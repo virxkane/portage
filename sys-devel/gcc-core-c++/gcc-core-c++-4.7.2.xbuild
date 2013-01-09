@@ -7,6 +7,9 @@ HOMEPAGE="http://gcc.gnu.org/"
 
 LICENSE="GPL-3 LGPL-3 || ( GPL-3 libgcc libstdc++ ) FDL-1.2"
 
+# For now this xbuild (designed for bootstraping) not worked for mingw-w64 :(
+# Please use `gcc-core-c++-nobstrap' instead or fix this file and send to me (http://sourceforge.net/p/mingwportage/).
+
 #   dependecies:
 # bison (msys)
 # perl (msys)
