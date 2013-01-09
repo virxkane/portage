@@ -1,0 +1,17 @@
+diff -urbB exiv2-0.21.1-orig/configure exiv2-0.21.1/configure
+--- exiv2-0.21.1-orig/configure	2011-02-14 13:28:18 +0400
++++ exiv2-0.21.1/configure	2012-02-25 12:10:09 +0400
+@@ -4133,13 +4133,6 @@
+ case $host_os in *\ *) host_os=`echo "$host_os" | sed 's/ /-/g'`;; esac
+ 
+ 
+-# Add flag for DLL on Windows
+-case "$host_os" in
+-*mingw* | *cygwin*)
+-    LDFLAGS="$LDFLAGS -no-undefined"
+-    ;;
+-esac
+-
+ # ---------------------------------------------------------------------------
+ # i18n support
+ # ---------------------------------------------------------------------------

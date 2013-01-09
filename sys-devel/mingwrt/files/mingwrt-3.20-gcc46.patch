@@ -1,0 +1,24 @@
+diff -urBb mingwrt-3.20-mingw32-orig/tlssup.c mingwrt-3.20-mingw32/tlssup.c
+--- mingwrt-3.20-mingw32-orig/tlssup.c	2011-08-24 02:16:27 +0400
++++ mingwrt-3.20-mingw32/tlssup.c	2012-02-22 10:09:55 +0400
+@@ -84,6 +84,7 @@
+ __dyn_tls_init (HANDLE hDllHandle, DWORD dwReason, LPVOID lpreserved)
+ {
+   _PVFV *pfunc;
++  int nfuncs, ifunc;
+ 
+   /* We don't let us trick here.  */
+   if (_CRT_MT != 2)
+@@ -96,8 +97,11 @@
+       return TRUE;
+     }
+ 
+-  for (pfunc = &__xd_a + 1; pfunc != &__xd_z; ++pfunc)
++  //for (pfunc = &__xd_a + 1; pfunc != &__xd_z; ++pfunc)
++  nfuncs = &__xd_z - (&__xd_a + 1);
++  for (ifunc = 0; ifunc < nfuncs; ++ifunc)
+     {
++	  pfunc = (&__xd_a + 1) + ifunc;
+       if (*pfunc != NULL)
+         (*pfunc)();
+     }

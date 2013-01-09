@@ -1,0 +1,13 @@
+diff -urBb gtk+-2.18.2-orig/gtk/gtkmain.c gtk+-2.18.2/gtk/gtkmain.c
+--- gtk+-2.18.2-orig/gtk/gtkmain.c	2009-10-01 19:45:28 +0400
++++ gtk+-2.18.2/gtk/gtkmain.c	2009-10-11 22:29:07 +0400
+@@ -686,7 +686,9 @@
+ 
+   gettext_initialization ();
+ 
++#ifndef _WIN32
+   signal (SIGPIPE, SIG_IGN);
++#endif
+ 
+   if (g_fatal_warnings)
+     {

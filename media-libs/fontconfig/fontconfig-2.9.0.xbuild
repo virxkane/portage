@@ -1,0 +1,21 @@
+# Copyright 2010 Chernov A.A.
+# Distributed under the terms of the GNU General Public License v2
+
+DESCRIPTION="A library for configuring and customizing font access"
+
+HOMEPAGE="http://www.fontconfig.org/"
+
+LICENSE="MIT"
+
+#   dependencies:
+# libiconv
+# freetype
+# pkg-config
+# expat
+
+SRC_URI="http://www.fontconfig.org/release/${P}.tar.gz"
+
+src_configure()
+{
+	econf --disable-xml2 --disable-docs
+}

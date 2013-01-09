@@ -1,0 +1,95 @@
+diff -urBb poppler-0.18.3-orig/cmake/modules/FindCairo.cmake poppler-0.18.3/cmake/modules/FindCairo.cmake
+--- poppler-0.18.3-orig/cmake/modules/FindCairo.cmake	2011-11-23 01:32:57 +0400
++++ poppler-0.18.3/cmake/modules/FindCairo.cmake	2012-02-25 13:48:48 +0400
+@@ -18,7 +18,7 @@
+ 
+ else(CAIRO_INCLUDE_DIRS AND CAIRO_LIBRARIES)
+ 
+-if(NOT WIN32)
++if(NOT WIN32 OR MINGW)
+   # use pkg-config to get the directories and then use these values
+   # in the FIND_PATH() and FIND_LIBRARY() calls
+   find_package(PkgConfig REQUIRED)
+@@ -29,10 +29,10 @@
+   if(_pc_cairo_FOUND)
+     set(CAIRO_FOUND TRUE)
+   endif(_pc_cairo_FOUND)
+-else(NOT WIN32)
++else(NOT WIN32 OR MINGW)
+   # assume so, for now
+   set(CAIRO_FOUND TRUE)
+-endif(NOT WIN32)
++endif(NOT WIN32 OR MINGW)
+ 
+ if(CAIRO_FOUND)
+   # set it back as false
+diff -urBb poppler-0.18.3-orig/cmake/modules/FindFontconfig.cmake poppler-0.18.3/cmake/modules/FindFontconfig.cmake
+--- poppler-0.18.3-orig/cmake/modules/FindFontconfig.cmake	2011-11-23 01:32:57 +0400
++++ poppler-0.18.3/cmake/modules/FindFontconfig.cmake	2012-02-25 13:50:31 +0400
+@@ -19,14 +19,14 @@
+ 
+ else (FONTCONFIG_LIBRARIES AND FONTCONFIG_INCLUDE_DIR)
+ 
+-  if (NOT WIN32)
++  if (NOT WIN32 OR MINGW)
+     # use pkg-config to get the directories and then use these values
+     # in the FIND_PATH() and FIND_LIBRARY() calls
+     find_package(PkgConfig)
+     pkg_check_modules(PC_FONTCONFIG fontconfig)
+ 
+     set(FONTCONFIG_DEFINITIONS ${PC_FONTCONFIG_CFLAGS_OTHER})
+-  endif (NOT WIN32)
++  endif (NOT WIN32 OR MINGW)
+ 
+   find_path(FONTCONFIG_INCLUDE_DIR fontconfig/fontconfig.h
+     PATHS
+diff -urBb poppler-0.18.3-orig/cmake/modules/FindGLIB.cmake poppler-0.18.3/cmake/modules/FindGLIB.cmake
+--- poppler-0.18.3-orig/cmake/modules/FindGLIB.cmake	2011-11-23 01:32:57 +0400
++++ poppler-0.18.3/cmake/modules/FindGLIB.cmake	2012-02-25 13:48:58 +0400
+@@ -12,11 +12,11 @@
+ 
+ include(FindPackageHandleStandardArgs)
+ 
+-if (NOT WIN32)
++if (NOT WIN32 OR MINGW)
+   find_package(PkgConfig REQUIRED)
+ 
+   pkg_check_modules(GLIB2 "glib-2.0>=${GLIB_REQUIRED}" "gobject-2.0>=${GLIB_REQUIRED}")
+ 
+   find_package_handle_standard_args(GLib DEFAULT_MSG GLIB2_LIBRARIES GLIB2_CFLAGS)
+ 
+-endif(NOT WIN32)
++endif(NOT WIN32 OR MINGW)
+diff -urBb poppler-0.18.3-orig/cmake/modules/FindGTK.cmake poppler-0.18.3/cmake/modules/FindGTK.cmake
+--- poppler-0.18.3-orig/cmake/modules/FindGTK.cmake	2011-11-23 01:32:57 +0400
++++ poppler-0.18.3/cmake/modules/FindGTK.cmake	2012-02-25 13:51:15 +0400
+@@ -12,11 +12,11 @@
+ 
+ include(FindPackageHandleStandardArgs)
+ 
+-if (NOT WIN32)
++if (NOT WIN32 OR MINGW)
+   find_package(PkgConfig REQUIRED)
+ 
+   pkg_check_modules(GTK2 "gtk+-2.0>=2.14" "gdk-pixbuf-2.0" "gthread-2.0" "gio-2.0")
+ 
+   find_package_handle_standard_args(GTK DEFAULT_MSG GTK2_LIBRARIES GTK2_CFLAGS)
+ 
+-endif(NOT WIN32)
++endif(NOT WIN32 OR MINGW)
+diff -urBb poppler-0.18.3-orig/cmake/modules/PopplerMacros.cmake poppler-0.18.3/cmake/modules/PopplerMacros.cmake
+--- poppler-0.18.3-orig/cmake/modules/PopplerMacros.cmake	2011-11-23 01:32:58 +0400
++++ poppler-0.18.3/cmake/modules/PopplerMacros.cmake	2012-02-25 13:53:21 +0400
+@@ -43,10 +43,10 @@
+ endmacro(POPPLER_ADD_UNITTEST)
+ 
+ macro(POPPLER_CREATE_INSTALL_PKGCONFIG generated_file install_location)
+-  if(NOT WIN32)
++  if(NOT WIN32 OR MINGW)
+     configure_file(${generated_file}.cmake ${CMAKE_CURRENT_BINARY_DIR}/${generated_file} @ONLY)
+     install(FILES ${CMAKE_CURRENT_BINARY_DIR}/${generated_file} DESTINATION ${install_location})
+-  endif(NOT WIN32)
++  endif(NOT WIN32 OR MINGW)
+ endmacro(POPPLER_CREATE_INSTALL_PKGCONFIG)
+ 
+ macro(SHOW_END_MESSAGE what value)

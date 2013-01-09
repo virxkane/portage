@@ -1,0 +1,35 @@
+diff -urBb gcc-4.4.2-orig/gcc/incpath.c gcc-4.4.2/gcc/incpath.c
+--- gcc-4.4.2-orig/gcc/incpath.c	2009-02-20 18:20:38 +0300
++++ gcc-4.4.2/gcc/incpath.c	2010-01-04 01:33:18 +0300
+@@ -133,31 +133,6 @@
+   int relocated = cpp_relocated();
+   size_t len;
+ 
+-  if (iprefix && (len = cpp_GCC_INCLUDE_DIR_len) != 0)
+-    {
+-      /* Look for directories that start with the standard prefix.
+-	 "Translate" them, i.e. replace /usr/local/lib/gcc... with
+-	 IPREFIX and search them first.  */
+-      for (p = cpp_include_defaults; p->fname; p++)
+-	{
+-	  if (!p->cplusplus || cxx_stdinc)
+-	    {
+-	      /* Should we be translating sysrooted dirs too?  Assume
+-		 that iprefix and sysroot are mutually exclusive, for
+-		 now.  */
+-	      if (sysroot && p->add_sysroot)
+-		continue;
+-	      if (!strncmp (p->fname, cpp_GCC_INCLUDE_DIR, len))
+-		{
+-		  char *str = concat (iprefix, p->fname + len, NULL);
+-		  if (p->multilib && imultilib)
+-		    str = concat (str, dir_separator_str, imultilib, NULL);
+-		  add_path (str, SYSTEM, p->cxx_aware, false);
+-		}
+-	    }
+-	}
+-    }
+-
+   for (p = cpp_include_defaults; p->fname; p++)
+     {
+       if (!p->cplusplus || cxx_stdinc)

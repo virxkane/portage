@@ -1,0 +1,16 @@
+diff -urBb glew-1.5.7-orig/config/Makefile.mingw glew-1.5.7/config/Makefile.mingw
+--- glew-1.5.7-orig/config/Makefile.mingw	2010-11-03 23:55:35 +0300
++++ glew-1.5.7/config/Makefile.mingw	2011-01-06 00:33:56 +0300
+@@ -1,4 +1,4 @@
+-NAME = glew32
++NAME = $(GLEW_NAME)
+ CC = gcc
+ # use gcc for linking, with ld it does not work
+ LD = gcc
+@@ -15,5 +15,5 @@
+ BIN.SUFFIX = .exe
+ LIB.SONAME = lib$(NAME).dll
+ LIB.DEVLNK = lib$(NAME).dll.a    # for mingw this is the dll import lib
+-LIB.SHARED = $(NAME).dll
++LIB.SHARED = glew32.dll
+ LIB.STATIC = lib$(NAME).a     # the static lib will be broken (see CFLAGS.SO)

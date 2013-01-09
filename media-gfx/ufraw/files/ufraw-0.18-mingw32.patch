@@ -1,0 +1,20 @@
+diff -urBb ufraw-0.18-orig/dcraw.cc ufraw-0.18/dcraw.cc
+--- ufraw-0.18-orig/dcraw.cc	2011-02-20 11:56:15 +0400
++++ ufraw-0.18/dcraw.cc	2012-02-25 17:06:57 +0400
+@@ -42,6 +42,7 @@
+ #include <sys/types.h>
+ #ifdef HAVE_LIBJPEG
+ extern "C" {
++#define XMD_H	// say jpeglib about already defined INT32
+ #include <jpeglib.h>
+ }
+ #endif
+@@ -74,6 +75,8 @@
+ #endif
+ #ifdef WIN32
+ #include <sys/utime.h>
++// don't include in windows.h rpcndr.h where declare boolean type
++#define _OBJC_NO_COM
+ #include <winsock2.h>
+ #ifndef __MINGW32__ /* causes warnings in cygwin's gcc -mno-cygwin UF*/
+ #pragma comment(lib, "ws2_32.lib")

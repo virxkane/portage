@@ -1,0 +1,38 @@
+# Copyright 2010-2012 Chernov A.A.
+# Distributed under the terms of the GNU General Public License v2
+
+DESCRIPTION="C++ library to create, manipulate and render SVG files"
+
+HOMEPAGE="http://wxsvg.sourceforge.net/"
+
+LICENSE="wxWinLL-3"
+
+#   dependencies:
+# >=gui-libs/wxWidgets-2.6.3
+# dev-util/pkg-config
+# gui-libs/cairo
+# dev-libs/expat
+#   optional
+# media-video/ffmpeg
+
+SRC_URI="http://downloads.sourceforge.net/${NAME}/${NAME}-${VERSION}.tar.bz2"
+
+#src_unpack()
+#{
+#	unpack "${A}"
+#	cd "${NAME}-${VERSION}-1"
+#}
+
+src_prepare()
+{
+	epatch "${NAME}-1.1.6-gct-mingw32.patch"
+	#eautoreconf
+}
+
+src_configure()
+{
+	LDFLAGS="-Wl,--enable-auto-import" \
+		./configure --prefix="${PREFIX}" --enable-shared --enable-static \
+		--enable-render=cairo --enable-ffmpeg
+	checkexitcode $? "configure failed"
+}

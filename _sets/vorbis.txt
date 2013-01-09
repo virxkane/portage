@@ -1,0 +1,14 @@
+iconv
+gettext
+glib
+pkg-config
+libogg
+pthreads-win32
+libvorbis
+nasm
+flac
+speex
+zlib
+openssl
+curl
+vorbis-tools

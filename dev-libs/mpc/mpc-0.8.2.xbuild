@@ -1,0 +1,25 @@
+# Copyright 2010-2012 Chernov A.A.
+# Distributed under the terms of the GNU General Public License v2
+
+DESCRIPTION="A library for multiprecision complex arithmetic with exact rounding"
+
+HOMEPAGE="http://mpc.multiprecision.org/"
+
+LICENSE="LGPL-2.1"
+
+#   dependencies:
+# >=dev-libs/gmp-4.2
+# >=dev-util/mpfr-2.3.1
+
+SRC_URI="http://www.multiprecision.org/${PN}/download/${P}.tar.gz"
+
+src_prepare()
+{
+	epatch ${P}-mingw32-gcc-46.patch
+	eautoreconf
+}
+
+src_configure()
+{
+	econf --enable-shared --enable-static
+}

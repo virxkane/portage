@@ -1,0 +1,30 @@
+# Copyright 2011 Chernov A.A.
+# Distributed under the terms of the GNU General Public License v2
+
+DESCRIPTION="A message bus system, a simple way for applications to talk to each other"
+
+HOMEPAGE="http://dbus.freedesktop.org/"
+
+LICENSE="GPL-2"
+
+#   dependencies:
+# >=cmake-2.4.4
+# libiconv
+# expat
+
+SRC_URI="http://dbus.freedesktop.org/releases/dbus/${NAME}-${VERSION}.tar.gz"
+
+#src_prepare()
+#{
+#	epatch "${NAME}-1.2.3-mingw32.patch"
+#}
+
+src_configure()
+{
+	mkdir "../${NAME}_build"
+	cd "../${NAME}_build"
+	cmake -G "MSYS Makefiles" -DCMAKE_BUILD_TYPE="Release" \
+		-DCMAKE_INSTALL_PREFIX="${PREFIX}" -DDBUS_BUILD_TESTS=OFF \
+		-DDBUS_ENABLE_VERBOSE_MODE=OFF "../${NAME}-${VERSION}/cmake"
+	checkexitcode $? "cmake failed"
+}

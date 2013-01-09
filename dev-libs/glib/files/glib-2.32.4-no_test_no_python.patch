@@ -1,0 +1,71 @@
+diff -urBb glib-2.32.4-orig/Makefile.am glib-2.32.4/Makefile.am
+--- glib-2.32.4-orig/Makefile.am	2012-07-14 16:39:30 +0400
++++ glib-2.32.4/Makefile.am	2012-07-28 21:52:02 +0400
+@@ -6,7 +6,7 @@
+ 
+ ACLOCAL_AMFLAGS = -I m4macros ${ACLOCAL_FLAGS}
+ 
+-SUBDIRS = . m4macros glib gmodule gthread gobject gio tests po docs
++SUBDIRS = . m4macros glib gmodule gthread gobject gio po docs
+ DIST_SUBDIRS = $(SUBDIRS) build
+ 
+ bin_SCRIPTS = glib-gettextize
+diff -urBb glib-2.32.4-orig/gio/Makefile.am glib-2.32.4/gio/Makefile.am
+--- glib-2.32.4-orig/gio/Makefile.am	2012-07-15 00:33:13 +0400
++++ glib-2.32.4/gio/Makefile.am	2012-07-28 22:00:51 +0400
+@@ -2,7 +2,7 @@
+ 
+ NULL =
+ 
+-SUBDIRS = gdbus-2.0/codegen
++SUBDIRS =
+ 
+ if OS_UNIX
+ SUBDIRS += xdgmime
+@@ -323,8 +323,6 @@
+ 
+ endif
+ 
+-SUBDIRS += tests
+-
+ libgio_2_0_la_SOURCES =		\
+ 	gappinfo.c 		\
+ 	gasynchelper.c 		\
+diff -urBb glib-2.32.4-orig/gio/gresource-tool.c glib-2.32.4/gio/gresource-tool.c
+--- glib-2.32.4-orig/gio/gresource-tool.c	2012-03-12 04:42:40 +0400
++++ glib-2.32.4/gio/gresource-tool.c	2012-07-28 21:52:02 +0400
+@@ -30,6 +30,10 @@
+ #include <string.h>
+ #include <locale.h>
+ 
++#ifdef _WIN32
++#undef HAVE_LIBELF
++#endif
++
+ #ifdef HAVE_LIBELF
+ #include <libelf.h>
+ #include <gelf.h>
+diff -urBb glib-2.32.4-orig/glib/Makefile.am glib-2.32.4/glib/Makefile.am
+--- glib-2.32.4-orig/glib/Makefile.am	2012-07-14 16:39:31 +0400
++++ glib-2.32.4/glib/Makefile.am	2012-07-28 21:56:34 +0400
+@@ -35,7 +35,7 @@
+ MAYBE_PCRE = pcre 
+ endif
+ 
+-SUBDIRS = libcharset $(PRINTF_SUBDIR) $(MAYBE_PCRE) update-pcre . tests
++SUBDIRS = libcharset $(PRINTF_SUBDIR) $(MAYBE_PCRE) update-pcre .
+ 
+ DIST_SUBDIRS = libcharset gnulib pcre update-pcre tests
+ 
+diff -urBb glib-2.32.4-orig/gobject/Makefile.am glib-2.32.4/gobject/Makefile.am
+--- glib-2.32.4-orig/gobject/Makefile.am	2012-07-14 16:39:31 +0400
++++ glib-2.32.4/gobject/Makefile.am	2012-07-28 21:56:49 +0400
+@@ -4,7 +4,7 @@
+ ## Process this file with automake to produce Makefile.in
+ include $(top_srcdir)/Makefile.decl
+ 
+-SUBDIRS = . tests
++SUBDIRS = .
+ 
+ BUILT_SOURCES=
+ CLEANFILES=

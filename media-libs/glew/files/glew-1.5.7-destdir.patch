@@ -1,0 +1,76 @@
+diff -urBb glew-1.5.7-orig/Makefile glew-1.5.7/Makefile
+--- glew-1.5.7-orig/Makefile	2010-11-03 23:55:35 +0300
++++ glew-1.5.7/Makefile	2011-01-06 00:28:01 +0300
+@@ -122,47 +122,48 @@
+ 
+ install: all
+ # directories
+-	$(INSTALL) -d -m 0755 $(BINDIR)
+-	$(INSTALL) -d -m 0755 $(INCDIR)
+-	$(INSTALL) -d -m 0755 $(LIBDIR)
+-	$(INSTALL) -d -m 0755 $(LIBDIR)/pkgconfig
++	$(INSTALL) -d -m 0755 $(DESTDIR)$(BINDIR)
++	$(INSTALL) -d -m 0755 $(DESTDIR)$(INCDIR)
++	$(INSTALL) -d -m 0755 $(DESTDIR)$(LIBDIR)
++	$(INSTALL) -d -m 0755 $(DESTDIR)$(LIBDIR)/pkgconfig
+ # runtime
+ ifeq ($(filter-out mingw% cygwin,$(SYSTEM)),)
+ 	$(STRIP) -x lib/$(LIB.SHARED)
+-	$(INSTALL) -m 0644 lib/$(LIB.SHARED) $(BINDIR)/
++	$(INSTALL) -m 0644 lib/$(LIB.SHARED) $(DESTDIR)$(BINDIR)/
+ else
+ 	$(STRIP) -x lib/$(LIB.SHARED)
+-	$(INSTALL) -m 0644 lib/$(LIB.SHARED) $(LIBDIR)/
+-	$(LN) $(LIB.SHARED) $(LIBDIR)/$(LIB.SONAME)
++	$(INSTALL) -m 0644 lib/$(LIB.SHARED) $(DESTDIR)$(LIBDIR)/
++	$(LN) $(LIB.SHARED) $(DESTDIR)$(LIBDIR)/$(LIB.SONAME)
+ endif
+ # development files
+-	$(INSTALL) -m 0644 include/GL/wglew.h $(INCDIR)/
+-	$(INSTALL) -m 0644 include/GL/glew.h $(INCDIR)/
+-	$(INSTALL) -m 0644 include/GL/glxew.h $(INCDIR)/
+-	$(INSTALL) -m 0644 glew.pc $(LIBDIR)/pkgconfig/
++	$(INSTALL) -m 0644 include/GL/wglew.h $(DESTDIR)$(INCDIR)/
++	$(INSTALL) -m 0644 include/GL/glew.h $(DESTDIR)$(INCDIR)/
++	$(INSTALL) -m 0644 include/GL/glxew.h $(DESTDIR)$(INCDIR)/
++	$(INSTALL) -m 0644 glew.pc $(DESTDIR)$(LIBDIR)/pkgconfig/
+ ifeq ($(filter-out mingw% cygwin,$(SYSTEM)),)
+-	$(INSTALL) -m 0644 lib/$(LIB.DEVLNK) $(LIBDIR)/
++	$(INSTALL) -m 0644 lib/$(LIB.DEVLNK) $(DESTDIR)$(LIBDIR)/
+ else
+ 	$(STRIP) -x lib/$(LIB.STATIC)
+-	$(INSTALL) -m 0644 lib/$(LIB.STATIC) $(LIBDIR)/
+-	$(LN) $(LIB.SHARED) $(LIBDIR)/$(LIB.DEVLNK)
++	$(INSTALL) -m 0644 lib/$(LIB.STATIC) $(DESTDIR)$(LIBDIR)/
++	$(LN) $(LIB.SHARED) $(DESTDIR)$(LIBDIR)/$(LIB.DEVLNK)
+ endif
+ # utilities
+-	$(INSTALL) -s -m 0755 bin/$(GLEWINFO.BIN) bin/$(VISUALINFO.BIN) $(BINDIR)/
++	$(INSTALL) -s -m 0755 bin/$(GLEWINFO.BIN) bin/$(VISUALINFO.BIN) $(DESTDIR)$(BINDIR)/
+ 
+ uninstall:
+-	$(RM) $(INCDIR)/wglew.h
+-	$(RM) $(INCDIR)/glew.h
+-	$(RM) $(INCDIR)/glxew.h
+-	$(RM) $(LIBDIR)/$(LIB.DEVLNK)
++	$(RM) $(DESTDIR)$(INCDIR)/wglew.h
++	$(RM) $(DESTDIR)$(INCDIR)/glew.h
++	$(RM) $(DESTDIR)$(INCDIR)/glxew.h
++	$(RM) $(DESTDIR)$(LIBDIR)/pkgconfig/glew.pc
++	$(RM) $(DESTDIR)$(LIBDIR)/$(LIB.DEVLNK)
+ ifeq ($(filter-out mingw% cygwin,$(SYSTEM)),)
+-	$(RM) $(BINDIR)/$(LIB.SHARED)
++	$(RM) $(DESTDIR)$(BINDIR)/$(LIB.SHARED)
+ else
+-	$(RM) $(LIBDIR)/$(LIB.SONAME)
+-	$(RM) $(LIBDIR)/$(LIB.SHARED)
+-	$(RM) $(LIBDIR)/$(LIB.STATIC)
++	$(RM) $(DESTDIR)$(LIBDIR)/$(LIB.SONAME)
++	$(RM) $(DESTDIR)$(LIBDIR)/$(LIB.SHARED)
++	$(RM) $(DESTDIR)$(LIBDIR)/$(LIB.STATIC)
+ endif
+-	$(RM) $(BINDIR)/$(GLEWINFO.BIN) $(BINDIR)/$(VISUALINFO.BIN)
++	$(RM) $(DESTDIR)$(BINDIR)/$(GLEWINFO.BIN) $(DESTDIR)$(BINDIR)/$(VISUALINFO.BIN)
+ 
+ clean:
+ 	$(RM) $(LIB.OBJS)

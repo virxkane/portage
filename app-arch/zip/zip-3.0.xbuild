@@ -1,0 +1,31 @@
+# Copyright 2010-2012 Chernov A.A.
+# Distributed under the terms of the GNU General Public License v3
+
+DESCRIPTION="Info ZIP (encryption support)"
+
+HOMEPAGE="http://www.info-zip.org/"
+
+LICENSE="Info-ZIP"
+
+RESTRICT="mirror"
+
+SRC_URI="ftp://ftp.info-zip.org/pub/infozip/src/${PN}30.tgz"
+
+SOURCES_DIR="${PN}30"
+
+src_configure()
+{
+	:
+}
+
+src_compile()
+{
+	emake -f win32/makefile.gcc LOCAL_ZIP=\"${CFLAGS} -DNO_ASM -DUSEZLIB\" -j1
+}
+
+src_install()
+{
+	install -d "${INSTDIR}${PREFIX}/bin"
+	cp -v zip*.exe "${INSTDIR}${PREFIX}/bin"
+	checkexitcode $? "make install failed"
+}

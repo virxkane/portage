@@ -1,0 +1,102 @@
+# Copyright 2010-2012 Chernov A.A.
+# Distributed under the terms of the GNU General Public License v2
+
+DESCRIPTION="The GNU Compiler Collection. Includes C/C++"
+
+HOMEPAGE="http://gcc.gnu.org/"
+
+LICENSE="GPL-3 LGPL-3 || ( GPL-3 libgcc libstdc++ ) FDL-1.2"
+
+#   dependecies:
+# bison (msys)
+# perl (msys)
+# dev-libs/gmp
+# dev-util/mpfr
+# dev-libs/mpc
+# sys-devel/binutils
+#   optional:
+# sys-devel/libiconv
+# >=dev-libs/libelf-0.8.12
+
+BASENAM="gcc"
+PATCHED_VERSION="4.7.0"
+#SRC_URI="http://ftp.gnu.org/gnu/gcc/${BASENAM}-${PV}/${BASENAM}-${PV}.tar.bz2"
+SRC_URI="${BASENAM}-core-${PV}.tar.xz ${BASENAM}-g++-${PV}.tar.xz"
+
+RESTRICT="fetch"
+
+SOURCES_DIR="${BASENAM}-${PV}"
+
+src_prepare()
+{
+	epatch "${BASENAM}-${PATCHED_VERSION}-drop-texinfo.patch"
+	#epatch "${BASENAM}-${PV}-fpermissive-w64.patch"
+	
+	#mkdir -p gcc/winsup/mingw/include
+	#cd gcc/winsup/mingw/include || eend "Can't cd to winsup/mingw/include"
+	#cp -pr "${PREFIX}"/x86_64-w64-mingw32/include/* .
+	#cd ../../../..
+}
+
+src_configure()
+{
+	unset CFLAGS
+	unset CXXFLAGS
+	BUILD_IN_SEPARATE_DIR=yes
+	local econfp=
+	case ${CHOST} in
+	x86_64-w64-*)
+		econfp="--with-sysroot=/mingw --enable-sjlj-exceptions --without-dwarf2"
+		;;
+	*)
+		econfp="--disable-sjlj-exceptions --with-dwarf2"
+		;;
+	esac
+
+	econf --enable-shared --disable-win32-registry \
+		--enable-version-specific-runtime-libs --disable-debug \
+		--enable-threads=win32 --enable-lto \
+		--with-gmp --with-mpc --with-ppl --with-cloog --with-libelf \
+		--with-system-zlib \
+		--enable-languages=c,c++ \
+		--enable-bootstrap --disable-nls --disable-multilib \
+		${econfp}
+}
+
+src_compile()
+{
+	case ${CHOST} in
+	x86_64-w64-*)
+		emake BOOT_CFLAGS=\"-fpermissive -g -O2\" STAGE1_TFLAGS=\"-I${PREFIX}/include\"
+		;;
+	*)
+		emake
+		;;
+	esac
+}
+
+src_install()
+{
+	emake_install
+	cp -pv ${INSTDIR}${PREFIX}/bin/gcc.exe ${INSTDIR}${PREFIX}/bin/cc.exe
+	mv -fv ${INSTDIR}${PREFIX}/lib/gcc/${CHOST}/lib/libgcc_s.a \
+		${INSTDIR}${PREFIX}/lib/gcc/${CHOST}/4.7.1/
+}
+
+
+pkg_postinst()
+{
+	einfo "Fix specs file..."
+	local targspecs=`dirname \`gcc --print-libgcc-file-name\``/specs
+	
+	local specs="${TMPDIR}/specs"
+	local prefix_w=`posix_w32path "${PREFIX}"`
+
+	echo "*mingw_prefix:" > ${specs}
+	echo ${prefix_w} >> ${specs}
+	echo "" >> ${specs}
+
+	gcc -dumpspecs >> ${specs}
+
+	sed ':a;N;$!ba;s/*cc1plus:\n\n/*cc1plus:\n\-isystem\ \%(mingw_prefix)\/include\n/' ${specs} > ${targspecs}
+}

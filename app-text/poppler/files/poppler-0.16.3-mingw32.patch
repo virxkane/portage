@@ -1,0 +1,205 @@
+diff -urBbN poppler-0.16.3-orig/CMakeLists.txt poppler-0.16.3/CMakeLists.txt
+--- poppler-0.16.3-orig/CMakeLists.txt	2011-02-27 14:17:49 +0300
++++ poppler-0.16.3/CMakeLists.txt	2011-03-08 12:02:20 +0300
+@@ -60,6 +60,16 @@
+   message(FATAL_ERROR "Invalid font configuration setting: ${FONT_CONFIGURATION}")
+ endif(font_configuration STREQUAL "win32")
+ 
++set(poppler_LDFLAGS "")
++if(WIN32)
++	if (CMAKE_COMPILER_IS_GNUCC)
++		set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -Wl,--enable-auto-import")
++		if(BUILD_SHARED_LIBS)
++			set(poppler_LDFLAGS "-Wl,--enable-auto-import")
++		endif(BUILD_SHARED_LIBS)
++	endif(CMAKE_COMPILER_IS_GNUCC)
++endif(WIN32)
++
+ # Enable these unconditionally.
+ set(MULTITHREADED ON)
+ set(OPI_SUPPORT ON)
+@@ -368,7 +378,7 @@
+ add_library(poppler SHARED ${poppler_SRCS})
+ endif(MSVC)
+ set_target_properties(poppler PROPERTIES VERSION 13.0.0 SOVERSION 13)
+-target_link_libraries(poppler ${poppler_LIBS})
++target_link_libraries(poppler ${poppler_LIBS} ${poppler_LDFLAGS})
+ target_link_libraries(poppler LINK_INTERFACE_LIBRARIES "")
+ install(TARGETS poppler RUNTIME DESTINATION bin LIBRARY DESTINATION lib${LIB_SUFFIX} ARCHIVE DESTINATION lib${LIB_SUFFIX})
+ 
+diff -urBbN poppler-0.16.3-orig/cmake/modules/FindCairo.cmake poppler-0.16.3/cmake/modules/FindCairo.cmake
+--- poppler-0.16.3-orig/cmake/modules/FindCairo.cmake	2010-12-27 23:44:27 +0300
++++ poppler-0.16.3/cmake/modules/FindCairo.cmake	2011-03-08 11:59:09 +0300
+@@ -18,7 +18,7 @@
+ 
+ else(CAIRO_INCLUDE_DIRS AND CAIRO_LIBRARIES)
+ 
+-if(NOT WIN32)
++if(NOT WIN32 OR MINGW)
+   # use pkg-config to get the directories and then use these values
+   # in the FIND_PATH() and FIND_LIBRARY() calls
+   find_package(PkgConfig REQUIRED)
+@@ -29,10 +29,10 @@
+   if(_pc_cairo_FOUND)
+     set(CAIRO_FOUND TRUE)
+   endif(_pc_cairo_FOUND)
+-else(NOT WIN32)
++else(NOT WIN32 OR MINGW)
+   # assume so, for now
+   set(CAIRO_FOUND TRUE)
+-endif(NOT WIN32)
++endif(NOT WIN32 OR MINGW)
+ 
+ if(CAIRO_FOUND)
+   # set it back as false
+diff -urBbN poppler-0.16.3-orig/cmake/modules/FindFontconfig.cmake poppler-0.16.3/cmake/modules/FindFontconfig.cmake
+--- poppler-0.16.3-orig/cmake/modules/FindFontconfig.cmake	2010-12-27 23:44:27 +0300
++++ poppler-0.16.3/cmake/modules/FindFontconfig.cmake	2011-03-08 11:59:09 +0300
+@@ -19,14 +19,14 @@
+ 
+ else (FONTCONFIG_LIBRARIES AND FONTCONFIG_INCLUDE_DIR)
+ 
+-  if (NOT WIN32)
++  if (NOT WIN32 OR MINGW)
+     # use pkg-config to get the directories and then use these values
+     # in the FIND_PATH() and FIND_LIBRARY() calls
+     find_package(PkgConfig)
+     pkg_check_modules(PC_FONTCONFIG fontconfig)
+ 
+     set(FONTCONFIG_DEFINITIONS ${PC_FONTCONFIG_CFLAGS_OTHER})
+-  endif (NOT WIN32)
++  endif (NOT WIN32 OR MINGW)
+ 
+   find_path(FONTCONFIG_INCLUDE_DIR fontconfig/fontconfig.h
+     PATHS
+diff -urBbN poppler-0.16.3-orig/cmake/modules/FindGDK.cmake poppler-0.16.3/cmake/modules/FindGDK.cmake
+--- poppler-0.16.3-orig/cmake/modules/FindGDK.cmake	2010-12-27 23:44:27 +0300
++++ poppler-0.16.3/cmake/modules/FindGDK.cmake	2011-03-08 11:59:09 +0300
+@@ -12,11 +12,11 @@
+ 
+ include(FindPackageHandleStandardArgs)
+ 
+-if (NOT WIN32)
++if (NOT WIN32 OR MINGW)
+   find_package(PkgConfig REQUIRED)
+ 
+   pkg_check_modules(GDK2 "gdk-2.0")
+ 
+   find_package_handle_standard_args(GDK DEFAULT_MSG GDK2_LIBRARIES GDK2_CFLAGS)
+ 
+-endif(NOT WIN32)
++endif(NOT WIN32 OR MINGW)
+diff -urBbN poppler-0.16.3-orig/cmake/modules/FindGLIB.cmake poppler-0.16.3/cmake/modules/FindGLIB.cmake
+--- poppler-0.16.3-orig/cmake/modules/FindGLIB.cmake	2010-12-27 23:44:27 +0300
++++ poppler-0.16.3/cmake/modules/FindGLIB.cmake	2011-03-08 11:59:09 +0300
+@@ -12,11 +12,11 @@
+ 
+ include(FindPackageHandleStandardArgs)
+ 
+-if (NOT WIN32)
++if (NOT WIN32 OR MINGW)
+   find_package(PkgConfig REQUIRED)
+ 
+   pkg_check_modules(GLIB2 "glib-2.0>=${GLIB_REQUIRED}" "gobject-2.0>=${GLIB_REQUIRED}")
+ 
+   find_package_handle_standard_args(GLib DEFAULT_MSG GLIB2_LIBRARIES GLIB2_CFLAGS)
+ 
+-endif(NOT WIN32)
++endif(NOT WIN32 OR MINGW)
+diff -urBbN poppler-0.16.3-orig/cmake/modules/FindGTK.cmake poppler-0.16.3/cmake/modules/FindGTK.cmake
+--- poppler-0.16.3-orig/cmake/modules/FindGTK.cmake	2010-12-27 23:44:27 +0300
++++ poppler-0.16.3/cmake/modules/FindGTK.cmake	2011-03-08 11:59:09 +0300
+@@ -12,11 +12,11 @@
+ 
+ include(FindPackageHandleStandardArgs)
+ 
+-if (NOT WIN32)
++if (NOT WIN32 OR MINGW)
+   find_package(PkgConfig REQUIRED)
+ 
+   pkg_check_modules(GTK2 "gtk+-2.0>=2.14" "gdk-pixbuf-2.0" "gthread-2.0" "gio-2.0")
+ 
+   find_package_handle_standard_args(GTK DEFAULT_MSG GTK2_LIBRARIES GTK2_CFLAGS)
+ 
+-endif(NOT WIN32)
++endif(NOT WIN32 OR MINGW)
+diff -urBbN poppler-0.16.3-orig/cmake/modules/FindLCMS.cmake poppler-0.16.3/cmake/modules/FindLCMS.cmake
+--- poppler-0.16.3-orig/cmake/modules/FindLCMS.cmake	2010-12-27 23:44:27 +0300
++++ poppler-0.16.3/cmake/modules/FindLCMS.cmake	2011-03-08 11:59:09 +0300
+@@ -15,11 +15,11 @@
+ 
+ # use pkg-config to get the directories and then use these values
+ # in the FIND_PATH() and FIND_LIBRARY() calls
+-if(NOT WIN32)
++if(NOT WIN32 OR MINGW)
+    find_package(PkgConfig)
+    pkg_check_modules(PC_LCMS lcms)
+    set(LCMS_DEFINITIONS ${PC_LCMS_CFLAGS_OTHER})
+-endif(NOT WIN32)
++endif(NOT WIN32 OR MINGW)
+ 
+ find_path(LCMS_INCLUDE_DIR lcms.h
+    PATHS
+diff -urBbN poppler-0.16.3-orig/cmake/modules/PopplerMacros.cmake poppler-0.16.3/cmake/modules/PopplerMacros.cmake
+--- poppler-0.16.3-orig/cmake/modules/PopplerMacros.cmake	2010-12-27 23:44:27 +0300
++++ poppler-0.16.3/cmake/modules/PopplerMacros.cmake	2011-03-08 11:59:09 +0300
+@@ -43,10 +43,10 @@
+ endmacro(POPPLER_ADD_UNITTEST)
+ 
+ macro(POPPLER_CREATE_INSTALL_PKGCONFIG generated_file install_location)
+-  if(NOT WIN32)
++  if(NOT WIN32 OR MINGW)
+     configure_file(${generated_file}.cmake ${CMAKE_CURRENT_BINARY_DIR}/${generated_file} @ONLY)
+     install(FILES ${CMAKE_CURRENT_BINARY_DIR}/${generated_file} DESTINATION ${install_location})
+-  endif(NOT WIN32)
++  endif(NOT WIN32 OR MINGW)
+ endmacro(POPPLER_CREATE_INSTALL_PKGCONFIG)
+ 
+ macro(SHOW_END_MESSAGE what value)
+diff -urBbN poppler-0.16.3-orig/cpp/CMakeLists.txt poppler-0.16.3/cpp/CMakeLists.txt
+--- poppler-0.16.3-orig/cpp/CMakeLists.txt	2010-12-27 23:44:27 +0300
++++ poppler-0.16.3/cpp/CMakeLists.txt	2011-03-08 11:59:09 +0300
+@@ -24,7 +24,7 @@
+ 
+ add_library(poppler-cpp SHARED ${poppler_cpp_SRCS})
+ set_target_properties(poppler-cpp PROPERTIES VERSION 0.2.0 SOVERSION 0)
+-target_link_libraries(poppler-cpp poppler ${ICONV_LIBRARIES})
++target_link_libraries(poppler-cpp poppler ${ICONV_LIBRARIES} ${poppler_LDFLAGS})
+ if(MSVC)
+ target_link_libraries(poppler-cpp ${poppler_LIBS})
+ endif(MSVC)
+diff -urBbN poppler-0.16.3-orig/glib/CMakeLists.txt poppler-0.16.3/glib/CMakeLists.txt
+--- poppler-0.16.3-orig/glib/CMakeLists.txt	2010-12-27 23:44:27 +0300
++++ poppler-0.16.3/glib/CMakeLists.txt	2011-03-08 11:59:09 +0300
+@@ -83,7 +83,7 @@
+ )
+ add_library(poppler-glib SHARED ${poppler_glib_SRCS} ${poppler_glib_generated_SRCS})
+ set_target_properties(poppler-glib PROPERTIES VERSION 6.0.0 SOVERSION 6)
+-target_link_libraries(poppler-glib poppler ${GLIB2_LIBRARIES} ${CAIRO_LIBRARIES} ${FREETYPE_LIBRARIES})
++target_link_libraries(poppler-glib poppler ${GLIB2_LIBRARIES} ${CAIRO_LIBRARIES} ${FREETYPE_LIBRARIES} ${poppler_LDFLAGS})
+ if (GDK_FOUND)
+   target_link_libraries(poppler-glib ${GDK2_LIBRARIES})
+ endif (GDK_FOUND)
+diff -urBbN poppler-0.16.3-orig/goo/JpegWriter.h poppler-0.16.3/goo/JpegWriter.h
+--- poppler-0.16.3-orig/goo/JpegWriter.h	2010-12-27 23:44:27 +0300
++++ poppler-0.16.3/goo/JpegWriter.h	2011-03-08 11:59:09 +0300
+@@ -23,6 +23,7 @@
+ #include "ImgWriter.h"
+ 
+ extern "C" {
++#define XMD_H	// say jpeglib about already defined INT32
+ #include <jpeglib.h>
+ }
+ 
+diff -urBbN poppler-0.16.3-orig/qt4/src/CMakeLists.txt poppler-0.16.3/qt4/src/CMakeLists.txt
+--- poppler-0.16.3-orig/qt4/src/CMakeLists.txt	2010-12-27 23:44:28 +0300
++++ poppler-0.16.3/qt4/src/CMakeLists.txt	2011-03-08 11:59:09 +0300
+@@ -30,7 +30,7 @@
+ qt4_automoc(${poppler_qt4_SRCS})
+ add_library(poppler-qt4 SHARED ${poppler_qt4_SRCS})
+ set_target_properties(poppler-qt4 PROPERTIES VERSION 3.4.0 SOVERSION 3)
+-target_link_libraries(poppler-qt4 poppler ${QT4_QTCORE_LIBRARY} ${QT4_QTGUI_LIBRARY} ${QT4_QTXML_LIBRARY})
++target_link_libraries(poppler-qt4 poppler ${QT4_QTCORE_LIBRARY} ${QT4_QTGUI_LIBRARY} ${QT4_QTXML_LIBRARY} ${poppler_LDFLAGS})
+ if(MSVC)
+ target_link_libraries(poppler-qt4 poppler ${poppler_LIBS})
+ endif(MSVC)

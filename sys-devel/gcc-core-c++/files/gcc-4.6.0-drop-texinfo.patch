@@ -1,0 +1,12 @@
+diff -urBb gcc-4.6.0-orig/libiberty/Makefile.in gcc-4.6.0/libiberty/Makefile.in
+--- gcc-4.6.0-orig/libiberty/Makefile.in	2010-11-20 22:37:08 +0300
++++ gcc-4.6.0/libiberty/Makefile.in	2011-03-27 18:37:01 +0400
+@@ -340,7 +340,7 @@
+ @MAINT@	echo stamp > stamp-functions
+ 
+ INSTALL_DEST = @INSTALL_DEST@
+-install: install_to_$(INSTALL_DEST) install-subdir
++install: install-subdir
+ install-strip: install
+ 
+ .PHONY: install install-strip

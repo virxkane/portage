@@ -1,0 +1,26 @@
+# Copyright 2010-2012 Chernov A.A.
+# Distributed under the terms of the GNU General Public License v2
+
+DESCRIPTION="Network utility to retrieve files from the WWW"
+
+HOMEPAGE="http://www.gnu.org/software/wget/"
+
+LICENSE="GPL-3"
+
+#   dependencies:
+# perl (msys)
+# dev-libs/openssl
+
+SRC_URI="http://ftp.gnu.org/gnu/${PN}/${P}.tar.xz"
+
+src_prepare()
+{
+	epatch "${P}-mingw32-openssl.patch"
+	AT_M4DIR="m4" eautoreconf
+}
+
+src_configure()
+{
+	econf --disable-debug --disable-nls \
+		--with-ssl=openssl --disable-ipv6
+}

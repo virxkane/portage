@@ -1,0 +1,24 @@
+# Copyright 2010 Chernov A.A.
+# Distributed under the terms of the GNU General Public License v2
+
+DESCRIPTION="GtkImageView is a simple image viewer widget for GTK."
+
+HOMEPAGE="http://trac.bjourne.webfactional.com/wiki"
+
+LICENSE="LGPL-2.1"
+
+#   dependencies:
+# gtk+
+
+SRC_URI="${NAME}-${VERSION}.tar.gz"
+
+src_prepare()
+{
+	epatch "${NAME}-${VERSION}-cflags.patch"
+}
+
+src_configure()
+{
+	./configure --prefix="${PREFIX}" --enable-shared
+	checkexitcode $? "configure failed"
+}

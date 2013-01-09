@@ -1,0 +1,49 @@
+This patch from smplayer project (http://sourceforge.net/projects/smplayer/)
+http://smplayer.svn.sourceforge.net/viewvc/smplayer/mplayer-builds/patches/file64_mingw.diff?view=log
+
+diff -Nur mingw-runtime-3.13-20070825-1.orig/include/io.h mingw-runtime-3.13-20070825-1/include/io.h
+--- mingw-runtime-3.13-20070825-1.orig/include/io.h	Sat Aug 25 14:24:37 2007
++++ mingw-runtime-3.13-20070825-1/include/io.h	Sun Sep  9 11:47:09 2007
+@@ -328,6 +328,10 @@
+ 
+ #endif	/* Not _NO_OLDNAMES */
+ 
++#if defined _FILE_OFFSET_BITS && _FILE_OFFSET_BITS == 64
++#define lseek _lseeki64
++#endif
++
+ #ifdef	__cplusplus
+ }
+ #endif
+diff -Nur mingw-runtime-3.13-20070825-1.orig/include/sys/stat.h mingw-runtime-3.13-20070825-1/include/sys/stat.h
+--- mingw-runtime-3.13-20070825-1.orig/include/sys/stat.h	Sat Aug 25 14:24:38 2007
++++ mingw-runtime-3.13-20070825-1/include/sys/stat.h	Sun Sep  9 11:47:09 2007
+@@ -186,6 +186,13 @@
+ #endif /* _WSTAT_DEFIND */
+ #endif /* __MSVCRT__ */
+ 
++#if defined _FILE_OFFSET_BITS && _FILE_OFFSET_BITS == 64
++#undef stat
++#define stat  _stati64
++#define fstat _fstati64
++#define wstat _wstati64
++#endif
++
+ #ifdef	__cplusplus
+ }
+ #endif
+diff -Nur mingw-runtime-3.13-20070825-1.orig/include/sys/types.h mingw-runtime-3.13-20070825-1/include/sys/types.h
+--- mingw-runtime-3.13-20070825-1.orig/include/sys/types.h	Sat Aug 25 14:24:38 2007
++++ mingw-runtime-3.13-20070825-1/include/sys/types.h	Sun Sep  9 11:47:09 2007
+@@ -35,7 +35,11 @@
+ 
+ #ifndef	_OFF_T_
+ #define	_OFF_T_
++#if defined _FILE_OFFSET_BITS && _FILE_OFFSET_BITS == 64
++typedef long long _off_t;
++#else
+ typedef long _off_t;
++#endif
+ 
+ #ifndef	_NO_OLDNAMES
+ typedef _off_t	off_t;

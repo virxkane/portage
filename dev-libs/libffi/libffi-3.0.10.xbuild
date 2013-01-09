@@ -1,0 +1,19 @@
+# Copyright 2012 Chernov A.A.
+# Distributed under the terms of the GNU General Public License v2
+
+DESCRIPTION="a portable, high level programming interface to various calling conventions."
+
+HOMEPAGE="http://sourceware.org/libffi/"
+
+LICENSE="MIT"
+
+#   dependencies:
+# none
+
+SRC_URI="ftp://sourceware.org/pub/${PN}/${P}.tar.gz"
+
+src_configure()
+{
+	econf --enable-shared --enable-static \
+		--disable-dependency-tracking
+}

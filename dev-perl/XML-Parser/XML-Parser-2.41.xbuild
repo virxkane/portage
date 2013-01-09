@@ -1,0 +1,96 @@
+# Copyright 2011-2012 Chernov A.A.
+# Distributed under the terms of the GNU General Public License v2
+
+DESCRIPTION=" A Perl extension interface to James Clark's XML parser, expat"
+
+HOMEPAGE="http://search.cpan.org/dist/XML-Parser/"
+
+LICENSE="|| ( Artistic GPL-1 GPL-2 GPL-3 )"
+
+#   dependencies:
+# dev-lang/perl (mingw)
+# dev-util/dmake
+# dev-libs/expat
+
+SRC_URI="http://search.cpan.org/CPAN/authors/id/C/CH/CHORNY/${P}.tar.gz"
+
+src_configure()
+{
+	export PATH="${PERL_PATH}/bin:${PATH}"
+
+	perl Makefile.PL
+	checkexitcode $? "configure failed"
+
+
+	# make build script for Windows Console
+	# local prefix_w=`posix_w32path "${PREFIX}"`
+	# prefix_w=`echo ${prefix_w} | sed -e 's/\\//\\\/g'`
+	# local perl_path_w=`posix_w32path "${PERL_PATH}"`
+	# perl_path_w=`echo ${perl_path_w} | sed -e 's/\\//\\\/g'`
+	# echo "set PATH=%SystemRoot%\system32;%SystemRoot%;${prefix_w}\bin;${perl_path_w}\bin" > build.cmd
+	# echo "dmake %*" >> build.cmd
+	# #echo "pause" >> build.cmd
+	# echo "exit" >> build.cmd
+}
+
+src_compile()
+{
+	# cmd //C build.cmd
+	dmake
+}
+
+src_install()
+{
+	# patch Makefile to change native filenames to MSYS filenames...
+	# fix INSTALLPRIVLIB
+	cat Makefile | sed -e "s|^INSTALLPRIVLIB\s*\=.*$|INSTALLPRIVLIB\ \=\ ${PERL_PATH}/lib|" > Makefile.new
+	mv -f Makefile.new Makefile
+	# fix INSTALLSITELIB
+	cat Makefile | sed -e "s|^INSTALLSITELIB\s*\=.*$|INSTALLSITELIB\ \=\ ${PERL_PATH}/site/lib|" > Makefile.new
+	mv -f Makefile.new Makefile
+	# fix INSTALLVENDORLIB
+	cat Makefile | sed -e "s|^INSTALLVENDORLIB\s*\=.*$|INSTALLVENDORLIB\ \=\ ${PERL_PATH}/vendor/lib|" > Makefile.new
+	mv -f Makefile.new Makefile
+	# fix INSTALLARCHLIB
+	cat Makefile | sed -e "s|^INSTALLARCHLIB\s*\=.*$|INSTALLARCHLIB\ \=\ ${PERL_PATH}/lib|" > Makefile.new
+	mv -f Makefile.new Makefile
+	# fix INSTALLSITEARCH
+	cat Makefile | sed -e "s|^INSTALLSITEARCH\s*\=.*$|INSTALLSITEARCH\ \=\ ${PERL_PATH}/site/lib|" > Makefile.new
+	mv -f Makefile.new Makefile
+	# fix INSTALLVENDORARCH
+	cat Makefile | sed -e "s|^INSTALLVENDORARCH\s*\=.*$|INSTALLVENDORARCH\ \=\ ${PERL_PATH}/vendor/lib|" > Makefile.new
+	mv -f Makefile.new Makefile
+	# fix INSTALLBIN
+	cat Makefile | sed -e "s|^INSTALLBIN\s*\=.*$|INSTALLBIN\ \=\ ${PERL_PATH}/bin|" > Makefile.new
+	mv -f Makefile.new Makefile
+	# fix INSTALLSITEBIN
+	cat Makefile | sed -e "s|^INSTALLSITEBIN\s*\=.*$|INSTALLSITEBIN\ \=\ ${PERL_PATH}/bin|" > Makefile.new
+	mv -f Makefile.new Makefile
+	# fix INSTALLVENDORBIN
+	cat Makefile | sed -e "s|^INSTALLVENDORBIN\s*\=.*$|INSTALLVENDORBIN\ \=\ ${PERL_PATH}/bin|" > Makefile.new
+	mv -f Makefile.new Makefile
+	# fix INSTALLSCRIPT
+	cat Makefile | sed -e "s|^INSTALLSCRIPT\s*\=.*$|INSTALLSCRIPT\ \=\ ${PERL_PATH}/bin|" > Makefile.new
+	mv -f Makefile.new Makefile
+	# INSTALLSITESCRIPT already correct
+	# fix INSTALLVENDORSCRIPT
+	cat Makefile | sed -e "s|^INSTALLVENDORSCRIPT\s*\=.*$|INSTALLVENDORSCRIPT\ \=\ \$\(INSTALLSCRIPT\)|" > Makefile.new
+	mv -f Makefile.new Makefile
+	# fix INSTALLMAN1DIR
+	cat Makefile | sed -e "s|^INSTALLMAN1DIR\s*\=.*$|INSTALLMAN1DIR\ \=\ ${PERL_PATH}/man/man1|" > Makefile.new
+	mv -f Makefile.new Makefile
+	# INSTALLSITEMAN1DIR already correct
+	# fix INSTALLVENDORMAN1DIR
+	cat Makefile | sed -e "s|^INSTALLVENDORMAN1DIR\s*\=.*$|INSTALLVENDORMAN1DIR\ \=\ \$\(INSTALLMAN1DIR\)|" > Makefile.new
+	mv -f Makefile.new Makefile
+	# fix INSTALLMAN3DIR
+	cat Makefile | sed -e "s|^INSTALLMAN3DIR\s*\=.*$|INSTALLMAN3DIR\ \=\ ${PERL_PATH}/man/man3|" > Makefile.new
+	mv -f Makefile.new Makefile
+	# INSTALLSITEMAN3DIR already correct
+	# fix INSTALLVENDORMAN3DIR
+	cat Makefile | sed -e "s|^INSTALLVENDORMAN3DIR\s*\=.*$|INSTALLVENDORMAN3DIR\ \=\ \$\(INSTALLMAN3DIR\)|" > Makefile.new
+	mv -f Makefile.new Makefile
+
+	install -d "${INSTDIR}"
+	dmake DESTDIR="${INSTDIR}" install
+}

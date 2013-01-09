@@ -1,0 +1,42 @@
+# Copyright 2010-2012 Chernov A.A.
+# Distributed under the terms of the GNU General Public License v2
+
+DESCRIPTION="OpenGL Extension Header Files"
+
+HOMEPAGE="http://www.opengl.org/"
+
+LICENSE="GPL-2"
+
+#   dependencies:
+# none?
+
+SRC_URI="http://www.opengl.org/registry/api/glext.h
+		http://www.opengl.org/registry/api/glxext.h
+		http://www.opengl.org/registry/api/wglext.h"
+
+RESTRICT="mirror"
+
+src_unpack()
+{
+	mkdir "${SOURCES_DIR}"
+	cd "${SOURCES_DIR}"
+	unpack $A
+}
+
+src_configure()
+{
+	:
+}
+
+src_compile()
+{
+	:
+}
+
+src_install()
+{
+	install -d ${INSTDIR}${PREFIX}/include/GL
+	cp -v glext.h ${INSTDIR}${PREFIX}/include/GL/
+	cp -v glxext.h ${INSTDIR}${PREFIX}/include/GL/
+	cp -v wglext.h ${INSTDIR}${PREFIX}/include/GL/
+}

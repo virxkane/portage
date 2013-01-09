@@ -1,0 +1,26 @@
+# Copyright 2010-2012 Chernov A.A.
+# Distributed under the terms of the GNU General Public License v2
+
+DESCRIPTION="Library for manipulation of TIFF (Tag Image File Format) images"
+
+HOMEPAGE="http://www.remotesensing.org/libtiff/"
+
+LICENSE="as-is"
+
+#   dependencies:
+# libz
+# jpeg
+# pthreads-win32
+
+SRC_URI="http://download.osgeo.org/libtiff/${P}.tar.gz"
+
+#src_prepare()
+#{
+#	epatch "${P}-tiff2pdf.patch"
+#}
+
+src_configure()
+{
+	econf --enable-shared --enable-static \
+		--enable-zlib --enable-jpeg --enable-cxx
+}

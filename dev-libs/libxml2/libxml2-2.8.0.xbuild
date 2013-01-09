@@ -1,0 +1,19 @@
+# Copyright 2010-2012 Chernov A.A.
+# Distributed under the terms of the GNU General Public License v2
+
+DESCRIPTION="Version 2 of the library to manipulate XML files"
+
+HOMEPAGE="http://www.xmlsoft.org/"
+
+LICENSE="MIT"
+
+#   dependencies:
+# libiconv
+
+SRC_URI="ftp://xmlsoft.org/${PN}/${P}.tar.gz"
+
+src_configure()
+{
+	econf --enable-shared --enable-static \
+		--with-threads=win32 --without-python
+}

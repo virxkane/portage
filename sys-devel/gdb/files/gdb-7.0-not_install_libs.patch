@@ -1,0 +1,49 @@
+diff -urBb gdb-7.0-orig/bfd/Makefile.in gdb-7.0/bfd/Makefile.in
+--- gdb-7.0-orig/bfd/Makefile.in	2009-09-07 13:15:27 +0400
++++ gdb-7.0/bfd/Makefile.in	2009-10-20 21:50:24 +0400
+@@ -1673,11 +1673,10 @@
+ 	for dir in "$(DESTDIR)$(bfdlibdir)" "$(DESTDIR)$(bfdincludedir)"; do \
+ 	  test -z "$$dir" || $(MKDIR_P) "$$dir"; \
+ 	done
+-install: $(BUILT_SOURCES)
+-	$(MAKE) $(AM_MAKEFLAGS) install-recursive
+-install-exec: install-exec-recursive
+-install-data: install-data-recursive
+-uninstall: uninstall-recursive
++install:
++install-exec:
++install-data:
++uninstall:
+ 
+ install-am: all-am
+ 	@$(MAKE) $(AM_MAKEFLAGS) install-exec-am install-data-am
+diff -urBb gdb-7.0-orig/libiberty/Makefile.in gdb-7.0/libiberty/Makefile.in
+--- gdb-7.0-orig/libiberty/Makefile.in	2009-08-23 23:03:58 +0400
++++ gdb-7.0/libiberty/Makefile.in	2009-10-20 21:48:46 +0400
+@@ -321,7 +321,7 @@
+ @MAINT@	echo stamp > stamp-functions
+ 
+ INSTALL_DEST = @INSTALL_DEST@
+-install: install_to_$(INSTALL_DEST) install-subdir
++install: install-subdir
+ 
+ # This is tricky.  Even though CC in the Makefile contains
+ # multilib-specific flags, it's overridden by FLAGS_TO_PASS from the
+diff -urBb gdb-7.0-orig/opcodes/Makefile.in gdb-7.0/opcodes/Makefile.in
+--- gdb-7.0-orig/opcodes/Makefile.in	2009-09-07 14:54:25 +0400
++++ gdb-7.0/opcodes/Makefile.in	2009-10-20 21:48:46 +0400
+@@ -1051,10 +1051,10 @@
+ 	for dir in "$(DESTDIR)$(bfdlibdir)" "$(DESTDIR)$(bfdincludedir)"; do \
+ 	  test -z "$$dir" || $(MKDIR_P) "$$dir"; \
+ 	done
+-install: install-recursive
+-install-exec: install-exec-recursive
+-install-data: install-data-recursive
+-uninstall: uninstall-recursive
++install: 
++install-exec: 
++install-data: 
++uninstall: 
+ 
+ install-am: all-am
+ 	@$(MAKE) $(AM_MAKEFLAGS) install-exec-am install-data-am

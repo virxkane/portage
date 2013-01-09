@@ -1,0 +1,84 @@
+diff -urBbN wxsvg-1.0.7_1-orig/autogen2.sh wxsvg-1.0.7_1/autogen2.sh
+--- wxsvg-1.0.7_1-orig/autogen2.sh	1970-01-01 03:00:00 +0300
++++ wxsvg-1.0.7_1/autogen2.sh	2010-10-28 01:04:20 +0400
+@@ -0,0 +1,8 @@
++#!/bin/sh
++
++libtoolize --copy --force
++aclocal -I/mingw/share/aclocal/ -I.
++libtoolize --copy --force 
++aclocal -I/mingw/share/aclocal/ -I.
++automake --foreign -a -c
++autoconf -I/mingw/share/aclocal/
+diff -urBbN wxsvg-1.0.7_1-orig/include/wxSVG/SVGAnimationElement.h wxsvg-1.0.7_1/include/wxSVG/SVGAnimationElement.h
+--- wxsvg-1.0.7_1-orig/include/wxSVG/SVGAnimationElement.h	2007-09-21 10:47:34 +0400
++++ wxsvg-1.0.7_1/include/wxSVG/SVGAnimationElement.h	2010-10-28 01:05:26 +0400
+@@ -38,7 +38,7 @@
+       wxSVGElement(tagName), m_targetElement(NULL) {}
+     virtual ~wxSVGAnimationElement() {}
+     virtual double GetStartTime();
+-    virtual double GetCurrentTime();
++    virtual double GetCurrentTime_();
+     virtual double GetSimpleDuration();
+     bool HasAttribute(const wxString& name);
+     wxString GetAttribute(const wxString& name);
+diff -urBbN wxsvg-1.0.7_1-orig/include/wxSVG/SVGDocument.h wxsvg-1.0.7_1/include/wxSVG/SVGDocument.h
+--- wxsvg-1.0.7_1-orig/include/wxSVG/SVGDocument.h	2010-07-23 00:22:39 +0400
++++ wxsvg-1.0.7_1/include/wxSVG/SVGDocument.h	2010-10-28 01:05:36 +0400
+@@ -77,7 +77,7 @@
+     wxSVGElement* GetElementById(const wxString& id);
+     
+     double GetDuration();
+-    double GetCurrentTime() { return m_time; }
++    double GetCurrentTime_() { return m_time; }
+     void SetCurrentTime(double seconds);
+     
+     wxImage Render(int width = -1, int height = -1, const wxSVGRect* rect = NULL, bool preserveAspectRatio = true);
+diff -urBbN wxsvg-1.0.7_1-orig/include/wxSVG/SVGSVGElement.h wxsvg-1.0.7_1/include/wxSVG/SVGSVGElement.h
+--- wxsvg-1.0.7_1-orig/include/wxSVG/SVGSVGElement.h	2007-10-31 00:59:22 +0300
++++ wxsvg-1.0.7_1/include/wxSVG/SVGSVGElement.h	2010-10-28 01:05:42 +0400
+@@ -133,7 +133,7 @@
+     virtual void PauseAnimations();
+     virtual void UnpauseAnimations();
+     virtual bool AnimationsPaused();
+-    virtual double GetCurrentTime();
++    virtual double GetCurrentTime_();
+     virtual void SetCurrentTime(double seconds);
+     virtual wxNodeList GetIntersectionList(const wxSVGRect& rect, const wxSVGElement& referenceElement);
+     virtual wxNodeList GetEnclosureList(const wxSVGRect& rect, const wxSVGElement& referenceElement);
+diff -urBbN wxsvg-1.0.7_1-orig/src/SVGAnimationElement.cpp wxsvg-1.0.7_1/src/SVGAnimationElement.cpp
+--- wxsvg-1.0.7_1-orig/src/SVGAnimationElement.cpp	2005-06-17 17:24:50 +0400
++++ wxsvg-1.0.7_1/src/SVGAnimationElement.cpp	2010-10-28 01:05:49 +0400
+@@ -15,7 +15,7 @@
+   return 0;
+ }
+ 
+-double wxSVGAnimationElement::GetCurrentTime()
++double wxSVGAnimationElement::GetCurrentTime_()
+ {
+   return 0;
+ }
+diff -urBbN wxsvg-1.0.7_1-orig/src/SVGCanvasItem.cpp wxsvg-1.0.7_1/src/SVGCanvasItem.cpp
+--- wxsvg-1.0.7_1-orig/src/SVGCanvasItem.cpp	2010-10-10 20:17:22 +0400
++++ wxsvg-1.0.7_1/src/SVGCanvasItem.cpp	2010-10-28 01:05:57 +0400
+@@ -942,7 +942,7 @@
+   m_width = element.GetWidth().GetAnimVal();
+   m_height = element.GetHeight().GetAnimVal();
+   m_href = element.GetHref();
+-  m_time = ((wxSVGDocument*)element.GetOwnerDocument())->GetCurrentTime();
++  m_time = ((wxSVGDocument*)element.GetOwnerDocument())->GetCurrentTime_();
+   wxSVGCanvasVideo* prevItem = (wxSVGCanvasVideo*) element.GetCanvasItem();
+   if (prevItem != NULL && prevItem->m_href == m_href)
+   {
+diff -urBbN wxsvg-1.0.7_1-orig/src/SVGSVGElement.cpp wxsvg-1.0.7_1/src/SVGSVGElement.cpp
+--- wxsvg-1.0.7_1-orig/src/SVGSVGElement.cpp	2007-05-24 12:59:09 +0400
++++ wxsvg-1.0.7_1/src/SVGSVGElement.cpp	2010-10-28 01:06:05 +0400
+@@ -46,7 +46,7 @@
+   return false;
+ }
+ 
+-double wxSVGSVGElement::GetCurrentTime()
++double wxSVGSVGElement::GetCurrentTime_()
+ {
+   return 0;
+ }

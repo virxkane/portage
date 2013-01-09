@@ -1,0 +1,14 @@
+diff -urBb glib-2.34.3-orig/gio/gresource-tool.c glib-2.34.3/gio/gresource-tool.c
+--- glib-2.34.3-orig/gio/gresource-tool.c	2012-11-26 20:52:48 +0400
++++ glib-2.34.3/gio/gresource-tool.c	2012-11-27 17:52:43 +0400
+@@ -30,6 +30,10 @@
+ #include <string.h>
+ #include <locale.h>
+ 
++#ifdef _WIN32
++#undef HAVE_LIBELF
++#endif
++
+ #ifdef HAVE_LIBELF
+ #include <libelf.h>
+ #include <gelf.h>

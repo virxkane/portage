@@ -1,0 +1,378 @@
+diff -urBbN lensfun-0.2.5-orig/CMakeLists.txt lensfun-0.2.5/CMakeLists.txt
+--- lensfun-0.2.5-orig/CMakeLists.txt	1970-01-01 03:00:00 +0300
++++ lensfun-0.2.5/CMakeLists.txt	2010-05-14 21:14:13 +0400
+@@ -0,0 +1,144 @@
++project(lensfun)
++
++include(CheckIncludeFile)
++include(FindPkgConfig)
++include(TestCXXAcceptsFlag)
++
++cmake_minimum_required(VERSION 2.6.2)
++
++#set(CMAKE_VERBOSE_MAKEFILE on)
++
++if(NOT DEFINED BUILD_SHARED_LIBS)
++	set(BUILD_SHARED_LIBS ON)
++endif(NOT DEFINED BUILD_SHARED_LIBS)
++
++OPTION(VECTORIZATION "Compile with vectorization instruction set (if supported) or\n
++      disable vectorization (a list like 'SSE4,SSE2,SSE' or empty)." ON)
++
++if(VECTORIZATION)
++	set(VECTORIZATION_SSE 1)
++	set(VECTORIZATION_SSE2 1)
++endif(VECTORIZATION)
++
++set(CONF_PACKAGE "${CMAKE_PROJECT_NAME}")
++set(CONF_VERSION "0.2.5")
++
++pkg_check_modules(GLIB2 REQUIRED glib-2.0>=2.10)
++pkg_check_modules(LIBPNG REQUIRED libpng)
++find_package(ZLIB 1.2.3 REQUIRED)
++find_program(DOXYGEN NAMES doxygen)
++CHECK_INCLUDE_FILE(regex.h REGEX_H)
++
++if(WIN32)
++	set(PLATFORM_WINDOWS 1)
++else(WIN32)
++	set(PLATFORM_WINDOWS 0)
++endif(WIN32)
++
++if(UNIX)
++	set(PLATFORM_POSIX 1)
++else(UNIX)
++	set(PLATFORM_POSIX 0)
++endif(UNIX)
++
++string(TOUPPER ${CMAKE_HOST_SYSTEM_PROCESSOR} HOST_ARCH)
++if(HOST_ARCH STREQUAL X86_64)
++	set(ARCH_X86_64 1)
++	set(TUNE_X86_64 1)
++endif(HOST_ARCH STREQUAL X86_64)
++if(HOST_ARCH STREQUAL X86)
++	set(ARCH_X86 1)
++	set(TUNE_X86 1)
++endif(HOST_ARCH STREQUAL X86)
++
++if(MSVC)
++	set(CONF_COMPILER_MSVC 1)
++else(MSVC)
++	set(CONF_COMPILER_MSVC 0)
++endif(MSVC)
++
++if (CMAKE_COMPILER_IS_GNUCC)
++	set(CONF_COMPILER_GCC 1)
++else(CMAKE_COMPILER_IS_GNUCC)
++	set(CONF_COMPILER_GCC 0)
++endif(CMAKE_COMPILER_IS_GNUCC)
++
++CHECK_CXX_ACCEPTS_FLAG("-fvisibility=hidden" fVISIBILITY1)
++CHECK_CXX_ACCEPTS_FLAG("-fvisibility-inlines-hidden" fVISIBILITY2)
++if(fVISIBILITY1 OR fVISIBILITY2)
++	set(CONF_SYMBOL_VISIBILITY 1)
++else(fVISIBILITY1 OR fVISIBILITY2)
++	set(CONF_SYMBOL_VISIBILITY 0)
++endif(fVISIBILITY1 OR fVISIBILITY2)
++
++set(CONF_PREFIX   ${CMAKE_INSTALL_PREFIX})
++if(NOT DEFINED CONF_BINDIR)
++	set(CONF_BINDIR   ${CMAKE_INSTALL_PREFIX}/bin)
++endif(NOT DEFINED CONF_BINDIR)
++if(NOT DEFINED CONF_SYSCONFDIR)
++	set(CONF_SYSCONFDIR  ${CMAKE_INSTALL_PREFIX}/etc/${CONF_PACKAGE})
++endif(NOT DEFINED CONF_SYSCONFDIR)
++if(NOT DEFINED CONF_DATADIR)
++	set(CONF_DATADIR  ${CMAKE_INSTALL_PREFIX}/share/${CONF_PACKAGE})
++endif(NOT DEFINED CONF_DATADIR)
++if(NOT DEFINED CONF_DOCDIR)
++	set(CONF_DOCDIR   ${CMAKE_INSTALL_PREFIX}/share/doc/${CONF_PACKAGE}-${CONF_VERSION})
++endif(NOT DEFINED CONF_DOCDIR)
++if(NOT DEFINED CONF_LIBDIR)
++	if(HOST_ARCH STREQUAL "X86")
++		set(CONF_LIBDIR   ${CMAKE_INSTALL_PREFIX}/lib)
++	else(HOST_ARCH STREQUAL "X86")
++		if(HOST_ARCH STREQUAL "X86_64")
++			set(CONF_LIBDIR   ${CMAKE_INSTALL_PREFIX}/lib64)
++		else(HOST_ARCH STREQUAL "X86_64")
++			set(CONF_LIBDIR   ${CMAKE_INSTALL_PREFIX}/lib)
++		endif(HOST_ARCH STREQUAL "X86_64")
++	endif(HOST_ARCH STREQUAL "X86")
++endif(NOT DEFINED CONF_LIBDIR)
++if(NOT DEFINED CONF_INCLUDEDIR)
++	set(CONF_INCLUDEDIR  ${CMAKE_INSTALL_PREFIX}/include)
++endif(NOT DEFINED CONF_INCLUDEDIR)
++if(NOT DEFINED CONF_LIBEXECDIR)
++	set(CONF_LIBEXECDIR  ${CMAKE_INSTALL_PREFIX}/libexec/${CONF_PACKAGE})
++endif(NOT DEFINED CONF_LIBEXECDIR)
++if(BUILD_SHARED_LIBS)
++	set(CONF_SHAREDLIBS  1)
++else(BUILD_SHARED_LIBS)
++	set(CONF_SHAREDLIBS  0)
++endif(BUILD_SHARED_LIBS)
++
++if(GLIB2_FOUND)
++	set(HAVE_GLIB_20 1)
++	set(HAVE_GLIBH 1)
++else(GLIB2_FOUND)
++	set(HAVE_GLIB_20 0)
++	set(HAVE_GLIBH 0)
++endif(GLIB2_FOUND)
++if(LIBPNG_FOUND)
++	set(HAVE_LIBPNG 1)
++else(LIBPNG_FOUND)
++	set(HAVE_LIBPNG 0)
++endif(LIBPNG_FOUND)
++if(ZLIB_INCLUDE_DIR)
++	set(HAVE_ZLIB 1)
++else(ZLIB_INCLUDE_DIR)
++	set(HAVE_ZLIB 0)
++endif(ZLIB_INCLUDE_DIR)
++if(REGEX_H)
++	set(HAVE_REGEXH 1)
++else(REGEX_H)
++	set(HAVE_REGEXH 0)
++endif(REGEX_H)
++
++add_subdirectory(data)
++add_subdirectory(include)
++add_subdirectory(docs)
++add_subdirectory(libs)
++
++configure_file(include/config.h.cmake ${CMAKE_BINARY_DIR}/include/config.h)
++
++set(DOC_FILES2
++		README
++)
++
++install(FILES ${DOC_FILES2} DESTINATION share/doc/lensfun-${CONF_VERSION})
+diff -urBbN lensfun-0.2.5-orig/data/CMakeLists.txt lensfun-0.2.5/data/CMakeLists.txt
+--- lensfun-0.2.5-orig/data/CMakeLists.txt	1970-01-01 03:00:00 +0300
++++ lensfun-0.2.5/data/CMakeLists.txt	2010-05-14 21:08:45 +0400
+@@ -0,0 +1,2 @@
++
++add_subdirectory(db)
+diff -urBbN lensfun-0.2.5-orig/data/db/CMakeLists.txt lensfun-0.2.5/data/db/CMakeLists.txt
+--- lensfun-0.2.5-orig/data/db/CMakeLists.txt	1970-01-01 03:00:00 +0300
++++ lensfun-0.2.5/data/db/CMakeLists.txt	2010-05-14 21:08:45 +0400
+@@ -0,0 +1,36 @@
++
++set(DB_FILES
++6x6.xml
++compact-canon.xml
++compact-casio.xml
++compact-fujifilm.xml
++compact-kodak.xml
++compact-konica-minolta.xml
++compact-leica.xml
++compact-nikon.xml
++compact-olympus.xml
++compact-panasonic.xml
++compact-pentax.xml
++compact-ricoh.xml
++compact-sigma.xml
++compact-sony.xml
++generic.xml
++rf-leica.xml
++slr-canon.xml
++slr-contax.xml
++slr-hasselblad.xml
++slr-konica-minolta.xml
++slr-nikon.xml
++slr-olympus.xml
++slr-panasonic.xml
++slr-pentax.xml
++slr-samsung.xml
++slr-schneider.xml
++slr-sigma.xml
++slr-sony.xml
++slr-tamron.xml
++slr-tokina.xml
++slr-ussr.xml
++)
++
++install(FILES ${DB_FILES} DESTINATION share/lensfun)
+diff -urBbN lensfun-0.2.5-orig/docs/CMakeLists.txt lensfun-0.2.5/docs/CMakeLists.txt
+--- lensfun-0.2.5-orig/docs/CMakeLists.txt	1970-01-01 03:00:00 +0300
++++ lensfun-0.2.5/docs/CMakeLists.txt	2010-05-14 21:08:45 +0400
+@@ -0,0 +1,8 @@
++
++set(DOC_FILES
++		cc-by-sa-3.0.txt
++		gpl-3.0.txt
++		lgpl-3.0.txt
++)
++
++install(FILES ${DOC_FILES} DESTINATION share/doc/lensfun-${CONF_VERSION})
+diff -urBbN lensfun-0.2.5-orig/include/CMakeLists.txt lensfun-0.2.5/include/CMakeLists.txt
+--- lensfun-0.2.5-orig/include/CMakeLists.txt	1970-01-01 03:00:00 +0300
++++ lensfun-0.2.5/include/CMakeLists.txt	2010-05-14 21:08:45 +0400
+@@ -0,0 +1,2 @@
++
++add_subdirectory(lensfun)
+diff -urBbN lensfun-0.2.5-orig/include/config.h.cmake lensfun-0.2.5/include/config.h.cmake
+--- lensfun-0.2.5-orig/include/config.h.cmake	1970-01-01 03:00:00 +0300
++++ lensfun-0.2.5/include/config.h.cmake	2010-05-14 21:08:45 +0400
+@@ -0,0 +1,30 @@
++/* This file has been automatically generated: do not modify
++   as it will be overwritten next time you run cmake! */
++
++#cmakedefine CONF_PACKAGE "@CONF_PACKAGE@"
++#cmakedefine CONF_VERSION "@CONF_VERSION@"
++#cmakedefine PLATFORM_POSIX @PLATFORM_POSIX@
++#cmakedefine PLATFORM_WINDOWS @PLATFORM_WINDOWS@
++#cmakedefine ARCH_X86_64 @ARCH_X86_64@
++#cmakedefine TUNE_X86_64 @TUNE_X86_64@
++#cmakedefine ARCH_X86 @ARCH_X86@
++#cmakedefine TUNE_X86 @TUNE_X86@
++#cmakedefine CONF_SYMBOL_VISIBILITY @CONF_SYMBOL_VISIBILITY@
++#cmakedefine CONF_COMPILER_MSVC @CONF_COMPILER_MSVC@
++#cmakedefine CONF_COMPILER_GCC @CONF_COMPILER_GCC@
++#cmakedefine CONF_PREFIX "@CONF_PREFIX@"
++#cmakedefine CONF_BINDIR "@CONF_BINDIR@"
++#cmakedefine CONF_SYSCONFDIR "@CONF_SYSCONFDIR@"
++#cmakedefine CONF_DATADIR "@CONF_DATADIR@"
++#cmakedefine CONF_LIBDIR "@CONF_LIBDIR@"
++#cmakedefine CONF_INCLUDEDIR "@CONF_INCLUDEDIR@"
++#cmakedefine CONF_DOCDIR "@CONF_DOCDIR@"
++#cmakedefine CONF_LIBEXECDIR "@CONF_LIBEXECDIR@"
++#cmakedefine CONF_SHAREDLIBS @CONF_SHAREDLIBS@
++#cmakedefine HAVE_GLIB_20 @HAVE_GLIB_20@
++#cmakedefine HAVE_GLIBH @HAVE_GLIBH@
++#cmakedefine HAVE_LIBPNG @HAVE_LIBPNG@
++#cmakedefine HAVE_ZLIB @HAVE_ZLIB@
++#cmakedefine HAVE_REGEXH @HAVE_REGEXH@
++#cmakedefine VECTORIZATION_SSE @VECTORIZATION_SSE@
++#cmakedefine VECTORIZATION_SSE2 @VECTORIZATION_SSE2@
+diff -urBbN lensfun-0.2.5-orig/include/lensfun/CMakeLists.txt lensfun-0.2.5/include/lensfun/CMakeLists.txt
+--- lensfun-0.2.5-orig/include/lensfun/CMakeLists.txt	1970-01-01 03:00:00 +0300
++++ lensfun-0.2.5/include/lensfun/CMakeLists.txt	2010-05-14 21:08:45 +0400
+@@ -0,0 +1,6 @@
++
++set(INC_FILES
++		lensfun.h
++)
++
++install(FILES ${INC_FILES} DESTINATION include)
+diff -urBbN lensfun-0.2.5-orig/libs/CMakeLists.txt lensfun-0.2.5/libs/CMakeLists.txt
+--- lensfun-0.2.5-orig/libs/CMakeLists.txt	1970-01-01 03:00:00 +0300
++++ lensfun-0.2.5/libs/CMakeLists.txt	2010-05-14 21:08:45 +0400
+@@ -0,0 +1,8 @@
++
++add_subdirectory(auxfun)
++add_subdirectory(lensfun)
++if(NOT REGEX_H)
++	add_subdirectory(regex)
++	add_dependencies(lensfun regex)
++endif(NOT REGEX_H)
++
+diff -urBbN lensfun-0.2.5-orig/libs/auxfun/CMakeLists.txt lensfun-0.2.5/libs/auxfun/CMakeLists.txt
+--- lensfun-0.2.5-orig/libs/auxfun/CMakeLists.txt	1970-01-01 03:00:00 +0300
++++ lensfun-0.2.5/libs/auxfun/CMakeLists.txt	2010-05-14 21:08:45 +0400
+@@ -0,0 +1,12 @@
++
++# sources
++set(auxfun_SRCS
++	image.cpp
++)
++
++set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${LIBPNG_CFLAGS_OTHER}")
++
++include_directories(${CMAKE_SOURCE_DIR}/include/auxfun ${CMAKE_BINARY_DIR}/include)
++include_directories(${LIBPNG_INCLUDE_DIRS})
++
++add_library(auxfun STATIC ${auxfun_SRCS})
+diff -urBbN lensfun-0.2.5-orig/libs/lensfun/CMakeLists.txt lensfun-0.2.5/libs/lensfun/CMakeLists.txt
+--- lensfun-0.2.5-orig/libs/lensfun/CMakeLists.txt	1970-01-01 03:00:00 +0300
++++ lensfun-0.2.5/libs/lensfun/CMakeLists.txt	2010-05-14 21:13:27 +0400
+@@ -0,0 +1,52 @@
++
++# sources
++set(lensfun_SRCS
++	auxfun.cpp
++	camera.cpp
++	cpuid.cpp
++	database.cpp
++	lens.cpp
++	mod-color-sse2.cpp
++	mod-color.cpp
++	mod-coord-sse.cpp
++	mod-coord.cpp
++	mod-subpix.cpp
++	modifier.cpp
++	mount.cpp
++)
++
++if(WIN32)
++	set(lensfun_SRCS ${lensfun_SRCS} windows/auxfun.cpp)
++endif(WIN32)
++
++if(VECTORIZATION_SSE)
++	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -msse")
++endif(VECTORIZATION_SSE)
++
++if(VECTORIZATION_SSE2)
++	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -msse2")
++endif(VECTORIZATION_SSE2)
++
++set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${GLIB2_CFLAGS_OTHER}")
++
++include_directories(${CMAKE_SOURCE_DIR}/include/lensfun ${CMAKE_BINARY_DIR}/include)
++include_directories(${GLIB2_INCLUDE_DIRS})
++
++if(NOT REGEX_H)
++	include_directories(${CMAKE_SOURCE_DIR}/include/regex)
++endif(NOT REGEX_H)
++
++add_library(lensfun ${lensfun_SRCS})
++if(REGEX_H)
++	target_link_libraries(lensfun ${GLIB2_LDFLAGS} "-Wl,--enable-auto-import")
++else(REGEX_H)
++	target_link_libraries(lensfun ${GLIB2_LDFLAGS} ${CMAKE_BINARY_DIR}/libs/regex/libregex.a "-Wl,--enable-auto-import")
++endif(REGEX_H)
++set_target_properties(lensfun PROPERTIES VERSION ${CONF_VERSION})
++install(TARGETS lensfun
++		RUNTIME DESTINATION bin
++		LIBRARY DESTINATION ${CONF_LIBDIR}
++		ARCHIVE DESTINATION ${CONF_LIBDIR})
++
++configure_file(lensfun.pc.cmake ${CMAKE_CURRENT_BINARY_DIR}/lensfun.pc)
++install(FILES ${CMAKE_CURRENT_BINARY_DIR}/lensfun.pc DESTINATION ${CONF_LIBDIR}/pkgconfig)
+diff -urBbN lensfun-0.2.5-orig/libs/lensfun/lensfun.pc.cmake lensfun-0.2.5/libs/lensfun/lensfun.pc.cmake
+--- lensfun-0.2.5-orig/libs/lensfun/lensfun.pc.cmake	1970-01-01 03:00:00 +0300
++++ lensfun-0.2.5/libs/lensfun/lensfun.pc.cmake	2010-05-14 21:08:45 +0400
+@@ -0,0 +1,6 @@
++Name: lensfun
++Description: A photographic lens database and access library
++Version: @CONF_VERSION@
++Requires: glib-2.0
++Libs: -L@CONF_LIBDIR@ -llensfun
++Cflags: -I@CONF_INCLUDEDIR@
+diff -urBbN lensfun-0.2.5-orig/libs/regex/CMakeLists.txt lensfun-0.2.5/libs/regex/CMakeLists.txt
+--- lensfun-0.2.5-orig/libs/regex/CMakeLists.txt	1970-01-01 03:00:00 +0300
++++ lensfun-0.2.5/libs/regex/CMakeLists.txt	2010-05-14 21:08:45 +0400
+@@ -0,0 +1,24 @@
++
++# sources
++set(regex_SRCS
++	regcomp.c
++	regerror.c
++	regexec.c
++	tre-ast.c
++	tre-compile.c
++	tre-match-approx.c
++	tre-match-backtrack.c
++	tre-match-parallel.c
++	tre-mem.c
++	tre-parse.c
++	tre-stack.c
++	xmalloc.c
++)
++
++set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wno-unused-function")
++
++add_definitions(-DHAVE_SYS_TYPES_H -DTRE_REGEX_T_FIELD=value -DTRE_VERSION="0" -Dinline=)
++
++include_directories(${CMAKE_SOURCE_DIR}/include/regex ${CMAKE_BINARY_DIR}/include)
++
++add_library(regex STATIC ${regex_SRCS})

@@ -1,0 +1,43 @@
+# Copyright 2010-2012 Chernov A.A.
+# Distributed under the terms of the GNU General Public License v2
+
+DESCRIPTION="PDF rendering library based on the xpdf-3.0 code base"
+
+HOMEPAGE="http://poppler.freedesktop.org/"
+
+LICENSE="GPL-2"
+
+#   dependencies:
+# media-libs/freetype
+#   optional:
+# media-libs/jpeg
+# media-libs/libpng
+# dui-libs/cairo
+# dev-libs/glib
+# gui-libs/gtk+
+# sys-devel/libiconv
+# =media-libs/openjpeg-1.5*
+# sys-libs/zlib
+# media-libs/lcms
+# net-misc/curl
+
+SRC_URI="http://dev.gentooexperimental.org/~scarabeus/${NAME}-${VERSION}.tar.gz"
+
+src_prepare()
+{
+	epatch "${NAME}-${VERSION}-mingw32-pkgconfig.patch"
+}
+
+src_configure()
+{
+	mkdir "../${NAME}_build"
+	cd "../${NAME}_build"
+	cmake -G "MSYS Makefiles" -DCMAKE_BUILD_TYPE="Release" \
+		-DCMAKE_INSTALL_PREFIX=${PREFIX} -DBUILD_SHARED_LIBS=ON \
+		-DBUILD_CPP_TESTS=OFF -DENABLE_SPLASH=ON -DENABLE_ZLIB=ON \
+		-DENABLE_LCMS=ON -DENABLE_UTILS=ON -DENABLE_LIBCURL=ON \
+		-DLIBOPENJPEG_INCLUDE_DIR="${PREFIX}/include/openjpeg-1.5" \
+		-DENABLE_XPDF_HEADERS=ON \
+		"../${NAME}-${VERSION}"
+	checkexitcode $? "cmake failed"
+}

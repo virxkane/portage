@@ -1,0 +1,46 @@
+# Copyright 2012 Chernov A.A.
+# Distributed under the terms of the GNU General Public License v2
+
+DESCRIPTION="Fix the specs file for gcc"
+
+HOMEPAGE="http://gcc.gnu.org/"
+
+LICENSE="GPL-3 LGPL-3 || ( GPL-3 libgcc libstdc++ ) FDL-1.2"
+
+src_unpack()
+{
+	mkdir "${NAME}-${VERSION}"
+}
+
+src_configure()
+{
+	eerror "This is experimentai xbuild, don't use it!"
+	:
+}
+
+src_compile()
+{
+	:
+}
+
+src_install()
+{
+	mmkdir "${INSTDIR}"
+}
+
+pkg_postinst()
+{
+	einfo "Fix specs file..."
+	local targspecs=`dirname \`gcc --print-libgcc-file-name\``/specs
+	
+	local specs="${TMPDIR}/specs"
+	local prefix_w=`posix_w32path "${PREFIX}"`
+
+	echo "*mingw_prefix:" > ${specs}
+	echo ${prefix_w} >> ${specs}
+	echo "" >> ${specs}
+
+	gcc -dumpspecs >> ${specs}
+
+	sed ':a;N;$!ba;s/*cc1plus:\n\n/*cc1plus:\n\-isystem\ \%(mingw_prefix)\/include\n/' ${specs} > ${targspecs}
+}

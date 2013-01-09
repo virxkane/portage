@@ -1,0 +1,31 @@
+# Copyright 2010-2012 Chernov A.A.
+# Distributed under the terms of the GNU General Public License v3
+
+DESCRIPTION="unzipper for pkzip-compressed files"
+
+HOMEPAGE="http://www.info-zip.org/"
+
+LICENSE="Info-ZIP"
+
+RESTRICT="mirror"
+
+SRC_URI="ftp://ftp.info-zip.org/pub/infozip/src/${PN}60.tgz"
+
+SOURCES_DIR="${PN}60"
+
+src_configure()
+{
+	:
+}
+
+src_compile()
+{
+	emake NOASM=1 CC_CPU_OPT=\"$CFLAGS\" -f win32/Makefile.gcc -j1
+}
+
+src_install()
+{
+	install -d ${INSTDIR}${PREFIX}/bin
+	cp -v *unzip*.exe ${INSTDIR}${PREFIX}/bin
+	checkexitcode $? "make install failed"
+}

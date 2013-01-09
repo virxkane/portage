@@ -1,0 +1,14 @@
+diff -urBb libpng-1.2.42-orig/Makefile.in libpng-1.2.42/Makefile.in
+--- libpng-1.2.42-orig/Makefile.in	2010-01-03 08:04:36 +0300
++++ libpng-1.2.42/Makefile.in	2010-01-08 15:09:18 +0300
+@@ -1356,8 +1356,8 @@
+ 	rm -f $@ $@.new
+ 	$(CPP) @LIBPNG_DEFINES@ $(CPPFLAGS) -DPNG_BUILDSYMS $(srcdir)/png.h | \
+ 		$(SED) -n -e \
+-		's|^.*PNG_FUNCTION_EXPORT[ 	]*\([$(AN)]*\).*$$|$(SYMBOL_PREFIX)\1|p' \
+-		-e 's|^.*PNG_DATA_EXPORT[ 	]*\([$(AN)]*\).*$$|$(SYMBOL_PREFIX)\1|p' \
++		's|^.*PNG_FUNCTION_EXPORT[ 	]*\([$(AN)]*\).*$$|\1|p' \
++		-e 's|^.*PNG_DATA_EXPORT[ 	]*\([$(AN)]*\).*$$|\1|p' \
+ 			>$@.new
+ 	mv $@.new $@
+ 

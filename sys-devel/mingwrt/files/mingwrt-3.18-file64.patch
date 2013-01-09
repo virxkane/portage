@@ -1,0 +1,75 @@
+This patch found in smplayer project (http://sourceforge.net/projects/smplayer/)
+http://smplayer.svn.sourceforge.net/viewvc/smplayer/mplayer-builds/patches/file64_mingw.diff?view=log
+Later added some improvements.
+
+diff -urBb mingwrt-3.18-mingw32-orig/include/io.h mingwrt-3.18-mingw32/include/io.h
+--- mingwrt-3.18-mingw32-orig/include/io.h	2010-03-07 06:28:36 +0300
++++ mingwrt-3.18-mingw32/include/io.h	2010-05-03 17:44:40 +0400
+@@ -484,6 +484,10 @@
+ 
+ #endif	/* Not _NO_OLDNAMES */
+ 
++#if defined _FILE_OFFSET_BITS && _FILE_OFFSET_BITS == 64 && !defined _MINGWRT_NO_UNSAFE_REDEFINITION
++#define lseek _lseeki64
++#endif
++
+ #ifdef	__cplusplus
+ }
+ #endif
+diff -urBb mingwrt-3.18-mingw32-orig/include/sys/stat.h mingwrt-3.18-mingw32/include/sys/stat.h
+--- mingwrt-3.18-mingw32-orig/include/sys/stat.h	2010-03-07 06:28:37 +0300
++++ mingwrt-3.18-mingw32/include/sys/stat.h	2010-05-03 18:37:57 +0400
+@@ -270,6 +270,13 @@
+ #endif /* _WSTAT_DEFIND */
+ #endif /* __MSVCRT__ */
+ 
++#if defined _FILE_OFFSET_BITS && _FILE_OFFSET_BITS == 64 && !defined _MINGWRT_NO_UNSAFE_REDEFINITION
++#undef stat
++#define stat  _stati64
++#define fstat _fstati64
++#define wstat _wstati64
++#endif
++
+ #ifdef	__cplusplus
+ }
+ #endif
+diff -urBb mingwrt-3.18-mingw32-orig/include/sys/types.h mingwrt-3.18-mingw32/include/sys/types.h
+--- mingwrt-3.18-mingw32-orig/include/sys/types.h	2010-03-07 06:28:37 +0300
++++ mingwrt-3.18-mingw32/include/sys/types.h	2010-05-03 18:37:46 +0400
+@@ -49,7 +49,11 @@
+ 
+ #ifndef	_OFF_T_
+ #define	_OFF_T_
++#if defined _FILE_OFFSET_BITS && _FILE_OFFSET_BITS == 64 && !defined _MINGWRT_NO_UNSAFE_REDEFINITION
++typedef long long _off_t;
++#else
+ typedef long _off_t;
++#endif
+ 
+ #ifndef	_NO_OLDNAMES
+ typedef _off_t	off_t;
+diff -urBb mingwrt-3.18-mingw32-orig/include/unistd.h mingwrt-3.18-mingw32/include/unistd.h
+--- mingwrt-3.18-mingw32-orig/include/unistd.h	2010-03-07 06:28:37 +0300
++++ mingwrt-3.18-mingw32/include/unistd.h	2010-05-03 17:44:40 +0400
+@@ -38,9 +38,9 @@
+ 
+ /* This is defined as a real library function to allow autoconf
+    to verify its existence. */
+-int ftruncate(int, off_t);
++int ftruncate(int, long);
+ #ifndef __NO_INLINE__
+-__CRT_INLINE int ftruncate(int __fd, off_t __length)
++__CRT_INLINE int ftruncate(int __fd, long __length)
+ {
+   return _chsize (__fd, __length);
+ }
+diff -urBb mingwrt-3.18-mingw32-orig/mingwex/ftruncate.c mingwrt-3.18-mingw32/mingwex/ftruncate.c
+--- mingwrt-3.18-mingw32-orig/mingwex/ftruncate.c	2004-07-11 14:01:41 +0400
++++ mingwrt-3.18-mingw32/mingwex/ftruncate.c	2010-05-03 17:44:40 +0400
+@@ -1,5 +1,5 @@
+ #include <unistd.h>
+-int ftruncate(int __fd, off_t __length)
++int ftruncate(int __fd, long __length)
+ {
+   return _chsize (__fd, __length);
+ }

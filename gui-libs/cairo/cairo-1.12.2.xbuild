@@ -1,0 +1,40 @@
+# Copyright 2010 Chernov A.A.
+# Distributed under the terms of the GNU General Public License v2
+
+DESCRIPTION="A vector graphics library with cross-device output support"
+
+HOMEPAGE="http://www.cairographics.org/"
+
+LICENSE="LGPL-2"
+
+#   dependencies:
+# zlib
+# pkg-config
+# libpng
+# freetype
+# fontconfig
+# pixman
+# glew
+#   optional
+# poppler
+# gtk+
+
+SRC_URI="http://www.cairographics.org/releases/${P}.tar.xz"
+
+src_prepare()
+{
+	epatch "${PN}-1.10.2-mingw32.patch"
+	AT_M4DIR="build" eautoreconf
+}
+
+# cairo have thread code for Win32 then pthread not needed here.
+# --enable-script work only in nix platform: used dlopen() in util/cairo-sphinx
+src_configure()
+{
+	# MinGW don't have POSIX function 'ffs' but gcc have internal implementation.
+	export CFLAGS="${CFLAGS} -Dffs=__builtin_ffs"
+	econf --enable-shared --enable-static \
+		--enable-win32 --enable-win32-font --enable-pdf \
+		--enable-xml --enable-gl \
+		--disable-pthread --disable-gtk-doc
+}

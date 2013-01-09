@@ -1,0 +1,15 @@
+# Copyright 2010 Chernov A.A.
+# Distributed under the terms of the GNU General Public License v2
+
+DESCRIPTION="Exuberant Ctags creates tags files for code browsing in editors"
+
+HOMEPAGE="http://ctags.sourceforge.net"
+
+LICENSE="GPL-2"
+
+SRC_URI="http://sourceforge.net/projects/${PN}/files/${PN}/${PV}/${P}.tar.gz"
+
+src_prepare()
+{
+	epatch "${PN}-5.7-destdir-install.patch"
+}

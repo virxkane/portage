@@ -1,0 +1,4014 @@
+Multiple issues when CFLAGS is defined.  EGREP broken and lots of
+
+checking limits.h usability... yes
+checking limits.h presence... no
+configure: WARNING: limits.h: accepted by the compiler, rejected by the preprocessor!
+configure: WARNING: limits.h: proceeding with the compiler's result
+
+http://lists.gforge.inria.fr/pipermail/mpc-discuss/2011-February/000805.html
+https://gforge.inria.fr/scm/viewvc.php/trunk/configure.ac?root=mpc&r1=932&r2=936
+
+--- a/configure
++++ b/configure
+@@ -749,6 +749,7 @@ LTLIBOBJS
+ WARNINGCFLAGS
+ MPC_LOG_H
+ LIBOBJS
++CPP
+ OTOOL64
+ OTOOL
+ LIPO
+@@ -764,11 +765,10 @@ ac_ct_DUMPBIN
+ DUMPBIN
+ LD
+ FGREP
+-LIBTOOL
+-SED
+ EGREP
+ GREP
+-CPP
++SED
++LIBTOOL
+ am__fastdepCC_FALSE
+ am__fastdepCC_TRUE
+ CCDEPMODE
+@@ -1658,43 +1658,6 @@ fi
+ 
+ } # ac_fn_c_try_compile
+ 
+-# ac_fn_c_try_cpp LINENO
+-# ----------------------
+-# Try to preprocess conftest.$ac_ext, and return whether this succeeded.
+-ac_fn_c_try_cpp ()
+-{
+-  as_lineno=${as_lineno-"$1"} as_lineno_stack=as_lineno_stack=$as_lineno_stack
+-  if { { ac_try="$ac_cpp conftest.$ac_ext"
+-case "(($ac_try" in
+-  *\"* | *\`* | *\\*) ac_try_echo=\$ac_try;;
+-  *) ac_try_echo=$ac_try;;
+-esac
+-eval ac_try_echo="\"\$as_me:${as_lineno-$LINENO}: $ac_try_echo\""
+-$as_echo "$ac_try_echo"; } >&5
+-  (eval "$ac_cpp conftest.$ac_ext") 2>conftest.err
+-  ac_status=$?
+-  if test -s conftest.err; then
+-    grep -v '^ *+' conftest.err >conftest.er1
+-    cat conftest.er1 >&5
+-    mv -f conftest.er1 conftest.err
+-  fi
+-  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+-  test $ac_status = 0; } > conftest.i && {
+-	 test -z "$ac_c_preproc_warn_flag$ac_c_werror_flag" ||
+-	 test ! -s conftest.err
+-       }; then :
+-  ac_retval=0
+-else
+-  $as_echo "$as_me: failed program was:" >&5
+-sed 's/^/| /' conftest.$ac_ext >&5
+-
+-    ac_retval=1
+-fi
+-  eval $as_lineno_stack; test "x$as_lineno_stack" = x && { as_lineno=; unset as_lineno;}
+-  as_fn_set_status $ac_retval
+-
+-} # ac_fn_c_try_cpp
+-
+ # ac_fn_c_try_link LINENO
+ # -----------------------
+ # Try to link conftest.$ac_ext, and return whether this succeeded.
+@@ -1772,6 +1735,43 @@ $as_echo "$ac_res" >&6; }
+ 
+ } # ac_fn_c_check_header_compile
+ 
++# ac_fn_c_try_cpp LINENO
++# ----------------------
++# Try to preprocess conftest.$ac_ext, and return whether this succeeded.
++ac_fn_c_try_cpp ()
++{
++  as_lineno=${as_lineno-"$1"} as_lineno_stack=as_lineno_stack=$as_lineno_stack
++  if { { ac_try="$ac_cpp conftest.$ac_ext"
++case "(($ac_try" in
++  *\"* | *\`* | *\\*) ac_try_echo=\$ac_try;;
++  *) ac_try_echo=$ac_try;;
++esac
++eval ac_try_echo="\"\$as_me:${as_lineno-$LINENO}: $ac_try_echo\""
++$as_echo "$ac_try_echo"; } >&5
++  (eval "$ac_cpp conftest.$ac_ext") 2>conftest.err
++  ac_status=$?
++  if test -s conftest.err; then
++    grep -v '^ *+' conftest.err >conftest.er1
++    cat conftest.er1 >&5
++    mv -f conftest.er1 conftest.err
++  fi
++  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
++  test $ac_status = 0; } > conftest.i && {
++	 test -z "$ac_c_preproc_warn_flag$ac_c_werror_flag" ||
++	 test ! -s conftest.err
++       }; then :
++  ac_retval=0
++else
++  $as_echo "$as_me: failed program was:" >&5
++sed 's/^/| /' conftest.$ac_ext >&5
++
++    ac_retval=1
++fi
++  eval $as_lineno_stack; test "x$as_lineno_stack" = x && { as_lineno=; unset as_lineno;}
++  as_fn_set_status $ac_retval
++
++} # ac_fn_c_try_cpp
++
+ # ac_fn_c_try_run LINENO
+ # ----------------------
+ # Try to link conftest.$ac_ext, and return whether this succeeded. Assumes
+@@ -2288,7 +2288,7 @@ $as_echo "$as_me: loading site script $ac_site_file" >&6;}
+       || { { $as_echo "$as_me:${as_lineno-$LINENO}: error: in \`$ac_pwd':" >&5
+ $as_echo "$as_me: error: in \`$ac_pwd':" >&2;}
+ as_fn_error $? "failed to load site script $ac_site_file
+-See \`config.log' for more details" "$LINENO" 5 ; }
++See \`config.log' for more details" "$LINENO" 5; }
+   fi
+ done
+ 
+@@ -2516,11 +2516,11 @@ am_lf='
+ '
+ case `pwd` in
+   *[\\\"\#\$\&\'\`$am_lf]*)
+-    as_fn_error $? "unsafe absolute working directory name" "$LINENO" 5 ;;
++    as_fn_error $? "unsafe absolute working directory name" "$LINENO" 5;;
+ esac
+ case $srcdir in
+   *[\\\"\#\$\&\'\`$am_lf\ \	]*)
+-    as_fn_error $? "unsafe srcdir value: \`$srcdir'" "$LINENO" 5 ;;
++    as_fn_error $? "unsafe srcdir value: \`$srcdir'" "$LINENO" 5;;
+ esac
+ 
+ # Do `set' in a subshell so we don't clobber the current shell's
+@@ -2934,7 +2934,7 @@ fi
+ $as_echo "$ac_cv_build" >&6; }
+ case $ac_cv_build in
+ *-*-*) ;;
+-*) as_fn_error $? "invalid value of canonical build" "$LINENO" 5 ;;
++*) as_fn_error $? "invalid value of canonical build" "$LINENO" 5;;
+ esac
+ build=$ac_cv_build
+ ac_save_IFS=$IFS; IFS='-'
+@@ -2967,7 +2967,7 @@ fi
+ $as_echo "$ac_cv_host" >&6; }
+ case $ac_cv_host in
+ *-*-*) ;;
+-*) as_fn_error $? "invalid value of canonical host" "$LINENO" 5 ;;
++*) as_fn_error $? "invalid value of canonical host" "$LINENO" 5;;
+ esac
+ host=$ac_cv_host
+ ac_save_IFS=$IFS; IFS='-'
+@@ -3008,7 +3008,7 @@ if test "${with_mpfr+set}" = set; then :
+                { { $as_echo "$as_me:${as_lineno-$LINENO}: error: in \`$ac_pwd':" >&5
+ $as_echo "$as_me: error: in \`$ac_pwd':" >&2;}
+ as_fn_error $? "Do not use --with-mpfr and --with-mpfr-include/--with-mpfr-lib options simultaneously.
+-See \`config.log' for more details" "$LINENO" 5 ; }
++See \`config.log' for more details" "$LINENO" 5; }
+             fi
+ 
+ fi
+@@ -3036,7 +3036,7 @@ if test "${with_gmp+set}" = set; then :
+                { { $as_echo "$as_me:${as_lineno-$LINENO}: error: in \`$ac_pwd':" >&5
+ $as_echo "$as_me: error: in \`$ac_pwd':" >&2;}
+ as_fn_error $? "Do not use --with-gmp and --with-gmp-include/--with-gmp-lib options simultaneously.
+-See \`config.log' for more details" "$LINENO" 5 ; }
++See \`config.log' for more details" "$LINENO" 5; }
+             fi
+ 
+ fi
+@@ -3048,7 +3048,7 @@ if test "${enable_logging+set}" = set; then :
+   as_fn_error $? "Logging works only with shared libraries; do not mix --enable-logging and --disable-shared" "$LINENO" 5
+ fi ;;
+                  no)  ;;
+-                 *)   as_fn_error $? "Bad value for --enable-logging: Use yes or no" "$LINENO" 5  ;;
++                 *)   as_fn_error $? "Bad value for --enable-logging: Use yes or no" "$LINENO" 5 ;;
+               esac
+ 
+ 
+@@ -3056,12 +3056,6 @@ fi
+ 
+ 
+ 
+-
+-if test -n "$CFLAGS" || test -n "$CC" ; then
+-   user_redefine_cc=yes
+-fi
+-
+-# Check for programs
+ ac_ext=c
+ ac_cpp='$CPP $CPPFLAGS'
+ ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
+@@ -3363,7 +3357,7 @@ fi
+ test -z "$CC" && { { $as_echo "$as_me:${as_lineno-$LINENO}: error: in \`$ac_pwd':" >&5
+ $as_echo "$as_me: error: in \`$ac_pwd':" >&2;}
+ as_fn_error $? "no acceptable C compiler found in \$PATH
+-See \`config.log' for more details" "$LINENO" 5 ; }
++See \`config.log' for more details" "$LINENO" 5; }
+ 
+ # Provide some information about the compiler.
+ $as_echo "$as_me:${as_lineno-$LINENO}: checking for C compiler version" >&5
+@@ -3478,7 +3472,7 @@ sed 's/^/| /' conftest.$ac_ext >&5
+ { { $as_echo "$as_me:${as_lineno-$LINENO}: error: in \`$ac_pwd':" >&5
+ $as_echo "$as_me: error: in \`$ac_pwd':" >&2;}
+ as_fn_error 77 "C compiler cannot create executables
+-See \`config.log' for more details" "$LINENO" 5 ; }
++See \`config.log' for more details" "$LINENO" 5; }
+ else
+   { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+ $as_echo "yes" >&6; }
+@@ -3521,7 +3515,7 @@ else
+   { { $as_echo "$as_me:${as_lineno-$LINENO}: error: in \`$ac_pwd':" >&5
+ $as_echo "$as_me: error: in \`$ac_pwd':" >&2;}
+ as_fn_error $? "cannot compute suffix of executables: cannot compile and link
+-See \`config.log' for more details" "$LINENO" 5 ; }
++See \`config.log' for more details" "$LINENO" 5; }
+ fi
+ rm -f conftest conftest$ac_cv_exeext
+ { $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_exeext" >&5
+@@ -3580,7 +3574,7 @@ $as_echo "$ac_try_echo"; } >&5
+ $as_echo "$as_me: error: in \`$ac_pwd':" >&2;}
+ as_fn_error $? "cannot run C compiled programs.
+ If you meant to cross compile, use \`--host'.
+-See \`config.log' for more details" "$LINENO" 5 ; }
++See \`config.log' for more details" "$LINENO" 5; }
+     fi
+   fi
+ fi
+@@ -3632,7 +3626,7 @@ sed 's/^/| /' conftest.$ac_ext >&5
+ { { $as_echo "$as_me:${as_lineno-$LINENO}: error: in \`$ac_pwd':" >&5
+ $as_echo "$as_me: error: in \`$ac_pwd':" >&2;}
+ as_fn_error $? "cannot compute suffix of object files: cannot compile
+-See \`config.log' for more details" "$LINENO" 5 ; }
++See \`config.log' for more details" "$LINENO" 5; }
+ fi
+ rm -f conftest.$ac_cv_objext conftest.$ac_ext
+ fi
+@@ -4048,29 +4042,115 @@ ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $
+ ac_compiler_gnu=$ac_cv_c_compiler_gnu
+ 
+ 
+-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for gmp.h" >&5
+-$as_echo_n "checking for gmp.h... " >&6; }
++# Set up LibTool
++case `pwd` in
++  *\ * | *\	*)
++    { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: Libtool does not cope well with whitespace in \`pwd\`" >&5
++$as_echo "$as_me: WARNING: Libtool does not cope well with whitespace in \`pwd\`" >&2;} ;;
++esac
+ 
+-cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+-/* end confdefs.h.  */
+ 
+-#include "gmp.h"
+ 
+-_ACEOF
+-if ac_fn_c_try_compile "$LINENO"; then :
+-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+-$as_echo "yes" >&6; }
++macro_version='2.2.6b'
++macro_revision='1.3017'
++
++
++
++
++
++
++
++
++
++
++
++
++
++ltmain="$ac_aux_dir/ltmain.sh"
++
++{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for a sed that does not truncate output" >&5
++$as_echo_n "checking for a sed that does not truncate output... " >&6; }
++if test "${ac_cv_path_SED+set}" = set; then :
++  $as_echo_n "(cached) " >&6
+ else
++            ac_script=s/aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa/bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb/
++     for ac_i in 1 2 3 4 5 6 7; do
++       ac_script="$ac_script$as_nl$ac_script"
++     done
++     echo "$ac_script" 2>/dev/null | sed 99q >conftest.sed
++     { ac_script=; unset ac_script;}
++     if test -z "$SED"; then
++  ac_path_SED_found=false
++  # Loop through the user's path and test for each of PROGNAME-LIST
++  as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
++for as_dir in $PATH
++do
++  IFS=$as_save_IFS
++  test -z "$as_dir" && as_dir=.
++    for ac_prog in sed gsed; do
++    for ac_exec_ext in '' $ac_executable_extensions; do
++      ac_path_SED="$as_dir/$ac_prog$ac_exec_ext"
++      { test -f "$ac_path_SED" && $as_test_x "$ac_path_SED"; } || continue
++# Check for GNU ac_path_SED and select it if it is found.
++  # Check for GNU $ac_path_SED
++case `"$ac_path_SED" --version 2>&1` in
++*GNU*)
++  ac_cv_path_SED="$ac_path_SED" ac_path_SED_found=:;;
++*)
++  ac_count=0
++  $as_echo_n 0123456789 >"conftest.in"
++  while :
++  do
++    cat "conftest.in" "conftest.in" >"conftest.tmp"
++    mv "conftest.tmp" "conftest.in"
++    cp "conftest.in" "conftest.nl"
++    $as_echo '' >> "conftest.nl"
++    "$ac_path_SED" -f conftest.sed < "conftest.nl" >"conftest.out" 2>/dev/null || break
++    diff "conftest.out" "conftest.nl" >/dev/null 2>&1 || break
++    as_fn_arith $ac_count + 1 && ac_count=$as_val
++    if test $ac_count -gt ${ac_path_SED_max-0}; then
++      # Best one so far, save it but keep looking for a better one
++      ac_cv_path_SED="$ac_path_SED"
++      ac_path_SED_max=$ac_count
++    fi
++    # 10*(2^10) chars as input seems more than enough
++    test $ac_count -gt 10 && break
++  done
++  rm -f conftest.in conftest.tmp conftest.nl conftest.out;;
++esac
+ 
+- { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+-$as_echo "no" >&6; }
+- as_fn_error $? "gmp.h can't be found, or is unusable." "$LINENO" 5
++      $ac_path_SED_found && break 3
++    done
++  done
++  done
++IFS=$as_save_IFS
++  if test -z "$ac_cv_path_SED"; then
++    as_fn_error $? "no acceptable sed could be found in \$PATH" "$LINENO" 5
++  fi
++else
++  ac_cv_path_SED=$SED
++fi
+ 
+ fi
+-rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
++{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_path_SED" >&5
++$as_echo "$ac_cv_path_SED" >&6; }
++ SED="$ac_cv_path_SED"
++  rm -f conftest.sed
+ 
+-if test -z "$user_redefine_cc" ; then
+-   { $as_echo "$as_me:${as_lineno-$LINENO}: checking for grep that handles long lines and -e" >&5
++test -z "$SED" && SED=sed
++Xsed="$SED -e 1s/^X//"
++
++
++
++
++
++
++
++
++
++
++
++{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for grep that handles long lines and -e" >&5
+ $as_echo_n "checking for grep that handles long lines and -e... " >&6; }
+ if test "${ac_cv_path_GREP+set}" = set; then :
+   $as_echo_n "(cached) " >&6
+@@ -4133,159 +4213,19 @@ $as_echo "$ac_cv_path_GREP" >&6; }
+  GREP="$ac_cv_path_GREP"
+ 
+ 
+-
+-   { $as_echo "$as_me:${as_lineno-$LINENO}: checking for CC and CFLAGS in gmp.h" >&5
+-$as_echo_n "checking for CC and CFLAGS in gmp.h... " >&6; }
+-   ac_ext=c
+-ac_cpp='$CPP $CPPFLAGS'
+-ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
+-ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
+-ac_compiler_gnu=$ac_cv_c_compiler_gnu
+-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking how to run the C preprocessor" >&5
+-$as_echo_n "checking how to run the C preprocessor... " >&6; }
+-# On Suns, sometimes $CPP names a directory.
+-if test -n "$CPP" && test -d "$CPP"; then
+-  CPP=
+-fi
+-if test -z "$CPP"; then
+-  if test "${ac_cv_prog_CPP+set}" = set; then :
++{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for egrep" >&5
++$as_echo_n "checking for egrep... " >&6; }
++if test "${ac_cv_path_EGREP+set}" = set; then :
+   $as_echo_n "(cached) " >&6
+ else
+-      # Double quotes because CPP needs to be expanded
+-    for CPP in "$CC -E" "$CC -E -traditional-cpp" "/lib/cpp"
+-    do
+-      ac_preproc_ok=false
+-for ac_c_preproc_warn_flag in '' yes
+-do
+-  # Use a header file that comes with gcc, so configuring glibc
+-  # with a fresh cross-compiler works.
+-  # Prefer <limits.h> to <assert.h> if __STDC__ is defined, since
+-  # <limits.h> exists even on freestanding compilers.
+-  # On the NeXT, cc -E runs the code through the compiler's parser,
+-  # not just through cpp. "Syntax error" is here to catch this case.
+-  cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+-/* end confdefs.h.  */
+-#ifdef __STDC__
+-# include <limits.h>
+-#else
+-# include <assert.h>
+-#endif
+-		     Syntax error
+-_ACEOF
+-if ac_fn_c_try_cpp "$LINENO"; then :
+-
+-else
+-  # Broken: fails on valid input.
+-continue
+-fi
+-rm -f conftest.err conftest.i conftest.$ac_ext
+-
+-  # OK, works on sane cases.  Now check whether nonexistent headers
+-  # can be detected and how.
+-  cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+-/* end confdefs.h.  */
+-#include <ac_nonexistent.h>
+-_ACEOF
+-if ac_fn_c_try_cpp "$LINENO"; then :
+-  # Broken: success on invalid input.
+-continue
+-else
+-  # Passes both tests.
+-ac_preproc_ok=:
+-break
+-fi
+-rm -f conftest.err conftest.i conftest.$ac_ext
+-
+-done
+-# Because of `break', _AC_PREPROC_IFELSE's cleaning code was skipped.
+-rm -f conftest.i conftest.err conftest.$ac_ext
+-if $ac_preproc_ok; then :
+-  break
+-fi
+-
+-    done
+-    ac_cv_prog_CPP=$CPP
+-
+-fi
+-  CPP=$ac_cv_prog_CPP
+-else
+-  ac_cv_prog_CPP=$CPP
+-fi
+-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $CPP" >&5
+-$as_echo "$CPP" >&6; }
+-ac_preproc_ok=false
+-for ac_c_preproc_warn_flag in '' yes
+-do
+-  # Use a header file that comes with gcc, so configuring glibc
+-  # with a fresh cross-compiler works.
+-  # Prefer <limits.h> to <assert.h> if __STDC__ is defined, since
+-  # <limits.h> exists even on freestanding compilers.
+-  # On the NeXT, cc -E runs the code through the compiler's parser,
+-  # not just through cpp. "Syntax error" is here to catch this case.
+-  cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+-/* end confdefs.h.  */
+-#ifdef __STDC__
+-# include <limits.h>
+-#else
+-# include <assert.h>
+-#endif
+-		     Syntax error
+-_ACEOF
+-if ac_fn_c_try_cpp "$LINENO"; then :
+-
+-else
+-  # Broken: fails on valid input.
+-continue
+-fi
+-rm -f conftest.err conftest.i conftest.$ac_ext
+-
+-  # OK, works on sane cases.  Now check whether nonexistent headers
+-  # can be detected and how.
+-  cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+-/* end confdefs.h.  */
+-#include <ac_nonexistent.h>
+-_ACEOF
+-if ac_fn_c_try_cpp "$LINENO"; then :
+-  # Broken: success on invalid input.
+-continue
+-else
+-  # Passes both tests.
+-ac_preproc_ok=:
+-break
+-fi
+-rm -f conftest.err conftest.i conftest.$ac_ext
+-
+-done
+-# Because of `break', _AC_PREPROC_IFELSE's cleaning code was skipped.
+-rm -f conftest.i conftest.err conftest.$ac_ext
+-if $ac_preproc_ok; then :
+-
+-else
+-  { { $as_echo "$as_me:${as_lineno-$LINENO}: error: in \`$ac_pwd':" >&5
+-$as_echo "$as_me: error: in \`$ac_pwd':" >&2;}
+-as_fn_error $? "C preprocessor \"$CPP\" fails sanity check
+-See \`config.log' for more details" "$LINENO" 5 ; }
+-fi
+-
+-ac_ext=c
+-ac_cpp='$CPP $CPPFLAGS'
+-ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
+-ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
+-ac_compiler_gnu=$ac_cv_c_compiler_gnu
+-
+-   { $as_echo "$as_me:${as_lineno-$LINENO}: checking for egrep" >&5
+-$as_echo_n "checking for egrep... " >&6; }
+-if test "${ac_cv_path_EGREP+set}" = set; then :
+-  $as_echo_n "(cached) " >&6
+-else
+-  if echo a | $GREP -E '(a|b)' >/dev/null 2>&1
+-   then ac_cv_path_EGREP="$GREP -E"
+-   else
+-     if test -z "$EGREP"; then
+-  ac_path_EGREP_found=false
+-  # Loop through the user's path and test for each of PROGNAME-LIST
+-  as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
+-for as_dir in $PATH$PATH_SEPARATOR/usr/xpg4/bin
++  if echo a | $GREP -E '(a|b)' >/dev/null 2>&1
++   then ac_cv_path_EGREP="$GREP -E"
++   else
++     if test -z "$EGREP"; then
++  ac_path_EGREP_found=false
++  # Loop through the user's path and test for each of PROGNAME-LIST
++  as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
++for as_dir in $PATH$PATH_SEPARATOR/usr/xpg4/bin
+ do
+   IFS=$as_save_IFS
+   test -z "$as_dir" && as_dir=.
+@@ -4340,34 +4280,31 @@ $as_echo "$ac_cv_path_EGREP" >&6; }
+  EGREP="$ac_cv_path_EGREP"
+ 
+ 
+-   { $as_echo "$as_me:${as_lineno-$LINENO}: checking for a sed that does not truncate output" >&5
+-$as_echo_n "checking for a sed that does not truncate output... " >&6; }
+-if test "${ac_cv_path_SED+set}" = set; then :
++{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for fgrep" >&5
++$as_echo_n "checking for fgrep... " >&6; }
++if test "${ac_cv_path_FGREP+set}" = set; then :
+   $as_echo_n "(cached) " >&6
+ else
+-            ac_script=s/aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa/bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb/
+-     for ac_i in 1 2 3 4 5 6 7; do
+-       ac_script="$ac_script$as_nl$ac_script"
+-     done
+-     echo "$ac_script" 2>/dev/null | sed 99q >conftest.sed
+-     { ac_script=; unset ac_script;}
+-     if test -z "$SED"; then
+-  ac_path_SED_found=false
++  if echo 'ab*c' | $GREP -F 'ab*c' >/dev/null 2>&1
++   then ac_cv_path_FGREP="$GREP -F"
++   else
++     if test -z "$FGREP"; then
++  ac_path_FGREP_found=false
+   # Loop through the user's path and test for each of PROGNAME-LIST
+   as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
+-for as_dir in $PATH
++for as_dir in $PATH$PATH_SEPARATOR/usr/xpg4/bin
+ do
+   IFS=$as_save_IFS
+   test -z "$as_dir" && as_dir=.
+-    for ac_prog in sed gsed; do
++    for ac_prog in fgrep; do
+     for ac_exec_ext in '' $ac_executable_extensions; do
+-      ac_path_SED="$as_dir/$ac_prog$ac_exec_ext"
+-      { test -f "$ac_path_SED" && $as_test_x "$ac_path_SED"; } || continue
+-# Check for GNU ac_path_SED and select it if it is found.
+-  # Check for GNU $ac_path_SED
+-case `"$ac_path_SED" --version 2>&1` in
++      ac_path_FGREP="$as_dir/$ac_prog$ac_exec_ext"
++      { test -f "$ac_path_FGREP" && $as_test_x "$ac_path_FGREP"; } || continue
++# Check for GNU ac_path_FGREP and select it if it is found.
++  # Check for GNU $ac_path_FGREP
++case `"$ac_path_FGREP" --version 2>&1` in
+ *GNU*)
+-  ac_cv_path_SED="$ac_path_SED" ac_path_SED_found=:;;
++  ac_cv_path_FGREP="$ac_path_FGREP" ac_path_FGREP_found=:;;
+ *)
+   ac_count=0
+   $as_echo_n 0123456789 >"conftest.in"
+@@ -4376,14 +4313,14 @@ case `"$ac_path_SED" --version 2>&1` in
+     cat "conftest.in" "conftest.in" >"conftest.tmp"
+     mv "conftest.tmp" "conftest.in"
+     cp "conftest.in" "conftest.nl"
+-    $as_echo '' >> "conftest.nl"
+-    "$ac_path_SED" -f conftest.sed < "conftest.nl" >"conftest.out" 2>/dev/null || break
++    $as_echo 'FGREP' >> "conftest.nl"
++    "$ac_path_FGREP" FGREP < "conftest.nl" >"conftest.out" 2>/dev/null || break
+     diff "conftest.out" "conftest.nl" >/dev/null 2>&1 || break
+     as_fn_arith $ac_count + 1 && ac_count=$as_val
+-    if test $ac_count -gt ${ac_path_SED_max-0}; then
++    if test $ac_count -gt ${ac_path_FGREP_max-0}; then
+       # Best one so far, save it but keep looking for a better one
+-      ac_cv_path_SED="$ac_path_SED"
+-      ac_path_SED_max=$ac_count
++      ac_cv_path_FGREP="$ac_path_FGREP"
++      ac_path_FGREP_max=$ac_count
+     fi
+     # 10*(2^10) chars as input seems more than enough
+     test $ac_count -gt 10 && break
+@@ -4391,217 +4328,147 @@ case `"$ac_path_SED" --version 2>&1` in
+   rm -f conftest.in conftest.tmp conftest.nl conftest.out;;
+ esac
+ 
+-      $ac_path_SED_found && break 3
++      $ac_path_FGREP_found && break 3
+     done
+   done
+   done
+ IFS=$as_save_IFS
+-  if test -z "$ac_cv_path_SED"; then
+-    as_fn_error $? "no acceptable sed could be found in \$PATH" "$LINENO" 5
++  if test -z "$ac_cv_path_FGREP"; then
++    as_fn_error $? "no acceptable fgrep could be found in $PATH$PATH_SEPARATOR/usr/xpg4/bin" "$LINENO" 5
+   fi
+ else
+-  ac_cv_path_SED=$SED
+-fi
+-
++  ac_cv_path_FGREP=$FGREP
+ fi
+-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_path_SED" >&5
+-$as_echo "$ac_cv_path_SED" >&6; }
+- SED="$ac_cv_path_SED"
+-  rm -f conftest.sed
+ 
+-   # Get CC
+-   echo "#include \"gmp.h\"" >  conftest.c
+-   echo "MPC_OPTION __GMP_CC"           >> conftest.c
+-   GMP_CC=`$CPP $CPPFLAGS conftest.c 2> /dev/null | $EGREP MPC_OPTION | $SED -e 's/MPC_OPTION //g' | $SED -e 's/"//g'`
+-   #Get CFLAGS
+-   echo "#include \"gmp.h\"" >  conftest.c
+-   echo "MPC_OPTION __GMP_CFLAGS"           >> conftest.c
+-   GMP_CFLAGS=`$CPP $CPPFLAGS conftest.c 2> /dev/null | $EGREP MPC_OPTION | $SED -e 's/MPC_OPTION //g'| $SED -e 's/"//g'`
+-   rm -f conftest.c
+-   if test "x$GMP_CFLAGS" = "x__GMP_CFLAGS" -o "x$GMP_CC" = "x__GMP_CC" ; then
+-      { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+-$as_echo "no" >&6; }
+-      GMP_CFLAGS=
+-      GMP_CC=
+-   else
+-      { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes CC=$GMP_CC CFLAGS=$GMP_CFLAGS" >&5
+-$as_echo "yes CC=$GMP_CC CFLAGS=$GMP_CFLAGS" >&6; }
+    fi
++fi
++{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_path_FGREP" >&5
++$as_echo "$ac_cv_path_FGREP" >&6; }
++ FGREP="$ac_cv_path_FGREP"
+ 
+-      if test -n "$GMP_CFLAGS" ; then
+-      old_cflags=$CFLAGS
+-      old_cc=$CC
+-      CFLAGS=$GMP_CFLAGS
+-      CC=$GMP_CC
+-      { $as_echo "$as_me:${as_lineno-$LINENO}: checking for CC=$GMP_CC and CFLAGS=$GMP_CFLAGS" >&5
+-$as_echo_n "checking for CC=$GMP_CC and CFLAGS=$GMP_CFLAGS... " >&6; }
+-      cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+-/* end confdefs.h.  */
+-/*hello*/
+-int
+-main ()
+-{
+-/*world*/
+-  ;
+-  return 0;
+-}
+-_ACEOF
+-if ac_fn_c_try_compile "$LINENO"; then :
+ 
+-         { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+-$as_echo "yes" >&6; }
++test -z "$GREP" && GREP=grep
+ 
+-else
+ 
+-         { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+-$as_echo "no" >&6; }
+-         CFLAGS=$old_cflags
+-         CC=$old_cc
+ 
+-fi
+-rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+-            cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+-/* end confdefs.h.  */
+ 
+-   #ifndef __GNUC__
+-   #error "GCC Not Found"
+-   error
+-   #endif
+ 
+-int
+-main ()
+-{
+ 
+-  ;
+-  return 0;
+-}
+-_ACEOF
+-if ac_fn_c_try_compile "$LINENO"; then :
+ 
+-      GCC=yes
+ 
+-else
+ 
+-      GCC=no
+ 
+-fi
+-rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+-   fi
+ 
+ 
+-fi
+ 
+ 
+-case $host in
+-  *-*-cygwin* | *-*-mingw* | *-*-pw32* | *-*-os2*)
+ 
+-   { $as_echo "$as_me:${as_lineno-$LINENO}: checking for DLL/static GMP" >&5
+-$as_echo_n "checking for DLL/static GMP... " >&6; }
+-   if test "$enable_shared" = yes; then
+-     LDFLAGS="$LDFLAGS -no-undefined"
+-     cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+-/* end confdefs.h.  */
+ 
+-#include "gmp.h"
+-#if !__GMP_LIBGMP_DLL
+-#error
+-error
+-#endif
+ 
+-int
+-main ()
+-{
+ 
+-  ;
+-  return 0;
+-}
+-_ACEOF
+-if ac_fn_c_try_compile "$LINENO"; then :
+-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: DLL" >&5
+-$as_echo "DLL" >&6; }
+-else
+ 
+-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: static" >&5
+-$as_echo "static" >&6; }
+-  as_fn_error $? "gmp.h isn't a DLL: use --enable-static --disable-shared" "$LINENO" 5
++# Check whether --with-gnu-ld was given.
++if test "${with_gnu_ld+set}" = set; then :
++  withval=$with_gnu_ld; test "$withval" = no || with_gnu_ld=yes
++else
++  with_gnu_ld=no
+ fi
+-rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+-     cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+-/* end confdefs.h.  */
+-
+-#include "mpfr.h"
+-#if !__GMP_LIBGMP_DLL
+-#error
+-error
+-#endif
+-
+-int
+-main ()
+-{
+ 
+-  ;
+-  return 0;
+-}
+-_ACEOF
+-if ac_fn_c_try_compile "$LINENO"; then :
+-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: DLL" >&5
+-$as_echo "DLL" >&6; }
++ac_prog=ld
++if test "$GCC" = yes; then
++  # Check if gcc -print-prog-name=ld gives a path.
++  { $as_echo "$as_me:${as_lineno-$LINENO}: checking for ld used by $CC" >&5
++$as_echo_n "checking for ld used by $CC... " >&6; }
++  case $host in
++  *-*-mingw*)
++    # gcc leaves a trailing carriage return which upsets mingw
++    ac_prog=`($CC -print-prog-name=ld) 2>&5 | tr -d '\015'` ;;
++  *)
++    ac_prog=`($CC -print-prog-name=ld) 2>&5` ;;
++  esac
++  case $ac_prog in
++    # Accept absolute paths.
++    [\\/]* | ?:[\\/]*)
++      re_direlt='/[^/][^/]*/\.\./'
++      # Canonicalize the pathname of ld
++      ac_prog=`$ECHO "$ac_prog"| $SED 's%\\\\%/%g'`
++      while $ECHO "$ac_prog" | $GREP "$re_direlt" > /dev/null 2>&1; do
++	ac_prog=`$ECHO $ac_prog| $SED "s%$re_direlt%/%"`
++      done
++      test -z "$LD" && LD="$ac_prog"
++      ;;
++  "")
++    # If it fails, then pretend we aren't using GCC.
++    ac_prog=ld
++    ;;
++  *)
++    # If it is relative, then search for the first ld in PATH.
++    with_gnu_ld=unknown
++    ;;
++  esac
++elif test "$with_gnu_ld" = yes; then
++  { $as_echo "$as_me:${as_lineno-$LINENO}: checking for GNU ld" >&5
++$as_echo_n "checking for GNU ld... " >&6; }
+ else
+-
+-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: static" >&5
+-$as_echo "static" >&6; }
+-  as_fn_error $? "gmp.h isn't a DLL: use --enable-static --disable-shared" "$LINENO" 5
++  { $as_echo "$as_me:${as_lineno-$LINENO}: checking for non-GNU ld" >&5
++$as_echo_n "checking for non-GNU ld... " >&6; }
+ fi
+-rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+-   else
+-     cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+-/* end confdefs.h.  */
+-
+-#include "gmp.h"
+-#if __GMP_LIBGMP_DLL
+-#error
+-error
+-#endif
+-
+-int
+-main ()
+-{
+-
+-  ;
+-  return 0;
+-}
+-_ACEOF
+-if ac_fn_c_try_compile "$LINENO"; then :
+-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: static" >&5
+-$as_echo "static" >&6; }
++if test "${lt_cv_path_LD+set}" = set; then :
++  $as_echo_n "(cached) " >&6
++else
++  if test -z "$LD"; then
++  lt_save_ifs="$IFS"; IFS=$PATH_SEPARATOR
++  for ac_dir in $PATH; do
++    IFS="$lt_save_ifs"
++    test -z "$ac_dir" && ac_dir=.
++    if test -f "$ac_dir/$ac_prog" || test -f "$ac_dir/$ac_prog$ac_exeext"; then
++      lt_cv_path_LD="$ac_dir/$ac_prog"
++      # Check to see if the program is GNU ld.  I'd rather use --version,
++      # but apparently some variants of GNU ld only accept -v.
++      # Break only if it was the GNU/non-GNU ld that we prefer.
++      case `"$lt_cv_path_LD" -v 2>&1 </dev/null` in
++      *GNU* | *'with BFD'*)
++	test "$with_gnu_ld" != no && break
++	;;
++      *)
++	test "$with_gnu_ld" != yes && break
++	;;
++      esac
++    fi
++  done
++  IFS="$lt_save_ifs"
+ else
++  lt_cv_path_LD="$LD" # Let the user override the test with a path.
++fi
++fi
+ 
+-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: DLL" >&5
+-$as_echo "DLL" >&6; }
+-  as_fn_error $? "gmp.h is a DLL: use --disable-static --enable-shared" "$LINENO" 5
++LD="$lt_cv_path_LD"
++if test -n "$LD"; then
++  { $as_echo "$as_me:${as_lineno-$LINENO}: result: $LD" >&5
++$as_echo "$LD" >&6; }
++else
++  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
++$as_echo "no" >&6; }
+ fi
+-rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+-  fi
++test -z "$LD" && as_fn_error $? "no acceptable ld found in \$PATH" "$LINENO" 5
++{ $as_echo "$as_me:${as_lineno-$LINENO}: checking if the linker ($LD) is GNU ld" >&5
++$as_echo_n "checking if the linker ($LD) is GNU ld... " >&6; }
++if test "${lt_cv_prog_gnu_ld+set}" = set; then :
++  $as_echo_n "(cached) " >&6
++else
++  # I'd rather use --version here, but apparently some GNU lds only accept -v.
++case `$LD -v 2>&1 </dev/null` in
++*GNU* | *'with BFD'*)
++  lt_cv_prog_gnu_ld=yes
++  ;;
++*)
++  lt_cv_prog_gnu_ld=no
+   ;;
+-
+-esac
+-
+-
+-case `pwd` in
+-  *\ * | *\	*)
+-    { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: Libtool does not cope well with whitespace in \`pwd\`" >&5
+-$as_echo "$as_me: WARNING: Libtool does not cope well with whitespace in \`pwd\`" >&2;} ;;
+ esac
+-
+-
+-
+-macro_version='2.2.6b'
+-macro_revision='1.3017'
+-
+-
+-
+-
+-
++fi
++{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $lt_cv_prog_gnu_ld" >&5
++$as_echo "$lt_cv_prog_gnu_ld" >&6; }
++with_gnu_ld=$lt_cv_prog_gnu_ld
+ 
+ 
+ 
+@@ -4610,279 +4477,425 @@ macro_revision='1.3017'
+ 
+ 
+ 
+-ltmain="$ac_aux_dir/ltmain.sh"
+ 
+-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for a sed that does not truncate output" >&5
+-$as_echo_n "checking for a sed that does not truncate output... " >&6; }
+-if test "${ac_cv_path_SED+set}" = set; then :
++{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for BSD- or MS-compatible name lister (nm)" >&5
++$as_echo_n "checking for BSD- or MS-compatible name lister (nm)... " >&6; }
++if test "${lt_cv_path_NM+set}" = set; then :
+   $as_echo_n "(cached) " >&6
+ else
+-            ac_script=s/aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa/bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb/
+-     for ac_i in 1 2 3 4 5 6 7; do
+-       ac_script="$ac_script$as_nl$ac_script"
+-     done
+-     echo "$ac_script" 2>/dev/null | sed 99q >conftest.sed
+-     { ac_script=; unset ac_script;}
+-     if test -z "$SED"; then
+-  ac_path_SED_found=false
+-  # Loop through the user's path and test for each of PROGNAME-LIST
+-  as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
++  if test -n "$NM"; then
++  # Let the user override the test.
++  lt_cv_path_NM="$NM"
++else
++  lt_nm_to_check="${ac_tool_prefix}nm"
++  if test -n "$ac_tool_prefix" && test "$build" = "$host"; then
++    lt_nm_to_check="$lt_nm_to_check nm"
++  fi
++  for lt_tmp_nm in $lt_nm_to_check; do
++    lt_save_ifs="$IFS"; IFS=$PATH_SEPARATOR
++    for ac_dir in $PATH /usr/ccs/bin/elf /usr/ccs/bin /usr/ucb /bin; do
++      IFS="$lt_save_ifs"
++      test -z "$ac_dir" && ac_dir=.
++      tmp_nm="$ac_dir/$lt_tmp_nm"
++      if test -f "$tmp_nm" || test -f "$tmp_nm$ac_exeext" ; then
++	# Check to see if the nm accepts a BSD-compat flag.
++	# Adding the `sed 1q' prevents false positives on HP-UX, which says:
++	#   nm: unknown option "B" ignored
++	# Tru64's nm complains that /dev/null is an invalid object file
++	case `"$tmp_nm" -B /dev/null 2>&1 | sed '1q'` in
++	*/dev/null* | *'Invalid file or object type'*)
++	  lt_cv_path_NM="$tmp_nm -B"
++	  break
++	  ;;
++	*)
++	  case `"$tmp_nm" -p /dev/null 2>&1 | sed '1q'` in
++	  */dev/null*)
++	    lt_cv_path_NM="$tmp_nm -p"
++	    break
++	    ;;
++	  *)
++	    lt_cv_path_NM=${lt_cv_path_NM="$tmp_nm"} # keep the first match, but
++	    continue # so that we can try to find one that supports BSD flags
++	    ;;
++	  esac
++	  ;;
++	esac
++      fi
++    done
++    IFS="$lt_save_ifs"
++  done
++  : ${lt_cv_path_NM=no}
++fi
++fi
++{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $lt_cv_path_NM" >&5
++$as_echo "$lt_cv_path_NM" >&6; }
++if test "$lt_cv_path_NM" != "no"; then
++  NM="$lt_cv_path_NM"
++else
++  # Didn't find any BSD compatible name lister, look for dumpbin.
++  if test -n "$ac_tool_prefix"; then
++  for ac_prog in "dumpbin -symbols" "link -dump -symbols"
++  do
++    # Extract the first word of "$ac_tool_prefix$ac_prog", so it can be a program name with args.
++set dummy $ac_tool_prefix$ac_prog; ac_word=$2
++{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for $ac_word" >&5
++$as_echo_n "checking for $ac_word... " >&6; }
++if test "${ac_cv_prog_DUMPBIN+set}" = set; then :
++  $as_echo_n "(cached) " >&6
++else
++  if test -n "$DUMPBIN"; then
++  ac_cv_prog_DUMPBIN="$DUMPBIN" # Let the user override the test.
++else
++as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
+ for as_dir in $PATH
+ do
+   IFS=$as_save_IFS
+   test -z "$as_dir" && as_dir=.
+-    for ac_prog in sed gsed; do
+     for ac_exec_ext in '' $ac_executable_extensions; do
+-      ac_path_SED="$as_dir/$ac_prog$ac_exec_ext"
+-      { test -f "$ac_path_SED" && $as_test_x "$ac_path_SED"; } || continue
+-# Check for GNU ac_path_SED and select it if it is found.
+-  # Check for GNU $ac_path_SED
+-case `"$ac_path_SED" --version 2>&1` in
+-*GNU*)
+-  ac_cv_path_SED="$ac_path_SED" ac_path_SED_found=:;;
+-*)
+-  ac_count=0
+-  $as_echo_n 0123456789 >"conftest.in"
+-  while :
+-  do
+-    cat "conftest.in" "conftest.in" >"conftest.tmp"
+-    mv "conftest.tmp" "conftest.in"
+-    cp "conftest.in" "conftest.nl"
+-    $as_echo '' >> "conftest.nl"
+-    "$ac_path_SED" -f conftest.sed < "conftest.nl" >"conftest.out" 2>/dev/null || break
+-    diff "conftest.out" "conftest.nl" >/dev/null 2>&1 || break
+-    as_fn_arith $ac_count + 1 && ac_count=$as_val
+-    if test $ac_count -gt ${ac_path_SED_max-0}; then
+-      # Best one so far, save it but keep looking for a better one
+-      ac_cv_path_SED="$ac_path_SED"
+-      ac_path_SED_max=$ac_count
+-    fi
+-    # 10*(2^10) chars as input seems more than enough
+-    test $ac_count -gt 10 && break
+-  done
+-  rm -f conftest.in conftest.tmp conftest.nl conftest.out;;
+-esac
+-
+-      $ac_path_SED_found && break 3
+-    done
+-  done
++  if { test -f "$as_dir/$ac_word$ac_exec_ext" && $as_test_x "$as_dir/$ac_word$ac_exec_ext"; }; then
++    ac_cv_prog_DUMPBIN="$ac_tool_prefix$ac_prog"
++    $as_echo "$as_me:${as_lineno-$LINENO}: found $as_dir/$ac_word$ac_exec_ext" >&5
++    break 2
++  fi
++done
+   done
+ IFS=$as_save_IFS
+-  if test -z "$ac_cv_path_SED"; then
+-    as_fn_error $? "no acceptable sed could be found in \$PATH" "$LINENO" 5
+-  fi
+-else
+-  ac_cv_path_SED=$SED
+-fi
+ 
+ fi
+-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_path_SED" >&5
+-$as_echo "$ac_cv_path_SED" >&6; }
+- SED="$ac_cv_path_SED"
+-  rm -f conftest.sed
+-
+-test -z "$SED" && SED=sed
+-Xsed="$SED -e 1s/^X//"
+-
+-
+-
+-
+-
+-
+-
+-
+-
++fi
++DUMPBIN=$ac_cv_prog_DUMPBIN
++if test -n "$DUMPBIN"; then
++  { $as_echo "$as_me:${as_lineno-$LINENO}: result: $DUMPBIN" >&5
++$as_echo "$DUMPBIN" >&6; }
++else
++  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
++$as_echo "no" >&6; }
++fi
+ 
+ 
+-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for fgrep" >&5
+-$as_echo_n "checking for fgrep... " >&6; }
+-if test "${ac_cv_path_FGREP+set}" = set; then :
++    test -n "$DUMPBIN" && break
++  done
++fi
++if test -z "$DUMPBIN"; then
++  ac_ct_DUMPBIN=$DUMPBIN
++  for ac_prog in "dumpbin -symbols" "link -dump -symbols"
++do
++  # Extract the first word of "$ac_prog", so it can be a program name with args.
++set dummy $ac_prog; ac_word=$2
++{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for $ac_word" >&5
++$as_echo_n "checking for $ac_word... " >&6; }
++if test "${ac_cv_prog_ac_ct_DUMPBIN+set}" = set; then :
+   $as_echo_n "(cached) " >&6
+ else
+-  if echo 'ab*c' | $GREP -F 'ab*c' >/dev/null 2>&1
+-   then ac_cv_path_FGREP="$GREP -F"
+-   else
+-     if test -z "$FGREP"; then
+-  ac_path_FGREP_found=false
+-  # Loop through the user's path and test for each of PROGNAME-LIST
+-  as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
+-for as_dir in $PATH$PATH_SEPARATOR/usr/xpg4/bin
++  if test -n "$ac_ct_DUMPBIN"; then
++  ac_cv_prog_ac_ct_DUMPBIN="$ac_ct_DUMPBIN" # Let the user override the test.
++else
++as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
++for as_dir in $PATH
+ do
+   IFS=$as_save_IFS
+   test -z "$as_dir" && as_dir=.
+-    for ac_prog in fgrep; do
+     for ac_exec_ext in '' $ac_executable_extensions; do
+-      ac_path_FGREP="$as_dir/$ac_prog$ac_exec_ext"
+-      { test -f "$ac_path_FGREP" && $as_test_x "$ac_path_FGREP"; } || continue
+-# Check for GNU ac_path_FGREP and select it if it is found.
+-  # Check for GNU $ac_path_FGREP
+-case `"$ac_path_FGREP" --version 2>&1` in
+-*GNU*)
+-  ac_cv_path_FGREP="$ac_path_FGREP" ac_path_FGREP_found=:;;
+-*)
+-  ac_count=0
+-  $as_echo_n 0123456789 >"conftest.in"
+-  while :
+-  do
+-    cat "conftest.in" "conftest.in" >"conftest.tmp"
+-    mv "conftest.tmp" "conftest.in"
+-    cp "conftest.in" "conftest.nl"
+-    $as_echo 'FGREP' >> "conftest.nl"
+-    "$ac_path_FGREP" FGREP < "conftest.nl" >"conftest.out" 2>/dev/null || break
+-    diff "conftest.out" "conftest.nl" >/dev/null 2>&1 || break
+-    as_fn_arith $ac_count + 1 && ac_count=$as_val
+-    if test $ac_count -gt ${ac_path_FGREP_max-0}; then
+-      # Best one so far, save it but keep looking for a better one
+-      ac_cv_path_FGREP="$ac_path_FGREP"
+-      ac_path_FGREP_max=$ac_count
+-    fi
+-    # 10*(2^10) chars as input seems more than enough
+-    test $ac_count -gt 10 && break
+-  done
+-  rm -f conftest.in conftest.tmp conftest.nl conftest.out;;
+-esac
+-
+-      $ac_path_FGREP_found && break 3
+-    done
+-  done
++  if { test -f "$as_dir/$ac_word$ac_exec_ext" && $as_test_x "$as_dir/$ac_word$ac_exec_ext"; }; then
++    ac_cv_prog_ac_ct_DUMPBIN="$ac_prog"
++    $as_echo "$as_me:${as_lineno-$LINENO}: found $as_dir/$ac_word$ac_exec_ext" >&5
++    break 2
++  fi
++done
+   done
+ IFS=$as_save_IFS
+-  if test -z "$ac_cv_path_FGREP"; then
+-    as_fn_error $? "no acceptable fgrep could be found in $PATH$PATH_SEPARATOR/usr/xpg4/bin" "$LINENO" 5
+-  fi
+-else
+-  ac_cv_path_FGREP=$FGREP
+-fi
+ 
+-   fi
+ fi
+-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_path_FGREP" >&5
+-$as_echo "$ac_cv_path_FGREP" >&6; }
+- FGREP="$ac_cv_path_FGREP"
+-
++fi
++ac_ct_DUMPBIN=$ac_cv_prog_ac_ct_DUMPBIN
++if test -n "$ac_ct_DUMPBIN"; then
++  { $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_ct_DUMPBIN" >&5
++$as_echo "$ac_ct_DUMPBIN" >&6; }
++else
++  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
++$as_echo "no" >&6; }
++fi
+ 
+-test -z "$GREP" && GREP=grep
+ 
++  test -n "$ac_ct_DUMPBIN" && break
++done
+ 
++  if test "x$ac_ct_DUMPBIN" = x; then
++    DUMPBIN=":"
++  else
++    case $cross_compiling:$ac_tool_warned in
++yes:)
++{ $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: using cross tools not prefixed with host triplet" >&5
++$as_echo "$as_me: WARNING: using cross tools not prefixed with host triplet" >&2;}
++ac_tool_warned=yes ;;
++esac
++    DUMPBIN=$ac_ct_DUMPBIN
++  fi
++fi
+ 
+ 
++  if test "$DUMPBIN" != ":"; then
++    NM="$DUMPBIN"
++  fi
++fi
++test -z "$NM" && NM=nm
+ 
+ 
+ 
+ 
+ 
+ 
++{ $as_echo "$as_me:${as_lineno-$LINENO}: checking the name lister ($NM) interface" >&5
++$as_echo_n "checking the name lister ($NM) interface... " >&6; }
++if test "${lt_cv_nm_interface+set}" = set; then :
++  $as_echo_n "(cached) " >&6
++else
++  lt_cv_nm_interface="BSD nm"
++  echo "int some_variable = 0;" > conftest.$ac_ext
++  (eval echo "\"\$as_me:4655: $ac_compile\"" >&5)
++  (eval "$ac_compile" 2>conftest.err)
++  cat conftest.err >&5
++  (eval echo "\"\$as_me:4658: $NM \\\"conftest.$ac_objext\\\"\"" >&5)
++  (eval "$NM \"conftest.$ac_objext\"" 2>conftest.err > conftest.out)
++  cat conftest.err >&5
++  (eval echo "\"\$as_me:4661: output\"" >&5)
++  cat conftest.out >&5
++  if $GREP 'External.*some_variable' conftest.out > /dev/null; then
++    lt_cv_nm_interface="MS dumpbin"
++  fi
++  rm -f conftest*
++fi
++{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $lt_cv_nm_interface" >&5
++$as_echo "$lt_cv_nm_interface" >&6; }
+ 
++{ $as_echo "$as_me:${as_lineno-$LINENO}: checking whether ln -s works" >&5
++$as_echo_n "checking whether ln -s works... " >&6; }
++LN_S=$as_ln_s
++if test "$LN_S" = "ln -s"; then
++  { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
++$as_echo "yes" >&6; }
++else
++  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no, using $LN_S" >&5
++$as_echo "no, using $LN_S" >&6; }
++fi
+ 
++# find the maximum length of command line arguments
++{ $as_echo "$as_me:${as_lineno-$LINENO}: checking the maximum length of command line arguments" >&5
++$as_echo_n "checking the maximum length of command line arguments... " >&6; }
++if test "${lt_cv_sys_max_cmd_len+set}" = set; then :
++  $as_echo_n "(cached) " >&6
++else
++    i=0
++  teststring="ABCD"
+ 
++  case $build_os in
++  msdosdjgpp*)
++    # On DJGPP, this test can blow up pretty badly due to problems in libc
++    # (any single argument exceeding 2000 bytes causes a buffer overrun
++    # during glob expansion).  Even if it were fixed, the result of this
++    # check would be larger than it should be.
++    lt_cv_sys_max_cmd_len=12288;    # 12K is about right
++    ;;
+ 
++  gnu*)
++    # Under GNU Hurd, this test is not required because there is
++    # no limit to the length of command line arguments.
++    # Libtool will interpret -1 as no limit whatsoever
++    lt_cv_sys_max_cmd_len=-1;
++    ;;
+ 
++  cygwin* | mingw* | cegcc*)
++    # On Win9x/ME, this test blows up -- it succeeds, but takes
++    # about 5 minutes as the teststring grows exponentially.
++    # Worse, since 9x/ME are not pre-emptively multitasking,
++    # you end up with a "frozen" computer, even though with patience
++    # the test eventually succeeds (with a max line length of 256k).
++    # Instead, let's just punt: use the minimum linelength reported by
++    # all of the supported platforms: 8192 (on NT/2K/XP).
++    lt_cv_sys_max_cmd_len=8192;
++    ;;
+ 
++  amigaos*)
++    # On AmigaOS with pdksh, this test takes hours, literally.
++    # So we just punt and use a minimum line length of 8192.
++    lt_cv_sys_max_cmd_len=8192;
++    ;;
+ 
++  netbsd* | freebsd* | openbsd* | darwin* | dragonfly*)
++    # This has been around since 386BSD, at least.  Likely further.
++    if test -x /sbin/sysctl; then
++      lt_cv_sys_max_cmd_len=`/sbin/sysctl -n kern.argmax`
++    elif test -x /usr/sbin/sysctl; then
++      lt_cv_sys_max_cmd_len=`/usr/sbin/sysctl -n kern.argmax`
++    else
++      lt_cv_sys_max_cmd_len=65536	# usable default for all BSDs
++    fi
++    # And add a safety zone
++    lt_cv_sys_max_cmd_len=`expr $lt_cv_sys_max_cmd_len \/ 4`
++    lt_cv_sys_max_cmd_len=`expr $lt_cv_sys_max_cmd_len \* 3`
++    ;;
+ 
++  interix*)
++    # We know the value 262144 and hardcode it with a safety zone (like BSD)
++    lt_cv_sys_max_cmd_len=196608
++    ;;
+ 
+-# Check whether --with-gnu-ld was given.
+-if test "${with_gnu_ld+set}" = set; then :
+-  withval=$with_gnu_ld; test "$withval" = no || with_gnu_ld=yes
+-else
+-  with_gnu_ld=no
+-fi
+-
+-ac_prog=ld
+-if test "$GCC" = yes; then
+-  # Check if gcc -print-prog-name=ld gives a path.
+-  { $as_echo "$as_me:${as_lineno-$LINENO}: checking for ld used by $CC" >&5
+-$as_echo_n "checking for ld used by $CC... " >&6; }
+-  case $host in
+-  *-*-mingw*)
+-    # gcc leaves a trailing carriage return which upsets mingw
+-    ac_prog=`($CC -print-prog-name=ld) 2>&5 | tr -d '\015'` ;;
+-  *)
+-    ac_prog=`($CC -print-prog-name=ld) 2>&5` ;;
+-  esac
+-  case $ac_prog in
+-    # Accept absolute paths.
+-    [\\/]* | ?:[\\/]*)
+-      re_direlt='/[^/][^/]*/\.\./'
+-      # Canonicalize the pathname of ld
+-      ac_prog=`$ECHO "$ac_prog"| $SED 's%\\\\%/%g'`
+-      while $ECHO "$ac_prog" | $GREP "$re_direlt" > /dev/null 2>&1; do
+-	ac_prog=`$ECHO $ac_prog| $SED "s%$re_direlt%/%"`
+-      done
+-      test -z "$LD" && LD="$ac_prog"
+-      ;;
+-  "")
+-    # If it fails, then pretend we aren't using GCC.
+-    ac_prog=ld
++  osf*)
++    # Dr. Hans Ekkehard Plesser reports seeing a kernel panic running configure
++    # due to this test when exec_disable_arg_limit is 1 on Tru64. It is not
++    # nice to cause kernel panics so lets avoid the loop below.
++    # First set a reasonable default.
++    lt_cv_sys_max_cmd_len=16384
++    #
++    if test -x /sbin/sysconfig; then
++      case `/sbin/sysconfig -q proc exec_disable_arg_limit` in
++        *1*) lt_cv_sys_max_cmd_len=-1 ;;
++      esac
++    fi
++    ;;
++  sco3.2v5*)
++    lt_cv_sys_max_cmd_len=102400
++    ;;
++  sysv5* | sco5v6* | sysv4.2uw2*)
++    kargmax=`grep ARG_MAX /etc/conf/cf.d/stune 2>/dev/null`
++    if test -n "$kargmax"; then
++      lt_cv_sys_max_cmd_len=`echo $kargmax | sed 's/.*[	 ]//'`
++    else
++      lt_cv_sys_max_cmd_len=32768
++    fi
+     ;;
+   *)
+-    # If it is relative, then search for the first ld in PATH.
+-    with_gnu_ld=unknown
++    lt_cv_sys_max_cmd_len=`(getconf ARG_MAX) 2> /dev/null`
++    if test -n "$lt_cv_sys_max_cmd_len"; then
++      lt_cv_sys_max_cmd_len=`expr $lt_cv_sys_max_cmd_len \/ 4`
++      lt_cv_sys_max_cmd_len=`expr $lt_cv_sys_max_cmd_len \* 3`
++    else
++      # Make teststring a little bigger before we do anything with it.
++      # a 1K string should be a reasonable start.
++      for i in 1 2 3 4 5 6 7 8 ; do
++        teststring=$teststring$teststring
++      done
++      SHELL=${SHELL-${CONFIG_SHELL-/bin/sh}}
++      # If test is not a shell built-in, we'll probably end up computing a
++      # maximum length that is only half of the actual maximum length, but
++      # we can't tell.
++      while { test "X"`$SHELL $0 --fallback-echo "X$teststring$teststring" 2>/dev/null` \
++	         = "XX$teststring$teststring"; } >/dev/null 2>&1 &&
++	      test $i != 17 # 1/2 MB should be enough
++      do
++        i=`expr $i + 1`
++        teststring=$teststring$teststring
++      done
++      # Only check the string length outside the loop.
++      lt_cv_sys_max_cmd_len=`expr "X$teststring" : ".*" 2>&1`
++      teststring=
++      # Add a significant safety factor because C++ compilers can tack on
++      # massive amounts of additional arguments before passing them to the
++      # linker.  It appears as though 1/2 is a usable value.
++      lt_cv_sys_max_cmd_len=`expr $lt_cv_sys_max_cmd_len \/ 2`
++    fi
+     ;;
+   esac
+-elif test "$with_gnu_ld" = yes; then
+-  { $as_echo "$as_me:${as_lineno-$LINENO}: checking for GNU ld" >&5
+-$as_echo_n "checking for GNU ld... " >&6; }
+-else
+-  { $as_echo "$as_me:${as_lineno-$LINENO}: checking for non-GNU ld" >&5
+-$as_echo_n "checking for non-GNU ld... " >&6; }
++
+ fi
+-if test "${lt_cv_path_LD+set}" = set; then :
+-  $as_echo_n "(cached) " >&6
+-else
+-  if test -z "$LD"; then
+-  lt_save_ifs="$IFS"; IFS=$PATH_SEPARATOR
+-  for ac_dir in $PATH; do
+-    IFS="$lt_save_ifs"
+-    test -z "$ac_dir" && ac_dir=.
+-    if test -f "$ac_dir/$ac_prog" || test -f "$ac_dir/$ac_prog$ac_exeext"; then
+-      lt_cv_path_LD="$ac_dir/$ac_prog"
+-      # Check to see if the program is GNU ld.  I'd rather use --version,
+-      # but apparently some variants of GNU ld only accept -v.
+-      # Break only if it was the GNU/non-GNU ld that we prefer.
+-      case `"$lt_cv_path_LD" -v 2>&1 </dev/null` in
+-      *GNU* | *'with BFD'*)
+-	test "$with_gnu_ld" != no && break
+-	;;
+-      *)
+-	test "$with_gnu_ld" != yes && break
+-	;;
+-      esac
+-    fi
+-  done
+-  IFS="$lt_save_ifs"
++
++if test -n $lt_cv_sys_max_cmd_len ; then
++  { $as_echo "$as_me:${as_lineno-$LINENO}: result: $lt_cv_sys_max_cmd_len" >&5
++$as_echo "$lt_cv_sys_max_cmd_len" >&6; }
+ else
+-  lt_cv_path_LD="$LD" # Let the user override the test with a path.
+-fi
++  { $as_echo "$as_me:${as_lineno-$LINENO}: result: none" >&5
++$as_echo "none" >&6; }
+ fi
++max_cmd_len=$lt_cv_sys_max_cmd_len
+ 
+-LD="$lt_cv_path_LD"
+-if test -n "$LD"; then
+-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: $LD" >&5
+-$as_echo "$LD" >&6; }
++
++
++
++
++
++: ${CP="cp -f"}
++: ${MV="mv -f"}
++: ${RM="rm -f"}
++
++{ $as_echo "$as_me:${as_lineno-$LINENO}: checking whether the shell understands some XSI constructs" >&5
++$as_echo_n "checking whether the shell understands some XSI constructs... " >&6; }
++# Try some XSI features
++xsi_shell=no
++( _lt_dummy="a/b/c"
++  test "${_lt_dummy##*/},${_lt_dummy%/*},"${_lt_dummy%"$_lt_dummy"}, \
++      = c,a/b,, \
++    && eval 'test $(( 1 + 1 )) -eq 2 \
++    && test "${#_lt_dummy}" -eq 5' ) >/dev/null 2>&1 \
++  && xsi_shell=yes
++{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $xsi_shell" >&5
++$as_echo "$xsi_shell" >&6; }
++
++
++{ $as_echo "$as_me:${as_lineno-$LINENO}: checking whether the shell understands \"+=\"" >&5
++$as_echo_n "checking whether the shell understands \"+=\"... " >&6; }
++lt_shell_append=no
++( foo=bar; set foo baz; eval "$1+=\$2" && test "$foo" = barbaz ) \
++    >/dev/null 2>&1 \
++  && lt_shell_append=yes
++{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $lt_shell_append" >&5
++$as_echo "$lt_shell_append" >&6; }
++
++
++if ( (MAIL=60; unset MAIL) || exit) >/dev/null 2>&1; then
++  lt_unset=unset
+ else
+-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+-$as_echo "no" >&6; }
++  lt_unset=false
+ fi
+-test -z "$LD" && as_fn_error $? "no acceptable ld found in \$PATH" "$LINENO" 5
+-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking if the linker ($LD) is GNU ld" >&5
+-$as_echo_n "checking if the linker ($LD) is GNU ld... " >&6; }
+-if test "${lt_cv_prog_gnu_ld+set}" = set; then :
+-  $as_echo_n "(cached) " >&6
+-else
+-  # I'd rather use --version here, but apparently some GNU lds only accept -v.
+-case `$LD -v 2>&1 </dev/null` in
+-*GNU* | *'with BFD'*)
+-  lt_cv_prog_gnu_ld=yes
++
++
++
++
++
++# test EBCDIC or ASCII
++case `echo X|tr X '\101'` in
++ A) # ASCII based system
++    # \n is not interpreted correctly by Solaris 8 /usr/ucb/tr
++  lt_SP2NL='tr \040 \012'
++  lt_NL2SP='tr \015\012 \040\040'
+   ;;
+-*)
+-  lt_cv_prog_gnu_ld=no
++ *) # EBCDIC based system
++  lt_SP2NL='tr \100 \n'
++  lt_NL2SP='tr \r\n \100\100'
+   ;;
+ esac
++
++
++
++
++
++
++
++
++
++{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for $LD option to reload object files" >&5
++$as_echo_n "checking for $LD option to reload object files... " >&6; }
++if test "${lt_cv_ld_reload_flag+set}" = set; then :
++  $as_echo_n "(cached) " >&6
++else
++  lt_cv_ld_reload_flag='-r'
+ fi
+-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $lt_cv_prog_gnu_ld" >&5
+-$as_echo "$lt_cv_prog_gnu_ld" >&6; }
+-with_gnu_ld=$lt_cv_prog_gnu_ld
++{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $lt_cv_ld_reload_flag" >&5
++$as_echo "$lt_cv_ld_reload_flag" >&6; }
++reload_flag=$lt_cv_ld_reload_flag
++case $reload_flag in
++"" | " "*) ;;
++*) reload_flag=" $reload_flag" ;;
++esac
++reload_cmds='$LD$reload_flag -o $output$reload_objs'
++case $host_os in
++  darwin*)
++    if test "$GCC" = yes; then
++      reload_cmds='$LTCC $LTCFLAGS -nostdlib ${wl}-r -o $output$reload_objs'
++    else
++      reload_cmds='$LD$reload_flag -o $output$reload_objs'
++    fi
++    ;;
++esac
+ 
+ 
+ 
+@@ -4892,84 +4905,27 @@ with_gnu_ld=$lt_cv_prog_gnu_ld
+ 
+ 
+ 
+-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for BSD- or MS-compatible name lister (nm)" >&5
+-$as_echo_n "checking for BSD- or MS-compatible name lister (nm)... " >&6; }
+-if test "${lt_cv_path_NM+set}" = set; then :
++if test -n "$ac_tool_prefix"; then
++  # Extract the first word of "${ac_tool_prefix}objdump", so it can be a program name with args.
++set dummy ${ac_tool_prefix}objdump; ac_word=$2
++{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for $ac_word" >&5
++$as_echo_n "checking for $ac_word... " >&6; }
++if test "${ac_cv_prog_OBJDUMP+set}" = set; then :
+   $as_echo_n "(cached) " >&6
+ else
+-  if test -n "$NM"; then
+-  # Let the user override the test.
+-  lt_cv_path_NM="$NM"
++  if test -n "$OBJDUMP"; then
++  ac_cv_prog_OBJDUMP="$OBJDUMP" # Let the user override the test.
+ else
+-  lt_nm_to_check="${ac_tool_prefix}nm"
+-  if test -n "$ac_tool_prefix" && test "$build" = "$host"; then
+-    lt_nm_to_check="$lt_nm_to_check nm"
+-  fi
+-  for lt_tmp_nm in $lt_nm_to_check; do
+-    lt_save_ifs="$IFS"; IFS=$PATH_SEPARATOR
+-    for ac_dir in $PATH /usr/ccs/bin/elf /usr/ccs/bin /usr/ucb /bin; do
+-      IFS="$lt_save_ifs"
+-      test -z "$ac_dir" && ac_dir=.
+-      tmp_nm="$ac_dir/$lt_tmp_nm"
+-      if test -f "$tmp_nm" || test -f "$tmp_nm$ac_exeext" ; then
+-	# Check to see if the nm accepts a BSD-compat flag.
+-	# Adding the `sed 1q' prevents false positives on HP-UX, which says:
+-	#   nm: unknown option "B" ignored
+-	# Tru64's nm complains that /dev/null is an invalid object file
+-	case `"$tmp_nm" -B /dev/null 2>&1 | sed '1q'` in
+-	*/dev/null* | *'Invalid file or object type'*)
+-	  lt_cv_path_NM="$tmp_nm -B"
+-	  break
+-	  ;;
+-	*)
+-	  case `"$tmp_nm" -p /dev/null 2>&1 | sed '1q'` in
+-	  */dev/null*)
+-	    lt_cv_path_NM="$tmp_nm -p"
+-	    break
+-	    ;;
+-	  *)
+-	    lt_cv_path_NM=${lt_cv_path_NM="$tmp_nm"} # keep the first match, but
+-	    continue # so that we can try to find one that supports BSD flags
+-	    ;;
+-	  esac
+-	  ;;
+-	esac
+-      fi
+-    done
+-    IFS="$lt_save_ifs"
+-  done
+-  : ${lt_cv_path_NM=no}
+-fi
+-fi
+-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $lt_cv_path_NM" >&5
+-$as_echo "$lt_cv_path_NM" >&6; }
+-if test "$lt_cv_path_NM" != "no"; then
+-  NM="$lt_cv_path_NM"
+-else
+-  # Didn't find any BSD compatible name lister, look for dumpbin.
+-  if test -n "$ac_tool_prefix"; then
+-  for ac_prog in "dumpbin -symbols" "link -dump -symbols"
+-  do
+-    # Extract the first word of "$ac_tool_prefix$ac_prog", so it can be a program name with args.
+-set dummy $ac_tool_prefix$ac_prog; ac_word=$2
+-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for $ac_word" >&5
+-$as_echo_n "checking for $ac_word... " >&6; }
+-if test "${ac_cv_prog_DUMPBIN+set}" = set; then :
+-  $as_echo_n "(cached) " >&6
+-else
+-  if test -n "$DUMPBIN"; then
+-  ac_cv_prog_DUMPBIN="$DUMPBIN" # Let the user override the test.
+-else
+-as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
+-for as_dir in $PATH
+-do
+-  IFS=$as_save_IFS
+-  test -z "$as_dir" && as_dir=.
+-    for ac_exec_ext in '' $ac_executable_extensions; do
+-  if { test -f "$as_dir/$ac_word$ac_exec_ext" && $as_test_x "$as_dir/$ac_word$ac_exec_ext"; }; then
+-    ac_cv_prog_DUMPBIN="$ac_tool_prefix$ac_prog"
+-    $as_echo "$as_me:${as_lineno-$LINENO}: found $as_dir/$ac_word$ac_exec_ext" >&5
+-    break 2
++as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
++for as_dir in $PATH
++do
++  IFS=$as_save_IFS
++  test -z "$as_dir" && as_dir=.
++    for ac_exec_ext in '' $ac_executable_extensions; do
++  if { test -f "$as_dir/$ac_word$ac_exec_ext" && $as_test_x "$as_dir/$ac_word$ac_exec_ext"; }; then
++    ac_cv_prog_OBJDUMP="${ac_tool_prefix}objdump"
++    $as_echo "$as_me:${as_lineno-$LINENO}: found $as_dir/$ac_word$ac_exec_ext" >&5
++    break 2
+   fi
+ done
+   done
+@@ -4977,32 +4933,28 @@ IFS=$as_save_IFS
+ 
+ fi
+ fi
+-DUMPBIN=$ac_cv_prog_DUMPBIN
+-if test -n "$DUMPBIN"; then
+-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: $DUMPBIN" >&5
+-$as_echo "$DUMPBIN" >&6; }
++OBJDUMP=$ac_cv_prog_OBJDUMP
++if test -n "$OBJDUMP"; then
++  { $as_echo "$as_me:${as_lineno-$LINENO}: result: $OBJDUMP" >&5
++$as_echo "$OBJDUMP" >&6; }
+ else
+   { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+ $as_echo "no" >&6; }
+ fi
+ 
+ 
+-    test -n "$DUMPBIN" && break
+-  done
+ fi
+-if test -z "$DUMPBIN"; then
+-  ac_ct_DUMPBIN=$DUMPBIN
+-  for ac_prog in "dumpbin -symbols" "link -dump -symbols"
+-do
+-  # Extract the first word of "$ac_prog", so it can be a program name with args.
+-set dummy $ac_prog; ac_word=$2
++if test -z "$ac_cv_prog_OBJDUMP"; then
++  ac_ct_OBJDUMP=$OBJDUMP
++  # Extract the first word of "objdump", so it can be a program name with args.
++set dummy objdump; ac_word=$2
+ { $as_echo "$as_me:${as_lineno-$LINENO}: checking for $ac_word" >&5
+ $as_echo_n "checking for $ac_word... " >&6; }
+-if test "${ac_cv_prog_ac_ct_DUMPBIN+set}" = set; then :
++if test "${ac_cv_prog_ac_ct_OBJDUMP+set}" = set; then :
+   $as_echo_n "(cached) " >&6
+ else
+-  if test -n "$ac_ct_DUMPBIN"; then
+-  ac_cv_prog_ac_ct_DUMPBIN="$ac_ct_DUMPBIN" # Let the user override the test.
++  if test -n "$ac_ct_OBJDUMP"; then
++  ac_cv_prog_ac_ct_OBJDUMP="$ac_ct_OBJDUMP" # Let the user override the test.
+ else
+ as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
+ for as_dir in $PATH
+@@ -5011,7 +4963,7 @@ do
+   test -z "$as_dir" && as_dir=.
+     for ac_exec_ext in '' $ac_executable_extensions; do
+   if { test -f "$as_dir/$ac_word$ac_exec_ext" && $as_test_x "$as_dir/$ac_word$ac_exec_ext"; }; then
+-    ac_cv_prog_ac_ct_DUMPBIN="$ac_prog"
++    ac_cv_prog_ac_ct_OBJDUMP="objdump"
+     $as_echo "$as_me:${as_lineno-$LINENO}: found $as_dir/$ac_word$ac_exec_ext" >&5
+     break 2
+   fi
+@@ -5021,21 +4973,17 @@ IFS=$as_save_IFS
+ 
+ fi
+ fi
+-ac_ct_DUMPBIN=$ac_cv_prog_ac_ct_DUMPBIN
+-if test -n "$ac_ct_DUMPBIN"; then
+-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_ct_DUMPBIN" >&5
+-$as_echo "$ac_ct_DUMPBIN" >&6; }
++ac_ct_OBJDUMP=$ac_cv_prog_ac_ct_OBJDUMP
++if test -n "$ac_ct_OBJDUMP"; then
++  { $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_ct_OBJDUMP" >&5
++$as_echo "$ac_ct_OBJDUMP" >&6; }
+ else
+   { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+ $as_echo "no" >&6; }
+ fi
+ 
+-
+-  test -n "$ac_ct_DUMPBIN" && break
+-done
+-
+-  if test "x$ac_ct_DUMPBIN" = x; then
+-    DUMPBIN=":"
++  if test "x$ac_ct_OBJDUMP" = x; then
++    OBJDUMP="false"
+   else
+     case $cross_compiling:$ac_tool_warned in
+ yes:)
+@@ -5043,241 +4991,223 @@ yes:)
+ $as_echo "$as_me: WARNING: using cross tools not prefixed with host triplet" >&2;}
+ ac_tool_warned=yes ;;
+ esac
+-    DUMPBIN=$ac_ct_DUMPBIN
++    OBJDUMP=$ac_ct_OBJDUMP
+   fi
++else
++  OBJDUMP="$ac_cv_prog_OBJDUMP"
+ fi
+ 
++test -z "$OBJDUMP" && OBJDUMP=objdump
+ 
+-  if test "$DUMPBIN" != ":"; then
+-    NM="$DUMPBIN"
+-  fi
+-fi
+-test -z "$NM" && NM=nm
+ 
+ 
+ 
+ 
+ 
+ 
+-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking the name lister ($NM) interface" >&5
+-$as_echo_n "checking the name lister ($NM) interface... " >&6; }
+-if test "${lt_cv_nm_interface+set}" = set; then :
+-  $as_echo_n "(cached) " >&6
+-else
+-  lt_cv_nm_interface="BSD nm"
+-  echo "int some_variable = 0;" > conftest.$ac_ext
+-  (eval echo "\"\$as_me:5069: $ac_compile\"" >&5)
+-  (eval "$ac_compile" 2>conftest.err)
+-  cat conftest.err >&5
+-  (eval echo "\"\$as_me:5072: $NM \\\"conftest.$ac_objext\\\"\"" >&5)
+-  (eval "$NM \"conftest.$ac_objext\"" 2>conftest.err > conftest.out)
+-  cat conftest.err >&5
+-  (eval echo "\"\$as_me:5075: output\"" >&5)
+-  cat conftest.out >&5
+-  if $GREP 'External.*some_variable' conftest.out > /dev/null; then
+-    lt_cv_nm_interface="MS dumpbin"
+-  fi
+-  rm -f conftest*
+-fi
+-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $lt_cv_nm_interface" >&5
+-$as_echo "$lt_cv_nm_interface" >&6; }
+ 
+-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking whether ln -s works" >&5
+-$as_echo_n "checking whether ln -s works... " >&6; }
+-LN_S=$as_ln_s
+-if test "$LN_S" = "ln -s"; then
+-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+-$as_echo "yes" >&6; }
+-else
+-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no, using $LN_S" >&5
+-$as_echo "no, using $LN_S" >&6; }
+-fi
+ 
+-# find the maximum length of command line arguments
+-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking the maximum length of command line arguments" >&5
+-$as_echo_n "checking the maximum length of command line arguments... " >&6; }
+-if test "${lt_cv_sys_max_cmd_len+set}" = set; then :
++{ $as_echo "$as_me:${as_lineno-$LINENO}: checking how to recognize dependent libraries" >&5
++$as_echo_n "checking how to recognize dependent libraries... " >&6; }
++if test "${lt_cv_deplibs_check_method+set}" = set; then :
+   $as_echo_n "(cached) " >&6
+ else
+-    i=0
+-  teststring="ABCD"
++  lt_cv_file_magic_cmd='$MAGIC_CMD'
++lt_cv_file_magic_test_file=
++lt_cv_deplibs_check_method='unknown'
++# Need to set the preceding variable on all platforms that support
++# interlibrary dependencies.
++# 'none' -- dependencies not supported.
++# `unknown' -- same as none, but documents that we really don't know.
++# 'pass_all' -- all dependencies passed with no checks.
++# 'test_compile' -- check by making test program.
++# 'file_magic [[regex]]' -- check by looking for files in library path
++# which responds to the $file_magic_cmd with a given extended regex.
++# If you have `file' or equivalent on your system and you're not sure
++# whether `pass_all' will *always* work, you probably want this one.
+ 
+-  case $build_os in
+-  msdosdjgpp*)
+-    # On DJGPP, this test can blow up pretty badly due to problems in libc
+-    # (any single argument exceeding 2000 bytes causes a buffer overrun
+-    # during glob expansion).  Even if it were fixed, the result of this
+-    # check would be larger than it should be.
+-    lt_cv_sys_max_cmd_len=12288;    # 12K is about right
+-    ;;
++case $host_os in
++aix[4-9]*)
++  lt_cv_deplibs_check_method=pass_all
++  ;;
+ 
+-  gnu*)
+-    # Under GNU Hurd, this test is not required because there is
+-    # no limit to the length of command line arguments.
+-    # Libtool will interpret -1 as no limit whatsoever
+-    lt_cv_sys_max_cmd_len=-1;
+-    ;;
++beos*)
++  lt_cv_deplibs_check_method=pass_all
++  ;;
+ 
+-  cygwin* | mingw* | cegcc*)
+-    # On Win9x/ME, this test blows up -- it succeeds, but takes
+-    # about 5 minutes as the teststring grows exponentially.
+-    # Worse, since 9x/ME are not pre-emptively multitasking,
+-    # you end up with a "frozen" computer, even though with patience
+-    # the test eventually succeeds (with a max line length of 256k).
+-    # Instead, let's just punt: use the minimum linelength reported by
+-    # all of the supported platforms: 8192 (on NT/2K/XP).
+-    lt_cv_sys_max_cmd_len=8192;
+-    ;;
++bsdi[45]*)
++  lt_cv_deplibs_check_method='file_magic ELF [0-9][0-9]*-bit [ML]SB (shared object|dynamic lib)'
++  lt_cv_file_magic_cmd='/usr/bin/file -L'
++  lt_cv_file_magic_test_file=/shlib/libc.so
++  ;;
+ 
+-  amigaos*)
+-    # On AmigaOS with pdksh, this test takes hours, literally.
+-    # So we just punt and use a minimum line length of 8192.
+-    lt_cv_sys_max_cmd_len=8192;
+-    ;;
++cygwin*)
++  # func_win32_libid is a shell function defined in ltmain.sh
++  lt_cv_deplibs_check_method='file_magic ^x86 archive import|^x86 DLL'
++  lt_cv_file_magic_cmd='func_win32_libid'
++  ;;
+ 
+-  netbsd* | freebsd* | openbsd* | darwin* | dragonfly*)
+-    # This has been around since 386BSD, at least.  Likely further.
+-    if test -x /sbin/sysctl; then
+-      lt_cv_sys_max_cmd_len=`/sbin/sysctl -n kern.argmax`
+-    elif test -x /usr/sbin/sysctl; then
+-      lt_cv_sys_max_cmd_len=`/usr/sbin/sysctl -n kern.argmax`
+-    else
+-      lt_cv_sys_max_cmd_len=65536	# usable default for all BSDs
+-    fi
+-    # And add a safety zone
+-    lt_cv_sys_max_cmd_len=`expr $lt_cv_sys_max_cmd_len \/ 4`
+-    lt_cv_sys_max_cmd_len=`expr $lt_cv_sys_max_cmd_len \* 3`
+-    ;;
++mingw* | pw32*)
++  # Base MSYS/MinGW do not provide the 'file' command needed by
++  # func_win32_libid shell function, so use a weaker test based on 'objdump',
++  # unless we find 'file', for example because we are cross-compiling.
++  if ( file / ) >/dev/null 2>&1; then
++    lt_cv_deplibs_check_method='file_magic ^x86 archive import|^x86 DLL'
++    lt_cv_file_magic_cmd='func_win32_libid'
++  else
++    lt_cv_deplibs_check_method='file_magic file format pei*-i386(.*architecture: i386)?'
++    lt_cv_file_magic_cmd='$OBJDUMP -f'
++  fi
++  ;;
+ 
+-  interix*)
+-    # We know the value 262144 and hardcode it with a safety zone (like BSD)
+-    lt_cv_sys_max_cmd_len=196608
+-    ;;
++cegcc)
++  # use the weaker test based on 'objdump'. See mingw*.
++  lt_cv_deplibs_check_method='file_magic file format pe-arm-.*little(.*architecture: arm)?'
++  lt_cv_file_magic_cmd='$OBJDUMP -f'
++  ;;
+ 
+-  osf*)
+-    # Dr. Hans Ekkehard Plesser reports seeing a kernel panic running configure
+-    # due to this test when exec_disable_arg_limit is 1 on Tru64. It is not
+-    # nice to cause kernel panics so lets avoid the loop below.
+-    # First set a reasonable default.
+-    lt_cv_sys_max_cmd_len=16384
+-    #
+-    if test -x /sbin/sysconfig; then
+-      case `/sbin/sysconfig -q proc exec_disable_arg_limit` in
+-        *1*) lt_cv_sys_max_cmd_len=-1 ;;
+-      esac
+-    fi
+-    ;;
+-  sco3.2v5*)
+-    lt_cv_sys_max_cmd_len=102400
++darwin* | rhapsody*)
++  lt_cv_deplibs_check_method=pass_all
++  ;;
++
++freebsd* | dragonfly*)
++  if echo __ELF__ | $CC -E - | $GREP __ELF__ > /dev/null; then
++    case $host_cpu in
++    i*86 )
++      # Not sure whether the presence of OpenBSD here was a mistake.
++      # Let's accept both of them until this is cleared up.
++      lt_cv_deplibs_check_method='file_magic (FreeBSD|OpenBSD|DragonFly)/i[3-9]86 (compact )?demand paged shared library'
++      lt_cv_file_magic_cmd=/usr/bin/file
++      lt_cv_file_magic_test_file=`echo /usr/lib/libc.so.*`
++      ;;
++    esac
++  else
++    lt_cv_deplibs_check_method=pass_all
++  fi
++  ;;
++
++gnu*)
++  lt_cv_deplibs_check_method=pass_all
++  ;;
++
++hpux10.20* | hpux11*)
++  lt_cv_file_magic_cmd=/usr/bin/file
++  case $host_cpu in
++  ia64*)
++    lt_cv_deplibs_check_method='file_magic (s[0-9][0-9][0-9]|ELF-[0-9][0-9]) shared object file - IA64'
++    lt_cv_file_magic_test_file=/usr/lib/hpux32/libc.so
+     ;;
+-  sysv5* | sco5v6* | sysv4.2uw2*)
+-    kargmax=`grep ARG_MAX /etc/conf/cf.d/stune 2>/dev/null`
+-    if test -n "$kargmax"; then
+-      lt_cv_sys_max_cmd_len=`echo $kargmax | sed 's/.*[	 ]//'`
+-    else
+-      lt_cv_sys_max_cmd_len=32768
+-    fi
++  hppa*64*)
++    lt_cv_deplibs_check_method='file_magic (s[0-9][0-9][0-9]|ELF-[0-9][0-9]) shared object file - PA-RISC [0-9].[0-9]'
++    lt_cv_file_magic_test_file=/usr/lib/pa20_64/libc.sl
+     ;;
+   *)
+-    lt_cv_sys_max_cmd_len=`(getconf ARG_MAX) 2> /dev/null`
+-    if test -n "$lt_cv_sys_max_cmd_len"; then
+-      lt_cv_sys_max_cmd_len=`expr $lt_cv_sys_max_cmd_len \/ 4`
+-      lt_cv_sys_max_cmd_len=`expr $lt_cv_sys_max_cmd_len \* 3`
+-    else
+-      # Make teststring a little bigger before we do anything with it.
+-      # a 1K string should be a reasonable start.
+-      for i in 1 2 3 4 5 6 7 8 ; do
+-        teststring=$teststring$teststring
+-      done
+-      SHELL=${SHELL-${CONFIG_SHELL-/bin/sh}}
+-      # If test is not a shell built-in, we'll probably end up computing a
+-      # maximum length that is only half of the actual maximum length, but
+-      # we can't tell.
+-      while { test "X"`$SHELL $0 --fallback-echo "X$teststring$teststring" 2>/dev/null` \
+-	         = "XX$teststring$teststring"; } >/dev/null 2>&1 &&
+-	      test $i != 17 # 1/2 MB should be enough
+-      do
+-        i=`expr $i + 1`
+-        teststring=$teststring$teststring
+-      done
+-      # Only check the string length outside the loop.
+-      lt_cv_sys_max_cmd_len=`expr "X$teststring" : ".*" 2>&1`
+-      teststring=
+-      # Add a significant safety factor because C++ compilers can tack on
+-      # massive amounts of additional arguments before passing them to the
+-      # linker.  It appears as though 1/2 is a usable value.
+-      lt_cv_sys_max_cmd_len=`expr $lt_cv_sys_max_cmd_len \/ 2`
+-    fi
++    lt_cv_deplibs_check_method='file_magic (s[0-9][0-9][0-9]|PA-RISC[0-9].[0-9]) shared library'
++    lt_cv_file_magic_test_file=/usr/lib/libc.sl
+     ;;
+   esac
++  ;;
+ 
+-fi
+-
+-if test -n $lt_cv_sys_max_cmd_len ; then
+-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: $lt_cv_sys_max_cmd_len" >&5
+-$as_echo "$lt_cv_sys_max_cmd_len" >&6; }
+-else
+-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: none" >&5
+-$as_echo "none" >&6; }
+-fi
+-max_cmd_len=$lt_cv_sys_max_cmd_len
+-
+-
+-
+-
+-
++interix[3-9]*)
++  # PIC code is broken on Interix 3.x, that's why |\.a not |_pic\.a here
++  lt_cv_deplibs_check_method='match_pattern /lib[^/]+(\.so|\.a)$'
++  ;;
+ 
+-: ${CP="cp -f"}
+-: ${MV="mv -f"}
+-: ${RM="rm -f"}
++irix5* | irix6* | nonstopux*)
++  case $LD in
++  *-32|*"-32 ") libmagic=32-bit;;
++  *-n32|*"-n32 ") libmagic=N32;;
++  *-64|*"-64 ") libmagic=64-bit;;
++  *) libmagic=never-match;;
++  esac
++  lt_cv_deplibs_check_method=pass_all
++  ;;
+ 
+-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking whether the shell understands some XSI constructs" >&5
+-$as_echo_n "checking whether the shell understands some XSI constructs... " >&6; }
+-# Try some XSI features
+-xsi_shell=no
+-( _lt_dummy="a/b/c"
+-  test "${_lt_dummy##*/},${_lt_dummy%/*},"${_lt_dummy%"$_lt_dummy"}, \
+-      = c,a/b,, \
+-    && eval 'test $(( 1 + 1 )) -eq 2 \
+-    && test "${#_lt_dummy}" -eq 5' ) >/dev/null 2>&1 \
+-  && xsi_shell=yes
+-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $xsi_shell" >&5
+-$as_echo "$xsi_shell" >&6; }
++# This must be Linux ELF.
++linux* | k*bsd*-gnu | kopensolaris*-gnu)
++  lt_cv_deplibs_check_method=pass_all
++  ;;
+ 
++netbsd* | netbsdelf*-gnu)
++  if echo __ELF__ | $CC -E - | $GREP __ELF__ > /dev/null; then
++    lt_cv_deplibs_check_method='match_pattern /lib[^/]+(\.so\.[0-9]+\.[0-9]+|_pic\.a)$'
++  else
++    lt_cv_deplibs_check_method='match_pattern /lib[^/]+(\.so|_pic\.a)$'
++  fi
++  ;;
+ 
+-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking whether the shell understands \"+=\"" >&5
+-$as_echo_n "checking whether the shell understands \"+=\"... " >&6; }
+-lt_shell_append=no
+-( foo=bar; set foo baz; eval "$1+=\$2" && test "$foo" = barbaz ) \
+-    >/dev/null 2>&1 \
+-  && lt_shell_append=yes
+-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $lt_shell_append" >&5
+-$as_echo "$lt_shell_append" >&6; }
++newos6*)
++  lt_cv_deplibs_check_method='file_magic ELF [0-9][0-9]*-bit [ML]SB (executable|dynamic lib)'
++  lt_cv_file_magic_cmd=/usr/bin/file
++  lt_cv_file_magic_test_file=/usr/lib/libnls.so
++  ;;
+ 
++*nto* | *qnx*)
++  lt_cv_deplibs_check_method=pass_all
++  ;;
+ 
+-if ( (MAIL=60; unset MAIL) || exit) >/dev/null 2>&1; then
+-  lt_unset=unset
+-else
+-  lt_unset=false
+-fi
++openbsd*)
++  if test -z "`echo __ELF__ | $CC -E - | $GREP __ELF__`" || test "$host_os-$host_cpu" = "openbsd2.8-powerpc"; then
++    lt_cv_deplibs_check_method='match_pattern /lib[^/]+(\.so\.[0-9]+\.[0-9]+|\.so|_pic\.a)$'
++  else
++    lt_cv_deplibs_check_method='match_pattern /lib[^/]+(\.so\.[0-9]+\.[0-9]+|_pic\.a)$'
++  fi
++  ;;
+ 
++osf3* | osf4* | osf5*)
++  lt_cv_deplibs_check_method=pass_all
++  ;;
+ 
++rdos*)
++  lt_cv_deplibs_check_method=pass_all
++  ;;
+ 
++solaris*)
++  lt_cv_deplibs_check_method=pass_all
++  ;;
+ 
++sysv5* | sco3.2v5* | sco5v6* | unixware* | OpenUNIX* | sysv4*uw2*)
++  lt_cv_deplibs_check_method=pass_all
++  ;;
+ 
+-# test EBCDIC or ASCII
+-case `echo X|tr X '\101'` in
+- A) # ASCII based system
+-    # \n is not interpreted correctly by Solaris 8 /usr/ucb/tr
+-  lt_SP2NL='tr \040 \012'
+-  lt_NL2SP='tr \015\012 \040\040'
++sysv4 | sysv4.3*)
++  case $host_vendor in
++  motorola)
++    lt_cv_deplibs_check_method='file_magic ELF [0-9][0-9]*-bit [ML]SB (shared object|dynamic lib) M[0-9][0-9]* Version [0-9]'
++    lt_cv_file_magic_test_file=`echo /usr/lib/libc.so*`
++    ;;
++  ncr)
++    lt_cv_deplibs_check_method=pass_all
++    ;;
++  sequent)
++    lt_cv_file_magic_cmd='/bin/file'
++    lt_cv_deplibs_check_method='file_magic ELF [0-9][0-9]*-bit [LM]SB (shared object|dynamic lib )'
++    ;;
++  sni)
++    lt_cv_file_magic_cmd='/bin/file'
++    lt_cv_deplibs_check_method="file_magic ELF [0-9][0-9]*-bit [LM]SB dynamic lib"
++    lt_cv_file_magic_test_file=/lib/libc.so
++    ;;
++  siemens)
++    lt_cv_deplibs_check_method=pass_all
++    ;;
++  pc)
++    lt_cv_deplibs_check_method=pass_all
++    ;;
++  esac
+   ;;
+- *) # EBCDIC based system
+-  lt_SP2NL='tr \100 \n'
+-  lt_NL2SP='tr \r\n \100\100'
++
++tpf*)
++  lt_cv_deplibs_check_method=pass_all
+   ;;
+ esac
+ 
++fi
++{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $lt_cv_deplibs_check_method" >&5
++$as_echo "$lt_cv_deplibs_check_method" >&6; }
++file_magic_cmd=$lt_cv_file_magic_cmd
++deplibs_check_method=$lt_cv_deplibs_check_method
++test -z "$deplibs_check_method" && deplibs_check_method=unknown
+ 
+ 
+ 
+@@ -5286,49 +5216,20 @@ esac
+ 
+ 
+ 
+-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for $LD option to reload object files" >&5
+-$as_echo_n "checking for $LD option to reload object files... " >&6; }
+-if test "${lt_cv_ld_reload_flag+set}" = set; then :
+-  $as_echo_n "(cached) " >&6
+-else
+-  lt_cv_ld_reload_flag='-r'
+-fi
+-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $lt_cv_ld_reload_flag" >&5
+-$as_echo "$lt_cv_ld_reload_flag" >&6; }
+-reload_flag=$lt_cv_ld_reload_flag
+-case $reload_flag in
+-"" | " "*) ;;
+-*) reload_flag=" $reload_flag" ;;
+-esac
+-reload_cmds='$LD$reload_flag -o $output$reload_objs'
+-case $host_os in
+-  darwin*)
+-    if test "$GCC" = yes; then
+-      reload_cmds='$LTCC $LTCFLAGS -nostdlib ${wl}-r -o $output$reload_objs'
+-    else
+-      reload_cmds='$LD$reload_flag -o $output$reload_objs'
+-    fi
+-    ;;
+-esac
+-
+-
+-
+-
+-
+ 
+ 
+ 
+ 
+ if test -n "$ac_tool_prefix"; then
+-  # Extract the first word of "${ac_tool_prefix}objdump", so it can be a program name with args.
+-set dummy ${ac_tool_prefix}objdump; ac_word=$2
++  # Extract the first word of "${ac_tool_prefix}ar", so it can be a program name with args.
++set dummy ${ac_tool_prefix}ar; ac_word=$2
+ { $as_echo "$as_me:${as_lineno-$LINENO}: checking for $ac_word" >&5
+ $as_echo_n "checking for $ac_word... " >&6; }
+-if test "${ac_cv_prog_OBJDUMP+set}" = set; then :
++if test "${ac_cv_prog_AR+set}" = set; then :
+   $as_echo_n "(cached) " >&6
+ else
+-  if test -n "$OBJDUMP"; then
+-  ac_cv_prog_OBJDUMP="$OBJDUMP" # Let the user override the test.
++  if test -n "$AR"; then
++  ac_cv_prog_AR="$AR" # Let the user override the test.
+ else
+ as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
+ for as_dir in $PATH
+@@ -5337,7 +5238,7 @@ do
+   test -z "$as_dir" && as_dir=.
+     for ac_exec_ext in '' $ac_executable_extensions; do
+   if { test -f "$as_dir/$ac_word$ac_exec_ext" && $as_test_x "$as_dir/$ac_word$ac_exec_ext"; }; then
+-    ac_cv_prog_OBJDUMP="${ac_tool_prefix}objdump"
++    ac_cv_prog_AR="${ac_tool_prefix}ar"
+     $as_echo "$as_me:${as_lineno-$LINENO}: found $as_dir/$ac_word$ac_exec_ext" >&5
+     break 2
+   fi
+@@ -5347,10 +5248,10 @@ IFS=$as_save_IFS
+ 
+ fi
+ fi
+-OBJDUMP=$ac_cv_prog_OBJDUMP
+-if test -n "$OBJDUMP"; then
+-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: $OBJDUMP" >&5
+-$as_echo "$OBJDUMP" >&6; }
++AR=$ac_cv_prog_AR
++if test -n "$AR"; then
++  { $as_echo "$as_me:${as_lineno-$LINENO}: result: $AR" >&5
++$as_echo "$AR" >&6; }
+ else
+   { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+ $as_echo "no" >&6; }
+@@ -5358,17 +5259,17 @@ fi
+ 
+ 
+ fi
+-if test -z "$ac_cv_prog_OBJDUMP"; then
+-  ac_ct_OBJDUMP=$OBJDUMP
+-  # Extract the first word of "objdump", so it can be a program name with args.
+-set dummy objdump; ac_word=$2
++if test -z "$ac_cv_prog_AR"; then
++  ac_ct_AR=$AR
++  # Extract the first word of "ar", so it can be a program name with args.
++set dummy ar; ac_word=$2
+ { $as_echo "$as_me:${as_lineno-$LINENO}: checking for $ac_word" >&5
+ $as_echo_n "checking for $ac_word... " >&6; }
+-if test "${ac_cv_prog_ac_ct_OBJDUMP+set}" = set; then :
++if test "${ac_cv_prog_ac_ct_AR+set}" = set; then :
+   $as_echo_n "(cached) " >&6
+ else
+-  if test -n "$ac_ct_OBJDUMP"; then
+-  ac_cv_prog_ac_ct_OBJDUMP="$ac_ct_OBJDUMP" # Let the user override the test.
++  if test -n "$ac_ct_AR"; then
++  ac_cv_prog_ac_ct_AR="$ac_ct_AR" # Let the user override the test.
+ else
+ as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
+ for as_dir in $PATH
+@@ -5377,7 +5278,7 @@ do
+   test -z "$as_dir" && as_dir=.
+     for ac_exec_ext in '' $ac_executable_extensions; do
+   if { test -f "$as_dir/$ac_word$ac_exec_ext" && $as_test_x "$as_dir/$ac_word$ac_exec_ext"; }; then
+-    ac_cv_prog_ac_ct_OBJDUMP="objdump"
++    ac_cv_prog_ac_ct_AR="ar"
+     $as_echo "$as_me:${as_lineno-$LINENO}: found $as_dir/$ac_word$ac_exec_ext" >&5
+     break 2
+   fi
+@@ -5387,17 +5288,17 @@ IFS=$as_save_IFS
+ 
+ fi
+ fi
+-ac_ct_OBJDUMP=$ac_cv_prog_ac_ct_OBJDUMP
+-if test -n "$ac_ct_OBJDUMP"; then
+-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_ct_OBJDUMP" >&5
+-$as_echo "$ac_ct_OBJDUMP" >&6; }
++ac_ct_AR=$ac_cv_prog_ac_ct_AR
++if test -n "$ac_ct_AR"; then
++  { $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_ct_AR" >&5
++$as_echo "$ac_ct_AR" >&6; }
+ else
+   { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+ $as_echo "no" >&6; }
+ fi
+ 
+-  if test "x$ac_ct_OBJDUMP" = x; then
+-    OBJDUMP="false"
++  if test "x$ac_ct_AR" = x; then
++    AR="false"
+   else
+     case $cross_compiling:$ac_tool_warned in
+ yes:)
+@@ -5405,13 +5306,14 @@ yes:)
+ $as_echo "$as_me: WARNING: using cross tools not prefixed with host triplet" >&2;}
+ ac_tool_warned=yes ;;
+ esac
+-    OBJDUMP=$ac_ct_OBJDUMP
++    AR=$ac_ct_AR
+   fi
+ else
+-  OBJDUMP="$ac_cv_prog_OBJDUMP"
++  AR="$ac_cv_prog_AR"
+ fi
+ 
+-test -z "$OBJDUMP" && OBJDUMP=objdump
++test -z "$AR" && AR=ar
++test -z "$AR_FLAGS" && AR_FLAGS=cru
+ 
+ 
+ 
+@@ -5421,213 +5323,101 @@ test -z "$OBJDUMP" && OBJDUMP=objdump
+ 
+ 
+ 
+-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking how to recognize dependent libraries" >&5
+-$as_echo_n "checking how to recognize dependent libraries... " >&6; }
+-if test "${lt_cv_deplibs_check_method+set}" = set; then :
+-  $as_echo_n "(cached) " >&6
+-else
+-  lt_cv_file_magic_cmd='$MAGIC_CMD'
+-lt_cv_file_magic_test_file=
+-lt_cv_deplibs_check_method='unknown'
+-# Need to set the preceding variable on all platforms that support
+-# interlibrary dependencies.
+-# 'none' -- dependencies not supported.
+-# `unknown' -- same as none, but documents that we really don't know.
+-# 'pass_all' -- all dependencies passed with no checks.
+-# 'test_compile' -- check by making test program.
+-# 'file_magic [[regex]]' -- check by looking for files in library path
+-# which responds to the $file_magic_cmd with a given extended regex.
+-# If you have `file' or equivalent on your system and you're not sure
+-# whether `pass_all' will *always* work, you probably want this one.
+ 
+-case $host_os in
+-aix[4-9]*)
+-  lt_cv_deplibs_check_method=pass_all
+-  ;;
+ 
+-beos*)
+-  lt_cv_deplibs_check_method=pass_all
+-  ;;
++if test -n "$ac_tool_prefix"; then
++  # Extract the first word of "${ac_tool_prefix}strip", so it can be a program name with args.
++set dummy ${ac_tool_prefix}strip; ac_word=$2
++{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for $ac_word" >&5
++$as_echo_n "checking for $ac_word... " >&6; }
++if test "${ac_cv_prog_STRIP+set}" = set; then :
++  $as_echo_n "(cached) " >&6
++else
++  if test -n "$STRIP"; then
++  ac_cv_prog_STRIP="$STRIP" # Let the user override the test.
++else
++as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
++for as_dir in $PATH
++do
++  IFS=$as_save_IFS
++  test -z "$as_dir" && as_dir=.
++    for ac_exec_ext in '' $ac_executable_extensions; do
++  if { test -f "$as_dir/$ac_word$ac_exec_ext" && $as_test_x "$as_dir/$ac_word$ac_exec_ext"; }; then
++    ac_cv_prog_STRIP="${ac_tool_prefix}strip"
++    $as_echo "$as_me:${as_lineno-$LINENO}: found $as_dir/$ac_word$ac_exec_ext" >&5
++    break 2
++  fi
++done
++  done
++IFS=$as_save_IFS
+ 
+-bsdi[45]*)
+-  lt_cv_deplibs_check_method='file_magic ELF [0-9][0-9]*-bit [ML]SB (shared object|dynamic lib)'
+-  lt_cv_file_magic_cmd='/usr/bin/file -L'
+-  lt_cv_file_magic_test_file=/shlib/libc.so
+-  ;;
++fi
++fi
++STRIP=$ac_cv_prog_STRIP
++if test -n "$STRIP"; then
++  { $as_echo "$as_me:${as_lineno-$LINENO}: result: $STRIP" >&5
++$as_echo "$STRIP" >&6; }
++else
++  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
++$as_echo "no" >&6; }
++fi
+ 
+-cygwin*)
+-  # func_win32_libid is a shell function defined in ltmain.sh
+-  lt_cv_deplibs_check_method='file_magic ^x86 archive import|^x86 DLL'
+-  lt_cv_file_magic_cmd='func_win32_libid'
+-  ;;
+ 
+-mingw* | pw32*)
+-  # Base MSYS/MinGW do not provide the 'file' command needed by
+-  # func_win32_libid shell function, so use a weaker test based on 'objdump',
+-  # unless we find 'file', for example because we are cross-compiling.
+-  if ( file / ) >/dev/null 2>&1; then
+-    lt_cv_deplibs_check_method='file_magic ^x86 archive import|^x86 DLL'
+-    lt_cv_file_magic_cmd='func_win32_libid'
+-  else
+-    lt_cv_deplibs_check_method='file_magic file format pei*-i386(.*architecture: i386)?'
+-    lt_cv_file_magic_cmd='$OBJDUMP -f'
++fi
++if test -z "$ac_cv_prog_STRIP"; then
++  ac_ct_STRIP=$STRIP
++  # Extract the first word of "strip", so it can be a program name with args.
++set dummy strip; ac_word=$2
++{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for $ac_word" >&5
++$as_echo_n "checking for $ac_word... " >&6; }
++if test "${ac_cv_prog_ac_ct_STRIP+set}" = set; then :
++  $as_echo_n "(cached) " >&6
++else
++  if test -n "$ac_ct_STRIP"; then
++  ac_cv_prog_ac_ct_STRIP="$ac_ct_STRIP" # Let the user override the test.
++else
++as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
++for as_dir in $PATH
++do
++  IFS=$as_save_IFS
++  test -z "$as_dir" && as_dir=.
++    for ac_exec_ext in '' $ac_executable_extensions; do
++  if { test -f "$as_dir/$ac_word$ac_exec_ext" && $as_test_x "$as_dir/$ac_word$ac_exec_ext"; }; then
++    ac_cv_prog_ac_ct_STRIP="strip"
++    $as_echo "$as_me:${as_lineno-$LINENO}: found $as_dir/$ac_word$ac_exec_ext" >&5
++    break 2
+   fi
+-  ;;
+-
+-cegcc)
+-  # use the weaker test based on 'objdump'. See mingw*.
+-  lt_cv_deplibs_check_method='file_magic file format pe-arm-.*little(.*architecture: arm)?'
+-  lt_cv_file_magic_cmd='$OBJDUMP -f'
+-  ;;
++done
++  done
++IFS=$as_save_IFS
+ 
+-darwin* | rhapsody*)
+-  lt_cv_deplibs_check_method=pass_all
+-  ;;
++fi
++fi
++ac_ct_STRIP=$ac_cv_prog_ac_ct_STRIP
++if test -n "$ac_ct_STRIP"; then
++  { $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_ct_STRIP" >&5
++$as_echo "$ac_ct_STRIP" >&6; }
++else
++  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
++$as_echo "no" >&6; }
++fi
+ 
+-freebsd* | dragonfly*)
+-  if echo __ELF__ | $CC -E - | $GREP __ELF__ > /dev/null; then
+-    case $host_cpu in
+-    i*86 )
+-      # Not sure whether the presence of OpenBSD here was a mistake.
+-      # Let's accept both of them until this is cleared up.
+-      lt_cv_deplibs_check_method='file_magic (FreeBSD|OpenBSD|DragonFly)/i[3-9]86 (compact )?demand paged shared library'
+-      lt_cv_file_magic_cmd=/usr/bin/file
+-      lt_cv_file_magic_test_file=`echo /usr/lib/libc.so.*`
+-      ;;
+-    esac
++  if test "x$ac_ct_STRIP" = x; then
++    STRIP=":"
+   else
+-    lt_cv_deplibs_check_method=pass_all
++    case $cross_compiling:$ac_tool_warned in
++yes:)
++{ $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: using cross tools not prefixed with host triplet" >&5
++$as_echo "$as_me: WARNING: using cross tools not prefixed with host triplet" >&2;}
++ac_tool_warned=yes ;;
++esac
++    STRIP=$ac_ct_STRIP
+   fi
+-  ;;
+-
+-gnu*)
+-  lt_cv_deplibs_check_method=pass_all
+-  ;;
+-
+-hpux10.20* | hpux11*)
+-  lt_cv_file_magic_cmd=/usr/bin/file
+-  case $host_cpu in
+-  ia64*)
+-    lt_cv_deplibs_check_method='file_magic (s[0-9][0-9][0-9]|ELF-[0-9][0-9]) shared object file - IA64'
+-    lt_cv_file_magic_test_file=/usr/lib/hpux32/libc.so
+-    ;;
+-  hppa*64*)
+-    lt_cv_deplibs_check_method='file_magic (s[0-9][0-9][0-9]|ELF-[0-9][0-9]) shared object file - PA-RISC [0-9].[0-9]'
+-    lt_cv_file_magic_test_file=/usr/lib/pa20_64/libc.sl
+-    ;;
+-  *)
+-    lt_cv_deplibs_check_method='file_magic (s[0-9][0-9][0-9]|PA-RISC[0-9].[0-9]) shared library'
+-    lt_cv_file_magic_test_file=/usr/lib/libc.sl
+-    ;;
+-  esac
+-  ;;
+-
+-interix[3-9]*)
+-  # PIC code is broken on Interix 3.x, that's why |\.a not |_pic\.a here
+-  lt_cv_deplibs_check_method='match_pattern /lib[^/]+(\.so|\.a)$'
+-  ;;
+-
+-irix5* | irix6* | nonstopux*)
+-  case $LD in
+-  *-32|*"-32 ") libmagic=32-bit;;
+-  *-n32|*"-n32 ") libmagic=N32;;
+-  *-64|*"-64 ") libmagic=64-bit;;
+-  *) libmagic=never-match;;
+-  esac
+-  lt_cv_deplibs_check_method=pass_all
+-  ;;
+-
+-# This must be Linux ELF.
+-linux* | k*bsd*-gnu | kopensolaris*-gnu)
+-  lt_cv_deplibs_check_method=pass_all
+-  ;;
+-
+-netbsd* | netbsdelf*-gnu)
+-  if echo __ELF__ | $CC -E - | $GREP __ELF__ > /dev/null; then
+-    lt_cv_deplibs_check_method='match_pattern /lib[^/]+(\.so\.[0-9]+\.[0-9]+|_pic\.a)$'
+-  else
+-    lt_cv_deplibs_check_method='match_pattern /lib[^/]+(\.so|_pic\.a)$'
+-  fi
+-  ;;
+-
+-newos6*)
+-  lt_cv_deplibs_check_method='file_magic ELF [0-9][0-9]*-bit [ML]SB (executable|dynamic lib)'
+-  lt_cv_file_magic_cmd=/usr/bin/file
+-  lt_cv_file_magic_test_file=/usr/lib/libnls.so
+-  ;;
+-
+-*nto* | *qnx*)
+-  lt_cv_deplibs_check_method=pass_all
+-  ;;
+-
+-openbsd*)
+-  if test -z "`echo __ELF__ | $CC -E - | $GREP __ELF__`" || test "$host_os-$host_cpu" = "openbsd2.8-powerpc"; then
+-    lt_cv_deplibs_check_method='match_pattern /lib[^/]+(\.so\.[0-9]+\.[0-9]+|\.so|_pic\.a)$'
+-  else
+-    lt_cv_deplibs_check_method='match_pattern /lib[^/]+(\.so\.[0-9]+\.[0-9]+|_pic\.a)$'
+-  fi
+-  ;;
+-
+-osf3* | osf4* | osf5*)
+-  lt_cv_deplibs_check_method=pass_all
+-  ;;
+-
+-rdos*)
+-  lt_cv_deplibs_check_method=pass_all
+-  ;;
+-
+-solaris*)
+-  lt_cv_deplibs_check_method=pass_all
+-  ;;
+-
+-sysv5* | sco3.2v5* | sco5v6* | unixware* | OpenUNIX* | sysv4*uw2*)
+-  lt_cv_deplibs_check_method=pass_all
+-  ;;
+-
+-sysv4 | sysv4.3*)
+-  case $host_vendor in
+-  motorola)
+-    lt_cv_deplibs_check_method='file_magic ELF [0-9][0-9]*-bit [ML]SB (shared object|dynamic lib) M[0-9][0-9]* Version [0-9]'
+-    lt_cv_file_magic_test_file=`echo /usr/lib/libc.so*`
+-    ;;
+-  ncr)
+-    lt_cv_deplibs_check_method=pass_all
+-    ;;
+-  sequent)
+-    lt_cv_file_magic_cmd='/bin/file'
+-    lt_cv_deplibs_check_method='file_magic ELF [0-9][0-9]*-bit [LM]SB (shared object|dynamic lib )'
+-    ;;
+-  sni)
+-    lt_cv_file_magic_cmd='/bin/file'
+-    lt_cv_deplibs_check_method="file_magic ELF [0-9][0-9]*-bit [LM]SB dynamic lib"
+-    lt_cv_file_magic_test_file=/lib/libc.so
+-    ;;
+-  siemens)
+-    lt_cv_deplibs_check_method=pass_all
+-    ;;
+-  pc)
+-    lt_cv_deplibs_check_method=pass_all
+-    ;;
+-  esac
+-  ;;
+-
+-tpf*)
+-  lt_cv_deplibs_check_method=pass_all
+-  ;;
+-esac
+-
+-fi
+-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $lt_cv_deplibs_check_method" >&5
+-$as_echo "$lt_cv_deplibs_check_method" >&6; }
+-file_magic_cmd=$lt_cv_file_magic_cmd
+-deplibs_check_method=$lt_cv_deplibs_check_method
+-test -z "$deplibs_check_method" && deplibs_check_method=unknown
+-
+-
+-
+-
+-
++else
++  STRIP="$ac_cv_prog_STRIP"
++fi
+ 
++test -z "$STRIP" && STRIP=:
+ 
+ 
+ 
+@@ -5635,15 +5425,15 @@ test -z "$deplibs_check_method" && deplibs_check_method=unknown
+ 
+ 
+ if test -n "$ac_tool_prefix"; then
+-  # Extract the first word of "${ac_tool_prefix}ar", so it can be a program name with args.
+-set dummy ${ac_tool_prefix}ar; ac_word=$2
++  # Extract the first word of "${ac_tool_prefix}ranlib", so it can be a program name with args.
++set dummy ${ac_tool_prefix}ranlib; ac_word=$2
+ { $as_echo "$as_me:${as_lineno-$LINENO}: checking for $ac_word" >&5
+ $as_echo_n "checking for $ac_word... " >&6; }
+-if test "${ac_cv_prog_AR+set}" = set; then :
++if test "${ac_cv_prog_RANLIB+set}" = set; then :
+   $as_echo_n "(cached) " >&6
+ else
+-  if test -n "$AR"; then
+-  ac_cv_prog_AR="$AR" # Let the user override the test.
++  if test -n "$RANLIB"; then
++  ac_cv_prog_RANLIB="$RANLIB" # Let the user override the test.
+ else
+ as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
+ for as_dir in $PATH
+@@ -5652,7 +5442,7 @@ do
+   test -z "$as_dir" && as_dir=.
+     for ac_exec_ext in '' $ac_executable_extensions; do
+   if { test -f "$as_dir/$ac_word$ac_exec_ext" && $as_test_x "$as_dir/$ac_word$ac_exec_ext"; }; then
+-    ac_cv_prog_AR="${ac_tool_prefix}ar"
++    ac_cv_prog_RANLIB="${ac_tool_prefix}ranlib"
+     $as_echo "$as_me:${as_lineno-$LINENO}: found $as_dir/$ac_word$ac_exec_ext" >&5
+     break 2
+   fi
+@@ -5662,10 +5452,10 @@ IFS=$as_save_IFS
+ 
+ fi
+ fi
+-AR=$ac_cv_prog_AR
+-if test -n "$AR"; then
+-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: $AR" >&5
+-$as_echo "$AR" >&6; }
++RANLIB=$ac_cv_prog_RANLIB
++if test -n "$RANLIB"; then
++  { $as_echo "$as_me:${as_lineno-$LINENO}: result: $RANLIB" >&5
++$as_echo "$RANLIB" >&6; }
+ else
+   { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+ $as_echo "no" >&6; }
+@@ -5673,17 +5463,17 @@ fi
+ 
+ 
+ fi
+-if test -z "$ac_cv_prog_AR"; then
+-  ac_ct_AR=$AR
+-  # Extract the first word of "ar", so it can be a program name with args.
+-set dummy ar; ac_word=$2
++if test -z "$ac_cv_prog_RANLIB"; then
++  ac_ct_RANLIB=$RANLIB
++  # Extract the first word of "ranlib", so it can be a program name with args.
++set dummy ranlib; ac_word=$2
+ { $as_echo "$as_me:${as_lineno-$LINENO}: checking for $ac_word" >&5
+ $as_echo_n "checking for $ac_word... " >&6; }
+-if test "${ac_cv_prog_ac_ct_AR+set}" = set; then :
++if test "${ac_cv_prog_ac_ct_RANLIB+set}" = set; then :
+   $as_echo_n "(cached) " >&6
+ else
+-  if test -n "$ac_ct_AR"; then
+-  ac_cv_prog_ac_ct_AR="$ac_ct_AR" # Let the user override the test.
++  if test -n "$ac_ct_RANLIB"; then
++  ac_cv_prog_ac_ct_RANLIB="$ac_ct_RANLIB" # Let the user override the test.
+ else
+ as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
+ for as_dir in $PATH
+@@ -5692,7 +5482,7 @@ do
+   test -z "$as_dir" && as_dir=.
+     for ac_exec_ext in '' $ac_executable_extensions; do
+   if { test -f "$as_dir/$ac_word$ac_exec_ext" && $as_test_x "$as_dir/$ac_word$ac_exec_ext"; }; then
+-    ac_cv_prog_ac_ct_AR="ar"
++    ac_cv_prog_ac_ct_RANLIB="ranlib"
+     $as_echo "$as_me:${as_lineno-$LINENO}: found $as_dir/$ac_word$ac_exec_ext" >&5
+     break 2
+   fi
+@@ -5702,17 +5492,17 @@ IFS=$as_save_IFS
+ 
+ fi
+ fi
+-ac_ct_AR=$ac_cv_prog_ac_ct_AR
+-if test -n "$ac_ct_AR"; then
+-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_ct_AR" >&5
+-$as_echo "$ac_ct_AR" >&6; }
++ac_ct_RANLIB=$ac_cv_prog_ac_ct_RANLIB
++if test -n "$ac_ct_RANLIB"; then
++  { $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_ct_RANLIB" >&5
++$as_echo "$ac_ct_RANLIB" >&6; }
+ else
+   { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+ $as_echo "no" >&6; }
+ fi
+ 
+-  if test "x$ac_ct_AR" = x; then
+-    AR="false"
++  if test "x$ac_ct_RANLIB" = x; then
++    RANLIB=":"
+   else
+     case $cross_compiling:$ac_tool_warned in
+ yes:)
+@@ -5720,239 +5510,35 @@ yes:)
+ $as_echo "$as_me: WARNING: using cross tools not prefixed with host triplet" >&2;}
+ ac_tool_warned=yes ;;
+ esac
+-    AR=$ac_ct_AR
++    RANLIB=$ac_ct_RANLIB
+   fi
+ else
+-  AR="$ac_cv_prog_AR"
++  RANLIB="$ac_cv_prog_RANLIB"
+ fi
+ 
+-test -z "$AR" && AR=ar
+-test -z "$AR_FLAGS" && AR_FLAGS=cru
++test -z "$RANLIB" && RANLIB=:
+ 
+ 
+ 
+ 
+ 
+ 
++# Determine commands to create old-style static archives.
++old_archive_cmds='$AR $AR_FLAGS $oldlib$oldobjs'
++old_postinstall_cmds='chmod 644 $oldlib'
++old_postuninstall_cmds=
+ 
+-
+-
+-
+-
+-if test -n "$ac_tool_prefix"; then
+-  # Extract the first word of "${ac_tool_prefix}strip", so it can be a program name with args.
+-set dummy ${ac_tool_prefix}strip; ac_word=$2
+-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for $ac_word" >&5
+-$as_echo_n "checking for $ac_word... " >&6; }
+-if test "${ac_cv_prog_STRIP+set}" = set; then :
+-  $as_echo_n "(cached) " >&6
+-else
+-  if test -n "$STRIP"; then
+-  ac_cv_prog_STRIP="$STRIP" # Let the user override the test.
+-else
+-as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
+-for as_dir in $PATH
+-do
+-  IFS=$as_save_IFS
+-  test -z "$as_dir" && as_dir=.
+-    for ac_exec_ext in '' $ac_executable_extensions; do
+-  if { test -f "$as_dir/$ac_word$ac_exec_ext" && $as_test_x "$as_dir/$ac_word$ac_exec_ext"; }; then
+-    ac_cv_prog_STRIP="${ac_tool_prefix}strip"
+-    $as_echo "$as_me:${as_lineno-$LINENO}: found $as_dir/$ac_word$ac_exec_ext" >&5
+-    break 2
+-  fi
+-done
+-  done
+-IFS=$as_save_IFS
+-
+-fi
+-fi
+-STRIP=$ac_cv_prog_STRIP
+-if test -n "$STRIP"; then
+-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: $STRIP" >&5
+-$as_echo "$STRIP" >&6; }
+-else
+-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+-$as_echo "no" >&6; }
+-fi
+-
+-
+-fi
+-if test -z "$ac_cv_prog_STRIP"; then
+-  ac_ct_STRIP=$STRIP
+-  # Extract the first word of "strip", so it can be a program name with args.
+-set dummy strip; ac_word=$2
+-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for $ac_word" >&5
+-$as_echo_n "checking for $ac_word... " >&6; }
+-if test "${ac_cv_prog_ac_ct_STRIP+set}" = set; then :
+-  $as_echo_n "(cached) " >&6
+-else
+-  if test -n "$ac_ct_STRIP"; then
+-  ac_cv_prog_ac_ct_STRIP="$ac_ct_STRIP" # Let the user override the test.
+-else
+-as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
+-for as_dir in $PATH
+-do
+-  IFS=$as_save_IFS
+-  test -z "$as_dir" && as_dir=.
+-    for ac_exec_ext in '' $ac_executable_extensions; do
+-  if { test -f "$as_dir/$ac_word$ac_exec_ext" && $as_test_x "$as_dir/$ac_word$ac_exec_ext"; }; then
+-    ac_cv_prog_ac_ct_STRIP="strip"
+-    $as_echo "$as_me:${as_lineno-$LINENO}: found $as_dir/$ac_word$ac_exec_ext" >&5
+-    break 2
+-  fi
+-done
+-  done
+-IFS=$as_save_IFS
+-
+-fi
+-fi
+-ac_ct_STRIP=$ac_cv_prog_ac_ct_STRIP
+-if test -n "$ac_ct_STRIP"; then
+-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_ct_STRIP" >&5
+-$as_echo "$ac_ct_STRIP" >&6; }
+-else
+-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+-$as_echo "no" >&6; }
+-fi
+-
+-  if test "x$ac_ct_STRIP" = x; then
+-    STRIP=":"
+-  else
+-    case $cross_compiling:$ac_tool_warned in
+-yes:)
+-{ $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: using cross tools not prefixed with host triplet" >&5
+-$as_echo "$as_me: WARNING: using cross tools not prefixed with host triplet" >&2;}
+-ac_tool_warned=yes ;;
+-esac
+-    STRIP=$ac_ct_STRIP
+-  fi
+-else
+-  STRIP="$ac_cv_prog_STRIP"
+-fi
+-
+-test -z "$STRIP" && STRIP=:
+-
+-
+-
+-
+-
+-
+-if test -n "$ac_tool_prefix"; then
+-  # Extract the first word of "${ac_tool_prefix}ranlib", so it can be a program name with args.
+-set dummy ${ac_tool_prefix}ranlib; ac_word=$2
+-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for $ac_word" >&5
+-$as_echo_n "checking for $ac_word... " >&6; }
+-if test "${ac_cv_prog_RANLIB+set}" = set; then :
+-  $as_echo_n "(cached) " >&6
+-else
+-  if test -n "$RANLIB"; then
+-  ac_cv_prog_RANLIB="$RANLIB" # Let the user override the test.
+-else
+-as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
+-for as_dir in $PATH
+-do
+-  IFS=$as_save_IFS
+-  test -z "$as_dir" && as_dir=.
+-    for ac_exec_ext in '' $ac_executable_extensions; do
+-  if { test -f "$as_dir/$ac_word$ac_exec_ext" && $as_test_x "$as_dir/$ac_word$ac_exec_ext"; }; then
+-    ac_cv_prog_RANLIB="${ac_tool_prefix}ranlib"
+-    $as_echo "$as_me:${as_lineno-$LINENO}: found $as_dir/$ac_word$ac_exec_ext" >&5
+-    break 2
+-  fi
+-done
+-  done
+-IFS=$as_save_IFS
+-
+-fi
+-fi
+-RANLIB=$ac_cv_prog_RANLIB
+-if test -n "$RANLIB"; then
+-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: $RANLIB" >&5
+-$as_echo "$RANLIB" >&6; }
+-else
+-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+-$as_echo "no" >&6; }
+-fi
+-
+-
+-fi
+-if test -z "$ac_cv_prog_RANLIB"; then
+-  ac_ct_RANLIB=$RANLIB
+-  # Extract the first word of "ranlib", so it can be a program name with args.
+-set dummy ranlib; ac_word=$2
+-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for $ac_word" >&5
+-$as_echo_n "checking for $ac_word... " >&6; }
+-if test "${ac_cv_prog_ac_ct_RANLIB+set}" = set; then :
+-  $as_echo_n "(cached) " >&6
+-else
+-  if test -n "$ac_ct_RANLIB"; then
+-  ac_cv_prog_ac_ct_RANLIB="$ac_ct_RANLIB" # Let the user override the test.
+-else
+-as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
+-for as_dir in $PATH
+-do
+-  IFS=$as_save_IFS
+-  test -z "$as_dir" && as_dir=.
+-    for ac_exec_ext in '' $ac_executable_extensions; do
+-  if { test -f "$as_dir/$ac_word$ac_exec_ext" && $as_test_x "$as_dir/$ac_word$ac_exec_ext"; }; then
+-    ac_cv_prog_ac_ct_RANLIB="ranlib"
+-    $as_echo "$as_me:${as_lineno-$LINENO}: found $as_dir/$ac_word$ac_exec_ext" >&5
+-    break 2
+-  fi
+-done
+-  done
+-IFS=$as_save_IFS
+-
+-fi
+-fi
+-ac_ct_RANLIB=$ac_cv_prog_ac_ct_RANLIB
+-if test -n "$ac_ct_RANLIB"; then
+-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_ct_RANLIB" >&5
+-$as_echo "$ac_ct_RANLIB" >&6; }
+-else
+-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+-$as_echo "no" >&6; }
+-fi
+-
+-  if test "x$ac_ct_RANLIB" = x; then
+-    RANLIB=":"
+-  else
+-    case $cross_compiling:$ac_tool_warned in
+-yes:)
+-{ $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: using cross tools not prefixed with host triplet" >&5
+-$as_echo "$as_me: WARNING: using cross tools not prefixed with host triplet" >&2;}
+-ac_tool_warned=yes ;;
+-esac
+-    RANLIB=$ac_ct_RANLIB
+-  fi
+-else
+-  RANLIB="$ac_cv_prog_RANLIB"
+-fi
+-
+-test -z "$RANLIB" && RANLIB=:
+-
+-
+-
+-
+-
+-
+-# Determine commands to create old-style static archives.
+-old_archive_cmds='$AR $AR_FLAGS $oldlib$oldobjs'
+-old_postinstall_cmds='chmod 644 $oldlib'
+-old_postuninstall_cmds=
+-
+-if test -n "$RANLIB"; then
+-  case $host_os in
+-  openbsd*)
+-    old_postinstall_cmds="$old_postinstall_cmds~\$RANLIB -t \$oldlib"
+-    ;;
+-  *)
+-    old_postinstall_cmds="$old_postinstall_cmds~\$RANLIB \$oldlib"
+-    ;;
+-  esac
+-  old_archive_cmds="$old_archive_cmds~\$RANLIB \$oldlib"
+-fi
++if test -n "$RANLIB"; then
++  case $host_os in
++  openbsd*)
++    old_postinstall_cmds="$old_postinstall_cmds~\$RANLIB -t \$oldlib"
++    ;;
++  *)
++    old_postinstall_cmds="$old_postinstall_cmds~\$RANLIB \$oldlib"
++    ;;
++  esac
++  old_archive_cmds="$old_archive_cmds~\$RANLIB \$oldlib"
++fi
+ 
+ 
+ 
+@@ -6246,6 +5832,7 @@ fi
+ 
+ 
+ 
++
+ # Check whether --enable-libtool-lock was given.
+ if test "${enable_libtool_lock+set}" = set; then :
+   enableval=$enable_libtool_lock;
+@@ -6277,7 +5864,7 @@ ia64-*-hpux*)
+   ;;
+ *-*-irix6*)
+   # Find out which ABI we are using.
+-  echo '#line 6280 "configure"' > conftest.$ac_ext
++  echo '#line 5867 "configure"' > conftest.$ac_ext
+   if { { eval echo "\"\$as_me\":${as_lineno-$LINENO}: \"$ac_compile\""; } >&5
+   (eval $ac_compile) 2>&5
+   ac_status=$?
+@@ -7024,6 +6611,143 @@ $as_echo "$lt_cv_ld_exported_symbols_list" >&6; }
+     ;;
+   esac
+ 
++ac_ext=c
++ac_cpp='$CPP $CPPFLAGS'
++ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
++ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
++ac_compiler_gnu=$ac_cv_c_compiler_gnu
++{ $as_echo "$as_me:${as_lineno-$LINENO}: checking how to run the C preprocessor" >&5
++$as_echo_n "checking how to run the C preprocessor... " >&6; }
++# On Suns, sometimes $CPP names a directory.
++if test -n "$CPP" && test -d "$CPP"; then
++  CPP=
++fi
++if test -z "$CPP"; then
++  if test "${ac_cv_prog_CPP+set}" = set; then :
++  $as_echo_n "(cached) " >&6
++else
++      # Double quotes because CPP needs to be expanded
++    for CPP in "$CC -E" "$CC -E -traditional-cpp" "/lib/cpp"
++    do
++      ac_preproc_ok=false
++for ac_c_preproc_warn_flag in '' yes
++do
++  # Use a header file that comes with gcc, so configuring glibc
++  # with a fresh cross-compiler works.
++  # Prefer <limits.h> to <assert.h> if __STDC__ is defined, since
++  # <limits.h> exists even on freestanding compilers.
++  # On the NeXT, cc -E runs the code through the compiler's parser,
++  # not just through cpp. "Syntax error" is here to catch this case.
++  cat confdefs.h - <<_ACEOF >conftest.$ac_ext
++/* end confdefs.h.  */
++#ifdef __STDC__
++# include <limits.h>
++#else
++# include <assert.h>
++#endif
++		     Syntax error
++_ACEOF
++if ac_fn_c_try_cpp "$LINENO"; then :
++
++else
++  # Broken: fails on valid input.
++continue
++fi
++rm -f conftest.err conftest.i conftest.$ac_ext
++
++  # OK, works on sane cases.  Now check whether nonexistent headers
++  # can be detected and how.
++  cat confdefs.h - <<_ACEOF >conftest.$ac_ext
++/* end confdefs.h.  */
++#include <ac_nonexistent.h>
++_ACEOF
++if ac_fn_c_try_cpp "$LINENO"; then :
++  # Broken: success on invalid input.
++continue
++else
++  # Passes both tests.
++ac_preproc_ok=:
++break
++fi
++rm -f conftest.err conftest.i conftest.$ac_ext
++
++done
++# Because of `break', _AC_PREPROC_IFELSE's cleaning code was skipped.
++rm -f conftest.i conftest.err conftest.$ac_ext
++if $ac_preproc_ok; then :
++  break
++fi
++
++    done
++    ac_cv_prog_CPP=$CPP
++
++fi
++  CPP=$ac_cv_prog_CPP
++else
++  ac_cv_prog_CPP=$CPP
++fi
++{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $CPP" >&5
++$as_echo "$CPP" >&6; }
++ac_preproc_ok=false
++for ac_c_preproc_warn_flag in '' yes
++do
++  # Use a header file that comes with gcc, so configuring glibc
++  # with a fresh cross-compiler works.
++  # Prefer <limits.h> to <assert.h> if __STDC__ is defined, since
++  # <limits.h> exists even on freestanding compilers.
++  # On the NeXT, cc -E runs the code through the compiler's parser,
++  # not just through cpp. "Syntax error" is here to catch this case.
++  cat confdefs.h - <<_ACEOF >conftest.$ac_ext
++/* end confdefs.h.  */
++#ifdef __STDC__
++# include <limits.h>
++#else
++# include <assert.h>
++#endif
++		     Syntax error
++_ACEOF
++if ac_fn_c_try_cpp "$LINENO"; then :
++
++else
++  # Broken: fails on valid input.
++continue
++fi
++rm -f conftest.err conftest.i conftest.$ac_ext
++
++  # OK, works on sane cases.  Now check whether nonexistent headers
++  # can be detected and how.
++  cat confdefs.h - <<_ACEOF >conftest.$ac_ext
++/* end confdefs.h.  */
++#include <ac_nonexistent.h>
++_ACEOF
++if ac_fn_c_try_cpp "$LINENO"; then :
++  # Broken: success on invalid input.
++continue
++else
++  # Passes both tests.
++ac_preproc_ok=:
++break
++fi
++rm -f conftest.err conftest.i conftest.$ac_ext
++
++done
++# Because of `break', _AC_PREPROC_IFELSE's cleaning code was skipped.
++rm -f conftest.i conftest.err conftest.$ac_ext
++if $ac_preproc_ok; then :
++
++else
++  { { $as_echo "$as_me:${as_lineno-$LINENO}: error: in \`$ac_pwd':" >&5
++$as_echo "$as_me: error: in \`$ac_pwd':" >&2;}
++as_fn_error $? "C preprocessor \"$CPP\" fails sanity check
++See \`config.log' for more details" "$LINENO" 5; }
++fi
++
++ac_ext=c
++ac_cpp='$CPP $CPPFLAGS'
++ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
++ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
++ac_compiler_gnu=$ac_cv_c_compiler_gnu
++
+ 
+ { $as_echo "$as_me:${as_lineno-$LINENO}: checking for ANSI C header files" >&5
+ $as_echo_n "checking for ANSI C header files... " >&6; }
+@@ -7669,11 +7393,11 @@ else
+    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
+    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
+    -e 's:$: $lt_compiler_flag:'`
+-   (eval echo "\"\$as_me:7672: $lt_compile\"" >&5)
++   (eval echo "\"\$as_me:7396: $lt_compile\"" >&5)
+    (eval "$lt_compile" 2>conftest.err)
+    ac_status=$?
+    cat conftest.err >&5
+-   echo "$as_me:7676: \$? = $ac_status" >&5
++   echo "$as_me:7400: \$? = $ac_status" >&5
+    if (exit $ac_status) && test -s "$ac_outfile"; then
+      # The compiler can only warn and ignore the option if not recognized
+      # So say no if there are warnings other than the usual output.
+@@ -8008,11 +7732,11 @@ else
+    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
+    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
+    -e 's:$: $lt_compiler_flag:'`
+-   (eval echo "\"\$as_me:8011: $lt_compile\"" >&5)
++   (eval echo "\"\$as_me:7735: $lt_compile\"" >&5)
+    (eval "$lt_compile" 2>conftest.err)
+    ac_status=$?
+    cat conftest.err >&5
+-   echo "$as_me:8015: \$? = $ac_status" >&5
++   echo "$as_me:7739: \$? = $ac_status" >&5
+    if (exit $ac_status) && test -s "$ac_outfile"; then
+      # The compiler can only warn and ignore the option if not recognized
+      # So say no if there are warnings other than the usual output.
+@@ -8113,11 +7837,11 @@ else
+    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
+    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
+    -e 's:$: $lt_compiler_flag:'`
+-   (eval echo "\"\$as_me:8116: $lt_compile\"" >&5)
++   (eval echo "\"\$as_me:7840: $lt_compile\"" >&5)
+    (eval "$lt_compile" 2>out/conftest.err)
+    ac_status=$?
+    cat out/conftest.err >&5
+-   echo "$as_me:8120: \$? = $ac_status" >&5
++   echo "$as_me:7844: \$? = $ac_status" >&5
+    if (exit $ac_status) && test -s out/conftest2.$ac_objext
+    then
+      # The compiler can only warn and ignore the option if not recognized
+@@ -8168,11 +7892,11 @@ else
+    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
+    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
+    -e 's:$: $lt_compiler_flag:'`
+-   (eval echo "\"\$as_me:8171: $lt_compile\"" >&5)
++   (eval echo "\"\$as_me:7895: $lt_compile\"" >&5)
+    (eval "$lt_compile" 2>out/conftest.err)
+    ac_status=$?
+    cat out/conftest.err >&5
+-   echo "$as_me:8175: \$? = $ac_status" >&5
++   echo "$as_me:7899: \$? = $ac_status" >&5
+    if (exit $ac_status) && test -s out/conftest2.$ac_objext
+    then
+      # The compiler can only warn and ignore the option if not recognized
+@@ -10552,7 +10276,7 @@ else
+   lt_dlunknown=0; lt_dlno_uscore=1; lt_dlneed_uscore=2
+   lt_status=$lt_dlunknown
+   cat > conftest.$ac_ext <<_LT_EOF
+-#line 10555 "configure"
++#line 10279 "configure"
+ #include "confdefs.h"
+ 
+ #if HAVE_DLFCN_H
+@@ -10648,7 +10372,7 @@ else
+   lt_dlunknown=0; lt_dlno_uscore=1; lt_dlneed_uscore=2
+   lt_status=$lt_dlunknown
+   cat > conftest.$ac_ext <<_LT_EOF
+-#line 10651 "configure"
++#line 10375 "configure"
+ #include "confdefs.h"
+ 
+ #if HAVE_DLFCN_H
+@@ -10743,137 +10467,616 @@ $as_echo "$lt_cv_dlopen_self_static" >&6; }
+   *) enable_dlopen_self=unknown ;;
+   esac
+ 
+-  case $lt_cv_dlopen_self_static in
+-  yes|no) enable_dlopen_self_static=$lt_cv_dlopen_self_static ;;
+-  *) enable_dlopen_self_static=unknown ;;
+-  esac
++  case $lt_cv_dlopen_self_static in
++  yes|no) enable_dlopen_self_static=$lt_cv_dlopen_self_static ;;
++  *) enable_dlopen_self_static=unknown ;;
++  esac
++fi
++
++
++
++
++
++
++
++
++
++
++
++
++
++
++
++
++
++striplib=
++old_striplib=
++{ $as_echo "$as_me:${as_lineno-$LINENO}: checking whether stripping libraries is possible" >&5
++$as_echo_n "checking whether stripping libraries is possible... " >&6; }
++if test -n "$STRIP" && $STRIP -V 2>&1 | $GREP "GNU strip" >/dev/null; then
++  test -z "$old_striplib" && old_striplib="$STRIP --strip-debug"
++  test -z "$striplib" && striplib="$STRIP --strip-unneeded"
++  { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
++$as_echo "yes" >&6; }
++else
++# FIXME - insert some real tests, host_os isn't really good enough
++  case $host_os in
++  darwin*)
++    if test -n "$STRIP" ; then
++      striplib="$STRIP -x"
++      old_striplib="$STRIP -S"
++      { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
++$as_echo "yes" >&6; }
++    else
++      { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
++$as_echo "no" >&6; }
++    fi
++    ;;
++  *)
++    { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
++$as_echo "no" >&6; }
++    ;;
++  esac
++fi
++
++
++
++
++
++
++
++
++
++
++
++
++  # Report which library types will actually be built
++  { $as_echo "$as_me:${as_lineno-$LINENO}: checking if libtool supports shared libraries" >&5
++$as_echo_n "checking if libtool supports shared libraries... " >&6; }
++  { $as_echo "$as_me:${as_lineno-$LINENO}: result: $can_build_shared" >&5
++$as_echo "$can_build_shared" >&6; }
++
++  { $as_echo "$as_me:${as_lineno-$LINENO}: checking whether to build shared libraries" >&5
++$as_echo_n "checking whether to build shared libraries... " >&6; }
++  test "$can_build_shared" = "no" && enable_shared=no
++
++  # On AIX, shared libraries and static libraries use the same namespace, and
++  # are all built from PIC.
++  case $host_os in
++  aix3*)
++    test "$enable_shared" = yes && enable_static=no
++    if test -n "$RANLIB"; then
++      archive_cmds="$archive_cmds~\$RANLIB \$lib"
++      postinstall_cmds='$RANLIB $lib'
++    fi
++    ;;
++
++  aix[4-9]*)
++    if test "$host_cpu" != ia64 && test "$aix_use_runtimelinking" = no ; then
++      test "$enable_shared" = yes && enable_static=no
++    fi
++    ;;
++  esac
++  { $as_echo "$as_me:${as_lineno-$LINENO}: result: $enable_shared" >&5
++$as_echo "$enable_shared" >&6; }
++
++  { $as_echo "$as_me:${as_lineno-$LINENO}: checking whether to build static libraries" >&5
++$as_echo_n "checking whether to build static libraries... " >&6; }
++  # Make sure either enable_shared or enable_static is yes.
++  test "$enable_shared" = yes || enable_static=yes
++  { $as_echo "$as_me:${as_lineno-$LINENO}: result: $enable_static" >&5
++$as_echo "$enable_static" >&6; }
++
++
++
++
++fi
++ac_ext=c
++ac_cpp='$CPP $CPPFLAGS'
++ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
++ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
++ac_compiler_gnu=$ac_cv_c_compiler_gnu
++
++CC="$lt_save_CC"
++
++
++
++
++
++
++
++
++
++
++
++
++
++        ac_config_commands="$ac_config_commands libtool"
++
++
++
++
++# Only expand once:
++
++
++
++if test -n "$CFLAGS" || test -n "$CC" ; then
++   user_redefine_cc=yes
++fi
++
++{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for gmp.h" >&5
++$as_echo_n "checking for gmp.h... " >&6; }
++cat confdefs.h - <<_ACEOF >conftest.$ac_ext
++/* end confdefs.h.  */
++
++#include "gmp.h"
++
++_ACEOF
++if ac_fn_c_try_compile "$LINENO"; then :
++  { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
++$as_echo "yes" >&6; }
++else
++
++ { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
++$as_echo "no" >&6; }
++ as_fn_error $? "gmp.h can't be found, or is unusable." "$LINENO" 5
++
++fi
++rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
++
++if test -z "$user_redefine_cc" ; then
++
++   { $as_echo "$as_me:${as_lineno-$LINENO}: checking for CC and CFLAGS in gmp.h" >&5
++$as_echo_n "checking for CC and CFLAGS in gmp.h... " >&6; }
++   ac_ext=c
++ac_cpp='$CPP $CPPFLAGS'
++ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
++ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
++ac_compiler_gnu=$ac_cv_c_compiler_gnu
++{ $as_echo "$as_me:${as_lineno-$LINENO}: checking how to run the C preprocessor" >&5
++$as_echo_n "checking how to run the C preprocessor... " >&6; }
++# On Suns, sometimes $CPP names a directory.
++if test -n "$CPP" && test -d "$CPP"; then
++  CPP=
++fi
++if test -z "$CPP"; then
++  if test "${ac_cv_prog_CPP+set}" = set; then :
++  $as_echo_n "(cached) " >&6
++else
++      # Double quotes because CPP needs to be expanded
++    for CPP in "$CC -E" "$CC -E -traditional-cpp" "/lib/cpp"
++    do
++      ac_preproc_ok=false
++for ac_c_preproc_warn_flag in '' yes
++do
++  # Use a header file that comes with gcc, so configuring glibc
++  # with a fresh cross-compiler works.
++  # Prefer <limits.h> to <assert.h> if __STDC__ is defined, since
++  # <limits.h> exists even on freestanding compilers.
++  # On the NeXT, cc -E runs the code through the compiler's parser,
++  # not just through cpp. "Syntax error" is here to catch this case.
++  cat confdefs.h - <<_ACEOF >conftest.$ac_ext
++/* end confdefs.h.  */
++#ifdef __STDC__
++# include <limits.h>
++#else
++# include <assert.h>
++#endif
++		     Syntax error
++_ACEOF
++if ac_fn_c_try_cpp "$LINENO"; then :
++
++else
++  # Broken: fails on valid input.
++continue
++fi
++rm -f conftest.err conftest.i conftest.$ac_ext
++
++  # OK, works on sane cases.  Now check whether nonexistent headers
++  # can be detected and how.
++  cat confdefs.h - <<_ACEOF >conftest.$ac_ext
++/* end confdefs.h.  */
++#include <ac_nonexistent.h>
++_ACEOF
++if ac_fn_c_try_cpp "$LINENO"; then :
++  # Broken: success on invalid input.
++continue
++else
++  # Passes both tests.
++ac_preproc_ok=:
++break
++fi
++rm -f conftest.err conftest.i conftest.$ac_ext
++
++done
++# Because of `break', _AC_PREPROC_IFELSE's cleaning code was skipped.
++rm -f conftest.i conftest.err conftest.$ac_ext
++if $ac_preproc_ok; then :
++  break
++fi
++
++    done
++    ac_cv_prog_CPP=$CPP
++
++fi
++  CPP=$ac_cv_prog_CPP
++else
++  ac_cv_prog_CPP=$CPP
++fi
++{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $CPP" >&5
++$as_echo "$CPP" >&6; }
++ac_preproc_ok=false
++for ac_c_preproc_warn_flag in '' yes
++do
++  # Use a header file that comes with gcc, so configuring glibc
++  # with a fresh cross-compiler works.
++  # Prefer <limits.h> to <assert.h> if __STDC__ is defined, since
++  # <limits.h> exists even on freestanding compilers.
++  # On the NeXT, cc -E runs the code through the compiler's parser,
++  # not just through cpp. "Syntax error" is here to catch this case.
++  cat confdefs.h - <<_ACEOF >conftest.$ac_ext
++/* end confdefs.h.  */
++#ifdef __STDC__
++# include <limits.h>
++#else
++# include <assert.h>
++#endif
++		     Syntax error
++_ACEOF
++if ac_fn_c_try_cpp "$LINENO"; then :
++
++else
++  # Broken: fails on valid input.
++continue
++fi
++rm -f conftest.err conftest.i conftest.$ac_ext
++
++  # OK, works on sane cases.  Now check whether nonexistent headers
++  # can be detected and how.
++  cat confdefs.h - <<_ACEOF >conftest.$ac_ext
++/* end confdefs.h.  */
++#include <ac_nonexistent.h>
++_ACEOF
++if ac_fn_c_try_cpp "$LINENO"; then :
++  # Broken: success on invalid input.
++continue
++else
++  # Passes both tests.
++ac_preproc_ok=:
++break
++fi
++rm -f conftest.err conftest.i conftest.$ac_ext
++
++done
++# Because of `break', _AC_PREPROC_IFELSE's cleaning code was skipped.
++rm -f conftest.i conftest.err conftest.$ac_ext
++if $ac_preproc_ok; then :
++
++else
++  { { $as_echo "$as_me:${as_lineno-$LINENO}: error: in \`$ac_pwd':" >&5
++$as_echo "$as_me: error: in \`$ac_pwd':" >&2;}
++as_fn_error $? "C preprocessor \"$CPP\" fails sanity check
++See \`config.log' for more details" "$LINENO" 5; }
++fi
++
++ac_ext=c
++ac_cpp='$CPP $CPPFLAGS'
++ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
++ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
++ac_compiler_gnu=$ac_cv_c_compiler_gnu
++
++   { $as_echo "$as_me:${as_lineno-$LINENO}: checking for egrep" >&5
++$as_echo_n "checking for egrep... " >&6; }
++if test "${ac_cv_path_EGREP+set}" = set; then :
++  $as_echo_n "(cached) " >&6
++else
++  if echo a | $GREP -E '(a|b)' >/dev/null 2>&1
++   then ac_cv_path_EGREP="$GREP -E"
++   else
++     if test -z "$EGREP"; then
++  ac_path_EGREP_found=false
++  # Loop through the user's path and test for each of PROGNAME-LIST
++  as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
++for as_dir in $PATH$PATH_SEPARATOR/usr/xpg4/bin
++do
++  IFS=$as_save_IFS
++  test -z "$as_dir" && as_dir=.
++    for ac_prog in egrep; do
++    for ac_exec_ext in '' $ac_executable_extensions; do
++      ac_path_EGREP="$as_dir/$ac_prog$ac_exec_ext"
++      { test -f "$ac_path_EGREP" && $as_test_x "$ac_path_EGREP"; } || continue
++# Check for GNU ac_path_EGREP and select it if it is found.
++  # Check for GNU $ac_path_EGREP
++case `"$ac_path_EGREP" --version 2>&1` in
++*GNU*)
++  ac_cv_path_EGREP="$ac_path_EGREP" ac_path_EGREP_found=:;;
++*)
++  ac_count=0
++  $as_echo_n 0123456789 >"conftest.in"
++  while :
++  do
++    cat "conftest.in" "conftest.in" >"conftest.tmp"
++    mv "conftest.tmp" "conftest.in"
++    cp "conftest.in" "conftest.nl"
++    $as_echo 'EGREP' >> "conftest.nl"
++    "$ac_path_EGREP" 'EGREP$' < "conftest.nl" >"conftest.out" 2>/dev/null || break
++    diff "conftest.out" "conftest.nl" >/dev/null 2>&1 || break
++    as_fn_arith $ac_count + 1 && ac_count=$as_val
++    if test $ac_count -gt ${ac_path_EGREP_max-0}; then
++      # Best one so far, save it but keep looking for a better one
++      ac_cv_path_EGREP="$ac_path_EGREP"
++      ac_path_EGREP_max=$ac_count
++    fi
++    # 10*(2^10) chars as input seems more than enough
++    test $ac_count -gt 10 && break
++  done
++  rm -f conftest.in conftest.tmp conftest.nl conftest.out;;
++esac
++
++      $ac_path_EGREP_found && break 3
++    done
++  done
++  done
++IFS=$as_save_IFS
++  if test -z "$ac_cv_path_EGREP"; then
++    as_fn_error $? "no acceptable egrep could be found in $PATH$PATH_SEPARATOR/usr/xpg4/bin" "$LINENO" 5
++  fi
++else
++  ac_cv_path_EGREP=$EGREP
++fi
++
++   fi
++fi
++{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_path_EGREP" >&5
++$as_echo "$ac_cv_path_EGREP" >&6; }
++ EGREP="$ac_cv_path_EGREP"
++
++
++   { $as_echo "$as_me:${as_lineno-$LINENO}: checking for a sed that does not truncate output" >&5
++$as_echo_n "checking for a sed that does not truncate output... " >&6; }
++if test "${ac_cv_path_SED+set}" = set; then :
++  $as_echo_n "(cached) " >&6
++else
++            ac_script=s/aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa/bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb/
++     for ac_i in 1 2 3 4 5 6 7; do
++       ac_script="$ac_script$as_nl$ac_script"
++     done
++     echo "$ac_script" 2>/dev/null | sed 99q >conftest.sed
++     { ac_script=; unset ac_script;}
++     if test -z "$SED"; then
++  ac_path_SED_found=false
++  # Loop through the user's path and test for each of PROGNAME-LIST
++  as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
++for as_dir in $PATH
++do
++  IFS=$as_save_IFS
++  test -z "$as_dir" && as_dir=.
++    for ac_prog in sed gsed; do
++    for ac_exec_ext in '' $ac_executable_extensions; do
++      ac_path_SED="$as_dir/$ac_prog$ac_exec_ext"
++      { test -f "$ac_path_SED" && $as_test_x "$ac_path_SED"; } || continue
++# Check for GNU ac_path_SED and select it if it is found.
++  # Check for GNU $ac_path_SED
++case `"$ac_path_SED" --version 2>&1` in
++*GNU*)
++  ac_cv_path_SED="$ac_path_SED" ac_path_SED_found=:;;
++*)
++  ac_count=0
++  $as_echo_n 0123456789 >"conftest.in"
++  while :
++  do
++    cat "conftest.in" "conftest.in" >"conftest.tmp"
++    mv "conftest.tmp" "conftest.in"
++    cp "conftest.in" "conftest.nl"
++    $as_echo '' >> "conftest.nl"
++    "$ac_path_SED" -f conftest.sed < "conftest.nl" >"conftest.out" 2>/dev/null || break
++    diff "conftest.out" "conftest.nl" >/dev/null 2>&1 || break
++    as_fn_arith $ac_count + 1 && ac_count=$as_val
++    if test $ac_count -gt ${ac_path_SED_max-0}; then
++      # Best one so far, save it but keep looking for a better one
++      ac_cv_path_SED="$ac_path_SED"
++      ac_path_SED_max=$ac_count
++    fi
++    # 10*(2^10) chars as input seems more than enough
++    test $ac_count -gt 10 && break
++  done
++  rm -f conftest.in conftest.tmp conftest.nl conftest.out;;
++esac
++
++      $ac_path_SED_found && break 3
++    done
++  done
++  done
++IFS=$as_save_IFS
++  if test -z "$ac_cv_path_SED"; then
++    as_fn_error $? "no acceptable sed could be found in \$PATH" "$LINENO" 5
++  fi
++else
++  ac_cv_path_SED=$SED
+ fi
+ 
++fi
++{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_path_SED" >&5
++$as_echo "$ac_cv_path_SED" >&6; }
++ SED="$ac_cv_path_SED"
++  rm -f conftest.sed
+ 
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-striplib=
+-old_striplib=
+-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking whether stripping libraries is possible" >&5
+-$as_echo_n "checking whether stripping libraries is possible... " >&6; }
+-if test -n "$STRIP" && $STRIP -V 2>&1 | $GREP "GNU strip" >/dev/null; then
+-  test -z "$old_striplib" && old_striplib="$STRIP --strip-debug"
+-  test -z "$striplib" && striplib="$STRIP --strip-unneeded"
+-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+-$as_echo "yes" >&6; }
+-else
+-# FIXME - insert some real tests, host_os isn't really good enough
+-  case $host_os in
+-  darwin*)
+-    if test -n "$STRIP" ; then
+-      striplib="$STRIP -x"
+-      old_striplib="$STRIP -S"
+-      { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+-$as_echo "yes" >&6; }
+-    else
++   # Get CC
++   echo "#include \"gmp.h\"" >  conftest.c
++   echo "MPC_OPTION __GMP_CC"           >> conftest.c
++   GMP_CC=`$CPP $CPPFLAGS conftest.c 2> /dev/null | $EGREP MPC_OPTION | $SED -e 's/MPC_OPTION //g' | $SED -e 's/"//g'`
++   #Get CFLAGS
++   echo "#include \"gmp.h\"" >  conftest.c
++   echo "MPC_OPTION __GMP_CFLAGS"           >> conftest.c
++   GMP_CFLAGS=`$CPP $CPPFLAGS conftest.c 2> /dev/null | $EGREP MPC_OPTION | $SED -e 's/MPC_OPTION //g'| $SED -e 's/"//g'`
++   rm -f conftest.c
++   if test "x$GMP_CFLAGS" = "x__GMP_CFLAGS" -o "x$GMP_CC" = "x__GMP_CC" ; then
+       { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+ $as_echo "no" >&6; }
+-    fi
+-    ;;
+-  *)
+-    { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+-$as_echo "no" >&6; }
+-    ;;
+-  esac
+-fi
+-
+-
+-
+-
+-
+-
+-
+-
++      GMP_CFLAGS=
++      GMP_CC=
++   else
++      { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes CC=$GMP_CC CFLAGS=$GMP_CFLAGS" >&5
++$as_echo "yes CC=$GMP_CC CFLAGS=$GMP_CFLAGS" >&6; }
++   fi
+ 
++      if test -n "$GMP_CFLAGS" ; then
++      old_cflags=$CFLAGS
++      old_cc=$CC
++      CFLAGS=$GMP_CFLAGS
++      CC=$GMP_CC
++      { $as_echo "$as_me:${as_lineno-$LINENO}: checking for CC=$GMP_CC and CFLAGS=$GMP_CFLAGS" >&5
++$as_echo_n "checking for CC=$GMP_CC and CFLAGS=$GMP_CFLAGS... " >&6; }
++      cat confdefs.h - <<_ACEOF >conftest.$ac_ext
++/* end confdefs.h.  */
++/*hello*/
++int
++main ()
++{
++/*world*/
++  ;
++  return 0;
++}
++_ACEOF
++if ac_fn_c_try_compile "$LINENO"; then :
+ 
++         { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
++$as_echo "yes" >&6; }
+ 
++else
+ 
+-  # Report which library types will actually be built
+-  { $as_echo "$as_me:${as_lineno-$LINENO}: checking if libtool supports shared libraries" >&5
+-$as_echo_n "checking if libtool supports shared libraries... " >&6; }
+-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: $can_build_shared" >&5
+-$as_echo "$can_build_shared" >&6; }
++         { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
++$as_echo "no" >&6; }
++         CFLAGS=$old_cflags
++         CC=$old_cc
+ 
+-  { $as_echo "$as_me:${as_lineno-$LINENO}: checking whether to build shared libraries" >&5
+-$as_echo_n "checking whether to build shared libraries... " >&6; }
+-  test "$can_build_shared" = "no" && enable_shared=no
++fi
++rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
++            cat confdefs.h - <<_ACEOF >conftest.$ac_ext
++/* end confdefs.h.  */
+ 
+-  # On AIX, shared libraries and static libraries use the same namespace, and
+-  # are all built from PIC.
+-  case $host_os in
+-  aix3*)
+-    test "$enable_shared" = yes && enable_static=no
+-    if test -n "$RANLIB"; then
+-      archive_cmds="$archive_cmds~\$RANLIB \$lib"
+-      postinstall_cmds='$RANLIB $lib'
+-    fi
+-    ;;
++   #ifndef __GNUC__
++   #error "GCC Not Found"
++   error
++   #endif
+ 
+-  aix[4-9]*)
+-    if test "$host_cpu" != ia64 && test "$aix_use_runtimelinking" = no ; then
+-      test "$enable_shared" = yes && enable_static=no
+-    fi
+-    ;;
+-  esac
+-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: $enable_shared" >&5
+-$as_echo "$enable_shared" >&6; }
++int
++main ()
++{
+ 
+-  { $as_echo "$as_me:${as_lineno-$LINENO}: checking whether to build static libraries" >&5
+-$as_echo_n "checking whether to build static libraries... " >&6; }
+-  # Make sure either enable_shared or enable_static is yes.
+-  test "$enable_shared" = yes || enable_static=yes
+-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: $enable_static" >&5
+-$as_echo "$enable_static" >&6; }
++  ;
++  return 0;
++}
++_ACEOF
++if ac_fn_c_try_compile "$LINENO"; then :
+ 
++      GCC=yes
+ 
++else
+ 
++      GCC=no
+ 
+ fi
+-ac_ext=c
+-ac_cpp='$CPP $CPPFLAGS'
+-ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
+-ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
+-ac_compiler_gnu=$ac_cv_c_compiler_gnu
+-
+-CC="$lt_save_CC"
++rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
++   fi
+ 
+ 
++fi
+ 
+ 
++case $host in
++  *-*-cygwin* | *-*-mingw* | *-*-pw32* | *-*-os2*)
+ 
++   { $as_echo "$as_me:${as_lineno-$LINENO}: checking for DLL/static GMP" >&5
++$as_echo_n "checking for DLL/static GMP... " >&6; }
++   if test "$enable_shared" = yes; then
++     LDFLAGS="$LDFLAGS -no-undefined"
++     cat confdefs.h - <<_ACEOF >conftest.$ac_ext
++/* end confdefs.h.  */
+ 
++#include "gmp.h"
++#if !__GMP_LIBGMP_DLL
++#error
++error
++#endif
+ 
++int
++main ()
++{
+ 
++  ;
++  return 0;
++}
++_ACEOF
++if ac_fn_c_try_compile "$LINENO"; then :
++  { $as_echo "$as_me:${as_lineno-$LINENO}: result: DLL" >&5
++$as_echo "DLL" >&6; }
++else
+ 
++  { $as_echo "$as_me:${as_lineno-$LINENO}: result: static" >&5
++$as_echo "static" >&6; }
++  as_fn_error $? "gmp.h isn't a DLL: use --enable-static --disable-shared" "$LINENO" 5
++fi
++rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
++     cat confdefs.h - <<_ACEOF >conftest.$ac_ext
++/* end confdefs.h.  */
+ 
++#include "mpfr.h"
++#if !__GMP_LIBGMP_DLL
++#error
++error
++#endif
+ 
++int
++main ()
++{
+ 
++  ;
++  return 0;
++}
++_ACEOF
++if ac_fn_c_try_compile "$LINENO"; then :
++  { $as_echo "$as_me:${as_lineno-$LINENO}: result: DLL" >&5
++$as_echo "DLL" >&6; }
++else
+ 
+-        ac_config_commands="$ac_config_commands libtool"
++  { $as_echo "$as_me:${as_lineno-$LINENO}: result: static" >&5
++$as_echo "static" >&6; }
++  as_fn_error $? "gmp.h isn't a DLL: use --enable-static --disable-shared" "$LINENO" 5
++fi
++rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
++   else
++     cat confdefs.h - <<_ACEOF >conftest.$ac_ext
++/* end confdefs.h.  */
+ 
++#include "gmp.h"
++#if __GMP_LIBGMP_DLL
++#error
++error
++#endif
+ 
++int
++main ()
++{
+ 
++  ;
++  return 0;
++}
++_ACEOF
++if ac_fn_c_try_compile "$LINENO"; then :
++  { $as_echo "$as_me:${as_lineno-$LINENO}: result: static" >&5
++$as_echo "static" >&6; }
++else
+ 
+-# Only expand once:
++  { $as_echo "$as_me:${as_lineno-$LINENO}: result: DLL" >&5
++$as_echo "DLL" >&6; }
++  as_fn_error $? "gmp.h is a DLL: use --disable-static --enable-shared" "$LINENO" 5
++fi
++rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
++  fi
++  ;;
+ 
++esac
+ 
+ 
+ # Checks for header files.
+@@ -13351,7 +13554,7 @@ do
+     "tests/Makefile") CONFIG_FILES="$CONFIG_FILES tests/Makefile" ;;
+     "doc/Makefile") CONFIG_FILES="$CONFIG_FILES doc/Makefile" ;;
+ 
+-  *) as_fn_error $? "invalid argument: \`$ac_config_target'" "$LINENO" 5 ;;
++  *) as_fn_error $? "invalid argument: \`$ac_config_target'" "$LINENO" 5;;
+   esac
+ done
+ 
+@@ -13667,7 +13870,7 @@ do
+   esac
+   case $ac_mode$ac_tag in
+   :[FHL]*:*);;
+-  :L* | :C*:*) as_fn_error $? "invalid tag \`$ac_tag'" "$LINENO" 5 ;;
++  :L* | :C*:*) as_fn_error $? "invalid tag \`$ac_tag'" "$LINENO" 5;;
+   :[FH]-) ac_tag=-:-;;
+   :[FH]*) ac_tag=$ac_tag:$ac_tag.in;;
+   esac
+@@ -13695,7 +13898,7 @@ do
+ 	   [\\/$]*) false;;
+ 	   *) test -f "$srcdir/$ac_f" && ac_f="$srcdir/$ac_f";;
+ 	   esac ||
+-	   as_fn_error 1 "cannot find input file: \`$ac_f'" "$LINENO" 5 ;;
++	   as_fn_error 1 "cannot find input file: \`$ac_f'" "$LINENO" 5;;
+       esac
+       case $ac_f in *\'*) ac_f=`$as_echo "$ac_f" | sed "s/'/'\\\\\\\\''/g"`;; esac
+       as_fn_append ac_file_inputs " '$ac_f'"
+@@ -13722,7 +13925,7 @@ $as_echo "$as_me: creating $ac_file" >&6;}
+ 
+     case $ac_tag in
+     *:-:* | *:-) cat >"$tmp/stdin" \
+-      || as_fn_error $? "could not create $ac_file" "$LINENO" 5  ;;
++      || as_fn_error $? "could not create $ac_file" "$LINENO" 5 ;;
+     esac
+     ;;
+   esac
+--- a/configure.ac
++++ b/configure.ac
+@@ -86,16 +86,17 @@ AC_ARG_ENABLE([logging],
+ 
+ 
+ dnl Setup CC and CFLAGS
++AC_PROG_CC
++AC_LANG(C)
++
++# Set up LibTool
++AC_PROG_LIBTOOL
+ 
+ dnl Check for user specification of CC or CFLAGS
+ if test -n "$CFLAGS" || test -n "$CC" ; then
+    user_redefine_cc=yes
+ fi
+ 
+-# Check for programs
+-AC_PROG_CC
+-AC_LANG(C)
+-
+ dnl Check GMP Header
+ AC_MSG_CHECKING(for gmp.h)
+ AC_COMPILE_IFELSE([AC_LANG_SOURCE([[
+@@ -118,9 +119,6 @@ case $host in
+ esac
+ 
+ 
+-dnl Finally set up LibTool
+-AC_PROG_LIBTOOL
+-
+ # Checks for header files.
+ AC_HEADER_STDC
+ AC_CHECK_HEADERS([complex.h locale.h inttypes.h stdint.h limits.h unistd.h sys/time.h])

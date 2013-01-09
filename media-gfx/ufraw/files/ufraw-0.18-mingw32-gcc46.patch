@@ -1,0 +1,38 @@
+diff -urBb ufraw-0.18-orig/configure.ac ufraw-0.18/configure.ac
+--- ufraw-0.18-orig/configure.ac	2010-11-21 06:52:25 +0400
++++ ufraw-0.18/configure.ac	2012-02-25 18:44:44 +0400
+@@ -63,8 +63,8 @@
+ AM_CONDITIONAL(UFRAW_WIN32, test x$ufraw_win32 = xyes)
+ 
+ if test $ufraw_win32 = yes; then
+-  CFLAGS="$CFLAGS -mno-cygwin -mwindows -mms-bitfields"
+-  CXXFLAGS="$CXXFLAGS -mno-cygwin -mwindows -mms-bitfields"
++  CFLAGS="$CFLAGS -mwindows -mms-bitfields"
++  CXXFLAGS="$CXXFLAGS -mwindows -mms-bitfields"
+   CONSOLE="-mconsole"
+ else
+   CONSOLE=
+diff -urBb ufraw-0.18-orig/ufraw_embedded.c ufraw-0.18/ufraw_embedded.c
+--- ufraw-0.18-orig/ufraw_embedded.c	2011-02-20 11:56:15 +0400
++++ ufraw-0.18/ufraw_embedded.c	2012-02-25 19:07:05 +0400
+@@ -246,7 +246,7 @@
+ {
+     volatile int status = UFRAW_SUCCESS;
+     dcraw_data *raw = uf->raw;
+-    FILE * volatile out = NULL; /* 'volatile' supresses clobbering warning */
++    FILE * out = NULL; /* 'volatile' supresses clobbering warning */
+     ufraw_message(UFRAW_RESET, NULL);
+ 
+     if (uf->conf->type != embedded_jpeg_type &&
+diff -urBb ufraw-0.18-orig/ufraw_writer.c ufraw-0.18/ufraw_writer.c
+--- ufraw-0.18-orig/ufraw_writer.c	2011-02-20 11:56:15 +0400
++++ ufraw-0.18/ufraw_writer.c	2012-02-25 19:07:23 +0400
+@@ -235,7 +235,7 @@
+ int ufraw_write_image(ufraw_data *uf)
+ {
+     /* 'volatile' supresses clobbering warning */
+-    void * volatile out; /* out is a pointer to FILE or TIFF */
++    void * out; /* out is a pointer to FILE or TIFF */
+ #ifdef HAVE_LIBCFITSIO
+     fitsfile *fitsFile;
+ #endif

@@ -1,0 +1,41 @@
+# Copyright 2010-2012 Chernov A.A.
+# Distributed under the terms of the GNU General Public License v2
+
+DESCRIPTION="A graph based image processing framework"
+
+HOMEPAGE="http://www.gegl.org/"
+
+LICENSE="GPL3 LGPL-3"
+
+#   dependecies:
+# >=media-libs/babl-0.1.6
+# >=dev-libs/glib-2.28.1
+# >=gui-libs/gdk-pixbuf-2.18.0
+# >=media-libs/lensfun-0.2.5
+# gui-libs/cairo
+# gui-libs/pango
+#
+# media-libs/libpng
+# media-libs/libsdl
+# media-libs/jpeg
+# media-gfx/exiv
+# #media-video/ffmpeg
+
+# to-do: libopenraw (need boost)
+
+# BUGS: linking to ffmpeg don't work
+
+SRC_URI="ftp://ftp.gimp.org/pub/gegl/0.1/${NAME}-${VERSION}.tar.bz2"
+
+#src_prepare()
+#{
+#	epatch "${NAME}-${VERSION}-mingw32.patch"
+#}
+
+src_configure()
+{
+	./configure --prefix="${PREFIX}" --enable-shared --enable-static \
+		--without-libavformat \
+		--enable-mmx --enable-sse
+	checkexitcode $? "configure failed"
+}

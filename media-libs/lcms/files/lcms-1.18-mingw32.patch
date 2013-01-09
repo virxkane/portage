@@ -1,0 +1,12 @@
+diff -urBb lcms-1.18-orig/include/lcms.h lcms-1.18/include/lcms.h
+--- lcms-1.18-orig/include/lcms.h	2009-03-22 20:13:57 +0300
++++ lcms-1.18/include/lcms.h	2009-04-25 11:43:18 +0400
+@@ -217,6 +217,8 @@
+ #endif
+ 
+ #define cdecl
++#else
++#define cdecl	__cdecl
+ #endif
+ 
+ // The specification for "inline" is section 6.7.4 of the C99 standard (ISO/IEC 9899:1999). 

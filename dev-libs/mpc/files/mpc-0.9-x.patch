@@ -1,0 +1,9 @@
+diff -urBb mpc-0.9-orig/src/Makefile.am mpc-0.9/src/Makefile.am
+--- mpc-0.9-orig/src/Makefile.am	2011-01-18 12:59:16 +0000
++++ mpc-0.9/src/Makefile.am	2011-05-28 08:24:20 +0000
+@@ -14,4 +14,4 @@
+   sub.c sub_fr.c sub_ui.c swap.c tan.c tanh.c uceil_log2.c ui_div.c        \
+   ui_ui_sub.c
+ 
+-libmpc_la_LIBADD = @LTLIBOBJS@
++#libmpc_la_LIBADD = @LTLIBOBJS@

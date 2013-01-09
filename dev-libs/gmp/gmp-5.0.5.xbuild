@@ -1,0 +1,19 @@
+# Copyright 2010-2012 Chernov A.A.
+# Distributed under the terms of the GNU General Public License v2
+
+DESCRIPTION="Library for arithmetic on arbitrary precision integers, rational numbers, and floating-point numbers"
+
+HOMEPAGE="http://gmplib.org/"
+
+LICENSE="LGPL-3"
+
+SRC_URI="http://ftp.gnu.org/gnu/gmp/${P}.tar.xz"
+
+# --enable-cxx for ppl
+
+src_configure()
+{
+	unset CFLAGS
+	unset CXXFLAGS
+	econf --enable-shared --disable-static --enable-cxx ABI=64
+}

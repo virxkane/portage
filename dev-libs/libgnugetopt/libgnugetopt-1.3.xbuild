@@ -1,0 +1,26 @@
+# Copyright 2010-2012 Chernov A.A.
+# Distributed under the terms of the GNU General Public License v2
+
+DESCRIPTION="GNU getopt library similar but more powerful than the standard getopt(3)."
+
+HOMEPAGE="~"
+
+LICENSE="GPL-2"
+
+RESTRICT="mirror"
+
+#   dependencies:
+# none?
+
+SRC_URI="http://foo.bar.com/downloads/${P}.tar.bz2"
+
+src_prepare()
+{
+	epatch "${P}.patch"
+	eautoreconf
+}
+
+src_configure()
+{
+	econf --enable-shared --enable-static
+}

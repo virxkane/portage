@@ -1,0 +1,13 @@
+# Copyright 2010-2012 Chernov A.A.
+# Distributed under the terms of the GNU General Public License v3
+
+DESCRIPTION="XML parsing libraries"
+
+HOMEPAGE="http://www.libexpat.org/"
+
+LICENSE="MIT"
+
+#   dependencies:
+# none?
+
+SRC_URI="http://downloads.sourceforge.net/${PN}/${P}.tar.gz"

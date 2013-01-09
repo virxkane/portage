@@ -1,0 +1,20 @@
+# Copyright 2010-2012 Chernov A.A.
+# Distributed under the terms of the GNU General Public License v2
+
+DESCRIPTION="Used to create autoconfiguration files"
+
+HOMEPAGE="http://www.gnu.org/software/autoconf/autoconf.html"
+
+LICENSE="GPL-3"
+
+#   dependencies:
+# m4 (msys)
+# perl (msys)
+
+SRC_URI="http://ftp.gnu.org/gnu/${PN}/${P}.tar.bz2"
+
+# --program-prefix="${PV}"
+src_configure()
+{
+	econf
+}

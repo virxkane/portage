@@ -1,0 +1,12 @@
+diff -urBb dmake-4.12-orig/configure dmake-4.12/configure
+--- dmake-4.12-orig/configure	2010-05-26 22:22:17 +0400
++++ dmake-4.12/configure	2010-07-28 01:02:05 +0400
+@@ -4049,7 +4049,7 @@
+ 	  OS_VERSION=cygwin
+ 	  CASE_INSENSITIVE_FS=true
+ 	  ;;
+-	"MINGW")
++	"MINGW"*)
+ 	  OS_VERSION=mingw
+ 	  OS_TYPE=winnt
+ 	  BUILDINFO="Windows / MinGW"

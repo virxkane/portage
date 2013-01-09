@@ -1,0 +1,13 @@
+# Copyright 2010-2012 Chernov A.A.
+# Distributed under the terms of the GNU General Public License v2
+
+DESCRIPTION="A high-quality and portable font engine"
+
+HOMEPAGE="http://freetype.sourceforge.net/ http://www.sourceforge.net/projects/freetype http://www.freetype.org/index2.html"
+
+LICENSE="FTL GPL-2"
+
+#   dependencies:
+# none?
+
+SRC_URI="http://downloads.sourceforge.net/${PN}/${P}.tar.bz2"

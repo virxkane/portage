@@ -1,0 +1,30 @@
+# Copyright 2010-2012 Chernov A.A.
+# Distributed under the terms of the GNU General Public License v3
+
+DESCRIPTION="Native Win32 version of standart make, not mSYS!"
+
+HOMEPAGE="http://www.gnu.org/software/make/make.html"
+
+LICENSE="GPL-2"
+
+BASNAM="make"
+
+SRC_URI="http://ftp.gnu.org/gnu/${BASNAM}/${BASNAM}-${PV}.tar.bz2"
+
+SOURCES_DIR="${BASNAM}-${PV}"
+
+src_configure()
+{
+	econf --disable-dependency-tracking \
+	--disable-nls --enable-case-insensitive-file-system \
+	--disable-job-server --disable-rpath --program-prefix=mingw32-
+
+	mv config.h config.orig
+	sed -e "s/PATH_SEPARATOR_CHAR\ *':'/PATH_SEPARATOR_CHAR\ ';'/" config.orig > config.h
+
+	mv config.h config.orig
+	sed -e 's/#define SVR4\ *1//' config.orig > config.h
+
+	mv config.h config.orig
+	sed -e 's/#define GETLOADAVG_PRIVILEGED\ *1//' config.orig > config.h
+}

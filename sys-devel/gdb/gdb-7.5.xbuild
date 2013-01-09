@@ -1,0 +1,24 @@
+# Copyright 2010-2012 Chernov A.A.
+# Distributed under the terms of the GNU General Public License v2
+
+DESCRIPTION="GNU debugger"
+
+HOMEPAGE="http://sources.redhat.com/gdb/"
+
+LICENSE="GPL-2 LGPL-2"
+
+#   dependencies:
+# none?
+
+SRC_URI="http://ftp.gnu.org/gnu/${PN}/${P}.tar.bz2"
+
+src_prepare()
+{
+	epatch "${PN}-7.3.1-not_install_libs.patch"
+}
+
+src_configure()
+{
+	BUILD_IN_SEPARATE_DIR=yes
+	econf --disable-werror --disable-nls
+}

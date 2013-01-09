@@ -1,0 +1,16 @@
+diff -urBb binutils-2.22/binutils/rename.c ../../binutils-2.22/binutils/rename.c
+--- binutils-2.22/binutils/rename.c	2009-09-02 11:22:32 +0400
++++ ../../binutils-2.22/binutils/rename.c	2012-08-21 16:24:22 +0400
+@@ -20,10 +20,11 @@
+ 
+ #include "sysdep.h"
+ #include "bfd.h"
+-#include "bucomm.h"
+ 
+ #include <sys/stat.h>
+ 
++#include "bucomm.h"
++
+ #ifdef HAVE_GOOD_UTIME_H
+ #include <utime.h>
+ #else /* ! HAVE_GOOD_UTIME_H */

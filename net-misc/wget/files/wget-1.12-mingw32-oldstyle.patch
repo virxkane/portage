@@ -1,0 +1,26 @@
+diff -urBb wget-1.12-orig/windows/Makefile.src.mingw wget-1.12/windows/Makefile.src.mingw
+--- wget-1.12-orig/windows/Makefile.src.mingw	2009-09-22 07:09:14 +0400
++++ wget-1.12/windows/Makefile.src.mingw	2009-10-11 19:02:45 +0400
+@@ -10,9 +10,6 @@
+ ##   to build wget.exe with SSL support.
+ ##
+ ## ----------------------------------------------------
+-## NOTE: If you plan to build WGET.EXE with SSL support,
+-##       please check the value of OPENSSL_PATH in this file
+-##	 and correct it if it is not the OpenSSL installed directory.
+ 
+ CC=gcc
+ LDFLAGS= -s
+@@ -29,10 +26,8 @@
+      version${OBJ_EXT} xmalloc${OBJ_EXT} mswindows${OBJ_EXT} spider${OBJ_EXT}
+ 
+ ifdef SSL
+-    ## OPENSSL_PATH is the OpenSSL installed directory
+-    OPENSSL_PATH = ../../openssl-0.9.7c
+-    CFLAGS += -I${OPENSSL_PATH}/outinc -DHAVE_SSL
+-    LIBS += -L${OPENSSL_PATH}/out -leay32 -lssl32
++    CFLAGS += -DHAVE_SSL
++    LIBS += -lcrypto -lssl
+     OBJS += openssl${OBJ_EXT} http-ntlm${OBJ_EXT}
+ endif
+ 

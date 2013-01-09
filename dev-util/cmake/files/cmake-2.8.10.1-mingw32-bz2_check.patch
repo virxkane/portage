@@ -1,0 +1,35 @@
+diff -urBb cmake-2.8.10.1-orig/Modules/FindBZip2.cmake cmake-2.8.10.1/Modules/FindBZip2.cmake
+--- cmake-2.8.10.1-orig/Modules/FindBZip2.cmake	2012-11-06 23:41:36 +0400
++++ cmake-2.8.10.1/Modules/FindBZip2.cmake	2012-11-28 00:50:14 +0400
+@@ -49,8 +49,28 @@
+                                   VERSION_VAR BZIP2_VERSION_STRING)
+ 
+ if (BZIP2_FOUND)
+-   include(CheckLibraryExists)
+-   CHECK_LIBRARY_EXISTS("${BZIP2_LIBRARIES}" BZ2_bzCompressInit "" BZIP2_NEED_PREFIX)
+-endif ()
++   include(CheckCSourceCompiles)
++
++   set(CMAKE_REQUIRED_LIBRARIES_save ${CMAKE_REQUIRED_LIBRARIES})
++   set(CMAKE_REQUIRED_INCLUDES_save ${CMAKE_REQUIRED_INCLUDES}) 
++   set(CMAKE_REQUIRED_LIBRARIES ${BZIP2_LIBRARIES})
++   set(CMAKE_REQUIRED_INCLUDES ${BZIP2_INCLUDE_DIR})
++
++   CHECK_C_SOURCE_COMPILES("
++#include <bzlib.h>
++int main()
++{
++  return BZ2_bzlibVersion ();
++}" BZIP2_COMPILES)
+ 
++   if(BZIP2_COMPILES)
++      set(BZIP2_NEED_PREFIX TRUE)
++   endif(BZIP2_COMPILES)
++
++   set(CMAKE_REQUIRED_LIBRARIES ${CMAKE_REQUIRED_LIBRARIES_save})
++   set(CMAKE_REQUIRED_INCLUDES ${CMAKE_REQUIRED_INCLUDES_save})
++   unset(CMAKE_REQUIRED_LIBRARIES_save)
++   unset(CMAKE_REQUIRED_INCLUDES_save)
++   unset(BZIP2_COMPILES)
++endif ()
+ mark_as_advanced(BZIP2_INCLUDE_DIR)

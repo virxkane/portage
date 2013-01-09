@@ -1,0 +1,133 @@
+# Copyright 2011-2012 Chernov A.A.
+# Distributed under the terms of the GNU General Public License v2
+
+# Mplayer release: 2012-06-10
+
+DESCRIPTION="Media Player for Linux"
+
+HOMEPAGE="http://www.mplayerhq.hu/"
+
+LICENSE="GPL-2"
+
+# to-do: add libdirac & libschroedinger
+
+#   dependencies:
+# gawk (msys)
+# dev-libs/directx7-headers
+# sys-libs/zlib
+#   optional:
+# app-arch/libbz2
+# sys-devel/libiconv
+# media-libs/x264-snapshot
+# media-sound/lame
+# media-libs/libsdl
+# media-libs/freetype
+# media-libs/fontconfig
+# dev-lang/yasm
+# media-libs/libpng
+# media-libs/giflib
+# media-libs/libjpeg-turbo
+
+MY_N="MPlayer"
+MY_V=`echo ${PV} | sed -e 's/_//'`
+
+SRC_URI="http://www.mplayerhq.hu/MPlayer/releases/${MY_N}-${MY_V}.tar.xz
+		 http://www.mplayerhq.hu/MPlayer/releases/fonts/font-arial-iso-8859-1.tar.bz2
+		 http://www.mplayerhq.hu/MPlayer/skins/Blue-1.8.tar.bz2"
+
+SOURCES_DIR="${MY_N}-${MY_V}"
+
+src_configure()
+{
+	unset CFLAGS
+	#CFLAGS="-O3 -D_FILE_OFFSET_BITS=64 -fomit-frame-pointer"
+	# --enable-mad
+	./configure --prefix=${PREFIX} --enable-win32dll --enable-md5sum \
+		--enable-menu --enable-gl --enable-freetype \
+		--enable-png --enable-jpeg --enable-gif --enable-tga \
+		--disable-tv --disable-dvb --enable-runtime-cpudetection \
+		--enable-gui --disable-pthreads --enable-w32threads
+		#--disable-vdpau
+	checkexitcode $? "configure failed"
+}
+
+src_install()
+{
+	emake_install
+
+	cd "../font-arial-iso-8859-1/font-arial-18-iso-8859-1"
+	install -d "${INSTDIR}${PREFIX}/share/mplayer/font"
+	install -t "${INSTDIR}${PREFIX}/share/mplayer/font/" *
+	cd ../..
+	cp -rv Blue "${INSTDIR}${PREFIX}/share/mplayer/skins/"
+	cat > "${INSTDIR}${PREFIX}/etc/mplayer/mplayer.conf" << EOF
+
+##################
+# video settings #
+##################
+
+# Specify default video driver (see -vo help for a list).
+vo=directx
+
+# Start in fullscreen mode by default.
+#fs=no
+
+# Enable software scaling (powerful CPU needed) for video output
+# drivers that do not support hardware scaling.
+#zoom=yes
+
+# Enable postprocessing
+pp=6
+
+# Enable osd level three
+osdlevel=3
+
+##################
+# audio settings #
+##################
+
+# Specify default audio driver (see -ao help for a list).
+ao=dsound
+# Enable software mixer
+softvol=yes
+
+##################
+# other settings #
+##################
+
+# Drop frames to preserve audio/video sync.
+framedrop = yes
+
+# Resample the font alphamap.
+# 0     plain white fonts
+# 0.75  very narrow black outline (default)
+# 1     narrow black outline
+# 10    bold black outline
+#ffactor = 0.75
+
+# cache settings
+#
+# Use 8MB input cache by default.
+cache = 8192
+#
+# Prefill 20% of the cache before starting playback.
+cache-min = 20.0
+#
+# Prefill 50% of the cache before restarting playback after the cache emptied.
+#cache-seek-min = 50
+
+# DVD: Display English subtitles if available.
+#slang = en
+slang = none
+
+# DVD: Play English audio tracks if available.
+#alang = en
+alang = ru
+
+# maibe enabled if compiled with fontconfig
+fontconfig=1
+subfont-osd-scale=3
+subfont-text-scale=2
+
+EOF
+}

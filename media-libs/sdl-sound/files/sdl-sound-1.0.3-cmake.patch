@@ -1,0 +1,530 @@
+diff -urBbN SDL_sound-1.0.3-orig/CMakeLists.txt SDL_sound-1.0.3/CMakeLists.txt
+--- SDL_sound-1.0.3-orig/CMakeLists.txt	1970-01-01 00:00:00 +0000
++++ SDL_sound-1.0.3/CMakeLists.txt	2010-04-12 05:46:33 +0000
+@@ -0,0 +1,81 @@
++project(SDL_sound)
++
++cmake_minimum_required(VERSION 2.6.2)
++
++#set(CMAKE_VERBOSE_MAKEFILE off)
++
++if(NOT DEFINED BUILD_SHARED_LIBS)
++	set(BUILD_SHARED_LIBS ON)
++endif(NOT DEFINED BUILD_SHARED_LIBS)
++
++# check SDL
++#set(SDL_BUILDING_LIBRARY on)
++#include(FindSDL)
++#if(NOT SDL_FOUND)
++#	MESSAGE(FATAL_ERROR "The installed SDL library not found") 	
++#endif(NOT SDL_FOUND)
++include(FindPkgConfig)
++pkg_check_modules(SDL REQUIRED sdl>=1.2.0)
++
++
++set(PACKAGE "${CMAKE_PROJECT_NAME}")
++set(MAJOR_VERSION 1)
++set(MINOR_VERSION 0)
++set(MICRO_VERSION 3)
++set(INTERFACE_AGE 2)
++set(BINARY_AGE 2)
++set(VERSION "${MAJOR_VERSION}.${MINOR_VERSION}.${MICRO_VERSION}")
++
++include(CMakeLists_Checks.cmake)
++
++# add debug defines
++if (CMAKE_COMPILER_IS_GNUCC)
++	set(CMAKE_C_FLAGS_DEBUG   "${CMAKE_C_FLAGS_DEBUG} -g -O0 -Werror")
++endif (CMAKE_COMPILER_IS_GNUCC)
++set(CMAKE_C_FLAGS_DEBUG   "${CMAKE_C_FLAGS_DEBUG} -DDEBUG")
++#  CMAKE_C_FLAGS_RELEASE already have -DNDEBUG
++#set(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} -DNDEBUG")
++
++configure_file(${CMAKE_SOURCE_DIR}/config.h.cmake ${CMAKE_BINARY_DIR}/config.h)
++add_definitions(-DHAVE_CONFIG_H)
++
++include_directories(${SDL_INCLUDE_DIRS})
++include_directories(${CMAKE_SOURCE_DIR} ${CMAKE_BINARY_DIR})
++
++add_subdirectory(decoders)
++add_subdirectory(playsound)
++
++# sources
++set(SDL_sound_SRCS
++	SDL_sound.c
++	alt_audio_convert.c
++	audio_convert.c
++	extra_rwops.c
++)
++
++if(WIN32)
++	add_definitions(-DSDL_SOUND_DLL_EXPORTS)
++endif(WIN32)
++
++set(MPGLIB_LIB "")
++if(SOUND_SUPPORTS_MPGLIB)
++	set(MPGLIB_LIB "${CMAKE_BINARY_DIR}/decoders/mpglib/libmpglib.a")
++endif(SOUND_SUPPORTS_MPGLIB)
++
++set(TIMIDITY_LIB "")
++if(SOUND_SUPPORTS_MIDI)
++	set(TIMIDITY_LIB "${CMAKE_BINARY_DIR}/decoders/timidity/libtimidity.a")
++endif(SOUND_SUPPORTS_MIDI)
++
++add_library(SDL_sound ${SDL_sound_SRCS})
++target_link_libraries(SDL_sound decoders ${SDL_LDFLAGS} ${MIKMOD_LIB} ${MODPLUG_LIBS} ${OGG_LIBS} ${FLAC_LIBS} ${SPEEX_LIBS} ${MPGLIB_LIB} ${TIMIDITY_LIB})
++set_target_properties(SDL_sound PROPERTIES VERSION ${VERSION})
++install(TARGETS SDL_sound
++		RUNTIME DESTINATION bin
++		LIBRARY DESTINATION lib
++		ARCHIVE DESTINATION lib)
++
++install(FILES SDL_sound.h DESTINATION include/SDL)
++
++add_dependencies(SDL_sound decoders)
++add_dependencies(playsound SDL_sound)
+diff -urBbN SDL_sound-1.0.3-orig/CMakeLists_Checks.cmake SDL_sound-1.0.3/CMakeLists_Checks.cmake
+--- SDL_sound-1.0.3-orig/CMakeLists_Checks.cmake	1970-01-01 00:00:00 +0000
++++ SDL_sound-1.0.3/CMakeLists_Checks.cmake	2010-04-12 03:49:16 +0000
+@@ -0,0 +1,218 @@
++
++include(CheckIncludeFile)
++include(CheckLibraryExists)
++include(CheckFunctionExists)
++
++CHECK_INCLUDE_FILE(assert.h HAVE_ASSERT_H)
++if(HAVE_ASSERT_H)
++	set(HAVE_ASSERT_H 1)
++endif(HAVE_ASSERT_H)
++
++CHECK_INCLUDE_FILE(signal.h HAVE_SIGNAL_H)
++if(HAVE_SIGNAL_H)
++	set(HAVE_SIGNAL_H 1)
++endif(HAVE_SIGNAL_H)
++
++CHECK_FUNCTION_EXISTS(setbuf HAVE_SETBUF)
++if(HAVE_SETBUF)
++	set(HAVE_SETBUF 1)
++endif(HAVE_SETBUF)
++
++# ---------------------------------------------------------------------
++# Checks for libraries.
++# ---------------------------------------------------------------------
++
++# Check for voc decoder inclusion...
++OPTION(SOUND_SUPPORTS_VOC "Enable VOC decoding [default=yes]" ON)
++if(SOUND_SUPPORTS_VOC)
++	set(SOUND_SUPPORTS_VOC 1)
++endif(SOUND_SUPPORTS_VOC)
++
++# Check for wav decoder inclusion...
++OPTION(SOUND_SUPPORTS_WAV "Enable WAV decoding [default=yes]" ON)
++if(SOUND_SUPPORTS_WAV)
++	set(SOUND_SUPPORTS_WAV 1)
++endif(SOUND_SUPPORTS_WAV)
++
++# Check for raw decoder inclusion...
++OPTION(SOUND_SUPPORTS_RAW "Enable raw audio \"decoding\" [default=yes]" ON)
++if(SOUND_SUPPORTS_RAW)
++	set(SOUND_SUPPORTS_RAW 1)
++endif(SOUND_SUPPORTS_RAW)
++
++# Check for aiff decoder inclusion...
++OPTION(SOUND_SUPPORTS_AIFF "Enable AIFF decoding [default=yes]" ON)
++if(SOUND_SUPPORTS_AIFF)
++	set(SOUND_SUPPORTS_AIFF 1)
++endif(SOUND_SUPPORTS_AIFF)
++
++# Check for au decoder inclusion
++OPTION(SOUND_SUPPORTS_AU "Enable AU decoding [default=yes]" ON)
++if(SOUND_SUPPORTS_AU)
++	set(SOUND_SUPPORTS_AU 1)
++endif(SOUND_SUPPORTS_AU)
++
++# Check for shn decoder inclusion...
++OPTION(SOUND_SUPPORTS_SHN "Enable SHN decoding [default=yes]" ON)
++if(SOUND_SUPPORTS_SHN)
++	set(SOUND_SUPPORTS_SHN 1)
++endif(SOUND_SUPPORTS_SHN)
++
++# Check for the MIDI decoder...
++OPTION(SOUND_SUPPORTS_MIDI "Enable software MIDI music [default=yes]" ON)
++if(SOUND_SUPPORTS_MIDI)
++	set(SOUND_SUPPORTS_MIDI 1)
++endif(SOUND_SUPPORTS_MIDI)
++
++# Check for SMPEG
++OPTION(SOUND_SUPPORTS_SMPEG "enable MP3 decoding via smpeg [default=yes]" ON)
++if(SOUND_SUPPORTS_SMPEG)
++	CHECK_INCLUDE_FILE(smpeg.h HAVE_SMPEG_HDR)
++	CHECK_LIBRARY_EXISTS(smpeg SMPEG_new "${CMAKE_LIBRARY_PATH}" HAVE_SMPEG_LIB)
++	if(NOT HAVE_SMPEG_HDR OR NOT HAVE_SMPEG_LIB)
++		#message(WARNING "Library smpeg NOT found, disabling!")
++		set(SOUND_SUPPORTS_SMPEG off)
++	endif(NOT HAVE_SMPEG_HDR OR NOT HAVE_SMPEG_LIB)
++endif(SOUND_SUPPORTS_SMPEG)
++if(SOUND_SUPPORTS_SMPEG)
++	set(SOUND_SUPPORTS_SMPEG 1)
++endif(SOUND_SUPPORTS_SMPEG)
++
++# Check for the MP3 decoder...
++OPTION(SOUND_SUPPORTS_MPGLIB "enable MP3 decoding internally [default=yes]" ON)
++if(SOUND_SUPPORTS_MPGLIB)
++	set(SOUND_SUPPORTS_MPGLIB 1)
++endif(SOUND_SUPPORTS_MPGLIB)
++
++# Check for libmikmod
++OPTION(SOUND_SUPPORTS_MIKMOD "enable MOD decoding via mikmod [default=yes]" ON)
++set(MIKMOD_LIB "")
++if(SOUND_SUPPORTS_MIKMOD)
++	CHECK_INCLUDE_FILE(mikmod.h HAVE_MIKMOD_HDR)
++	CHECK_LIBRARY_EXISTS(mikmod MikMod_RegisterDriver "${CMAKE_LIBRARY_PATH}" HAVE_MIKMOD_LIB)
++	if(NOT HAVE_MIKMOD_HDR OR NOT HAVE_MIKMOD_LIB)
++		#message(WARNING "Library mikmod NOT found, disabling!")
++		set(SOUND_SUPPORTS_MIKMOD off)
++	else(NOT HAVE_MIKMOD_HDR OR NOT HAVE_MIKMOD_LIB)
++		set(MIKMOD_LIB "-lmikmod")
++	endif(NOT HAVE_MIKMOD_HDR OR NOT HAVE_MIKMOD_LIB)
++endif(SOUND_SUPPORTS_MIKMOD)
++if(SOUND_SUPPORTS_MIKMOD)
++	set(SOUND_SUPPORTS_MIKMOD 1)
++endif(SOUND_SUPPORTS_MIKMOD)
++
++# Check for libmodplug
++OPTION(SOUND_SUPPORTS_MODPLUG "enable MOD decoding via mikmod [default=yes]" ON)
++set(MODPLUG_LIB "")
++if(SOUND_SUPPORTS_MODPLUG)
++	CHECK_INCLUDE_FILE(modplug.h HAVE_MODPLUG_HDR)
++	if(NOT HAVE_MODPLUG_HDR)
++		CHECK_INCLUDE_FILE(libmodplug/modplug.h SOUND_MODPLUG_IN_OWN_PATH)
++		if(SOUND_MODPLUG_IN_OWN_PATH)
++			set(SOUND_MODPLUG_IN_OWN_PATH 1)
++			set(HAVE_MODPLUG_HDR 1)
++		endif(SOUND_MODPLUG_IN_OWN_PATH)
++	endif(NOT HAVE_MODPLUG_HDR)
++	CHECK_LIBRARY_EXISTS(modplug ModPlug_Load "${CMAKE_LIBRARY_PATH}" HAVE_MODPLUG_LIB)
++	if(NOT HAVE_MODPLUG_HDR OR NOT HAVE_MODPLUG_LIB)
++		#message(WARNING "Library modplug NOT found, disabling!")
++		set(SOUND_SUPPORTS_MODPLUG off)
++	else(NOT HAVE_MODPLUG_HDR OR NOT HAVE_MODPLUG_LIB)
++		set(MODPLUG_LIB "-lmodplug")
++	endif(NOT HAVE_MODPLUG_HDR OR NOT HAVE_MODPLUG_LIB)
++endif(SOUND_SUPPORTS_MODPLUG)
++if(SOUND_SUPPORTS_MODPLUG)
++	set(SOUND_SUPPORTS_MODPLUG 1)
++endif(SOUND_SUPPORTS_MODPLUG)
++
++OPTION(SOUND_SUPPORTS_OGG "enable OGG decoding via libvorbis [default=yes]" ON)
++set(OGG_LIBS "")
++
++CHECK_INCLUDE_FILE(ogg/ogg.h HAVE_OGG_HDR)
++CHECK_LIBRARY_EXISTS(ogg ogg_sync_init "${CMAKE_LIBRARY_PATH}" HAVE_OGG_LIB)
++
++set(HAVE_OGG 0)
++if(HAVE_OGG_HDR AND HAVE_OGG_LIB)
++	set(HAVE_OGG 1)
++endif(HAVE_OGG_HDR AND HAVE_OGG_LIB)
++
++# Check for Ogg Vorbis
++if(SOUND_SUPPORTS_OGG)
++	CHECK_INCLUDE_FILE(vorbis/codec.h HAVE_VORBIS_HDR)
++	CHECK_LIBRARY_EXISTS(vorbis vorbis_info_init "${CMAKE_LIBRARY_PATH}" HAVE_VORBIS_LIB)
++	CHECK_INCLUDE_FILE(vorbis/vorbisfile.h HAVE_VORBISFILE_HDR)
++	CHECK_LIBRARY_EXISTS(vorbisfile ov_open_callbacks "${CMAKE_LIBRARY_PATH}" HAVE_VORBISFILE_LIB)
++	if(HAVE_OGG AND HAVE_VORBIS_HDR AND HAVE_VORBIS_LIB AND HAVE_VORBISFILE_HDR AND HAVE_VORBISFILE_LIB)
++		set(OGG_LIBS "-logg -lvorbis -lvorbisfile")
++	else(HAVE_OGG AND HAVE_VORBIS_HDR AND HAVE_VORBIS_LIB AND HAVE_VORBISFILE_HDR AND HAVE_VORBISFILE_LIB)
++		set(SOUND_SUPPORTS_OGG off)
++	endif(HAVE_OGG AND HAVE_VORBIS_HDR AND HAVE_VORBIS_LIB AND HAVE_VORBISFILE_HDR AND HAVE_VORBISFILE_LIB)
++endif(SOUND_SUPPORTS_OGG)
++if(SOUND_SUPPORTS_OGG)
++	set(SOUND_SUPPORTS_OGG 1)
++endif(SOUND_SUPPORTS_OGG)
++
++# Note that we intentionally look for a symbol in FLAC 1.0.4, since the
++#  FLAC developers tend to break their API with every release, so we're
++#  checking for the latest-and-greatest here so we don't have to support
++#  obsolete versions.
++# Starting with FLAC 1.1.3:
++#   libFLAC supports Ogg FLAC (no more libOggFLAC) so we also need -logg
++#   the libFLAC .so version is also #defined in FLAC/export.h
++
++# Check for libFLAC
++OPTION(SOUND_SUPPORTS_FLAC "enable FLAC decoding via libFLAC [default=yes]" ON)
++set(FLAC_LIBS "")
++
++if(SOUND_SUPPORTS_FLAC)
++	CHECK_INCLUDE_FILE(FLAC/stream_decoder.h HAVE_FLAC_HDR)
++	CHECK_LIBRARY_EXISTS(FLAC FLAC__stream_decoder_process_single "${CMAKE_LIBRARY_PATH}" HAVE_FLAC_LIB)
++	if(NOT HAVE_FLAC_HDR OR NOT HAVE_FLAC_LIB)
++		message(WARNING "Library FLAC NOT found, disabling!")
++		set(SOUND_SUPPORTS_FLAC off)
++	else(NOT HAVE_FLAC_HDR OR NOT HAVE_FLAC_LIB)
++		set(FLAC_LIBS "-lFLAC -logg")
++	endif(NOT HAVE_FLAC_HDR OR NOT HAVE_FLAC_LIB)
++endif(SOUND_SUPPORTS_FLAC)
++if(SOUND_SUPPORTS_FLAC)
++	set(SOUND_SUPPORTS_FLAC 1)
++endif(SOUND_SUPPORTS_FLAC)
++
++# Check for speex
++OPTION(SOUND_SUPPORTS_SPEEX "enable SPX decoding via libspeex [default=yes]" ON)
++set(SPEEX_LIBS "")
++
++if(SOUND_SUPPORTS_SPEEX)
++	CHECK_INCLUDE_FILE(speex/speex.h HAVE_SPEEX_HDR)
++	CHECK_LIBRARY_EXISTS(speex speex_bits_init "${CMAKE_LIBRARY_PATH}" HAVE_SPEEX_LIB)
++	if(NOT HAVE_SPEEX_HDR OR NOT HAVE_SPEEX_LIB)
++		message(WARNING "Library speex NOT found, disabling!")
++		set(SOUND_SUPPORTS_SPEEX off)
++	else(NOT HAVE_SPEEX_HDR OR NOT HAVE_SPEEX_LIB)
++		set(SPEEX_LIBS "-logg -lspeex")
++	endif(NOT HAVE_SPEEX_HDR OR NOT HAVE_SPEEX_LIB)
++endif(SOUND_SUPPORTS_SPEEX)
++if(SOUND_SUPPORTS_SPEEX)
++	set(SOUND_SUPPORTS_SPEEX 1)
++endif(SOUND_SUPPORTS_SPEEX)
++
++# Check for PhysicsFS http://icculus.org/physfs/
++OPTION(SUPPORT_PHYSFS "enable PhysicsFS in playsound [default=yes]" ON)
++set(PHYSFS_LIBS "")
++
++if(SUPPORT_PHYSFS)
++	CHECK_INCLUDE_FILE(physfs.h HAVE_PHYSFS_HDR)
++	CHECK_LIBRARY_EXISTS(physfs PHYSFS_init "${CMAKE_LIBRARY_PATH}" HAVE_PHYSFS_LIB)
++	if(NOT HAVE_PHYSFS_HDR OR NOT HAVE_PHYSFS_LIB)
++		#message(WARNING "Library physfs NOT found, disabling!")
++		set(SUPPORT_PHYSFS off)
++	else(NOT HAVE_PHYSFS_HDR OR NOT HAVE_PHYSFS_LIB)
++		set(PHYSFS_LIBS "-lphysfs")
++	endif(NOT HAVE_PHYSFS_HDR OR NOT HAVE_PHYSFS_LIB)
++endif(SUPPORT_PHYSFS)
++
++# Check for PhysicsFS http://icculus.org/physfs/
++OPTION(SOUND_USE_ALTCVT "enable EXPERIMENTAL audio converter [default=yes]" OFF)
++if(SOUND_USE_ALTCVT)
++	set(SOUND_USE_ALTCVT 1)
++endif(SOUND_USE_ALTCVT)
+diff -urBbN SDL_sound-1.0.3-orig/config.h.cmake SDL_sound-1.0.3/config.h.cmake
+--- SDL_sound-1.0.3-orig/config.h.cmake	1970-01-01 00:00:00 +0000
++++ SDL_sound-1.0.3/config.h.cmake	2010-04-12 03:49:16 +0000
+@@ -0,0 +1,87 @@
++
++/* Define for debug build chattering. */
++#cmakedefine DEBUG_CHATTER
++
++/* Define to 1 if you have the <assert.h> header file. */
++#cmakedefine HAVE_ASSERT_H		@HAVE_ASSERT_H@
++
++/* Define to 1 if you have the `setbuf' function. */
++#cmakedefine HAVE_SETBUF		@HAVE_SETBUF@
++
++/* Define to 1 if you have the <signal.h> header file. */
++#cmakedefine HAVE_SIGNAL_H		@HAVE_SIGNAL_H@
++
++/* Name of package */
++#cmakedefine PACKAGE "@PACKAGE@"
++
++/* Define to the address where bug reports for this package should be sent. */
++#cmakedefine PACKAGE_BUGREPORT
++
++/* Define to the full name of this package. */
++#cmakedefine PACKAGE_NAME
++
++/* Define to the full name and version of this package. */
++#cmakedefine PACKAGE_STRING
++
++/* Define to the one symbol short name of this package. */
++#cmakedefine PACKAGE_TARNAME
++
++/* Define to the version of this package. */
++#cmakedefine PACKAGE_VERSION
++
++/* Define if modplug header is in own directory. */
++#cmakedefine SOUND_MODPLUG_IN_OWN_PATH	${SOUND_MODPLUG_IN_OWN_PATH}
++
++/* Define if AIFF support is desired. */
++#cmakedefine SOUND_SUPPORTS_AIFF	${SOUND_SUPPORTS_AIFF}
++
++/* Define if AU support is desired. */
++#cmakedefine SOUND_SUPPORTS_AU		${SOUND_SUPPORTS_AU}
++
++/* Define if FLAC support is desired. */
++#cmakedefine SOUND_SUPPORTS_FLAC	${SOUND_SUPPORTS_FLAC}
++
++/* Define if MIDI support is desired. */
++#cmakedefine SOUND_SUPPORTS_MIDI	${SOUND_SUPPORTS_MIDI}
++
++/* Define if MIKMOD support is desired. */
++#cmakedefine SOUND_SUPPORTS_MIKMOD	${SOUND_SUPPORTS_MIKMOD}
++
++/* Define if MODPLUG support is desired. */
++#cmakedefine SOUND_SUPPORTS_MODPLUG	${SOUND_SUPPORTS_MODPLUG}
++
++/* Define if MPGLIB support is desired. */
++#cmakedefine SOUND_SUPPORTS_MPGLIB	${SOUND_SUPPORTS_MPGLIB}
++
++/* Define if OGG support is desired. */
++#cmakedefine SOUND_SUPPORTS_OGG		${SOUND_SUPPORTS_OGG}
++
++/* Define if RAW support is desired. */
++#cmakedefine SOUND_SUPPORTS_RAW		${SOUND_SUPPORTS_RAW}
++
++/* Define if SHN support is desired. */
++#cmakedefine SOUND_SUPPORTS_SHN		${SOUND_SUPPORTS_SHN}
++
++/* Define if SMPEG support is desired. */
++#cmakedefine SOUND_SUPPORTS_SMPEG	${SOUND_SUPPORTS_SMPEG}
++
++/* Define if SPEEX support is desired. */
++#cmakedefine SOUND_SUPPORTS_SPEEX	${SOUND_SUPPORTS_SPEEX}
++
++/* Define if VOC support is desired. */
++#cmakedefine SOUND_SUPPORTS_VOC		${SOUND_SUPPORTS_VOC}
++
++/* Define if WAV support is desired. */
++#cmakedefine SOUND_SUPPORTS_WAV		${SOUND_SUPPORTS_WAV}
++
++/* Define to use alternate audio converter. */
++#cmakedefine SOUND_USE_ALTCVT		${SOUND_USE_ALTCVT}
++
++/* Version number of package */
++#cmakedefine VERSION "@VERSION@"
++
++/* Define to empty if `const' does not conform to ANSI C. */
++#cmakedefine const ${const}
++
++/* Define to `unsigned int' if <sys/types.h> does not define. */
++#cmakedefine size_t ${size_t}
+diff -urBbN SDL_sound-1.0.3-orig/decoders/CMakeLists.txt SDL_sound-1.0.3/decoders/CMakeLists.txt
+--- SDL_sound-1.0.3-orig/decoders/CMakeLists.txt	1970-01-01 00:00:00 +0000
++++ SDL_sound-1.0.3/decoders/CMakeLists.txt	2010-04-12 03:49:16 +0000
+@@ -0,0 +1,34 @@
++
++add_subdirectory(timidity)
++add_subdirectory(mpglib)
++
++# sources
++set(decoders_SRCS
++	aiff.c
++	au.c
++	mikmod.c
++	modplug.c
++	mpglib.c
++	smpeg.c
++	ogg.c
++	raw.c
++	shn.c
++	voc.c
++	midi.c
++	flac.c
++	speex.c
++	quicktime.c
++	wav.c
++)
++
++include_directories(${CMAKE_SOURCE_DIR} ${CMAKE_BINARY_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/timidity)
++
++add_library(decoders STATIC ${decoders_SRCS})
++
++if(SOUND_SUPPORTS_MPGLIB)
++	add_dependencies(decoders mpglib)
++endif(SOUND_SUPPORTS_MPGLIB)
++
++if(SOUND_SUPPORTS_MIDI)
++	add_dependencies(decoders timidity)
++endif(SOUND_SUPPORTS_MIDI)
+diff -urBbN SDL_sound-1.0.3-orig/decoders/mpglib/CMakeLists.txt SDL_sound-1.0.3/decoders/mpglib/CMakeLists.txt
+--- SDL_sound-1.0.3-orig/decoders/mpglib/CMakeLists.txt	1970-01-01 00:00:00 +0000
++++ SDL_sound-1.0.3/decoders/mpglib/CMakeLists.txt	2010-04-12 03:49:16 +0000
+@@ -0,0 +1,24 @@
++
++if(SOUND_SUPPORTS_MPGLIB) 
++	# sources
++	set(mpglib_SRCS
++		mpglib_common.c
++		huffman.h
++		layer1.c
++		tabinit.c
++		dct64_i386.c
++		interface.c
++		layer2.c
++		mpg123_sdlsound.h
++		decode_i386.c
++		l2tables.h
++		layer3.c
++		mpglib_sdlsound.h
++	)
++
++	add_definitions(-DLAYER1 -DLAYER2 -DLAYER3)
++
++	include_directories(${CMAKE_SOURCE_DIR} ${CMAKE_BINARY_DIR})
++
++	add_library(mpglib STATIC ${mpglib_SRCS})
++endif(SOUND_SUPPORTS_MPGLIB)
+diff -urBbN SDL_sound-1.0.3-orig/decoders/timidity/CMakeLists.txt SDL_sound-1.0.3/decoders/timidity/CMakeLists.txt
+--- SDL_sound-1.0.3-orig/decoders/timidity/CMakeLists.txt	1970-01-01 00:00:00 +0000
++++ SDL_sound-1.0.3/decoders/timidity/CMakeLists.txt	2010-04-12 03:49:16 +0000
+@@ -0,0 +1,33 @@
++
++if(SOUND_SUPPORTS_MIDI) 
++	# sources
++	set(timidity_SRCS
++		common.c
++		common.h
++		dls1.h
++		dls2.h
++		instrum.c
++		instrum.h
++		instrum_dls.c
++		instrum_dls.h
++		mix.c
++		mix.h
++		options.h
++		output.c
++		output.h
++		playmidi.c
++		playmidi.h
++		readmidi.c
++		readmidi.h
++		resample.c
++		resample.h
++		tables.c
++		tables.h
++		timidity.c
++		timidity.h
++	)
++
++	include_directories(${CMAKE_SOURCE_DIR} ${CMAKE_BINARY_DIR})
++
++	add_library(timidity STATIC ${timidity_SRCS})
++endif(SOUND_SUPPORTS_MIDI)
+diff -urBbN SDL_sound-1.0.3-orig/playsound/CMakeLists.txt SDL_sound-1.0.3/playsound/CMakeLists.txt
+--- SDL_sound-1.0.3-orig/playsound/CMakeLists.txt	1970-01-01 00:00:00 +0000
++++ SDL_sound-1.0.3/playsound/CMakeLists.txt	2010-04-12 03:49:16 +0000
+@@ -0,0 +1,25 @@
++
++# sources
++set(playsound_SRCS
++	playsound.c
++	physfsrwops.c
++)
++
++set(playsound_simple_SRCS
++	playsound_simple.c
++)
++
++if(SUPPORT_PHYSFS)
++	add_definitions(-DSUPPORT_PHYSFS=1)
++endif(SUPPORT_PHYSFS)
++
++include_directories(${CMAKE_SOURCE_DIR} ${CMAKE_BINARY_DIR})
++
++add_executable(playsound ${playsound_SRCS})
++target_link_libraries(playsound ${SDL_LDFLAGS} ${MIKMOD_LIB} ${MODPLUG_LIBS} ${OGG_LIBS} ${FLAC_LIBS} ${SPEEX_LIBS} ${PHYSFS_LIBS} SDL_sound)
++
++add_executable(playsound_simple ${playsound_simple_SRCS})
++target_link_libraries(playsound_simple ${SDL_LDFLAGS} ${MIKMOD_LIB} ${MODPLUG_LIBS} ${OGG_LIBS} ${FLAC_LIBS} ${SPEEX_LIBS} SDL_sound)
++
++install(TARGETS playsound playsound_simple
++		RUNTIME DESTINATION bin)

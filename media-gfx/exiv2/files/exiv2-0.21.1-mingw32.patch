@@ -1,0 +1,24 @@
+diff -urbB exiv2-0.21.1-orig/src/Makefile exiv2-0.21.1/src/Makefile
+--- exiv2-0.21.1-orig/src/Makefile	2011-02-13 18:39:15 +0400
++++ exiv2-0.21.1/src/Makefile	2012-02-25 12:10:27 +0400
+@@ -238,7 +238,7 @@
+ bin: lib $(BINARY) $(EXIV2BIN) $(MCBIN) path-test
+ 
+ lib: $(OBJ)
+-	$(LIBTOOL) --mode=link $(LINK.cc) -o $(LIBRARY) $(LOBJ) -rpath $(libdir) -version-info $(EXIV2_LTVERSION) $(LIBS)
++	$(LIBTOOL) --mode=link $(LINK.cc) -o $(LIBRARY) $(LOBJ) -rpath $(libdir) -no-undefined -version-info $(EXIV2_LTVERSION) $(LIBS)
+ 	@touch lib
+ 
+ path-test: path-test.o utils.o
+diff -urbB exiv2-0.21.1-orig/xmpsdk/src/XMPCore_Impl.hpp exiv2-0.21.1/xmpsdk/src/XMPCore_Impl.hpp
+--- exiv2-0.21.1-orig/xmpsdk/src/XMPCore_Impl.hpp	2010-06-13 18:21:05 +0400
++++ exiv2-0.21.1/xmpsdk/src/XMPCore_Impl.hpp	2012-02-25 12:10:27 +0400
+@@ -101,7 +101,7 @@
+ #define kLF ((char)0x0A)
+ #define kCR ((char)0x0D)
+ 
+-#if XMP_WinBuild
++#if XMP_WinBuild && defined(_MSC_VER)
+ 	#define snprintf _snprintf
+ #endif
+ 

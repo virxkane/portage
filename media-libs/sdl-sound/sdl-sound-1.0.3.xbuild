@@ -1,0 +1,37 @@
+# Copyright 2010 Chernov A.A.
+# Distributed under the terms of the GNU General Public License v2
+
+DESCRIPTION="A library that handles the decoding of sound file formats"
+
+HOMEPAGE="http://icculus.org/SDL_sound/"
+
+LICENSE="LGPL-2.1"
+
+#   dependencies:
+# libsdl
+#   optional
+# ogg
+# vorbis
+# FLAC
+# speex
+
+# mikmod
+# modplug
+# smpeg
+
+MY_NAME="SDL_sound"
+SRC_URI="http://icculus.org/SDL_sound/downloads/${MY_NAME}-${PV}.tar.gz"
+
+SOURCES_DIR="${MY_NAME}-${PV}"
+
+
+src_prepare()
+{
+	epatch "${P}-cmake.patch"
+	epatch "${P}-mingw32.patch"
+}
+
+src_configure()
+{
+	USE_CMAKE=yes econf
+}

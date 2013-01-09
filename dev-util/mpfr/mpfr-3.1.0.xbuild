@@ -1,0 +1,25 @@
+# Copyright 2010 Chernov A.A.
+# Distributed under the terms of the GNU General Public License v2
+
+DESCRIPTION="library for multiple-precision floating-point computations with exact rounding"
+
+HOMEPAGE="http://www.mpfr.org/"
+
+LICENSE="LGPL-2.1"
+
+#   dependencies:
+# gmp (>4.1)
+
+SRC_URI="http://www.mpfr.org/mpfr-current/${NAME}-${VERSION}.tar.bz2"
+
+#src_prepare()
+#{
+#	epatch "${NAME}-${VERSION}-igncr.patch"
+#}
+
+src_configure()
+{
+	./configure --prefix="${PREFIX}" --build=${CBUILD} --host=${CHOST} \
+		--enable-shared --disable-static
+	checkexitcode $? "configure failed"
+}

@@ -1,0 +1,62 @@
+diff -urBb glib-2.30.2-orig/Makefile.in glib-2.30.2/Makefile.in
+--- glib-2.30.2-orig/Makefile.in	2011-11-12 02:11:57 +0400
++++ glib-2.30.2/Makefile.in	2012-02-23 11:16:36 +0400
+@@ -431,7 +431,7 @@
+ 	gio-2.0-uninstalled.pc.in gio-unix-2.0-uninstalled.pc.in
+ TEST_PROGS = 
+ ACLOCAL_AMFLAGS = -I m4macros ${ACLOCAL_FLAGS}
+-SUBDIRS = . m4macros glib gmodule gthread gobject gio tests po docs
++SUBDIRS = . m4macros glib gmodule gthread gobject gio po docs
+ DIST_SUBDIRS = $(SUBDIRS) build
+ bin_SCRIPTS = glib-gettextize
+ AM_CPPFLAGS = \
+diff -urBb glib-2.30.2-orig/gio/Makefile.in glib-2.30.2/gio/Makefile.in
+--- glib-2.30.2-orig/gio/Makefile.in	2011-11-12 02:11:55 +0400
++++ glib-2.30.2/gio/Makefile.in	2012-02-23 11:11:20 +0400
+@@ -709,8 +709,8 @@
+ 	gschema.dtd $(NULL) $(completion_DATA)
+ TEST_PROGS = 
+ NULL = 
+-SUBDIRS = gdbus-2.0/codegen $(am__append_1) $(am__append_3) \
+-	$(am__append_7) $(am__append_10) . $(am__append_13) tests
++SUBDIRS = $(am__append_1) $(am__append_3) \
++	$(am__append_7) $(am__append_10) . $(am__append_13)
+ @MS_LIB_AVAILABLE_TRUE@@OS_WIN32_AND_DLL_COMPILATION_TRUE@noinst_DATA = gio-2.0.lib
+ @MS_LIB_AVAILABLE_TRUE@@OS_WIN32_AND_DLL_COMPILATION_TRUE@install_ms_lib_cmd = $(INSTALL) gio-2.0.lib $(DESTDIR)$(libdir)
+ @MS_LIB_AVAILABLE_TRUE@@OS_WIN32_AND_DLL_COMPILATION_TRUE@uninstall_ms_lib_cmd = -rm $(DESTDIR)$(libdir)/gio-2.0.lib
+diff -urBb glib-2.30.2-orig/glib/Makefile.in glib-2.30.2/glib/Makefile.in
+--- glib-2.30.2-orig/glib/Makefile.in	2011-11-12 02:11:56 +0400
++++ glib-2.30.2/glib/Makefile.in	2012-02-23 11:17:23 +0400
+@@ -553,7 +553,7 @@
+ @ENABLE_REGEX_TRUE@gregex_c = gregex.c
+ @ENABLE_REGEX_FALSE@gregex_h = 
+ @ENABLE_REGEX_TRUE@gregex_h = gregex.h
+-SUBDIRS = libcharset $(PRINTF_SUBDIR) $(MAYBE_PCRE) update-pcre . tests
++SUBDIRS = libcharset $(PRINTF_SUBDIR) $(MAYBE_PCRE) update-pcre .
+ DIST_SUBDIRS = libcharset gnulib pcre update-pcre tests
+ AM_CPPFLAGS = \
+ 	$(glib_INCLUDES) 		\
+diff -urBb glib-2.30.2-orig/gobject/Makefile.in glib-2.30.2/gobject/Makefile.in
+--- glib-2.30.2-orig/gobject/Makefile.in	2011-11-12 02:11:57 +0400
++++ glib-2.30.2/gobject/Makefile.in	2012-02-23 11:18:08 +0400
+@@ -458,7 +458,7 @@
+ # GObject - GLib Type, Object, Parameter and Signal Library
+ # Copyright (C) 1997,98,99,2000 Tim Janik and Red Hat, Inc.
+ #
+-SUBDIRS = . tests
++SUBDIRS = .
+ BUILT_SOURCES = $(am__append_1)
+ CLEANFILES = $(am__append_2) gobject-public-headers.txt $(gen_sources)
+ @HAVE_THREADS_TRUE@THREAD_FLAGS = -DG_THREADS_MANDATORY
+diff -urBb glib-2.30.2-orig/gthread/Makefile.in glib-2.30.2/gthread/Makefile.in
+--- glib-2.30.2-orig/gthread/Makefile.in	2011-11-12 02:11:57 +0400
++++ glib-2.30.2/gthread/Makefile.in	2012-02-23 11:18:19 +0400
+@@ -406,7 +406,7 @@
+ EXTRA_DIST = makefile.msc.in gthread-posix.c gthread-win32.c \
+ 	gthread-none.c gthread.def gthread.rc.in
+ TEST_PROGS = 
+-SUBDIRS = . tests
++SUBDIRS = .
+ DIST_SUBDIRS = tests
+ AM_CPPFLAGS = \
+ 	$(glib_INCLUDES) 		\

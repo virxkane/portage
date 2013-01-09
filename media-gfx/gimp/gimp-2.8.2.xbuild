@@ -1,0 +1,48 @@
+# Copyright 2011-2013 Chernov A.A.
+# Distributed under the terms of the GNU General Public License v2
+
+DESCRIPTION="GNU Image Manipulation Program"
+
+HOMEPAGE="http://www.gimp.org/ ftp://ftp.gimp.org/pub/gimp/"
+
+LICENSE="GPL-2"
+
+# to-do: librsvg, python
+#        libpoppler (for pdf)
+#        webkit-gtk (help, html)
+
+#   dependencies:
+# dev-libs/glib-2.31
+# gui-libs/gtk+-2.24.10
+# gui-libs/gdk-pixbuf-2.24.1
+# gui-libs/pango
+# gui-libs/cairo-1.10.2		# with cairo-1.12.4 crashed!!!
+# media-libs/babl-0.1.10
+# media-libs/gegl-0.2.0
+#
+# dev-libs/directx7-headers
+# media-libs/lcms
+# media-libs/libexif
+# media-libs/libjpegtubo
+# media-libs/libpng
+# media-libs/libmng
+# media-libs/tiff
+# net-misc/curl
+# dev-util/intltool-0.40.1
+
+# >=dev-lang/perl-5.12 (mingw)
+# dev-perl/XML-Parser
+
+SRC_URI="ftp://ftp.gimp.org/pub/gimp/v2.8/${P}.tar.bz2"
+
+src_prepare()
+{
+	epatch "${PN}-2.8.0-mingw32.patch"
+}
+
+# --with-directx-sdk=/mingw for dinput failed - directx7-headers too old for this app
+src_configure()
+{
+	export PATH="${PERL_PATH}/bin:${PATH}"
+	econf --enable-shared --disable-python
+}

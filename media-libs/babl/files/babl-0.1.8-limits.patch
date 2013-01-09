@@ -1,0 +1,11 @@
+diff -urBb babl-0.1.8-orig/babl/babl-palette.c babl-0.1.8/babl/babl-palette.c
+--- babl-0.1.8-orig/babl/babl-palette.c	2012-03-30 03:10:26 +0400
++++ babl-0.1.8/babl/babl-palette.c	2012-07-21 21:53:20 +0400
+@@ -21,6 +21,7 @@
+ #include <stdio.h>
+ #include <values.h>
+ #include <assert.h>
++#include <limits.h>
+ #include "config.h"
+ #include "babl-internal.h"
+ #include "babl.h"

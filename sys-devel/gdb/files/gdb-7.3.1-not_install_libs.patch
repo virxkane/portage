@@ -1,0 +1,49 @@
+diff -urBbN gdb-7.3.1-orig/bfd/Makefile.in gdb-7.3.1/bfd/Makefile.in
+--- gdb-7.3.1-orig/bfd/Makefile.in	2010-12-04 17:00:35 +0400
++++ gdb-7.3.1/bfd/Makefile.in	2011-11-07 11:54:27 +0400
+@@ -1688,11 +1688,10 @@
+ 	for dir in "$(DESTDIR)$(bfdlibdir)" "$(DESTDIR)$(bfdincludedir)"; do \
+ 	  test -z "$$dir" || $(MKDIR_P) "$$dir"; \
+ 	done
+-install: $(BUILT_SOURCES)
+-	$(MAKE) $(AM_MAKEFLAGS) install-recursive
+-install-exec: install-exec-recursive
+-install-data: install-data-recursive
+-uninstall: uninstall-recursive
++install:
++install-exec:
++install-data:
++uninstall:
+ 
+ install-am: all-am
+ 	@$(MAKE) $(AM_MAKEFLAGS) install-exec-am install-data-am
+diff -urBbN gdb-7.3.1-orig/libiberty/Makefile.in gdb-7.3.1/libiberty/Makefile.in
+--- gdb-7.3.1-orig/libiberty/Makefile.in	2010-11-20 23:37:58 +0400
++++ gdb-7.3.1/libiberty/Makefile.in	2011-11-07 11:56:13 +0400
+@@ -340,7 +340,7 @@
+ @MAINT@	echo stamp > stamp-functions
+ 
+ INSTALL_DEST = @INSTALL_DEST@
+-install: install_to_$(INSTALL_DEST) install-subdir
++install: install-subdir
+ install-strip: install
+ 
+ .PHONY: install install-strip
+diff -urBbN gdb-7.3.1-orig/opcodes/Makefile.in gdb-7.3.1/opcodes/Makefile.in
+--- gdb-7.3.1-orig/opcodes/Makefile.in	2010-10-22 03:50:57 +0400
++++ gdb-7.3.1/opcodes/Makefile.in	2011-11-07 11:54:27 +0400
+@@ -1057,10 +1057,10 @@
+ 	for dir in "$(DESTDIR)$(bfdlibdir)" "$(DESTDIR)$(bfdincludedir)"; do \
+ 	  test -z "$$dir" || $(MKDIR_P) "$$dir"; \
+ 	done
+-install: install-recursive
+-install-exec: install-exec-recursive
+-install-data: install-data-recursive
+-uninstall: uninstall-recursive
++install: 
++install-exec: 
++install-data: 
++uninstall: 
+ 
+ install-am: all-am
+ 	@$(MAKE) $(AM_MAKEFLAGS) install-exec-am install-data-am

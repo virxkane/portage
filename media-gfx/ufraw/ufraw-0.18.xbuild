@@ -1,0 +1,46 @@
+# Copyright 2010-2012 Chernov A.A.
+# Distributed under the terms of the GNU General Public License v2
+
+DESCRIPTION="RAW Image format viewer and GIMP plugin"
+
+HOMEPAGE="http://ufraw.sourceforge.net/"
+
+LICENSE="GPL-2"
+
+#   dependencies:
+# dev-utils/pkg-config
+# gui-libs/gtk+
+# media-libs/lcms
+# media-gfx/gimp
+#   optional:
+# >=media-libs/lensfun-0.2.5
+# media-gfx/gtkimageview
+# media-libs/libexif
+# >=media-gfx/exiv2-0.18.1
+# dev-libs/libgnugetopt
+
+SRC_URI="http://prdownloads.sourceforge.net/${NAME}/${NAME}-${VERSION}.tar.gz"
+
+src_prepare()
+{
+	epatch "${NAME}-${VERSION}-mingw32.patch"
+	epatch "${NAME}-${VERSION}-mingw32-gcc46.patch"
+	eautoreconf
+}
+
+src_configure()
+{
+	./configure --prefix="${PREFIX}" --with-gtk --with-gimp \
+		--enable-extras --enable-contrast
+	checkexitcode $? "configure failed"
+	gimpdir_w32=`pkg-config --variable=gimplibdir gimp-2.0`
+#echo "gimpdir_w32=$gimpdir_w32"
+	gimpdir=`w32path_posix "${gimpdir_w32}"`
+#echo "gimpdir=$gimpdir"
+	gimpdir_w32_p=`echo "${gimpdir_w32}" | sed -e 's/\\//\\\\\//g'`
+#echo "gimpdir_w32_p=$gimpdir_w32_p"
+	gimpdir_p=`echo "${gimpdir}" | sed -e 's/\\//\\\\\//g'`
+#echo "gimpdir_p=$gimpdir_p"
+	cat Makefile | sed -e "s/GIMP_LIBDIR = ${gimpdir_w32_p}/GIMP_LIBDIR = ${gimpdir_p}/" > Makefile.new
+	mv -f Makefile.new Makefile
+}

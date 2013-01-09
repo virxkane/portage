@@ -1,0 +1,19 @@
+diff -urBb wget-1.14-orig/configure.ac wget-1.14/configure.ac
+--- wget-1.14-orig/configure.ac	2012-05-13 18:16:52 +0400
++++ wget-1.14/configure.ac	2012-12-01 10:15:47 +0400
+@@ -261,12 +261,12 @@
+         AC_CHECK_LIB(eay32, EVP_MD_CTX_init)
+         if test x"$ac_cv_lib_eay32_EVP_MD_CTX_init" != xno
+         then
+-          AC_CHECK_LIB(ssl32, SSL_connect, [
++          AC_CHECK_LIB(ssl, SSL_connect, [
+             ssl_found=yes
+             AC_MSG_NOTICE([Enabling support for SSL via OpenSSL (shared)])
+             AC_LIBOBJ([openssl])
+-            LIBS="${LIBS} -lssl32"
+-            AC_DEFINE([HAVE_LIBSSL32], [1], [Define to 1 if you have the `ssl32' library (-lssl32).])
++            LIBS="${LIBS} -lssl"
++            AC_DEFINE([HAVE_LIBSSL32], [1], [Define to 1 if you have the `ssl' library (-lssl).])
+           ],
+           AC_MSG_ERROR([openssl not found: shared lib eay32 found but ssl32 not found]))
+           

@@ -1,0 +1,24 @@
+diff -urBb mpc-0.8.2-orig/acinclude.m4 mpc-0.8.2/acinclude.m4
+--- mpc-0.8.2-orig/acinclude.m4	2009-09-07 19:54:37 +0400
++++ mpc-0.8.2/acinclude.m4	2012-02-22 13:43:22 +0400
+@@ -196,7 +196,7 @@
+ AC_DEFUN([MPC_WINDOWS], [
+    AC_MSG_CHECKING(for DLL/static GMP)
+    if test "$enable_shared" = yes; then
+-     LDFLAGS="$LDFLAGS -no-undefined"
++     #LDFLAGS="$LDFLAGS -no-undefined"
+      AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[
+ #include "gmp.h"
+ #if !__GMP_LIBGMP_DLL
+diff -urBb mpc-0.8.2-orig/src/Makefile.am mpc-0.8.2/src/Makefile.am
+--- mpc-0.8.2-orig/src/Makefile.am	2009-10-28 13:53:38 +0400
++++ mpc-0.8.2/src/Makefile.am	2012-02-22 13:43:38 +0400
+@@ -2,7 +2,7 @@
+ AM_CFLAGS=@WARNINGCFLAGS@
+ 
+ lib_LTLIBRARIES = libmpc.la
+-libmpc_la_LDFLAGS = -version-info 2:0:0
++libmpc_la_LDFLAGS = -no-undefined -version-info 2:0:0
+ libmpc_la_SOURCES = mpc-impl.h abs.c acos.c acosh.c add.c add_fr.c         \
+   add_ui.c arg.c asin.c asinh.c atan.c atanh.c clear.c cmp.c cmp_si_si.c   \
+   conj.c cos.c cosh.c div_2exp.c div.c div_fr.c div_ui.c exp.c fr_div.c    \

@@ -1,0 +1,27 @@
+# Copyright 2010-2012 Chernov A.A.
+# Distributed under the terms of the GNU General Public License v2
+
+DESCRIPTION="Anti-Grain Geometry - A High Quality Rendering Engine for C++"
+
+HOMEPAGE="http://www.antigrain.com/"
+
+LICENSE="GPL-2"
+
+#   dependencies:
+# pkg-config
+#   optional
+# libsdl
+# freetype
+
+SRC_URI="http://www.antigrain.com/${P}.tar.gz"
+
+src_prepare()
+{
+	eautoreconf
+}
+
+src_configure()
+{
+	econf --enable-shared --enable-static \
+		--disable-examples --enable-win32tt
+}

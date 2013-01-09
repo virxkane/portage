@@ -1,0 +1,20 @@
+# Copyright 2010-2012 Chernov A.A.
+# Distributed under the terms of the GNU General Public License v3
+
+DESCRIPTION="A shared library tool for developers"
+
+HOMEPAGE="http://www.gnu.org/software/libtool/"
+
+LICENSE="GPL-2"
+
+#   dependencies:
+# gawk (msys)
+# sed (msys)
+# grep (msys)
+
+SRC_URI="http://ftp.gnu.org/gnu/${PN}/${P}.tar.xz"
+
+src_configure()
+{
+	econf --enable-static --enable-shared
+}

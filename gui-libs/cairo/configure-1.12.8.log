@@ -1,0 +1,502 @@
+checking for x86_64-w64-mingw32-gcc... x86_64-w64-mingw32-gcc
+checking whether the C compiler works... yes
+checking for C compiler default output file name... a.exe
+checking for suffix of executables... .exe
+checking whether we are cross compiling... no
+checking for suffix of object files... o
+checking whether we are using the GNU C compiler... yes
+checking whether x86_64-w64-mingw32-gcc accepts -g... yes
+checking for x86_64-w64-mingw32-gcc option to accept ISO C89... none needed
+checking how to run the C preprocessor... x86_64-w64-mingw32-gcc -E
+checking for grep that handles long lines and -e... /bin/grep
+checking for egrep... /bin/grep -E
+checking for ANSI C header files... yes
+checking for sys/types.h... yes
+checking for sys/stat.h... yes
+checking for stdlib.h... yes
+checking for string.h... yes
+checking for memory.h... yes
+checking for strings.h... yes
+checking for inttypes.h... yes
+checking for stdint.h... yes
+checking for unistd.h... yes
+checking minix/config.h usability... no
+checking minix/config.h presence... no
+checking for minix/config.h... no
+checking whether it is safe to define __EXTENSIONS__... yes
+checking for a BSD-compatible install... /bin/install -c
+checking whether build environment is sane... yes
+checking for a thread-safe mkdir -p... /bin/mkdir -p
+checking for gawk... gawk
+checking whether make sets $(MAKE)... yes
+checking for style of include used by make... GNU
+checking dependency style of x86_64-w64-mingw32-gcc... gcc3
+checking whether make supports nested variables... yes
+checking build system type... x86_64-w64-mingw32
+checking host system type... x86_64-w64-mingw32
+checking how to print strings... printf
+checking for a sed that does not truncate output... /bin/sed
+checking for fgrep... /bin/grep -F
+checking for ld used by x86_64-w64-mingw32-gcc... d:/mingw64/x86_64-w64-mingw32/bin/ld.exe
+checking if the linker (d:/mingw64/x86_64-w64-mingw32/bin/ld.exe) is GNU ld... yes
+checking for BSD- or MS-compatible name lister (nm)... /mingw/bin/nm
+checking the name lister (/mingw/bin/nm) interface... BSD nm
+checking whether ln -s works... no, using cp -p
+checking the maximum length of command line arguments... 8192
+checking whether the shell understands some XSI constructs... yes
+checking whether the shell understands "+="... yes
+checking how to convert x86_64-w64-mingw32 file names to x86_64-w64-mingw32 format... func_convert_file_msys_to_w32
+checking how to convert x86_64-w64-mingw32 file names to toolchain format... func_convert_file_msys_to_w32
+checking for d:/mingw64/x86_64-w64-mingw32/bin/ld.exe option to reload object files... -r
+checking for x86_64-w64-mingw32-objdump... no
+checking for objdump... objdump
+checking how to recognize dependent libraries... file_magic ^x86 archive import|^x86 DLL
+checking for x86_64-w64-mingw32-dlltool... no
+checking for dlltool... dlltool
+checking how to associate runtime and link libraries... func_cygming_dll_for_implib
+checking for x86_64-w64-mingw32-ar... no
+checking for ar... ar
+checking for archiver @FILE support... @
+checking for x86_64-w64-mingw32-strip... no
+checking for strip... strip
+checking for x86_64-w64-mingw32-ranlib... no
+checking for ranlib... ranlib
+checking command to parse /mingw/bin/nm output from x86_64-w64-mingw32-gcc object... ok
+checking for sysroot... no
+checking for x86_64-w64-mingw32-mt... no
+checking for mt... no
+checking if : is a manifest tool... no
+checking for dlfcn.h... no
+checking for x86_64-w64-mingw32-as... no
+checking for as... as
+checking for x86_64-w64-mingw32-dlltool... dlltool
+checking for x86_64-w64-mingw32-objdump... objdump
+checking for objdir... .libs
+checking if x86_64-w64-mingw32-gcc supports -fno-rtti -fno-exceptions... no
+checking for x86_64-w64-mingw32-gcc option to produce PIC... -DDLL_EXPORT -DPIC
+checking if x86_64-w64-mingw32-gcc PIC flag -DDLL_EXPORT -DPIC works... yes
+checking if x86_64-w64-mingw32-gcc static flag -static works... yes
+checking if x86_64-w64-mingw32-gcc supports -c -o file.o... yes
+checking if x86_64-w64-mingw32-gcc supports -c -o file.o... (cached) yes
+checking whether the x86_64-w64-mingw32-gcc linker (d:/mingw64/x86_64-w64-mingw32/bin/ld.exe) supports shared libraries... yes
+checking whether -lc should be explicitly linked in... yes
+checking dynamic linker characteristics... Win32 ld.exe
+checking how to hardcode library paths into programs... immediate
+checking whether stripping libraries is possible... yes
+checking if libtool supports shared libraries... yes
+checking whether to build shared libraries... yes
+checking whether to build static libraries... yes
+checking for x86_64-w64-mingw32-pkg-config... no
+checking for pkg-config... /mingw/bin/pkg-config
+checking pkg-config is at least version 0.9.0... yes
+checking for gtkdoc-check... no
+checking for gtkdoc-rebase... no
+checking for gtkdoc-mkpdf... no
+checking whether to build gtk-doc documentation... no
+checking for special C compiler options needed for large files... no
+checking for _FILE_OFFSET_BITS value needed for large files... 64
+checking for find... /bin/find
+checking for xargs... no
+checking for x86_64-w64-mingw32-gcc... (cached) x86_64-w64-mingw32-gcc
+checking whether we are using the GNU C compiler... (cached) yes
+checking whether x86_64-w64-mingw32-gcc accepts -g... (cached) yes
+checking for x86_64-w64-mingw32-gcc option to accept ISO C89... (cached) none needed
+checking how to run the C preprocessor... x86_64-w64-mingw32-gcc -E
+checking for x86_64-w64-mingw32-g++... x86_64-w64-mingw32-g++
+checking whether we are using the GNU C++ compiler... yes
+checking whether x86_64-w64-mingw32-g++ accepts -g... yes
+checking dependency style of x86_64-w64-mingw32-g++... gcc3
+checking how to run the C++ preprocessor... x86_64-w64-mingw32-g++ -E
+checking for ld used by x86_64-w64-mingw32-g++... d:/mingw64/x86_64-w64-mingw32/bin/ld.exe
+checking if the linker (d:/mingw64/x86_64-w64-mingw32/bin/ld.exe) is GNU ld... yes
+checking whether the x86_64-w64-mingw32-g++ linker (d:/mingw64/x86_64-w64-mingw32/bin/ld.exe) supports shared libraries... yes
+checking for x86_64-w64-mingw32-g++ option to produce PIC... -DDLL_EXPORT -DPIC
+checking if x86_64-w64-mingw32-g++ PIC flag -DDLL_EXPORT -DPIC works... yes
+checking if x86_64-w64-mingw32-g++ static flag -static works... yes
+checking if x86_64-w64-mingw32-g++ supports -c -o file.o... yes
+checking if x86_64-w64-mingw32-g++ supports -c -o file.o... (cached) yes
+checking whether the x86_64-w64-mingw32-g++ linker (d:/mingw64/x86_64-w64-mingw32/bin/ld.exe) supports shared libraries... yes
+checking dynamic linker characteristics... Win32 ld.exe
+checking how to hardcode library paths into programs... immediate
+checking whether x86_64-w64-mingw32-gcc and cc understand -c and -o together... yes
+checking for inline... inline
+checking for x86_64-w64-mingw32-pkg-config... /mingw/bin/pkg-config
+checking pkg-config is at least version 0.9.0... yes
+checking for supported warning flags... 
+checking whether x86_64-w64-mingw32-gcc supports -Werror... yes
+checking whether x86_64-w64-mingw32-gcc supports -errwarn... no
+checking whether x86_64-w64-mingw32-gcc supports -Wall... yes
+checking whether x86_64-w64-mingw32-gcc supports -Wextra... yes
+checking whether x86_64-w64-mingw32-gcc supports -Wold-style-definition... yes
+checking whether x86_64-w64-mingw32-gcc supports -Wdeclaration-after-statement... yes
+checking whether x86_64-w64-mingw32-gcc supports -Wmissing-declarations... yes
+checking whether x86_64-w64-mingw32-gcc supports -Werror-implicit-function-declaration... yes
+checking whether x86_64-w64-mingw32-gcc supports -Wnested-externs... yes
+checking whether x86_64-w64-mingw32-gcc supports -Wpointer-arith... yes
+checking whether x86_64-w64-mingw32-gcc supports -Wwrite-strings... yes
+checking whether x86_64-w64-mingw32-gcc supports -Wsign-compare... yes
+checking whether x86_64-w64-mingw32-gcc supports -Wstrict-prototypes... yes
+checking whether x86_64-w64-mingw32-gcc supports -Wmissing-prototypes... yes
+checking whether x86_64-w64-mingw32-gcc supports -Wpacked... yes
+checking whether x86_64-w64-mingw32-gcc supports -Wswitch-enum... yes
+checking whether x86_64-w64-mingw32-gcc supports -Wmissing-format-attribute... yes
+checking whether x86_64-w64-mingw32-gcc supports -Wbad-function-cast... yes
+checking whether x86_64-w64-mingw32-gcc supports -Wvolatile-register-var... yes
+checking whether x86_64-w64-mingw32-gcc supports -Wstrict-aliasing=2... yes
+checking whether x86_64-w64-mingw32-gcc supports -Winit-self... yes
+checking whether x86_64-w64-mingw32-gcc supports -Wunsafe-loop-optimizations... yes
+checking whether x86_64-w64-mingw32-gcc supports -Wno-missing-field-initializers... yes
+checking whether x86_64-w64-mingw32-gcc supports -Wno-unused-parameter... yes
+checking whether x86_64-w64-mingw32-gcc supports -Wno-attributes... yes
+checking whether x86_64-w64-mingw32-gcc supports -Wno-long-long... yes
+checking whether x86_64-w64-mingw32-gcc supports -Winline... yes
+checking whether x86_64-w64-mingw32-gcc supports -erroff=E_ENUM_TYPE_MISMATCH_ARG... no
+checking whether x86_64-w64-mingw32-gcc supports -erroff=E_ENUM_TYPE_MISMATCH_OP... no
+checking whether x86_64-w64-mingw32-gcc supports -flto... yes
+checking whether x86_64-w64-mingw32-gcc supports -fno-strict-aliasing... yes
+checking whether x86_64-w64-mingw32-gcc supports -fno-common... yes
+checking whether x86_64-w64-mingw32-gcc supports -Wp,-D_FORTIFY_SOURCE=2... yes
+checking whether x86_64-w64-mingw32-gcc supports -Wunused-but-set-variable -Wno-unused-but-set-variable... yes
+checking which warning flags were supported...  -Wall -Wextra -Wold-style-definition -Wdeclaration-after-statement -Wmissing-declarations -Werror-implicit-function-declaration -Wnested-externs -Wpointer-arith -Wwrite-strings -Wsign-compare -Wstrict-prototypes -Wmissing-prototypes -Wpacked -Wswitch-enum -Wmissing-format-attribute -Wbad-function-cast -Wvolatile-register-var -Wstrict-aliasing=2 -Winit-self -Wunsafe-loop-optimizations -Wno-missing-field-initializers -Wno-unused-parameter -Wno-attributes -Wno-long-long -Winline -flto -fno-strict-aliasing -fno-common -Wp,-D_FORTIFY_SOURCE=2 -Wno-unused-but-set-variable
+checking how to enable unused result warnings... __attribute__((__warn_unused_result__))
+checking how to allow undefined symbols in shared libraries used by test suite... -Wl,--allow-shlib-undefined
+checking whether byte ordering is bigendian... no
+checking whether float word ordering is bigendian... no
+checking for native atomic primitives... Intel
+checking whether atomic ops require a memory barrier... no
+checking size of void *... 8
+checking size of int... 4
+checking size of long... 4
+checking size of long long... 8
+checking size of size_t... 8
+checking for native Win32... yes
+checking for Sun Solaris (non-POSIX ctime_r)... no
+checking for cos in -lm... yes
+checking for sched_yield in -lrt... no
+checking for shm_open in -lrt... no
+checking for connect in -lsocket... no
+checking for __builtin_return_address(0)... yes
+checking for stdint.h... (cached) yes
+checking for inttypes.h... (cached) yes
+checking sys/int_types.h usability... no
+checking sys/int_types.h presence... no
+checking for sys/int_types.h... no
+checking for uint64_t... yes
+checking for uint128_t... no
+checking for __uint128_t... yes
+checking fcntl.h usability... yes
+checking fcntl.h presence... yes
+checking for fcntl.h... yes
+checking for unistd.h... (cached) yes
+checking signal.h usability... yes
+checking signal.h presence... yes
+checking for signal.h... yes
+checking for sys/stat.h... (cached) yes
+checking sys/socket.h usability... no
+checking sys/socket.h presence... no
+checking for sys/socket.h... no
+checking sys/poll.h usability... no
+checking sys/poll.h presence... no
+checking for sys/poll.h... no
+checking sys/un.h usability... no
+checking sys/un.h presence... no
+checking for sys/un.h... no
+checking for alarm... yes
+checking sched.h usability... yes
+checking sched.h presence... yes
+checking for sched.h... yes
+checking for sched_getaffinity... no
+checking sys/mman.h usability... no
+checking sys/mman.h presence... no
+checking for sys/mman.h... no
+checking time.h usability... yes
+checking time.h presence... yes
+checking for time.h... yes
+checking for clock_gettime... no
+checking fenv.h usability... yes
+checking fenv.h presence... yes
+checking for fenv.h... yes
+checking for feenableexcept... no
+checking for fedisableexcept... no
+checking for feclearexcept... yes
+checking libgen.h usability... yes
+checking libgen.h presence... yes
+checking for libgen.h... yes
+checking byteswap.h usability... no
+checking byteswap.h presence... no
+checking for byteswap.h... no
+checking for signal.h... (cached) yes
+checking setjmp.h usability... yes
+checking setjmp.h presence... yes
+checking for setjmp.h... yes
+checking for fenv.h... (cached) yes
+checking sys/wait.h usability... no
+checking sys/wait.h presence... no
+checking for sys/wait.h... no
+checking for ctime_r... no
+checking for drand48... no
+checking for flockfile... no
+checking for funlockfile... no
+checking for getline... no
+checking for link... no
+checking for strndup... no
+checking windows.h usability... yes
+checking windows.h presence... yes
+checking for windows.h... yes
+checking for sys/stat.h... (cached) yes
+checking io.h usability... yes
+checking io.h presence... yes
+checking for io.h... yes
+checking for mkdir... yes
+checking mkdir variant... mkdir(path)
+checking for fork... no
+checking for waitpid... no
+checking for raise... yes
+checking for VALGRIND... no
+no
+checking for compress in -lz... yes
+checking zlib.h usability... yes
+checking zlib.h presence... yes
+checking for zlib.h... yes
+checking for dlsym in -ldl... no
+checking for dlsym... no
+checking for dlfcn.h... (cached) no
+checking for X... no
+checking for cairo's Xlib surface backend feature... 
+checking for xlib... no
+checking sys/ipc.h usability... no
+checking sys/ipc.h presence... no
+checking for sys/ipc.h... no
+checking sys/shm.h usability... no
+checking sys/shm.h presence... no
+checking for sys/shm.h... no
+checking for X11/extensions/XShm.h... no
+checking for X11/extensions/shmproto.h... no
+checking for X11/extensions/shmstr.h... no
+checking whether cairo's Xlib surface backend feature could be enabled... no (requires X development libraries)
+checking for cairo's Xlib Xrender surface backend feature... 
+checking whether cairo's Xlib Xrender surface backend feature could be enabled... no (requires --enable-xlib)
+checking for cairo's XCB surface backend feature... 
+checking for xcb... no
+checking whether cairo's XCB surface backend feature could be enabled... no (requires xcb >= 1.6 xcb-render >= 1.6 http://xcb.freedesktop.org)
+checking for cairo's XCB/SHM functions feature... 
+checking whether cairo's XCB/SHM functions feature could be enabled... no (requires --enable-xcb)
+checking for cairo's Quartz surface backend feature... 
+checking ApplicationServices/ApplicationServices.h usability... no
+checking ApplicationServices/ApplicationServices.h presence... no
+checking for ApplicationServices/ApplicationServices.h... no
+checking CoreGraphics/CoreGraphics.h usability... no
+checking CoreGraphics/CoreGraphics.h presence... no
+checking for CoreGraphics/CoreGraphics.h... no
+checking whether cairo's Quartz surface backend feature could be enabled... no (requires CoreGraphics framework)
+checking for cairo's Quartz font backend feature... 
+checking whether cairo's Quartz font backend feature could be enabled... no (requires CoreGraphics framework)
+checking for cairo's Microsoft Windows surface backend feature... 
+checking whether cairo's Microsoft Windows surface backend feature could be enabled... yes
+checking for cairo's Microsoft Windows font backend feature... 
+checking whether cairo's Microsoft Windows font backend feature could be enabled... yes
+checking for gs... no
+configure: WARNING: Win32 Printing backend will not be tested since ghostscript is not available
+checking for cairo's PNG functions feature... 
+checking for png... yes
+checking whether cairo's PNG functions feature could be enabled... yes
+checking for cairo's EGL functions feature... 
+checking whether cairo's EGL functions feature could be enabled... no (not required by any backend)
+checking for cairo's GLX functions feature... 
+checking whether cairo's GLX functions feature could be enabled... no (not required by any backend)
+checking for cairo's WGL functions feature... 
+checking whether cairo's WGL functions feature could be enabled... no (not required by any backend)
+checking for cairo's script surface backend feature... 
+checking whether cairo's script surface backend feature could be enabled... yes
+checking for cairo's FreeType font backend feature... 
+checking for FREETYPE... yes
+checking whether cairo's FreeType font backend feature could be enabled... yes
+checking for cairo's Fontconfig font backend feature... 
+checking for FONTCONFIG... yes
+checking whether cairo's Fontconfig font backend feature could be enabled... yes
+checking for FT_Bitmap_Size.y_ppem... yes
+checking for FT_Get_X11_Font_Format... yes
+checking for FT_GlyphSlot_Embolden... yes
+checking for FT_GlyphSlot_Oblique... yes
+checking for FT_Load_Sfnt_Table... yes
+checking for FT_Library_SetLcdFilter... yes
+checking for FcInit... yes
+checking for FcFini... yes
+checking for cairo's PostScript surface backend feature... 
+checking whether cairo's PostScript surface backend feature could be enabled... yes
+checking for gs... no
+configure: WARNING: PS backend will not be tested since ghostscript is not available
+checking for LIBSPECTRE... no
+checking for cairo's PDF surface backend feature... 
+checking whether cairo's PDF surface backend feature could be enabled... yes
+checking for POPPLER... no
+configure: WARNING: PDF backend will not be tested since poppler >= 0.17.4 is not available
+checking for cairo's SVG surface backend feature... 
+checking whether cairo's SVG surface backend feature could be enabled... yes
+checking for LIBRSVG... no
+configure: WARNING: SVG backend will not be tested since librsvg >= 2.15.0 is not available
+checking for cairo's image surface backend feature... 
+checking for pixman... yes
+checking whether cairo's image surface backend feature could be enabled... yes
+checking for cairo's mime surface backend feature... 
+checking whether cairo's mime surface backend feature could be enabled... yes
+checking for cairo's recording surface backend feature... 
+checking whether cairo's recording surface backend feature could be enabled... yes
+checking for cairo's observer surface backend feature... 
+checking whether cairo's observer surface backend feature could be enabled... yes
+checking for cairo's xml surface backend feature... 
+checking whether cairo's xml surface backend feature could be enabled... yes
+checking for cairo's user font backend feature... 
+checking whether cairo's user font backend feature could be enabled... yes
+checking for cairo's gobject functions feature... 
+checking for GOBJECT... yes
+checking whether cairo's gobject functions feature could be enabled... yes
+checking for GOBJECT... yes
+checking for cairo's cairo-trace feature... 
+checking whether cairo's cairo-trace feature could be enabled... no (requires dynamic linker and zlib and real pthreads)
+checking for cairo's cairo-script-interpreter feature... 
+checking whether cairo's cairo-script-interpreter feature could be enabled... yes
+checking for bfd_openr in -lbfd... no
+checking libiberty.h usability... no
+checking libiberty.h presence... no
+checking for libiberty.h... no
+checking for cairo's symbol-lookup feature... 
+checking whether cairo's symbol-lookup feature could be enabled... no (requires bfd)
+checking for glib... yes
+checking for shm_open in -lrt... (cached) no
+checking for gtk... yes
+configure: creating ./config.status
+config.status: creating src/cairo.pc
+config.status: creating cairo-uninstalled.pc
+config.status: creating src/cairo-win32.pc
+config.status: creating cairo-win32-uninstalled.pc
+config.status: creating src/cairo-win32-font.pc
+config.status: creating cairo-win32-font-uninstalled.pc
+config.status: creating src/cairo-png.pc
+config.status: creating cairo-png-uninstalled.pc
+config.status: creating src/cairo-script.pc
+config.status: creating cairo-script-uninstalled.pc
+config.status: creating src/cairo-ft.pc
+config.status: creating cairo-ft-uninstalled.pc
+config.status: creating src/cairo-fc.pc
+config.status: creating cairo-fc-uninstalled.pc
+config.status: creating src/cairo-ps.pc
+config.status: creating cairo-ps-uninstalled.pc
+config.status: creating src/cairo-pdf.pc
+config.status: creating cairo-pdf-uninstalled.pc
+config.status: creating src/cairo-svg.pc
+config.status: creating cairo-svg-uninstalled.pc
+config.status: creating src/cairo-xml.pc
+config.status: creating cairo-xml-uninstalled.pc
+config.status: creating src/cairo-gobject.pc
+config.status: creating cairo-gobject-uninstalled.pc
+config.status: creating Makefile
+config.status: creating boilerplate/Makefile
+config.status: creating src/Makefile
+config.status: creating test/Makefile
+config.status: creating test/pdiff/Makefile
+config.status: creating perf/Makefile
+config.status: creating perf/micro/Makefile
+config.status: creating util/Makefile
+config.status: creating util/cairo-fdr/Makefile
+config.status: creating util/cairo-gobject/Makefile
+config.status: creating util/cairo-missing/Makefile
+config.status: creating util/cairo-script/Makefile
+config.status: creating util/cairo-script/examples/Makefile
+config.status: creating util/cairo-sphinx/Makefile
+config.status: creating util/cairo-trace/Makefile
+config.status: creating util/cairo-trace/cairo-trace
+config.status: creating doc/Makefile
+config.status: creating doc/public/Makefile
+config.status: creating config.h
+config.status: executing depfiles commands
+config.status: executing libtool commands
+config.status: executing ./build/Makefile.win32.features commands
+config.status: creating ./build/Makefile.win32.features
+config.status: ./build/Makefile.win32.features is unchanged
+config.status: executing ./src/Makefile.am.features commands
+config.status: creating ./src/Makefile.am.features
+config.status: ./src/Makefile.am.features is unchanged
+config.status: executing ./src/Makefile.win32.features commands
+config.status: creating ./src/Makefile.win32.features
+config.status: ./src/Makefile.win32.features is unchanged
+config.status: executing ./boilerplate/Makefile.am.features commands
+config.status: creating ./boilerplate/Makefile.am.features
+config.status: ./boilerplate/Makefile.am.features is unchanged
+config.status: executing ./boilerplate/Makefile.win32.features commands
+config.status: creating ./boilerplate/Makefile.win32.features
+config.status: ./boilerplate/Makefile.win32.features is unchanged
+config.status: executing src/cairo-features.h commands
+config.status: creating src/cairo-features.h
+config.status: executing src/cairo-supported-features.h commands
+config.status: creating src/cairo-supported-features.h
+config.status: executing ./build/Makefile.win32.features-h commands
+config.status: creating ./build/Makefile.win32.features-h
+config.status: ./build/Makefile.win32.features-h is unchanged
+
+cairo (version 1.12.8 [release]) will be compiled with:
+
+The following surface backends:
+  Image:         yes (always builtin)
+  Recording:     yes (always builtin)
+  Observer:      yes (always builtin)
+  Mime:          yes (always builtin)
+  Tee:           no (disabled, use --enable-tee to enable)
+  XML:           yes
+  Skia:          no (disabled, use --enable-skia to enable)
+  Xlib:          no (requires X development libraries)
+  Xlib Xrender:  no (requires --enable-xlib)
+  Qt:            no (disabled, use --enable-qt to enable)
+  Quartz:        no (requires CoreGraphics framework)
+  Quartz-image:  no (disabled, use --enable-quartz-image to enable)
+  XCB:           no (requires xcb >= 1.6 xcb-render >= 1.6 http://xcb.freedesktop.org)
+  Win32:         yes
+  OS2:           no (disabled, use --enable-os2 to enable)
+  CairoScript:   yes
+  PostScript:    yes
+  PDF:           yes
+  SVG:           yes
+  OpenGL:        no (disabled, use --enable-gl to enable)
+  OpenGL ES 2.0: no (disabled, use --enable-glesv2 to enable)
+  BeOS:          no (disabled, use --enable-beos to enable)
+  DirectFB:      no (disabled, use --enable-directfb to enable)
+  OpenVG:        no (disabled, use --enable-vg to enable)
+  DRM:           no (disabled, use --enable-drm to enable)
+  Cogl:          no (disabled, use --enable-cogl to enable)
+
+The following font backends:
+  User:          yes (always builtin)
+  FreeType:      yes
+  Fontconfig:    yes
+  Win32:         yes
+  Quartz:        no (requires CoreGraphics framework)
+
+The following functions:
+  PNG functions:   yes
+  GLX functions:   no (not required by any backend)
+  WGL functions:   no (not required by any backend)
+  EGL functions:   no (not required by any backend)
+  X11-xcb functions: no (disabled, use --enable-xlib-xcb to enable)
+  XCB-shm functions: no (requires --enable-xcb)
+
+The following features and utilities:
+  cairo-trace:                no (requires dynamic linker and zlib and real pthreads)
+  cairo-script-interpreter:   yes
+
+And the following internal features:
+  pthread:       no (disabled, use --enable-pthread to enable)
+  gtk-doc:       no
+  gcov support:  no
+  symbol-lookup: no (requires bfd)
+  test surfaces: no (disabled, use --enable-test-surfaces to enable)
+  ps testing:    no (requires libspectre)
+  pdf testing:   no (requires poppler-glib >= 0.17.4)
+  svg testing:   no (requires librsvg-2.0 >= 2.15.0)
+  win32 printing testing:    no (requires ghostscript)
+
+
+--- The xml surface backend feature is still under active development and is
+--- included in this release only as a preview. It does NOT fully work yet
+--- and incompatible changes may yet be made to xml surface backend specific
+--- API.
+

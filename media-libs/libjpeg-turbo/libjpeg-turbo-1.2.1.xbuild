@@ -1,0 +1,20 @@
+# Copyright 2010 Chernov A.A.
+# Distributed under the terms of the GNU General Public License v2
+
+DESCRIPTION="MMX, SSE, and SSE2 SIMD accelerated JPEG library"
+
+HOMEPAGE="http://libjpeg-turbo.virtualgl.org/ http://sourceforge.net/projects/libjpeg-turbo/"
+
+LICENSE="BSD"
+
+#   dependencies:
+# nasm
+
+# http://ftp.debian.org/debian/pool/main/libj/libjpeg8/libjpeg8_8b-1.debian.tar.gz
+SRC_URI="http://downloads.sourceforge.net/${PN}/${P}.tar.gz"
+
+src_configure()
+{
+	econf --enable-shared --enable-static \
+		--with-jpeg8
+}

@@ -1,0 +1,118 @@
+diff -urBbN zlib-1.2.7-orig/Makefile.am zlib-1.2.7/Makefile.am
+--- zlib-1.2.7-orig/Makefile.am	1970-01-01 04:00:00 +0400
++++ zlib-1.2.7/Makefile.am	2012-06-29 20:19:55 +0400
+@@ -0,0 +1,46 @@
++
++lib_LTLIBRARIES = libz.la
++
++libz_la_SOURCES = adler32.c compress.c crc32.c deflate.c gzclose.c gzlib.c gzread.c \
++	gzwrite.c infback.c inffast.c inflate.c inftrees.c trees.c uncompr.c zutil.c 
++
++libz_la_LDFLAGS = -no-undefined -export-dynamic \
++	-version-number 1:2:7
++
++dist_man_MANS = zlib.3
++
++pkgincludedir = $(includedir)
++pkginclude_HEADERS = zlib.h zconf.h
++
++noinst_PROGRAMS = example minigzip example64 minigzip64
++
++example_SOURCES = test/example.c
++example_LDADD = libz.la
++
++example64_SOURCES = test/example.c
++example64_CFLAGS = -D_FILE_OFFSET_BITS=64
++example64_LDADD = libz.la
++
++minigzip_SOURCES = test/minigzip.c
++minigzip_LDADD = libz.la
++
++minigzip64_SOURCES = test/minigzip.c
++minigzip64_CFLAGS = -D_FILE_OFFSET_BITS=64
++minigzip64_LDADD = libz.la
++
++# pkg-config stuff, note that zlib.pc is always required in order
++# to get the correct library 
++pkgconfigdir = @pkgconfigdir@
++pkgconfig_DATA = zlib.pc
++
++check: test
++
++test: minigzip$(EXE) example$(EXE)
++	@LD_LIBRARY_PATH=.:$(LD_LIBRARY_PATH) ; export LD_LIBRARY_PATH; \
++	echo hello world | ./minigzip$(EXE) | ./minigzip$(EXE) -d || \
++	  echo '		*** minigzip test FAILED ***' ; \
++	if ./example$(EXE); then \
++	  echo '		*** zlib test OK ***'; \
++	else \
++	  echo '		*** zlib test FAILED ***'; \
++	fi
+diff -urBbN zlib-1.2.7-orig/configure.in zlib-1.2.7/configure.in
+--- zlib-1.2.7-orig/configure.in	1970-01-01 04:00:00 +0400
++++ zlib-1.2.7/configure.in	2012-06-29 20:20:19 +0400
+@@ -0,0 +1,46 @@
++AC_INIT(configure.in)
++
++AC_PROG_INSTALL
++AC_PROG_LN_S
++AM_PROG_LIBTOOL
++
++AM_INIT_AUTOMAKE(zlib, 1.2.7)
++
++# Здесь мы не можем использовать autoheader
++# так как формат файла zconf.in.h это не позволяет.
++
++AC_CHECK_HEADER([unistd.h], [_UNISTD_H_FOUND=1], [_UNISTD_H_FOUND=0])
++if test ${_UNISTD_H_FOUND} -eq 1
++then
++	sed < zconf.h.in "/HAVE_UNISTD_H/s%0%1%" > zconf.h 
++else
++	cp -p zconf.in.h zconf.h
++fi
++
++AC_CHECK_HEADER([errno.h], [_ERRNO_H_FOUND=1], [_ERRNO_H_FOUND=0])
++if test ${_ERRNO_H_FOUND} -eq 0
++then
++	CFLAGS="$CFLAGS -DNO_ERRNO_H"
++fi
++
++AC_FUNC_MMAP
++if test "$ac_cv_func_mmap_fixed_mapped" = "yes"; then
++	CFLAGS="$CFLAGS -DUSE_MMAP"
++fi
++
++# В оригинальном configure также проверяется наличие
++# функции vs[n]printf(), но в mingw32 и linux's glibc она всегда есть.
++
++# Additional arguments (and substitutions)
++# Allow the pkg-config directory to be set
++AC_ARG_WITH(pkgconfigdir,
++	AC_HELP_STRING([--with-pkgconfigdir],
++	[Use the specified pkgconfig dir (default is libdir/pkgconfig)]),
++	[pkgconfigdir=${withval}],
++	[pkgconfigdir='${libdir}/pkgconfig'])
++
++AC_SUBST([pkgconfigdir])
++AC_MSG_NOTICE([pkgconfig directory is ${pkgconfigdir}])
++
++AC_OUTPUT(Makefile)
++AC_OUTPUT(zlib.pc)
+diff -urBbN zlib-1.2.7-orig/zlib.pc.in zlib-1.2.7/zlib.pc.in
+--- zlib-1.2.7-orig/zlib.pc.in	2010-04-18 10:48:15 +0400
++++ zlib-1.2.7/zlib.pc.in	2012-06-29 20:22:24 +0400
+@@ -1,7 +1,6 @@
+ prefix=@prefix@
+ exec_prefix=@exec_prefix@
+ libdir=@libdir@
+-sharedlibdir=@sharedlibdir@
+ includedir=@includedir@
+ 
+ Name: zlib
+@@ -9,5 +8,5 @@
+ Version: @VERSION@
+ 
+ Requires:
+-Libs: -L${libdir} -L${sharedlibdir} -lz
++Libs: -L${libdir} -lz
+ Cflags: -I${includedir}

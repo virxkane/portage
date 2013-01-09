@@ -1,0 +1,12 @@
+diff -urBb gtkimageview-1.6.4-orig/configure gtkimageview-1.6.4/configure
+--- gtkimageview-1.6.4-orig/configure	2009-04-06 00:04:32 +0400
++++ gtkimageview-1.6.4/configure	2009-04-26 09:41:12 +0400
+@@ -20740,7 +20740,7 @@
+ ######################################################################
+ ##### Twiddle CFLAGS #################################################
+ ######################################################################
+-CFLAGS="${CFLAGS} -Wall -Werror -std=c99 -Wmissing-prototypes"
++CFLAGS="${CFLAGS} -Wall -std=c99 -Wmissing-prototypes"
+ 
+ 
+ ######################################################################

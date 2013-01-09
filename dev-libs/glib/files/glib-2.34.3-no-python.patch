@@ -1,0 +1,12 @@
+diff -urBb glib-2.34.3-orig/gio/Makefile.am glib-2.34.3/gio/Makefile.am
+--- glib-2.34.3-orig/gio/Makefile.am	2012-11-26 20:52:48 +0400
++++ glib-2.34.3/gio/Makefile.am	2012-11-27 17:52:43 +0400
+@@ -2,7 +2,7 @@
+ 
+ NULL =
+ 
+-SUBDIRS = gdbus-2.0/codegen
++SUBDIRS =
+ 
+ if OS_UNIX
+ SUBDIRS += xdgmime

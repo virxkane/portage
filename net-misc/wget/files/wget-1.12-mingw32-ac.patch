@@ -1,0 +1,84 @@
+diff -urBb wget-1.12-orig/configure.ac wget-1.12/configure.ac
+--- wget-1.12-orig/configure.ac	2009-09-22 20:39:49 +0400
++++ wget-1.12/configure.ac	2010-07-12 14:35:56 +0400
+@@ -201,7 +201,16 @@
+ AC_FUNC_MMAP
+ AC_FUNC_FSEEKO
+ AC_CHECK_FUNCS(strptime timegm snprintf vsnprintf vasprintf drand48)
+-AC_CHECK_FUNCS(strtoll usleep ftello sigblock sigsetjmp memrchr wcwidth mbtowc)
++AC_CHECK_FUNCS(strtoll ftello sigblock sigsetjmp memrchr wcwidth mbtowc)
++case "$host_os" in
++  mingw*)
++	AC_MSG_NOTICE([Windows don't have usleep(3), but mingw has with any libraries, disable this.])
++	LIBS="${LIBS} -lws2_32"
++	;;
++  *)
++    AC_CHECK_FUNCS(usleep)
++    ;;
++esac
+ 
+ if test x"$ENABLE_OPIE" = xyes; then
+   AC_LIBOBJ([ftp-opie])
+@@ -215,7 +224,7 @@
+ AC_DEFINE([HAVE_STRNCASECMP], 1, [Define to 1 if you have the `strncasecmp' function.])
+ AC_DEFINE([HAVE_STRDUP], 1, [Define to 1 if you have the `strdup' function.])
+ AC_DEFINE([HAVE_ISATTY], 1, [Define to 1 if you have the `isatty' function.])
+-AC_DEFINE([HAVE_SYMLINK], 1, [Define to 1 if you have the `symlink' function.])
++AC_CHECK_FUNCS(symlink)
+ 
+ dnl
+ dnl Call Wget-specific macros defined in aclocal.
+@@ -353,6 +362,18 @@
+   AC_DEFINE([HAVE_MD5], 1, [Define if we're compiling support for MD5.])
+ fi
+ 
++case "$host_os" in
++  mingw*)
++    CFLAGS="$CFLAGS -DWINDOWS"
++	__ac_IS_MSWINDOWS=1
++    LIBS="-lmingwex $LIBS"
++	;;
++  *)
++	__ac_IS_MSWINDOWS=0
++    ;;
++esac
++AM_CONDITIONAL([IS_MSWINDOWS], [test $__ac_IS_MSWINDOWS -eq 1])
++
+ dnl **********************************************************************
+ dnl Checks for IPv6
+ dnl **********************************************************************
+diff -urBb wget-1.12-orig/src/Makefile.am wget-1.12/src/Makefile.am
+--- wget-1.12-orig/src/Makefile.am	2009-09-22 20:39:49 +0400
++++ wget-1.12/src/Makefile.am	2010-07-12 14:35:04 +0400
+@@ -34,6 +34,10 @@
+ IRI_OBJ = iri.c
+ endif
+ 
++if IS_MSWINDOWS
++MSWINDOWS_OBJ = mswindows.c
++endif
++
+ # The following line is losing on some versions of make!
+ DEFS     = @DEFS@ -DSYSTEM_WGETRC=\"$(sysconfdir)/wgetrc\" -DLOCALEDIR=\"$(localedir)\"
+ LIBS     = @LIBSSL@ @LIBGNUTLS@ @LIBICONV@ @LIBINTL@ @LIBS@
+@@ -44,7 +48,7 @@
+ 	       ftp-basic.c ftp-ls.c hash.c host.c html-parse.c html-url.c \
+ 	       http.c init.c log.c main.c netrc.c progress.c ptimer.c     \
+ 	       recur.c res.c retr.c snprintf.c spider.c url.c	          \
+-	       utils.c exits.c build_info.c $(IRI_OBJ)			  \
++	       utils.c exits.c build_info.c $(IRI_OBJ) $(MSWINDOWS_OBJ)	  \
+ 	       css-url.h css-tokens.h connect.h convert.h cookies.h       \
+ 	       ftp.h gen-md5.h hash.h host.h html-parse.h html-url.h      \
+ 	       http.h http-ntlm.h init.h log.h mswindows.h netrc.h        \
+diff -urBb wget-1.12-orig/src/host.c wget-1.12/src/host.c
+--- wget-1.12-orig/src/host.c	2009-09-22 07:00:05 +0400
++++ wget-1.12/src/host.c	2010-07-12 14:35:04 +0400
+@@ -63,7 +63,7 @@
+ # define NO_ADDRESS NO_DATA
+ #endif
+ 
+-#if !HAVE_DECL_H_ERRNO
++#if !HAVE_DECL_H_ERRNO && !WINDOWS
+ extern int h_errno;
+ #endif
+ 

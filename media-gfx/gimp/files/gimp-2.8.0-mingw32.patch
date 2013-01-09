@@ -1,0 +1,12 @@
+diff -urpBb gimp-2.8.0-orig/app/language.c gimp-2.8.0/app/language.c
+--- gimp-2.8.0-orig/app/language.c	2012-03-12 23:18:07 +0400
++++ gimp-2.8.0/app/language.c	2012-08-21 13:48:37 +0400
+@@ -47,7 +47,7 @@ language_init (const gchar *language)
+        * http://blogs.msdn.com/b/michkap/archive/2007/04/15/2146890.aspx
+        */
+ 
+-      switch (GetUserDefaultUILanguage())
++      switch (GetUserDefaultLangID())
+         {
+         case 1078:
+           language = "af";    /* Afrikaans - South Africa */

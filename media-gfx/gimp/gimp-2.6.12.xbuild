@@ -1,0 +1,40 @@
+# Copyright 2011-2012 Chernov A.A.
+# Distributed under the terms of the GNU General Public License v2
+
+DESCRIPTION="GNU Image Manipulation Program"
+
+HOMEPAGE="http://www.gimp.org/ ftp://ftp.gimp.org/pub/gimp/"
+
+LICENSE="GPL-2"
+
+# to-do: librsvg, python
+
+#   dependencies:
+# gui-libs/gtk+-2.16
+# gui-libs/gdk-pixbuf
+# media-libs/babl-0.0.22
+# media-libs/gegl-0.0.18
+#
+# media-libs/lcms
+# media-libs/libexif
+# media-libs/jpeg
+# media-libs/libpng
+# media-libs/tiff
+# net-misc/curl
+# dev-util/intltool
+
+# >=dev-lang/perl-5.12 (mingw)
+
+SRC_URI="ftp://ftp.gimp.org/pub/gimp/v2.6/${NAME}-${VERSION}.tar.bz2"
+
+src_prepare()
+{
+	epatch "${NAME}-${VERSION}-mingw32-script-fu.patch"
+}
+
+src_configure()
+{
+	PATH="${PERL_PATH}/bin:${PATH}" ./configure --prefix="${PREFIX}" \
+		--enable-shared --disable-gtk-doc --disable-python
+	checkexitcode $? "configure failed"
+}

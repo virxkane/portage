@@ -1,0 +1,25 @@
+# Copyright 2010-2012 Chernov A.A.
+# Distributed under the terms of the GNU General Public License v2
+
+DESCRIPTION="This is a sample skeleton xbuild file"
+
+HOMEPAGE="http://foo.bar.com/"
+
+LICENSE="GPL-2"
+
+#   dependencies:
+# none?
+
+SRC_URI="http://foo.bar.com/downloads/${P}.tar.bz2"
+
+src_prepare()
+{
+	epatch "${P}-mingw32.patch"
+}
+
+src_configure()
+{
+	# don't use at this point ./configure - you lost build.log file!
+	econf --enable-shared --enable-static
+	checkexitcode $? "configure failed"
+}

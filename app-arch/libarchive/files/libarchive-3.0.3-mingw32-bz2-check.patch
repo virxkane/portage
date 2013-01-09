@@ -1,0 +1,36 @@
+diff -urBb libarchive-3.0.3-orig/configure.ac libarchive-3.0.3/configure.ac
+--- libarchive-3.0.3-orig/configure.ac	2012-01-13 08:04:48 +0400
++++ libarchive-3.0.3/configure.ac	2012-02-23 14:31:06 +0400
+@@ -253,7 +253,31 @@
+ 
+ if test "x$with_bz2lib" != "xno"; then
+   AC_CHECK_HEADERS([bzlib.h])
+-  AC_CHECK_LIB(bz2,BZ2_bzDecompressInit)
++  #AC_CHECK_LIB(bz2,BZ2_bzlibVersion)
++
++  # my code
++  # ----------------------------
++  ac_libs_backup=$LIBS
++  LIBS="-lbz2 $LIBS"
++
++  dnl check for the presence of 'libbz2'
++  AC_MSG_CHECKING([for the libbz2 availability])
++  AC_LINK_IFELSE([
++                    AC_LANG_PROGRAM([#include <bzlib.h>],
++                                    [BZ2_bzlibVersion();])
++                    ],
++                    [HAVE_LIBBZ2=1], [])
++
++  if test "$HAVE_LIBBZ2" = "1"; then
++    AC_MSG_RESULT([found])
++	AC_DEFINE([HAVE_LIBBZ2], [1], [Define to 1 if you have the `bz2' library (-lbz2).])
++  else
++    AC_MSG_RESULT([not found !])
++    LIBS=$ac_libs_backup
++  fi
++	
++  # ----------------------------
++  # end of my code
+ fi
+ 
+ AC_ARG_WITH([lzmadec],

@@ -1,0 +1,14 @@
+diff -urBbN cloog-ppl-0.15.9-orig/Makefile.am cloog-ppl-0.15.9/Makefile.am
+--- cloog-ppl-0.15.9-orig/Makefile.am	2010-03-24 00:29:47 +0300
++++ cloog-ppl-0.15.9/Makefile.am	2010-10-28 13:44:59 +0400
+@@ -58,6 +58,10 @@
+ 	source/program.c \
+ 	source/statement.c \
+ 	source/version.c
++
++libcloog_la_LDFLAGS = -no-undefined -export-dynamic \
++	-version-number 0:15:9
++
+ LDADD = libcloog.la
+ cloog_SOURCES = source/cloog.c
+ 

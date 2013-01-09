@@ -1,0 +1,26 @@
+# Copyright 2010-2012 Chernov A.A.
+# Distributed under the terms of the GNU General Public License v2
+
+DESCRIPTION="Port of CLooG (Chunky LOOp Generator) to PPL (Parma Polyhedra Library)"
+
+HOMEPAGE="http://repo.or.cz/w/cloog-ppl.git"
+
+LICENSE="GPL-2"
+
+#   dependencies:
+# dev-libs/gmp
+# dev-libs/ppl
+
+SRC_URI="ftp://gcc.gnu.org/pub/gcc/infrastructure/${P}.tar.gz"
+
+src_prepare()
+{
+	epatch ${P}-no-undef.patch
+	eautoreconf
+}
+
+src_configure()
+{
+	export LDFLAGS="-Wl,--enable-auto-import"
+	econf --enable-shared --enable-static --with-ppl
+}

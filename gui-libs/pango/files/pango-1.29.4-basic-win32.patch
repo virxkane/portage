@@ -1,0 +1,42 @@
+diff -urBb pango-1.29.4-orig/modules/basic/basic-win32.c pango-1.29.4/modules/basic/basic-win32.c
+--- pango-1.29.4-orig/modules/basic/basic-win32.c	2011-09-28 18:34:33 +0400
++++ pango-1.29.4/modules/basic/basic-win32.c	2011-11-22 22:59:54 +0400
+@@ -33,10 +33,6 @@
+ 
+ extern HFONT _pango_win32_font_get_hfont (PangoFont *font);
+ 
+-#ifndef PANGO_MODULE_PREFIX
+-#define PANGO_MODULE_PREFIX _pango_basic_win32
+-#endif
+-
+ #include "pango-engine.h"
+ #include "pango-utils.h"
+ 
+@@ -869,25 +865,10 @@
+   script_engines[0].scripts = basic_scripts;
+   script_engines[0].n_scripts = G_N_ELEMENTS (basic_scripts);
+ 
+-#if 0
+-  int i;
+-  GArray *ranges = g_array_new (FALSE, FALSE, sizeof (PangoEngineRange));
+-
+-  /* Walk through scripts supported by the Uniscribe implementation on this
+-   * machine, and mark corresponding Unicode ranges.
+-   */
+-  for (i = 0; i < nscripts; i++)
+-    {
+-    }
+-
+-  /* Sort range array */
+-  g_array_sort (ranges, compare_range);
+-  script_engines[0].ranges = ranges;
+-  script_engines[0].n_ranges = ranges->len;
+-#else
++  /* This is stupid, we rewrite the previous two lines.  Not
++   * going to touch it now. */
+   script_engines[0].scripts = uniscribe_scripts;
+   script_engines[0].n_scripts = G_N_ELEMENTS (uniscribe_scripts);
+-#endif
+ 
+   *engines = script_engines;
+   *n_engines = G_N_ELEMENTS (script_engines);

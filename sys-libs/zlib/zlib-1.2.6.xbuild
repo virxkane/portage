@@ -1,0 +1,21 @@
+# Copyright 2010-2012 Chernov A.A.
+# Distributed under the terms of the GNU General Public License v2
+
+DESCRIPTION="Standard (de)compression library"
+
+HOMEPAGE="http://www.zlib.net/"
+
+LICENSE="ZLIB"
+
+SRC_URI="http://www.zlib.net/${P}.tar.bz2"
+
+src_prepare()
+{
+	epatch "${P}-automake.patch"
+	eautoreconf
+}
+
+src_configure()
+{
+	econf --enable-shared --enable-static
+}

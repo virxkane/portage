@@ -1,0 +1,15 @@
+diff -urBb pkg-config-0.25-orig/main.c pkg-config-0.25/main.c
+--- pkg-config-0.25-orig/main.c	2010-05-10 21:58:57 +0400
++++ pkg-config-0.25/main.c	2010-07-05 22:30:34 +0400
+@@ -752,11 +752,7 @@
+     }
+ 
+   if (need_newline)
+-#ifdef G_OS_WIN32
+-    printf ("\r\n");
+-#else
+     printf ("\n");
+-#endif
+ 
+   return 0;
+ }

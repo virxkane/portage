@@ -1,0 +1,56 @@
+diff -urBbN flac-1.2.1-orig/examples/cpp/encode/file/main.cpp flac-1.2.1/examples/cpp/encode/file/main.cpp
+--- flac-1.2.1-orig/examples/cpp/encode/file/main.cpp	2007-09-13 19:58:03 +0400
++++ flac-1.2.1/examples/cpp/encode/file/main.cpp	2010-10-28 11:15:44 +0400
+@@ -30,6 +30,7 @@
+ 
+ #include <stdio.h>
+ #include <stdlib.h>
++#include <string.h>
+ #include "FLAC++/metadata.h"
+ #include "FLAC++/encoder.h"
+ 
+diff -urBbN flac-1.2.1-orig/include/share/alloc.h flac-1.2.1/include/share/alloc.h
+--- flac-1.2.1-orig/include/share/alloc.h	2007-09-12 09:32:21 +0400
++++ flac-1.2.1/include/share/alloc.h	2010-10-28 11:15:44 +0400
+@@ -37,6 +37,8 @@
+ # ifndef SIZE_T_MAX
+ #  ifdef _MSC_VER
+ #   define SIZE_T_MAX UINT_MAX
++#  elif __MINGW32__
++#   define SIZE_T_MAX UINT_MAX
+ #  else
+ #   error
+ #  endif
+diff -urBbN flac-1.2.1-orig/src/libFLAC/Makefile.am flac-1.2.1/src/libFLAC/Makefile.am
+--- flac-1.2.1-orig/src/libFLAC/Makefile.am	2007-09-15 01:06:17 +0400
++++ flac-1.2.1/src/libFLAC/Makefile.am	2010-10-28 11:18:20 +0400
+@@ -69,7 +69,7 @@
+ endif
+ endif
+ 
+-libFLAC_la_LIBADD = $(LOCAL_EXTRA_LIBADD) @OGG_LIBS@
++libFLAC_la_LIBADD = $(LOCAL_EXTRA_LIBADD) @OGG_LIBS@ -lws2_32
+ 
+ SUBDIRS = $(ARCH_SUBDIRS) include .
+ 
+@@ -96,7 +96,7 @@
+ 	ogg_mapping.c
+ endif
+ # see 'http://www.gnu.org/software/libtool/manual.html#Libtool-versioning' for numbering convention
+-libFLAC_la_LDFLAGS = -version-info 10:0:2 -lm $(LOCAL_EXTRA_LDFLAGS)
++libFLAC_la_LDFLAGS = -no-undefined -version-info 10:0:2 -lm $(LOCAL_EXTRA_LDFLAGS)
+ libFLAC_la_SOURCES = \
+ 	bitmath.c \
+ 	bitreader.c \
+diff -urBbN flac-1.2.1-orig/src/libFLAC++/Makefile.am flac-1.2.1/src/libFLAC++/Makefile.am
+--- flac-1.2.1-orig/src/libFLAC++/Makefile.am	2007-09-15 01:06:10 +0400
++++ flac-1.2.1/src/libFLAC++/Makefile.am	2010-10-28 11:19:05 +0400
+@@ -46,7 +46,7 @@
+ 	libFLAC++.m4
+ 
+ # see 'http://www.gnu.org/software/libtool/manual.html#Libtool-versioning' for numbering convention
+-libFLAC___la_LDFLAGS = -version-info 8:0:2
++libFLAC___la_LDFLAGS = -no-undefined -version-info 8:0:2
+ libFLAC___la_LIBADD = ../libFLAC/libFLAC.la
+ 
+ libFLAC___la_SOURCES = \

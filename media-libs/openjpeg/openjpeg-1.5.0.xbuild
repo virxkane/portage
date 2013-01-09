@@ -1,0 +1,27 @@
+# Copyright 2010 Chernov A.A.
+# Distributed under the terms of the GNU General Public License v2
+
+DESCRIPTION="An open-source JPEG 2000 codec written in C"
+
+HOMEPAGE="http://www.openjpeg.org/"
+
+LICENSE="BSD-2"
+
+#   dependencies:
+# dev-util/cmake
+#   optional
+# media-libs/tiff
+# media-libs/lcms2
+
+SRC_URI="http://openjpeg.googlecode.com/files/${P}.tar.gz"
+
+#src_prepare()
+#{
+#	epatch "${NAME}-${VERSION}-mingw32.patch"
+#}
+
+src_configure()
+{
+	USE_CMAKE=yes
+	econf -DBUILD_SHARED_LIBS=ON
+}

@@ -1,0 +1,23 @@
+# Copyright 2010 Chernov A.A.
+# Distributed under the terms of the GNU General Public License v2
+
+DESCRIPTION="Package config system that manages compile/link flags"
+
+HOMEPAGE="http://pkgconfig.freedesktop.org/wiki/"
+
+LICENSE="GPL-2"
+
+#   dependencies:
+# glib
+
+SRC_URI="http://pkgconfig.freedesktop.org/releases/${P}.tar.gz"
+
+src_prepare()
+{
+	epatch "${PN}-0.25-msys.patch"
+}
+
+src_configure()
+{
+	econf --disable-debug
+}

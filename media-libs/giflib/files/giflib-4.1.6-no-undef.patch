@@ -1,0 +1,11 @@
+diff -urBbN giflib-4.1.6-orig/lib/Makefile.am giflib-4.1.6/lib/Makefile.am
+--- giflib-4.1.6-orig/lib/Makefile.am	2007-11-11 01:47:55 +0300
++++ giflib-4.1.6/lib/Makefile.am	2010-10-28 15:28:58 +0400
+@@ -21,6 +21,6 @@
+                     quantize.c  \
+ 					gif_lib_private.h
+ 
+-libgif_la_LDFLAGS = -version-info 5:6:1
++libgif_la_LDFLAGS = -no-undefined -version-info 5:6:1
+ libgif_la_LIBADD = @DEVS@
+ libgif_CFLAGS = $(X_CFLAGS) $(AM_CFLAGS)
