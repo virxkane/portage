@@ -26,5 +26,11 @@ src_prepare()
 src_configure()
 {
 	BUILD_IN_SEPARATE_DIR=yes
-	econf --with-sysroot=/mingw --disable-nls --disable-werror
+	local econfp=
+	case ${CHOST} in
+	x86_64-w64*)
+		econfp="--with-sysroot=/mingw"
+		;;
+	esac
+	econf --disable-nls --disable-werror ${econfp}
 }
