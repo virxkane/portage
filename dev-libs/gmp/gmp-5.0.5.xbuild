@@ -15,5 +15,11 @@ src_configure()
 {
 	unset CFLAGS
 	unset CXXFLAGS
-	econf --enable-shared --disable-static --enable-cxx ABI=64
+	local _abi=32
+	case ${CHOST} in
+	x86_64-w64-*)
+		_abi=64
+		;;
+	esac
+	econf --enable-shared --disable-static --enable-cxx ABI=${_abi}
 }
