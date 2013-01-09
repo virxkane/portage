@@ -12,19 +12,22 @@ LICENSE="GPL-2"
 # libiconv
 # expat
 
-SRC_URI="http://dbus.freedesktop.org/releases/dbus/${NAME}-${VERSION}.tar.gz"
+SRC_URI="http://dbus.freedesktop.org/releases/dbus/${P}.tar.gz"
 
 #src_prepare()
 #{
-#	epatch "${NAME}-1.2.3-mingw32.patch"
+#	epatch "${PN}-1.2.3-mingw32.patch"
 #}
 
 src_configure()
 {
-	mkdir "../${NAME}_build"
-	cd "../${NAME}_build"
-	cmake -G "MSYS Makefiles" -DCMAKE_BUILD_TYPE="Release" \
-		-DCMAKE_INSTALL_PREFIX="${PREFIX}" -DDBUS_BUILD_TESTS=OFF \
-		-DDBUS_ENABLE_VERBOSE_MODE=OFF "../${NAME}-${VERSION}/cmake"
-	checkexitcode $? "cmake failed"
+#	mkdir "../${PN}_build"
+#	cd "../${PN}_build"
+#	cmake -G "MSYS Makefiles" -DCMAKE_BUILD_TYPE="Release" \
+#		-DCMAKE_INSTALL_PREFIX="${PREFIX}" -DDBUS_BUILD_TESTS=OFF \
+#		-DDBUS_ENABLE_VERBOSE_MODE=OFF "../${P}/cmake"
+#	checkexitcode $? "cmake failed"
+
+	USE_CMAKE=yes
+	econf -DDBUS_BUILD_TESTS=OFF -DDBUS_ENABLE_VERBOSE_MODE=OFF
 }

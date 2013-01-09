@@ -23,10 +23,10 @@ src_prepare()
 
 src_configure()
 {
-#	mkdir "../${NAME}_build"
-#	cd "../${NAME}_build"
+#	mkdir "../${PN}_build"
+#	cd "../${PN}_build"
 #	cmake -G "MSYS Makefiles" -DCMAKE_BUILD_TYPE="Release" \
-#		-DCMAKE_INSTALL_PREFIX=${PREFIX} "../${NAME}-${VERSION}"
+#		-DCMAKE_INSTALL_PREFIX=${PREFIX} "../${P}"
 #	checkexitcode $? "cmake failed"
 	USE_CMAKE=yes
 	econf

@@ -25,17 +25,16 @@ LICENSE="GPL3 LGPL-3"
 
 # BUGS: linking to ffmpeg don't work
 
-SRC_URI="ftp://ftp.gimp.org/pub/gegl/0.1/${NAME}-${VERSION}.tar.bz2"
+SRC_URI="ftp://ftp.gimp.org/pub/${PN}/0.1/${P}.tar.bz2"
 
 #src_prepare()
 #{
-#	epatch "${NAME}-${VERSION}-mingw32.patch"
+#	epatch "${P}-mingw32.patch"
 #}
 
 src_configure()
 {
-	./configure --prefix="${PREFIX}" --enable-shared --enable-static \
+	econf --enable-shared --enable-static \
 		--without-libavformat \
 		--enable-mmx --enable-sse
-	checkexitcode $? "configure failed"
 }

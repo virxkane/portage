@@ -15,24 +15,23 @@ LICENSE="wxWinLL-3"
 #   optional
 # media-video/ffmpeg
 
-SRC_URI="http://downloads.sourceforge.net/${NAME}/${NAME}-${VERSION}.tar.bz2"
+SRC_URI="http://downloads.sourceforge.net/${PN}/${P}.tar.bz2"
 
 #src_unpack()
 #{
 #	unpack "${A}"
-#	cd "${NAME}-${VERSION}-1"
+#	cd "${P}-1"
 #}
 
 src_prepare()
 {
-	epatch "${NAME}-1.1.6-gct-mingw32.patch"
+	epatch "${PN}-1.1.6-gct-mingw32.patch"
 	#eautoreconf
 }
 
 src_configure()
 {
-	LDFLAGS="-Wl,--enable-auto-import" \
-		./configure --prefix="${PREFIX}" --enable-shared --enable-static \
+	export LDFLAGS="-Wl,--enable-auto-import"
+	econf --enable-shared --enable-static \
 		--enable-render=cairo --enable-ffmpeg
-	checkexitcode $? "configure failed"
 }

@@ -18,18 +18,17 @@ LICENSE="GPL-2"
 # media-sound/lame
 # media-libs/x264-snapshot
 
-SRC_URI="http://ffmpeg.org/releases/${NAME}-${VERSION}.tar.bz2"
+SRC_URI="http://ffmpeg.org/releases/${P}.tar.bz2"
 
 src_prepare()
 {
-	epatch "${NAME}-${VERSION}-no_vs_libs.patch"
+	epatch "${P}-no_vs_libs.patch"
 }
 
 src_configure()
 {
-	./configure --prefix="${PREFIX}" \
+	econf \
 		--enable-gpl --enable-shared --enable-static --disable-pthreads \
 		--enable-w32threads --enable-runtime-cpudetect --enable-libx264 \
 		--enable-libmp3lame --enable-libfreetype --enable-libspeex
-	checkexitcode $? "configure failed"
 }

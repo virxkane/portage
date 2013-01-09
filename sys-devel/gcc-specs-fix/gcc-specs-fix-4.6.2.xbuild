@@ -9,7 +9,7 @@ LICENSE="GPL-3 LGPL-3 || ( GPL-3 libgcc libstdc++ ) FDL-1.2"
 
 src_unpack()
 {
-	mkdir "${NAME}-${VERSION}"
+	mkdir "${P}"
 }
 
 src_configure()

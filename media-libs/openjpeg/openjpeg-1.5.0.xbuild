@@ -17,7 +17,7 @@ SRC_URI="http://openjpeg.googlecode.com/files/${P}.tar.gz"
 
 #src_prepare()
 #{
-#	epatch "${NAME}-${VERSION}-mingw32.patch"
+#	epatch "${P}-mingw32.patch"
 #}
 
 src_configure()

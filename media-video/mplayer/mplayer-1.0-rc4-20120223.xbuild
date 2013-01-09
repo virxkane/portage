@@ -31,7 +31,7 @@ RESTRICT="mirror"
 #MY_N="MPlayer"
 #MY_V=`echo ${VERSION} | sed -e 's/_//'`
 
-SRC_URI="http://www.mplayerhq.hu/MPlayer/releases/${NAME}-${VERSION}.tar.xz
+SRC_URI="http://distfiles.gentoo.org/distfiles/${P}.tar.xz
 		 http://www.mplayerhq.hu/MPlayer/releases/fonts/font-arial-iso-8859-1.tar.bz2
 		 http://www.mplayerhq.hu/MPlayer/skins/Blue-1.8.tar.bz2"
 
@@ -46,13 +46,12 @@ src_configure()
 	unset CFLAGS
 	#CFLAGS="-O3 -D_FILE_OFFSET_BITS=64 -fomit-frame-pointer"
 	# --enable-mad
-	./configure --prefix="${PREFIX}" --enable-win32dll --enable-md5sum \
+	econf --enable-win32dll --enable-md5sum \
 		--enable-menu --enable-gl --enable-freetype \
 		--enable-png --enable-jpeg --enable-gif --enable-tga \
 		--disable-tv --disable-dvb --enable-runtime-cpudetection \
 		--enable-gui --disable-pthreads --enable-w32threads
 		#--disable-vdpau
-	checkexitcode $? "configure failed"
 }
 
 src_install()
