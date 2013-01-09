@@ -30,6 +30,7 @@ src_prepare()
 
 src_configure()
 {
+	export CXXFLAGS="${CXXFLAGS} -fpermissive"
 	econf --with-gtk --with-gimp --enable-extras --enable-contrast
 
 	local gimpdir_w32=`pkg-config --variable=gimplibdir gimp-2.0`
