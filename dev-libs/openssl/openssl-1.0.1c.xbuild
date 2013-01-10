@@ -17,11 +17,17 @@ SRC_URI="http://www.openssl.org/source/${P}.tar.gz"
 
 src_configure()
 {
+	local _targ=mingw
+	case ${CHOST} in
+	x86_64-w64-*)
+		_targ=mingw64
+		;;
+	esac
 	perl Configure --prefix="${PREFIX}" --openssldir="${PREFIX}/etc/ssl" \
 		enable-camellia enable-ec enable-idea enable-mdc2 enable-rc5 \
 		enable-tlsext enable-zlib disable-capieng \
 		shared threads \
-		mingw64
+		${_targ}
 	checkexitcode $? "configure failed"
 }
 
