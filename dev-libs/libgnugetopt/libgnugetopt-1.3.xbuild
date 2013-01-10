@@ -3,7 +3,7 @@
 
 DESCRIPTION="GNU getopt library similar but more powerful than the standard getopt(3)."
 
-HOMEPAGE="~"
+HOMEPAGE="https://trac.macports.org/browser/trunk/dports/devel/libgnugetopt/Portfile"
 
 LICENSE="GPL-2"
 
@@ -12,7 +12,7 @@ RESTRICT="mirror"
 #   dependencies:
 # none?
 
-SRC_URI="http://foo.bar.com/downloads/${P}.tar.bz2"
+SRC_URI="http://distfiles.macports.org/libgnugetopt/${P}.tar.bz2"
 
 src_prepare()
 {
