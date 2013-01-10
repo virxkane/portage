@@ -17,7 +17,11 @@ SRC_URI="http://ftp.gnu.org/pub/gnu/${PN}/${P}.tar.gz"
 
 src_prepare()
 {
-	epatch "${P}-${CHOST}.patch"
+	case ${CHOST} in
+	x86_64-w64-mingw32)
+		epatch "${P}-${CHOST}.patch"
+		;;
+	esac
 }
 
 src_configure()
