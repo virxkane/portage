@@ -20,7 +20,15 @@ src_configure()
 
 src_compile()
 {
-	emake -f win32/makefile.gcc LOCAL_ZIP=\"${CFLAGS} -DNO_ASM -DUSEZLIB\" -j1
+	case ${CHOST} in
+	x86_64-w64-*)
+		# but this anyway failed :(
+		emake -f win32/makefile.gcc LOCAL_ZIP=\"${CFLAGS} -DNO_ASM -DUSEZLIB\" -j1
+		;;
+	*)
+		emake -f win32/makefile.gcc LOCAL_ZIP=\"${CFLAGS}\" -j1
+		;;
+	esac
 }
 
 src_install()
