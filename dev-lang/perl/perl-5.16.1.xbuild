@@ -30,6 +30,14 @@ src_prepare()
 
 src_configure()
 {
+	local _abi=32
+	case ${CHOST} in
+	x86_64-w64-*)
+		_abi=64
+		;;
+	esac
+
+
 	# edit makefile.mk
 	prefix_w=`posix_w32path "${PREFIX}"`
 	prefix_w=`echo ${prefix_w} | sed -e 's/\\//\\\/g'`
@@ -48,13 +56,16 @@ src_configure()
 	cat makefile.mk | sed -e "s/^INST_TOP\\t\\*\\=.*$/INST_TOP\\t\\*\\=\\ ${inst_top}/" > makefile.mk.new
 	mv -f makefile.mk.new makefile.mk
 	
-	# build a 32-bit Perl using a 32-bit compiler on a 64-bit version of Windows
-	#cat makefile.mk | sed -e 's/^#WIN64\t*\*\=\ undef$/WIN64\t\*\=\ undef/' > makefile.mk.new
-	#mv -f makefile.mk.new makefile.mk
-	
-	# build a 64-bit Perl
-	cat makefile.mk | sed -e 's/^#WIN64\t*\*\=\ undef$/WIN64\t\*\=\ define/' > makefile.mk.new
-	mv -f makefile.mk.new makefile.mk
+	if [ $_abi -eq 32 ]
+	then
+		# build a 32-bit Perl using a 32-bit compiler on a 64-bit version of Windows
+		cat makefile.mk | sed -e 's/^#WIN64\t*\*\=\ undef$/WIN64\t\*\=\ undef/' > makefile.mk.new
+		mv -f makefile.mk.new makefile.mk
+	else
+		# build a 64-bit Perl
+		cat makefile.mk | sed -e 's/^#WIN64\t*\*\=\ undef$/WIN64\t\*\=\ define/' > makefile.mk.new
+		mv -f makefile.mk.new makefile.mk
+	fi
 
 	# define mingw-w64 crosscompiler
 	#cat makefile.mk | sed -e 's/^#GCCCROSS\t*\*\=\ define$/GCCCROSS\t\*\=\ define/' > makefile.mk.new
