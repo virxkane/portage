@@ -1,20 +1,28 @@
-diff -urBb ufraw-0.18-orig/dcraw.cc ufraw-0.18/dcraw.cc
---- ufraw-0.18-orig/dcraw.cc	2011-02-20 11:56:15 +0400
-+++ ufraw-0.18/dcraw.cc	2012-02-25 17:06:57 +0400
-@@ -42,6 +42,7 @@
+diff -urBb ufraw-0.18/dcraw.cc tmp/ufraw-build/ufraw-0.18//dcraw.cc
+--- ufraw-0.18/dcraw.cc	2011-02-20 11:56:15 +0400
++++ tmp/ufraw-build/ufraw-0.18//dcraw.cc	2013-01-11 21:20:58 +0400
+@@ -40,11 +40,6 @@
+ #include <string.h>
+ #include <time.h>
  #include <sys/types.h>
- #ifdef HAVE_LIBJPEG
- extern "C" {
-+#define XMD_H	// say jpeglib about already defined INT32
- #include <jpeglib.h>
- }
+-#ifdef HAVE_LIBJPEG
+-extern "C" {
+-#include <jpeglib.h>
+-}
+-#endif
+ /*
+    NO_LCMS disables the "-p" option.
+  */
+@@ -91,6 +86,12 @@
+ typedef unsigned long long UINT64;
  #endif
-@@ -74,6 +75,8 @@
- #endif
- #ifdef WIN32
- #include <sys/utime.h>
-+// don't include in windows.h rpcndr.h where declare boolean type
-+#define _OBJC_NO_COM
- #include <winsock2.h>
- #ifndef __MINGW32__ /* causes warnings in cygwin's gcc -mno-cygwin UF*/
- #pragma comment(lib, "ws2_32.lib")
+ 
++#ifdef HAVE_LIBJPEG
++extern "C" {
++#include <jpeglib.h>
++}
++#endif
++
+ #ifdef LJPEG_DECODE
+ #error Please compile dcraw.c by itself.
+ #error Do not link it with ljpeg_decode.
