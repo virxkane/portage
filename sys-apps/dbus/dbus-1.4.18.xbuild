@@ -1,4 +1,4 @@
-# Copyright 2011 Chernov A.A.
+# Copyright 2011-2013 Chernov A.A.
 # Distributed under the terms of the GNU General Public License v2
 
 DESCRIPTION="A message bus system, a simple way for applications to talk to each other"
