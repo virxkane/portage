@@ -13,6 +13,11 @@ LICENSE="BSD"
 # http://ftp.debian.org/debian/pool/main/libj/libjpeg8/libjpeg8_8b-1.debian.tar.gz
 SRC_URI="http://downloads.sourceforge.net/${PN}/${P}.tar.gz"
 
+src_prepare()
+{
+	epatch "${P}-mingw32.patch"
+}
+
 src_configure()
 {
 	econf --enable-shared --enable-static \
