@@ -21,7 +21,6 @@ LICENSE="GPL3 LGPL-3"
 # media-libs/jpeg
 # media-gfx/exiv
 # #media-video/ffmpeg
-# media-libs/libsdl
 
 # to-do: libopenraw (need boost)
 
