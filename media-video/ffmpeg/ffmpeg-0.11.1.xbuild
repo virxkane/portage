@@ -27,8 +27,9 @@ src_prepare()
 
 src_configure()
 {
-	econf \
+	./configure --prefix=${PREFIX} \
 		--enable-gpl --enable-shared --enable-static --disable-pthreads \
 		--enable-w32threads --enable-runtime-cpudetect --enable-libx264 \
 		--enable-libmp3lame --enable-libfreetype --enable-libspeex
+	checkexitcode $? "configure failed"
 }
