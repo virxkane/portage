@@ -21,13 +21,7 @@ SRC_URI="http://dbus.freedesktop.org/releases/dbus/${P}.tar.gz"
 
 src_configure()
 {
-#	mkdir "../${PN}_build"
-#	cd "../${PN}_build"
-#	cmake -G "MSYS Makefiles" -DCMAKE_BUILD_TYPE="Release" \
-#		-DCMAKE_INSTALL_PREFIX="${PREFIX}" -DDBUS_BUILD_TESTS=OFF \
-#		-DDBUS_ENABLE_VERBOSE_MODE=OFF "../${P}/cmake"
-#	checkexitcode $? "cmake failed"
-
 	USE_CMAKE=yes
+	CMAKE_SOURCES_DIR="${SOURCES_DIR}/cmake"
 	econf -DDBUS_BUILD_TESTS=OFF -DDBUS_ENABLE_VERBOSE_MODE=OFF
 }
