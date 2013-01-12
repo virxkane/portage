@@ -1,4 +1,4 @@
-# Copyright 2010-2012 Chernov A.A.
+# Copyright 2010-2013 Chernov A.A.
 # Distributed under the terms of the GNU General Public License v2
 
 DESCRIPTION="Cross-platform C++ GUI toolkit"
@@ -17,13 +17,16 @@ RESTRICT="mirror"
 # jpeg
 # tiff
 
-# to-do: fix install script: make proper link to wx-config
-
 SRC_URI="http://prdownloads.sourceforge.net/wxwindows/${P}.tar.bz2"
+
+src_prepare()
+{
+	epatch "${P}-mingw32.patch"
+}
 
 src_configure()
 {
-#  option --disable-precomp-headers need for bug? in gcc-4.3.0
+#  with option --enable-precomp-headers we can't link mswu_core - ld.exe allocate 2G memory & crashed in 32-bit mode
 	export LDFLAGS="-Wl,--enable-auto-import"
 	econf --enable-gui --enable-shared \
 			--enable-optimise --disable-compat24 --enable-compat26 --enable-intl \
@@ -38,6 +41,6 @@ src_configure()
 src_install()
 {
 	emake_install
-	# move dll to bin directory
+	# move dlls to bin directory
 	mv "${INSTDIR}${PREFIX}"/lib/wx*.dll "${INSTDIR}${PREFIX}/bin"
 }
