@@ -15,7 +15,6 @@ LICENSE="LGPL-2.1 GPL-3"
 # media-libs/tiff
 # dev-util/qt4-pathfix
 #   optional
-# sys-apps/dbus
 # dev-db/sqlite
 # dev-db/postgresql-libpq
 
@@ -40,7 +39,7 @@ src_configure()
 		-qt-style-windows -qt-style-windowsxp -qt-style-windowsvista \
 		-system-libpng -system-libjpeg -system-libmng -system-libtiff -system-zlib \
 		-graphicssystem raster \
-		-openssl -dbus -no-phonon -multimedia -no-webkit -audio-backend -script -scripttools -declarative \
+		-openssl -no-dbus -no-phonon -multimedia -no-webkit -audio-backend -script -scripttools -declarative \
 		-no-dsp -no-vcproj -nomake examples -nomake demos \
 		-platform win32-g++-4.6 \
 			2>&1 | tee -a "${BUILDLOG}"
