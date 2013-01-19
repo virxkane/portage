@@ -5,7 +5,7 @@ DESCRIPTION="Small utility to change hardcoded pathes in Qt4"
 
 HOMEPAGE="http://www.sourceforge.net/projects/mingwportage/"
 
-LICENSE="GPL-2"
+LICENSE="GPL-3"
 
 #   dependencies:
 # none?
