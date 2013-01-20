@@ -16,6 +16,7 @@ LICENSE="LGPL-2.1 GPL-3"
 # media-libs/libmng
 # media-libs/tiff
 # dev-util/qt4-pathfix
+# dev-util/mingw32-make
 #   optional
 # dev-db/sqlite
 # dev-db/postgresql-libpq
