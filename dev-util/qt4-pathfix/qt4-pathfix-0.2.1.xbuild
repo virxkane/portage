@@ -1,0 +1,21 @@
+# Copyright 2013 Chernov A.A.
+# Distributed under the terms of the GNU General Public License v2
+
+DESCRIPTION="Small utility to change hardcoded pathes in Qt4"
+
+HOMEPAGE="http://www.sourceforge.net/projects/mingwportage/"
+
+LICENSE="GPL-3"
+
+#   dependencies:
+# none?
+
+SRC_URI="http://downloads.sourceforge.net/mingwportage/${P}.tar.xz"
+
+RESTRICT="mirror"
+
+src_configure()
+{
+	USE_CMAKE=yes
+	econf
+}
