@@ -7,6 +7,8 @@ HOMEPAGE="http://qt-project.org/ http://qt.digia.com/"
 
 LICENSE="LGPL-2.1 GPL-3"
 
+# to-do: install private headers, for qt-creator.
+
 #   dependencies:
 # sys-libs/zlib
 # media-libs/libpng
@@ -64,35 +66,36 @@ src_install()
 	// to-do
 
 	local _prefix="${INSTDIR}${PREFIX}"
-	
+	local prefix_w=`posix_w32path "${PREFIX}"`
+
 	#mv -fv "${_prefix}/lib/qt4/"*.dll "${_prefix}/bin/"
 	rm -f "${_prefix}/lib/qt4/"*.dll
 
-	qt4-pathfix --prefix="${PREFIX}" \
-				--bindir="${PREFIX}/bin" \
-				--libdir="${PREFIX}/lib/qt4" \
-				--docdir="${PREFIX}/share/doc/qt-${PV}" \
-				--headerdir="${PREFIX}/include/qt4" \
-				--plugindir="${PREFIX}/lib/qt4/plugins" \
-				--importdir="${PREFIX}/lib/qt4/imports" \
-				--datadir="${PREFIX}/share/qt4" \
-				--translationdir="${PREFIX}/share/qt4/translations" \
-				--examplesdir="${PREFIX}/share/qt4/examples" \
-				--demosdir="${PREFIX}/share/qt4/demos" \
+	qt4-pathfix --prefix="${prefix_w}" \
+				--bindir="${prefix_w}/bin" \
+				--libdir="${prefix_w}/lib/qt4" \
+				--docdir="${prefix_w}/share/doc/qt-${PV}" \
+				--headerdir="${prefix_w}/include/qt4" \
+				--plugindir="${prefix_w}/lib/qt4/plugins" \
+				--importdir="${prefix_w}/lib/qt4/imports" \
+				--datadir="${prefix_w}/share/qt4" \
+				--translationdir="${prefix_w}/share/qt4/translations" \
+				--examplesdir="${prefix_w}/share/qt4/examples" \
+				--demosdir="${prefix_w}/share/qt4/demos" \
 				"${_prefix}/bin/qmake.exe"
-	qt4-pathfix --prefix="${PREFIX}" \
-				--bindir="${PREFIX}/bin" \
-				--libdir="${PREFIX}/lib/qt4" \
-				--docdir="${PREFIX}/share/doc/qt-${PV}" \
-				--headerdir="${PREFIX}/include/qt4" \
-				--plugindir="${PREFIX}/lib/qt4/plugins" \
-				--importdir="${PREFIX}/lib/qt4/imports" \
-				--datadir="${PREFIX}/share/qt4" \
-				--translationdir="${PREFIX}/share/qt4/translations" \
-				--examplesdir="${PREFIX}/share/qt4/examples" \
-				--demosdir="${PREFIX}/share/qt4/demos" \
+	qt4-pathfix --prefix="${prefix_w}" \
+				--bindir="${prefix_w}/bin" \
+				--libdir="${prefix_w}/lib/qt4" \
+				--docdir="${prefix_w}/share/doc/qt-${PV}" \
+				--headerdir="${prefix_w}/include/qt4" \
+				--plugindir="${prefix_w}/lib/qt4/plugins" \
+				--importdir="${prefix_w}/lib/qt4/imports" \
+				--datadir="${prefix_w}/share/qt4" \
+				--translationdir="${prefix_w}/share/qt4/translations" \
+				--examplesdir="${prefix_w}/share/qt4/examples" \
+				--demosdir="${prefix_w}/share/qt4/demos" \
 				"${_prefix}/bin/QtCore4.dll"
-	qt4-pathfix --prefix="${PREFIX}" \
-				--datadir="${PREFIX}/share/qt4" \
+	qt4-pathfix --prefix="${prefix_w}" \
+				--datadir="${prefix_w}/share/qt4" \
 				"${_prefix}/share/qt4/mkspecs/default/qmake.conf"
 }
