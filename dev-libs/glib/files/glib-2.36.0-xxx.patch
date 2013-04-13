@@ -1,0 +1,12 @@
+diff -urBb glib-2.36.0-orig/gio/gdbusmessage.c glib-2.36.0/gio/gdbusmessage.c
+--- glib-2.36.0-orig/gio/gdbusmessage.c	2013-03-25 21:02:43 +0400
++++ glib-2.36.0/gio/gdbusmessage.c	2013-04-12 19:39:32 +0400
+@@ -1384,7 +1384,7 @@
+                                 "Wanted to read %lu bytes but only got %lu",
+                                 (gulong)len),
+                                 (gulong)len,
+-                   (gulong)mbuf->valid_len - mbuf->pos);
++                   (gulong)(mbuf->valid_len - mbuf->pos));
+       mbuf->pos = mbuf->valid_len;
+       return NULL;
+     }

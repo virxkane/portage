@@ -1,6 +1,7 @@
 sys-devel/libiconv
 sys-libs/zlib
 media-libs/libpng
+dev-lang/nasm
 media-libs/libjpeg-turbo
 dev-libs/pthreads-win32
 media-libs/freeglut

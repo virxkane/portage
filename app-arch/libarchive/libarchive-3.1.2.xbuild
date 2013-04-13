@@ -1,0 +1,30 @@
+# Copyright 2010-2013 Chernov A.A.
+# Distributed under the terms of the GNU General Public License v3
+
+DESCRIPTION="BSD tar command"
+
+HOMEPAGE="http://code.google.com/p/libarchive/"
+
+LICENSE="BSD"
+
+#   dependencies:
+#   optional
+# dev-libs/openssl
+# sys-libs/zlib
+# app-arch/libbz2
+# lzma ???
+# dev-libs/expat
+
+# We not use cmake to resolve circular dependencies.
+
+SRC_URI="http://libarchive.googlecode.com/files/${P}.tar.gz"
+
+src_configure()
+{
+	econf --enable-shared --enable-static \
+			--without-xml2 --with-expat
+
+
+	#USE_CMAKE=yes
+	#econf -DBUILD_SHARED_LIBS=ON
+}

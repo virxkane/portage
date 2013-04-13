@@ -1,0 +1,15 @@
+This patch fix problem when we have gettext installed and
+specify command line argument --disable-nls. But this is UGLY!
+
+diff -urBb gcc-4.8.0-orig/gcc/intl.h gcc-4.8.0/gcc/intl.h
+--- gcc-4.8.0-orig/gcc/intl.h	2013-01-11 00:38:27 +0400
++++ gcc-4.8.0/gcc/intl.h	2013-04-07 22:04:15 +0400
+@@ -31,7 +31,7 @@
+    libintl.h, the stubs defined down below will cause syntax errors
+    when parsing libintl.h. See http://gcc.gnu.org/bugzilla/show_bug.cgi?id=54281
+    for details.  */
+-#if defined(HAVE_LIBINTL_H) || defined(ENABLE_NLS)
++#if defined(HAVE_LIBINTL_H) && defined(ENABLE_NLS)
+ # include <libintl.h>
+ #endif
+ 

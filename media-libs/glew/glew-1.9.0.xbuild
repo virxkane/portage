@@ -1,4 +1,4 @@
-# Copyright 2010-2012 Chernov A.A.
+# Copyright 2010-2013 Chernov A.A.
 # Distributed under the terms of the GNU General Public License v2
 
 DESCRIPTION="The OpenGL Extension Wrangler Library"
@@ -31,4 +31,6 @@ src_compile()
 src_install()
 {
 	emake_install DESTDIR="${INSTDIR}" GLEW_DEST="${PREFIX}"
+	install bin/glewinfo.exe "${INSTDIR}${PREFIX}/bin/"
+	install bin/visualinfo.exe "${INSTDIR}${PREFIX}/bin/"
 }
