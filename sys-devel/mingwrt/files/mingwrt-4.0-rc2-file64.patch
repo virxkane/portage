@@ -1,0 +1,50 @@
+This patch found in smplayer project (http://sourceforge.net/projects/smplayer/)
+http://smplayer.svn.sourceforge.net/viewvc/smplayer/mplayer-builds/patches/file64_mingw.diff?view=log
+Updated for version 4.0 by Chernov A.A. <valexlin@gmail.com>
+
+diff -urBb mingwrt-4.0-1-mingw32-rc-2-src-orig/include/io.h mingwrt-4.0-1-mingw32-rc-2-src/include/io.h
+--- mingwrt-4.0-1-mingw32-rc-2-src-orig/include/io.h	2013-02-26 00:37:52 +0400
++++ mingwrt-4.0-1-mingw32-rc-2-src/include/io.h	2013-04-26 09:54:12 +0400
+@@ -429,6 +429,10 @@
+ 
+ #endif	/* Not _NO_OLDNAMES */
+ 
++#if defined _FILE_OFFSET_BITS && _FILE_OFFSET_BITS == 64 && !defined _MINGWRT_NO_UNSAFE_REDEFINITION
++#define lseek _lseeki64
++#endif
++
+ #ifdef	__cplusplus
+ }
+ #endif
+diff -urBb mingwrt-4.0-1-mingw32-rc-2-src-orig/include/sys/stat.h mingwrt-4.0-1-mingw32-rc-2-src/include/sys/stat.h
+--- mingwrt-4.0-1-mingw32-rc-2-src-orig/include/sys/stat.h	2013-01-08 01:14:57 +0400
++++ mingwrt-4.0-1-mingw32-rc-2-src/include/sys/stat.h	2013-04-26 09:54:12 +0400
+@@ -296,6 +296,13 @@
+ #define _WSTAT_DEFINED
+ #endif /* _WSTAT_DEFIND */
+ 
++#if defined _FILE_OFFSET_BITS && _FILE_OFFSET_BITS == 64 && !defined _MINGWRT_NO_UNSAFE_REDEFINITION
++#undef stat
++#define stat  _stati64
++#define fstat _fstati64
++#define wstat _wstati64
++#endif
++
+ #ifdef	__cplusplus
+ }
+ #endif
+diff -urBb mingwrt-4.0-1-mingw32-rc-2-src-orig/include/sys/types.h mingwrt-4.0-1-mingw32-rc-2-src/include/sys/types.h
+--- mingwrt-4.0-1-mingw32-rc-2-src-orig/include/sys/types.h	2013-01-08 01:14:57 +0400
++++ mingwrt-4.0-1-mingw32-rc-2-src/include/sys/types.h	2013-04-26 10:09:48 +0400
+@@ -60,7 +60,11 @@
+ 
+ #ifndef	_OFF_T_
+ #define	_OFF_T_
++#if defined _FILE_OFFSET_BITS && _FILE_OFFSET_BITS == 64 && !defined _MINGWRT_NO_UNSAFE_REDEFINITION
++typedef long long _off_t;
++#else
+ typedef long _off_t;
++#endif
+ typedef _off_t	off_t;
+ #endif	/* Not _OFF_T_ */
+ 

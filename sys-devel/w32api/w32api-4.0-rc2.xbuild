@@ -1,0 +1,15 @@
+# Copyright 2010-2013 Chernov A.A.
+# Distributed under the terms of the GNU General Public License v2
+
+DESCRIPTION="Free headers and libraries for the Win32 API"
+
+HOMEPAGE="http://www.mingw.org/"
+
+LICENSE="as-is"
+
+#SRC_URI="http://downloads.sourceforge.net/mingw/${PN}-4.0-1-mingw32-rc-2-src.tar.lzma"
+
+src_unpack()
+{
+	eerror "w32api package now obsoleted, minwrt already have w32api contents!"
+}
