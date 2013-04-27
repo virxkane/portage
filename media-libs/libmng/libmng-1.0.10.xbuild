@@ -1,4 +1,4 @@
-# Copyright 2010-2012 Chernov A.A.
+# Copyright 2010-2013 Chernov A.A.
 # Distributed under the terms of the GNU General Public License v2
 
 DESCRIPTION="Multiple Image Networkgraphics lib (animated png's)"
@@ -16,7 +16,7 @@ SRC_URI="http://downloads.sourceforge.net/${PN}/${P}.tar.gz"
 
 src_prepare()
 {
-	cp -pv makefiles/configure.in .
+	cp -pv makefiles/configure.in configure.ac
 	cp -pv makefiles/Makefile.am .
 	cat Makefile.am | sed -e 's/libmng_la_LDFLAGS\ =\ /libmng_la_LDFLAGS\ =\ -no-undefined\ /' > Makefile.am.new
 	mv -f Makefile.am.new Makefile.am
