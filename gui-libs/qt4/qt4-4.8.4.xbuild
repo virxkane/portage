@@ -64,7 +64,7 @@ src_install()
 		eerror "make install failed!"
 	fi
 	# copy private headers
-	// to-do
+	# to-do
 
 	local _prefix="${INSTDIR}${PREFIX}"
 	local prefix_w=`posix_w32path "${PREFIX}"`

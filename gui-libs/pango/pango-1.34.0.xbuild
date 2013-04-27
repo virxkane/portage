@@ -1,0 +1,27 @@
+# Copyright 2010-2013 Chernov A.A.
+# Distributed under the terms of the GNU General Public License v2
+
+DESCRIPTION="Internationalized text layout and rendering library"
+
+HOMEPAGE="http://www.pango.org/"
+
+LICENSE="LGPL-2 FTL"
+
+#   dependencies:
+# perl (msys)
+# dev-libs/glib
+# gui-libs/cairo
+
+SRC_URI="http://ftp.gnome.org/pub/GNOME/sources/${PN}/1.34/${P}.tar.xz"
+
+src_configure()
+{
+	econf --enable-shared --disable-gtk-doc
+}
+
+pkg_postinst()
+{
+	einfo "enum pango modules"
+	mkdir -pv ${PREFIX}/etc/pango
+	${PREFIX}/bin/pango-querymodules > ${PREFIX}/etc/pango/pango.modules
+}
