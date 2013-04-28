@@ -1,4 +1,4 @@
-# Copyright 2010 Chernov A.A.
+# Copyright 2010-2013 Chernov A.A.
 # Distributed under the terms of the GNU General Public License v2
 
 DESCRIPTION="A library that handles the decoding of sound file formats"
@@ -19,11 +19,10 @@ LICENSE="LGPL-2.1"
 # modplug
 # smpeg
 
-MY_NAME="SDL_sound"
-SRC_URI="http://icculus.org/SDL_sound/downloads/${MY_NAME}-${PV}.tar.gz"
+MY_PN="SDL_sound"
+SRC_URI="http://icculus.org/SDL_sound/downloads/${MY_PN}-${PV}.tar.gz"
 
-SOURCES_DIR="${MY_NAME}-${PV}"
-
+SOURCES_DIR="${MY_PN}-${PV}"
 
 src_prepare()
 {

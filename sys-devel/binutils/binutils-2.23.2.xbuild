@@ -8,12 +8,9 @@ HOMEPAGE="http://www.gnu.org/software/binutils/"
 LICENSE="GPL-3 LGPL-3"
 
 #   dependencies:
-# bison
-# flex
+# bison (msys)
+# flex (msys)
 # sys-libs/zlib
-#   optional
-# dev-libs/ppl
-# dev-libs/cloog-ppl
 
 SRC_URI="http://ftp.gnu.org/gnu/${PN}/${P}.tar.bz2"
 

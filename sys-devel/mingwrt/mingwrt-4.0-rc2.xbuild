@@ -21,7 +21,7 @@ src_prepare()
 		eerror "This xbuild only for i686-pc-mingw32 platform!"
 		;;
 	esac
-	#epatch "${PN}-4.0-rc2-file64.patch"
+	epatch "${PN}-4.0-rc2-file64.patch"
 }
 
 src_configure()
