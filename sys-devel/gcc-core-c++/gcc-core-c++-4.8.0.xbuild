@@ -15,11 +15,11 @@ LICENSE="GPL-3 LGPL-3 || ( GPL-3 libgcc libstdc++ ) FDL-1.2"
 # perl (msys)
 # >=sys-devel/mingw-w64-headers-3.0.beta0.5752
 # >=sys-devel/mingw-w64-crt-3.0.beta0.5752
+# sys-devel/binutils
 # >=dev-libs/gmp-4.3.2
 # >=dev-util/mpfr-2.4.2
 # >=dev-libs/mpc-0.8.1
-# sys-devel/binutils
-#   optional:
+# dev-libs/pthreads-win32 (for gomp)
 # sys-devel/libiconv
 # >=dev-libs/cloog-0.17
 # >=dev-libs/isl-0.10
