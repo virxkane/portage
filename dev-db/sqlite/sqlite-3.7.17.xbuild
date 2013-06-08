@@ -1,0 +1,29 @@
+# Copyright 2010-2013 Chernov A.A.
+# Distributed under the terms of the GNU General Public License v3
+
+DESCRIPTION="an SQL Database Engine in a C Library"
+
+HOMEPAGE="http://www.sqlite.org/"
+
+LICENSE="as-is"
+
+#   dependents
+# dev-libs/pthreads-win32
+
+SVER="3071700"
+
+SRC_URI="http://www.sqlite.org/${PN}-autoconf-${SVER}.tar.gz"
+
+SOURCES_DIR="${PN}-autoconf-${SVER}"
+
+src_configure()
+{
+	econf --enable-shared --enable-static \
+		--disable-readline --enable-threadsafe --enable-dynamic-extensions
+}
+
+src_compile()
+{
+	#emake -j1
+	emake
+}
