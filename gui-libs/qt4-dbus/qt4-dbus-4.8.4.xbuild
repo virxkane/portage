@@ -137,4 +137,6 @@ src_install()
 		fi
 		cd ${pwd1}
 	done
+
+	rm -fv ${INSTDIR}${PREFIX}/lib/qt4/*.dll
 }
