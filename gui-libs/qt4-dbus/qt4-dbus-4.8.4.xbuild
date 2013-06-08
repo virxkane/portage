@@ -112,7 +112,6 @@ src_compile()
 	for dir in ${QT4_TARGET_DIRECTORIES}
 	do
 		cd ${dir} || eerror "Can't cd to dir ${dir}"
-		qmake
 		emake
 		cd ${pwd1}
 	done
