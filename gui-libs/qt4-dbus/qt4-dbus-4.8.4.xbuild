@@ -73,19 +73,6 @@ src_configure()
 	
 	local _prefix_w=`posix_w32path .`
 
-#		--bindir="${_prefix_w}/bin" \
-#		--libdir="${_prefix_w}/lib/qt4" \
-#		--docdir="${_prefix_w}/share/doc/qt-${PV}" \
-#		--headerdir="${_prefix_w}/include/qt4" \
-#		--plugindir="${_prefix_w}/lib/qt4/plugins" \
-#		--importdir="${_prefix_w}/lib/qt4/imports" \
-#		--datadir="${_prefix_w}/share/qt4" \
-#		--translationdir="${_prefix_w}/share/qt4/translations" \
-#		--examplesdir="${_prefix_w}/share/qt4/examples" \
-#		--demosdir="${_prefix_w}/share/qt4/demos" \
-
-	#qt4-pathfix --prefix="${_prefix_w}" "./bin/qmake.exe"
-
 	./configure.exe -prefix ${_prefix} -bindir "${_prefix}/bin" -libdir "${_prefix}/lib/qt4" \
 		-docdir "${_prefix}/share/doc/qt-${PV}" -headerdir "${_prefix}/include/qt4" \
 		-plugindir "${_prefix}/lib/qt4/plugins" -importdir "${_prefix}/lib/qt4/imports" \
