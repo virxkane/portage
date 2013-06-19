@@ -18,11 +18,7 @@ LICENSE="POSTGRESQL"
 BASENAM="postgresql"
 SRC_URI="http://wwwmaster.postgresql.org/download/mirrors-ftp/source/v${PV}/${BASENAM}-${PV}.tar.bz2"
 
-src_unpack()
-{
-	unpack "${BASENAM}-${PV}.tar.bz2"
-	cd "${BASENAM}-${PV}"
-}
+SOURCES_DIR="${BASENAM}-${PV}"
 
 #src_prepare()
 #{
