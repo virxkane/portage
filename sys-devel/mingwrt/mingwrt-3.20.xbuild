@@ -11,6 +11,8 @@ W32APIVER="3.17-2"
 SRC_URI="http://downloads.sourceforge.net/mingw/${P}-mingw32-src.tar.gz
 	http://downloads.sourceforge.net/mingw/w32api-${W32APIVER}-mingw32-src.tar.lzma"
 
+SOURCES_DIR="${P}-mingw32"
+
 #convert_gas_comment()
 #{
 #	list=`find . -name *.[sS]`

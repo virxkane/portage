@@ -9,11 +9,7 @@ LICENSE="as-is"
 
 SRC_URI="http://downloads.sourceforge.net/mingw/${P}-2-mingw32-src.tar.lzma"
 
-src_unpack()
-{
-	unpack ${A}
-	cd "${P}-2-mingw32"
-}
+SOURCES_DIR="${P}-2-mingw32"
 
 src_prepare()
 {
