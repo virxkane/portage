@@ -32,7 +32,7 @@ src_prepare()
 # cairo have thread code for Win32 then pthread not needed here.
 # --enable-script work only in nix platform: used dlopen() in util/cairo-sphinx
 # --enable-gl require opengl-ext with additional OpenGL (v1.3) symbols like
-# glActiveTexture() which now ommited in mingw-w64.
+# glActiveTexture() which now ommited in mingw/mingw-w64.
 src_configure()
 {
 	# MinGW don't have POSIX function 'ffs' but gcc have internal implementation.
