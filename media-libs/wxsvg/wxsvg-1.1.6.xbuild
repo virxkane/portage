@@ -11,9 +11,10 @@ LICENSE="wxWinLL-3"
 # >=gui-libs/wxWidgets-2.6.3
 # dev-util/pkg-config
 # gui-libs/cairo
+# gui-libs/pango
 # dev-libs/expat
 #   optional
-# media-video/ffmpeg
+# #media-video/ffmpeg
 
 SRC_URI="http://downloads.sourceforge.net/${PN}/${P}.tar.bz2"
 
@@ -33,5 +34,5 @@ src_configure()
 {
 	export LDFLAGS="-Wl,--enable-auto-import"
 	econf --enable-shared --enable-static \
-		--enable-render=cairo --enable-ffmpeg
+		--enable-render=cairo --disable-ffmpeg
 }
