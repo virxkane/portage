@@ -15,6 +15,7 @@ LICENSE="GPL-2"
 # dui-libs/cairo
 # dev-libs/glib
 # gui-libs/gtk+
+# gui-libs/qt4
 # sys-devel/libiconv
 # =media-libs/openjpeg-1.5*
 # sys-libs/zlib
