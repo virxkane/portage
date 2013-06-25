@@ -1,4 +1,4 @@
-# Copyright 2010-2012 Chernov A.A.
+# Copyright 2010-2013 Chernov A.A.
 # Distributed under the terms of the GNU General Public License v2
 
 DESCRIPTION="Improved make"
@@ -14,11 +14,7 @@ RESTRICT="mirror"
 # dependencies:
 #  none?
 
-src_unpack()
-{
-	unpack "${A}"
-	cd "${P}-cvs-20090821-PCZERKAS/${PN}"
-}
+SOURCES_DIR="${P}-cvs-20090821-PCZERKAS/${PN}"
 
 #src_prepare()
 #{
