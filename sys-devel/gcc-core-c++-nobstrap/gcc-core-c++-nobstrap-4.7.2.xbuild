@@ -27,6 +27,7 @@ SRC_URI="http://ftp.gnu.org/gnu/gcc/${BASENAM}-${PV}/${BASENAM}-${PV}.tar.bz2"
 #RESTRICT="fetch"
 
 SOURCES_DIR="${BASENAM}-${PV}"
+BUILD_IN_SEPARATE_DIR=yes
 
 src_prepare()
 {
@@ -38,7 +39,6 @@ src_configure()
 {
 	unset CFLAGS
 	unset CXXFLAGS
-	BUILD_IN_SEPARATE_DIR=yes
 
 	case ${CHOST} in
 	x86_64-w64-*)

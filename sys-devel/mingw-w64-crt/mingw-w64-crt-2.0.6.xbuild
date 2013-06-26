@@ -17,6 +17,8 @@ SRC_URI="http://downloads.sourceforge.net/mingw-w64/${BASENAM}-v${PV}.tar.gz"
 
 SOURCES_DIR="${BASENAM}-v${PV}/${BASENAM}-crt"
 
+BUILD_IN_SEPARATE_DIR=yes
+
 src_prepare()
 {
 	case ${CHOST} in
@@ -31,7 +33,6 @@ src_prepare()
 
 src_configure()
 {
-	BUILD_IN_SEPARATE_DIR=yes
 	econf --disable-lib32
 }
 

@@ -26,6 +26,7 @@ SRC_URI="${BASENAM}-core-${PV}.tar.xz ${BASENAM}-g++-${PV}.tar.xz"
 RESTRICT="fetch"
 
 SOURCES_DIR="${BASENAM}-${PV}"
+BUILD_IN_SEPARATE_DIR=yes
 
 src_prepare()
 {
@@ -42,7 +43,6 @@ src_configure()
 {
 	unset CFLAGS
 	unset CXXFLAGS
-	BUILD_IN_SEPARATE_DIR=yes
 	local econfp=
 	case ${CHOST} in
 	x86_64-w64-*)

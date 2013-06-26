@@ -16,6 +16,7 @@ BASENAM="mingw-w64"
 SRC_URI="http://downloads.sourceforge.net/mingw-w64/${BASENAM}-v${PV}.tar.gz"
 
 SOURCES_DIR="${BASENAM}-v${PV}/${BASENAM}-headers"
+BUILD_IN_SEPARATE_DIR=yes
 
 src_prepare()
 {
@@ -32,7 +33,6 @@ src_prepare()
 
 src_configure()
 {
-	BUILD_IN_SEPARATE_DIR=yes
 	econf
 }
 

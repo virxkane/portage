@@ -16,6 +16,7 @@ BASENAM="mingw-w64"
 SRC_URI="http://downloads.sourceforge.net/mingwportage/${BASENAM}-v${PV}.tar.xz"
 
 SOURCES_DIR="${BASENAM}-v${PV}/${BASENAM}-headers"
+BUILD_IN_SEPARATE_DIR=yes
 
 src_prepare()
 {
@@ -31,7 +32,6 @@ src_prepare()
 
 src_configure()
 {
-	BUILD_IN_SEPARATE_DIR=yes
 	# as writed in docs: https://sourceforge.net/apps/trac/mingw-w64/wiki/Native%20Win64%20compiler
 	# we must redefined PREFIX:
 	PREFIX=${PREFIX}/${CHOST} \
