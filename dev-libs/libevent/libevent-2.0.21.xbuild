@@ -1,0 +1,26 @@
+# Copyright 2013 Chernov A.A.
+# Distributed under the terms of the GNU General Public License v2
+
+MY_P="${P}-stable"
+
+DESCRIPTION="A library to execute a function when a specific event occurs on a file descriptor"
+HOMEPAGE="http://libevent.org/"
+SRC_URI="http://github.com/downloads/${PN}/${PN}/${MY_P}.tar.gz"
+
+LICENSE="BSD"
+
+#   dependecies:
+# dev-libs/openssl
+
+SOURCES_DIR=${MY_P}
+
+src_prepare() {
+	# don't waste time building tests/samples
+	sed -i \
+		-e 's|^\(SUBDIRS =.*\)sample test\(.*\)$|\1\2|' \
+		Makefile.in || die "sed Makefile.in failed"
+}
+
+src_configure() {
+	econf --enable-shared --enable-static --enable-openssl
+}
