@@ -11,5 +11,6 @@ SRC_URI="http://ftp.gnu.org/pub/gnu/${PN}/${P}.tar.gz"
 
 src_configure()
 {
+	export CFLAGS="$CFLAGS -D_MINGWRT_NO_UNSAFE_REDEFINITION"
 	econf --enable-shared --enable-static --disable-nls
 }
