@@ -7,8 +7,12 @@ HOMEPAGE="http://gcc.gnu.org/"
 
 LICENSE="GPL-3 LGPL-3 || ( GPL-3 libgcc libstdc++ ) FDL-1.2"
 
+# For now this xbuild (designed for bootstraping) not worked for mingw-w64 :(
+# Please use `gcc-core-c++-nobstrap' instead or fix this file and send to me (http://sourceforge.net/p/mingwportage/).
+
 #   dependecies:
 # bison (msys)
+# perl (msys)
 # >=sys-devel/mingw-w64-headers-3.0.0
 # >=sys-devel/mingw-w64-crt-3.0.0
 # sys-devel/binutils
@@ -20,7 +24,7 @@ LICENSE="GPL-3 LGPL-3 || ( GPL-3 libgcc libstdc++ ) FDL-1.2"
 # >=dev-libs/cloog-0.17
 # >=dev-libs/isl-0.10
 # >=dev-libs/libelf-0.8.12
- 
+
 BASENAM="gcc"
 PATCHED_VERSION="4.8.0"
 SRC_URI="http://ftp.gnu.org/gnu/gcc/${BASENAM}-${PV}/${BASENAM}-${PV}.tar.bz2"
@@ -33,8 +37,13 @@ BUILD_IN_SEPARATE_DIR=yes
 
 src_prepare()
 {
-	#epatch "${BASENAM}-${PATCHED_VERSION}-incpath.patch"
 	epatch "${BASENAM}-${PATCHED_VERSION}-drop-texinfo.patch"
+	#epatch "${BASENAM}-${PV}-fpermissive-w64.patch"
+	
+	#mkdir -p gcc/winsup/mingw/include
+	#cd gcc/winsup/mingw/include || eend "Can't cd to winsup/mingw/include"
+	#cp -pr "${PREFIX}"/x86_64-w64-mingw32/include/* .
+	#cd ../../../..
 }
 
 src_configure()
@@ -42,8 +51,10 @@ src_configure()
 	unset CFLAGS
 	unset CXXFLAGS
 
+	local econfp=
 	case ${CHOST} in
 	x86_64-w64-*)
+		#econfp="--with-sysroot=/mingw --enable-sjlj-exceptions --without-dwarf2"
 		econfp="--enable-sjlj-exceptions --without-dwarf2"
 		;;
 	*)
@@ -57,9 +68,21 @@ src_configure()
 		--with-gmp --with-mpc --with-cloog --with-libelf \
 		--with-system-zlib --disable-werror \
 		--enable-languages=c,c++ \
-		--disable-bootstrap --disable-nls --disable-multilib \
+		--enable-bootstrap --disable-nls --disable-multilib \
 		${econfp}
 }
+
+#src_compile()
+#{
+#	case ${CHOST} in
+#	x86_64-w64-*)
+#		emake BOOT_CFLAGS=\"-fpermissive -g -O2\" STAGE1_TFLAGS=\"-I${PREFIX}/include\"
+#		;;
+#	*)
+#		emake
+#		;;
+#	esac
+#}
 
 src_install()
 {
@@ -72,6 +95,7 @@ src_install()
 		;;
 	esac
 }
+
 
 pkg_postinst()
 {
