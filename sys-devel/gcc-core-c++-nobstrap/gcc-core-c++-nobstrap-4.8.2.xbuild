@@ -1,0 +1,91 @@
+# Copyright 2010-2013 Chernov A.A.
+# Distributed under the terms of the GNU General Public License v2
+
+DESCRIPTION="The GNU Compiler Collection. Includes C/C++"
+
+HOMEPAGE="http://gcc.gnu.org/"
+
+LICENSE="GPL-3 LGPL-3 || ( GPL-3 libgcc libstdc++ ) FDL-1.2"
+
+#   dependecies:
+# bison (msys)
+# >=sys-devel/mingw-w64-headers-3.0.beta0.5752
+# >=sys-devel/mingw-w64-crt-3.0.beta0.5752
+# sys-devel/binutils
+# >=dev-libs/gmp-4.3.2
+# >=dev-util/mpfr-2.4.2
+# >=dev-libs/mpc-0.8.1
+# dev-libs/pthreads-win32 (for gomp)
+# sys-devel/libiconv
+# >=dev-libs/cloog-0.17
+# >=dev-libs/isl-0.10
+# >=dev-libs/libelf-0.8.12
+ 
+BASENAM="gcc"
+PATCHED_VERSION="4.8.0"
+SRC_URI="http://ftp.gnu.org/gnu/gcc/${BASENAM}-${PV}/${BASENAM}-${PV}.tar.bz2"
+#SRC_URI="${BASENAM}-core-${PV}.tar.xz ${BASENAM}-g++-${PV}.tar.xz"
+
+#RESTRICT="fetch"
+
+SOURCES_DIR="${BASENAM}-${PV}"
+BUILD_IN_SEPARATE_DIR=yes
+
+src_prepare()
+{
+	#epatch "${BASENAM}-${PATCHED_VERSION}-incpath.patch"
+	epatch "${BASENAM}-${PATCHED_VERSION}-drop-texinfo.patch"
+}
+
+src_configure()
+{
+	unset CFLAGS
+	unset CXXFLAGS
+
+	case ${CHOST} in
+	x86_64-w64-*)
+		econfp="--enable-sjlj-exceptions --without-dwarf2"
+		;;
+	*)
+		econfp="--disable-sjlj-exceptions --with-dwarf2"
+		;;
+	esac
+
+	econf --enable-shared \
+		--disable-win32-registry --enable-version-specific-runtime-libs \
+		--disable-debug --enable-threads=win32 --enable-libgomp --enable-lto \
+		--with-gmp --with-mpc --with-cloog --with-libelf \
+		--with-system-zlib --disable-werror \
+		--enable-languages=c,c++ \
+		--disable-bootstrap --disable-nls --disable-multilib \
+		${econfp}
+}
+
+src_install()
+{
+	emake_install
+	cp -pv ${INSTDIR}${PREFIX}/bin/gcc.exe ${INSTDIR}${PREFIX}/bin/cc.exe
+	case ${CHOST} in
+	x86_64-w64-*)
+		mv -fv ${INSTDIR}${PREFIX}/lib/gcc/${CHOST}/lib/libgcc_s.a \
+				${INSTDIR}${PREFIX}/lib/gcc/${CHOST}/${PV}/
+		;;
+	esac
+}
+
+pkg_postinst()
+{
+	einfo "Fix specs file..."
+	local targspecs=`dirname \`gcc --print-libgcc-file-name\``/specs
+	
+	local specs="${TMPDIR}/specs"
+	local prefix_w=`posix_w32path "${PREFIX}"`
+
+	echo "*mingw_prefix:" > ${specs}
+	echo ${prefix_w} >> ${specs}
+	echo "" >> ${specs}
+
+	gcc -dumpspecs >> ${specs}
+
+	sed ':a;N;$!ba;s/*cc1plus:\n\n/*cc1plus:\n\-isystem\ \%(mingw_prefix)\/include\n/' ${specs} > ${targspecs}
+}
