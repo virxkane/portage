@@ -1,0 +1,34 @@
+This patch found in smplayer project (http://sourceforge.net/projects/smplayer/)
+http://smplayer.svn.sourceforge.net/viewvc/smplayer/mplayer-builds/patches/file64_mingw.diff?view=log
+Updated for version 4.0 by Chernov A.A. <valexlin@gmail.com>
+
+diff -urBb mingwrt-4.0.3-1-mingw32-src-orig/include/io.h mingwrt-4.0.3-1-mingw32-src/include/io.h
+--- mingwrt-4.0.3-1-mingw32-src-orig/include/io.h	2013-09-18 21:14:50 +0400
++++ mingwrt-4.0.3-1-mingw32-src/include/io.h	2014-03-17 23:28:25 +0400
+@@ -539,6 +539,10 @@
+ 
+ #endif	/* Not _NO_OLDNAMES */
+ 
++#if defined _FILE_OFFSET_BITS && _FILE_OFFSET_BITS == 64 && !defined _MINGWRT_NO_UNSAFE_REDEFINITION
++#define lseek _lseeki64
++#endif
++
+ #ifdef	__cplusplus
+ }
+ #endif
+Only in mingwrt-4.0.3-1-mingw32-src/include: io.h.orig
+diff -urBb mingwrt-4.0.3-1-mingw32-src-orig/include/sys/types.h mingwrt-4.0.3-1-mingw32-src/include/sys/types.h
+--- mingwrt-4.0.3-1-mingw32-src-orig/include/sys/types.h	2013-09-18 21:14:51 +0400
++++ mingwrt-4.0.3-1-mingw32-src/include/sys/types.h	2014-03-17 23:31:23 +0400
+@@ -65,7 +65,11 @@
+ 
+ #ifndef	_OFF_T_
+ #define	_OFF_T_
++#if defined _FILE_OFFSET_BITS && _FILE_OFFSET_BITS == 64 && !defined _MINGWRT_NO_UNSAFE_REDEFINITION
++typedef long long _off_t;
++#else
+ typedef long _off_t;
++#fi
+ #ifndef __STRICT_ANSI__
+ typedef _off_t	off_t;
+ #endif /* __STRICT_ANSI__ */

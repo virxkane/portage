@@ -1,4 +1,4 @@
-# Copyright 2010-2012 Chernov A.A.
+# Copyright 2010-2014 Chernov A.A.
 # Distributed under the terms of the GNU General Public License v2
 
 DESCRIPTION="Used to create autoconfiguration files"
@@ -17,4 +17,12 @@ SRC_URI="http://ftp.gnu.org/gnu/${PN}/${P}.tar.bz2"
 src_configure()
 {
 	econf
+}
+
+src_install()
+{
+	emake_install
+	cp -pv ${INSTDIR}${PREFIX}/bin/autom4te ${INSTDIR}${PREFIX}/bin/autom4te-${PV}
+	cp -pv ${INSTDIR}${PREFIX}/bin/autoconf ${INSTDIR}${PREFIX}/bin/autoconf-${PV}
+	cp -pv ${INSTDIR}${PREFIX}/bin/autoheader ${INSTDIR}${PREFIX}/bin/autoheader-${PV}
 }

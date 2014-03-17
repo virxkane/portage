@@ -1,0 +1,11 @@
+diff -urBb mingwrt-4.0.3-1-mingw32-src-orig/Makefile.in mingwrt-4.0.3-1-mingw32-src/Makefile.in
+--- mingwrt-4.0.3-1-mingw32-src-orig/Makefile.in	2013-09-18 21:14:49 +0400
++++ mingwrt-4.0.3-1-mingw32-src/Makefile.in	2014-03-18 00:00:39 +0400
+@@ -967,6 +967,7 @@
+ 	done
+ 	for I in `find $(top_srcdir)/misc/include/* -type d`; do \
+ 	  J=`basename $$I`; \
++	  $(mkinstalldirs) $(DESTDIR)$(includedir)/$$J ; \
+ 	  for INC in $$I/*.h; do \
+ 	    $(INSTALL_DATA) $$INC $(DESTDIR)$(includedir)/$$J ; \
+ 	  done \
