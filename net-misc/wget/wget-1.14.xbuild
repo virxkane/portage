@@ -1,4 +1,4 @@
-# Copyright 2010-2012 Chernov A.A.
+# Copyright 2010-2014 Chernov A.A.
 # Distributed under the terms of the GNU General Public License v2
 
 DESCRIPTION="Network utility to retrieve files from the WWW"
@@ -17,6 +17,7 @@ src_prepare()
 {
 	epatch "${P}-mingw32-openssl.patch"
 	AT_M4DIR="m4" eautoreconf
+	epatch "${P}-gnulibup.patch"
 }
 
 src_configure()
