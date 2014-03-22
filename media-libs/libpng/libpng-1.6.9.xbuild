@@ -1,0 +1,29 @@
+# Copyright 2010-2014 Chernov A.A.
+# Distributed under the terms of the GNU General Public License v2
+
+DESCRIPTION="Portable Network Graphics library"
+
+HOMEPAGE="http://www.libpng.org/"
+
+LICENSE="as-is"
+
+#   dependencies:
+# sys-libs/zlib
+
+SRC_URI="http://downloads.sourceforge.net/${PN}/${P}.tar.xz"
+
+#src_prepare()
+#{
+#	local ld_ver_maj=`ld --version | head -n 1 | sed -e 's/^.*\ \([0-9]\)\.[0-9]*.*$/\1/'`
+#	local ld_ver_min=`ld --version | head -n 1 | sed -e 's/^.*\ [0-9]\.\([0-9]*\).*$/\1/'`
+#	local ld_ver=`expr ${ld_ver_maj} \* 100 + ${ld_ver_min}`
+#	if [ ${ld_ver} -ge 220 ]
+#	then
+#		epatch ${PN}-1.2.42-binutils-2.20.patch
+#	fi
+#}
+
+src_prepare()
+{
+	epatch "${P}-apng.patch"
+}
