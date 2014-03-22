@@ -1,0 +1,37 @@
+# Copyright 2010-2014 Chernov A.A.
+# Distributed under the terms of the GNU General Public License v2
+
+DESCRIPTION="Network utility to retrieve files from the WWW"
+
+HOMEPAGE="http://www.gnu.org/software/wget/"
+
+LICENSE="GPL-3"
+
+#   dependencies:
+# perl (msys)
+# dev-libs/openssl
+
+SRC_URI="http://ftp.gnu.org/gnu/${PN}/${P}.tar.xz"
+
+src_prepare()
+{
+	epatch "${P}-mingw32-openssl.patch"
+	AT_M4DIR="m4" eautoreconf	
+}
+
+src_configure()
+{
+	econf --disable-debug --disable-nls --with-ssl=openssl \
+		--enable-threads=windows --disable-ipv6
+
+	# in mingwrt-4.x libmsvcrt.a contain all symbols for all
+	# Windows version, we disable some of this to provide work 
+	# in Windows XP.
+	case ${CHOST} in
+	i[4-6]86-pc-mingw32)
+		echo "#undef HAVE__FSEEKI64" >> src/config.h
+		echo "#undef HAVE__FTELLI64" >> src/config.h
+		echo "#undef HAVE_MSVC_INVALID_PARAMETER_HANDLER" >> src/config.h
+		;;
+	esac
+}
