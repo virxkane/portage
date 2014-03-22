@@ -1,0 +1,16 @@
+# Copyright 2010-2014 Chernov A.A.
+# Distributed under the terms of the GNU General Public License v2
+
+DESCRIPTION="A Client that groks URLs"
+
+HOMEPAGE="http://curl.haxx.se/"
+
+LICENSE="MIT"
+
+#   dependencies:
+# dev-util/pkg-config
+#   optional:
+# sys-libs/zlib
+# dev-libs/openssl
+
+SRC_URI="http://curl.haxx.se/download/${P}.tar.lzma"
