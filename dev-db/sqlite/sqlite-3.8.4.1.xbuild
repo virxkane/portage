@@ -1,4 +1,4 @@
-# Copyright 2010-2012 Chernov A.A.
+# Copyright 2010-2014 Chernov A.A.
 # Distributed under the terms of the GNU General Public License v3
 
 DESCRIPTION="an SQL Database Engine in a C Library"
@@ -10,7 +10,7 @@ LICENSE="as-is"
 #   dependents
 # dev-libs/pthreads-win32
 
-SVER="3071300"
+SVER="3080401"
 
 SRC_URI="http://www.sqlite.org/${PN}-autoconf-${SVER}.tar.gz"
 
