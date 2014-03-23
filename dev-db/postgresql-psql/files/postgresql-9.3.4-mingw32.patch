@@ -1,0 +1,14 @@
+Only in postgresql-9.3.4/src/bin/pg_config: win32ver.rc
+diff -urBb postgresql-9.3.4-orig/src/include/port.h postgresql-9.3.4/src/include/port.h
+--- postgresql-9.3.4-orig/src/include/port.h	2014-03-17 23:35:47 +0400
++++ postgresql-9.3.4/src/include/port.h	2014-03-23 08:26:44 +0400
+@@ -311,6 +311,9 @@
+  */
+ #if defined(WIN32) && !defined(__CYGWIN__) && !defined(UNSAFE_STAT_OK)
+ #include <sys/stat.h>
++#ifdef stat
++#undef stat
++#endif
+ extern int	pgwin32_safestat(const char *path, struct stat * buf);
+ 
+ #define stat(a,b) pgwin32_safestat(a,b)
