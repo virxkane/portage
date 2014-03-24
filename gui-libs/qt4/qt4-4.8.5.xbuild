@@ -28,6 +28,11 @@ SRC_URI="http://releases.qt-project.org/qt4/source/${MY_P}.tar.gz"
 
 SOURCES_DIR="${MY_P}"
 
+src_prepare()
+{
+	epatch "${P}-mingw-w64-3.patch"
+}
+
 src_configure()
 {
 	local _prefix="${INSTDIR}${PREFIX}"
