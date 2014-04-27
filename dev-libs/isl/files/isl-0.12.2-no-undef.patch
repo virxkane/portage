@@ -1,0 +1,12 @@
+diff -urBb isl-0.12.2-orig/Makefile.am isl-0.12.2/Makefile.am
+--- isl-0.12.2-orig/Makefile.am	2014-01-12 14:15:28 +0400
++++ isl-0.12.2/Makefile.am	2014-04-27 11:18:55 +0400
+@@ -154,7 +154,7 @@
+ 	isl_sample_piplib.h \
+ 	isl_piplib.c
+ libisl_la_LIBADD = @PIPLIB_LIBS@ @GMP_LIBS@
+-libisl_la_LDFLAGS = -version-info @versioninfo@ \
++libisl_la_LDFLAGS = -no-undefined -version-info @versioninfo@ \
+ 	@PIPLIB_LDFLAGS@ @GMP_LDFLAGS@
+ libisl_la_CPPFLAGS = $(INCLUDES) @PIPLIB_CPPFLAGS@ @GMP_CPPFLAGS@
+ 
