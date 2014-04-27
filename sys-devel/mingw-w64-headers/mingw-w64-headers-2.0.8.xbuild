@@ -1,4 +1,4 @@
-# Copyright 2010-2013 Chernov A.A.
+# Copyright 2010-2014 Chernov A.A.
 # Distributed under the terms of the GNU General Public License v3
 
 DESCRIPTION="This is a sample skeleton xbuild file"
@@ -39,5 +39,5 @@ src_install()
 {
 	emake_install
 	# just copy
-	#ln -s ${INSTDIR}${PREFIX}/x86_64-w64-mingw32  ${INSTDIR}${PREFIX}/mingw
+	cp -pvr ${INSTDIR}${PREFIX}/x86_64-w64-mingw32 ${INSTDIR}${PREFIX}/mingw
 }

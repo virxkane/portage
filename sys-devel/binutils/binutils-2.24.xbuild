@@ -1,4 +1,4 @@
-# Copyright 2010-2013 Chernov A.A.
+# Copyright 2010-2014 Chernov A.A.
 # Distributed under the terms of the GNU General Public License v2
 
 DESCRIPTION="Tools necessary to build programs"
@@ -30,4 +30,14 @@ src_configure()
 		;;
 	esac
 	econf --disable-nls --disable-werror ${econfp}
+}
+
+src_install()
+{
+	emake_install
+	case ${CHOST} in
+	x86_64-w64-mingw32)
+		cp -pvr ${INSTDIR}${PREFIX}/x86_64-w64-mingw32 ${INSTDIR}${PREFIX}/mingw
+		;;
+	esac
 }

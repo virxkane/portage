@@ -36,8 +36,9 @@ src_configure()
 {
 	# as writed in docs: https://sourceforge.net/apps/trac/mingw-w64/wiki/Native%20Win64%20compiler
 	# we must redefined PREFIX:
+	PREFIX_S=${PREFIX}
 	PREFIX=${PREFIX}/${CHOST} \
-		econf --disable-lib32
+		econf --disable-lib32 --with-sysroot=${PREFIX_S}
 }
 
 src_compile()
@@ -47,8 +48,8 @@ src_compile()
 
 src_install()
 {
+	PREFIX=${PREFIX_S}
 	emake_install
 	# just copy
-	#ln -s ${INSTDIR}${PREFIX}/x86_64-w64-mingw32/lib ${INSTDIR}${PREFIX}/x86_64-w64-mingw32/lib64
-	#ln -s ${INSTDIR}${PREFIX}/x86_64-w64-mingw32  ${INSTDIR}${PREFIX}/mingw
+	cp -pvr ${INSTDIR}${PREFIX}/x86_64-w64-mingw32 ${INSTDIR}${PREFIX}/mingw
 }
