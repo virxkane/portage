@@ -1,7 +1,7 @@
 # Copyright 2010-2014 Chernov A.A.
 # Distributed under the terms of the GNU General Public License v3
 
-DESCRIPTION="This is a sample skeleton xbuild file"
+DESCRIPTION="Free Win64 system headers"
 
 HOMEPAGE="http://mingw-w64.sourceforge.net/"
 
