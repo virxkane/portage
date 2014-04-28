@@ -1,4 +1,4 @@
-# Copyright 2010-2012 Chernov A.A.
+# Copyright 2010-2014 Chernov A.A.
 # Distributed under the terms of the GNU General Public License v3
 
 DESCRIPTION="Open Source POSIX Threads for Win32"
@@ -10,6 +10,18 @@ LICENSE="LGPL"
 SRC_URI="ftp://sourceware.org/pub/${PN}/pthreads-w32-2-8-0-release.tar.gz"
 
 SOURCES_DIR="pthreads-w32-2-8-0-release"
+
+src_prepare()
+{
+	case ${CHOST} in
+	i686-pc-mingw32)
+		:
+		;;
+	*)
+		eerror "This xbuild only for i686-pc-mingw32 platform!"
+		;;
+	esac
+}
 
 src_configure()
 {
