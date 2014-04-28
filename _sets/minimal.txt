@@ -8,7 +8,7 @@ dev-util/mpfr
 dev-libs/mpc
 dev-libs/isl
 dev-libs/cloog
-dev-libs/pthreads-win32
+dev-libs/pthreads-win32 || winpthreads
 dev-libs/libelf
 sys-devel/gcc
 
@@ -17,3 +17,4 @@ net-misc/wget
 sys-devel/gdb
 sys-devel/autoconf
 sys-devel/automake
+sys-devel/libtool

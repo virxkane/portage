@@ -12,5 +12,5 @@ dev-util/mpfr
 dev-libs/mpc
 dev-libs/isl
 dev-libs/cloog
-dev-libs/pthreads-win32
+dev-libs/pthreads-win32 || winpthreads
 >=dev-libs/libelf-0.8.12
