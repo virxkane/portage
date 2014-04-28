@@ -21,21 +21,18 @@ LICENSE="GPL-3 LGPL-3 || ( GPL-3 libgcc libstdc++ ) FDL-1.2"
 # >=dev-libs/cloog-0.18.0
 # >=dev-libs/isl-0.12
 # >=dev-libs/libelf-0.8.12
- 
+
 BASENAM="gcc"
 PATCHED_VERSION="4.8.0"
 SRC_URI="http://ftp.gnu.org/gnu/gcc/${BASENAM}-${PV}/${BASENAM}-${PV}.tar.bz2"
-#SRC_URI="${BASENAM}-core-${PV}.tar.xz ${BASENAM}-g++-${PV}.tar.xz"
-
-#RESTRICT="fetch"
 
 SOURCES_DIR="${BASENAM}-${PV}"
 BUILD_IN_SEPARATE_DIR=yes
 
 src_prepare()
 {
-	#epatch "${BASENAM}-${PATCHED_VERSION}-incpath.patch"
 	epatch "${BASENAM}-${PATCHED_VERSION}-drop-texinfo.patch"
+	epatch "${BASENAM}-4.8.2-mingw-w64.patch"
 }
 
 src_configure()
@@ -43,9 +40,10 @@ src_configure()
 	unset CFLAGS
 	unset CXXFLAGS
 
+	local econfp=
 	case ${CHOST} in
 	x86_64-w64-*)
-		econfp="--enable-sjlj-exceptions --without-dwarf2"
+		econfp="--with-sysroot=${PREFIX} --target=x86_64-w64-mingw32 --enable-sjlj-exceptions --without-dwarf2"
 		;;
 	*)
 		econfp="--disable-sjlj-exceptions --with-dwarf2"
@@ -57,9 +55,22 @@ src_configure()
 		--disable-debug --enable-threads=win32 --enable-libgomp --enable-lto \
 		--with-gmp --with-mpc --with-cloog --with-libelf \
 		--with-system-zlib --disable-werror \
-		--enable-languages=c,c++ \
-		--disable-bootstrap --disable-nls --disable-multilib \
+		--enable-languages=c,c++ --enable-fully-dynamic-string \
+		--enable-bootstrap --disable-nls --disable-multilib \
 		${econfp}
+}
+
+src_compile()
+{
+	case ${CHOST} in
+	x86_64-w64-*)
+		emake CFLAGS_FOR_TARGET=\"-O2 -pipe -I${PREFIX}/include -L${PREFIX}/lib\" \
+				CXXFLAGS_FOR_TARGET=\"-O2 -pipe -I${PREFIX}/include -L${PREFIX}/lib\"
+		;;
+	*)
+		emake
+		;;
+	esac
 }
 
 src_install()
@@ -73,6 +84,7 @@ src_install()
 		;;
 	esac
 }
+
 
 pkg_postinst()
 {
