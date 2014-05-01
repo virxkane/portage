@@ -7,24 +7,30 @@ HOMEPAGE="http://gcc.gnu.org/"
 
 LICENSE="GPL-3 LGPL-3 || ( GPL-3 libgcc libstdc++ ) FDL-1.2"
 
+# For now this xbuild (designed for bootstraping) not worked for mingw-w64 :(
+# Please use `gcc-core-c++-nobstrap' instead or fix this file and send to me (http://sourceforge.net/p/mingwportage/).
+
 #   dependecies:
 # bison (msys)
 # perl (msys)
-# >=sys-devel/mingw-w64-headers-3.1.0
-# >=sys-devel/mingw-w64-crt-3.1.0
+# >=sys-devel/mingw-w64-headers-3.0.0
+# >=sys-devel/mingw-w64-crt-3.0.0
 # sys-devel/binutils
-# >=dev-libs/gmp-5.1.3
-# >=dev-util/mpfr-3.1.2
-# >=dev-libs/mpc-1.0.2
-# dev-libs/pthreads-win32 || dev-libs/winpthreads
+# >=dev-libs/gmp-4.3.2
+# >=dev-util/mpfr-2.4.2
+# >=dev-libs/mpc-0.8.1
+# dev-libs/pthreads-win32 (for gomp)
 # sys-devel/libiconv
-# >=dev-libs/cloog-0.18.0
-# >=dev-libs/isl-0.12
+# >=dev-libs/cloog-0.17
+# >=dev-libs/isl-0.10
 # >=dev-libs/libelf-0.8.12
 
 BASENAM="gcc"
 PATCHED_VERSION="4.8.0"
 SRC_URI="http://ftp.gnu.org/gnu/gcc/${BASENAM}-${PV}/${BASENAM}-${PV}.tar.bz2"
+#SRC_URI="${BASENAM}-core-${PV}.tar.xz ${BASENAM}-g++-${PV}.tar.xz"
+
+#RESTRICT="fetch"
 
 SOURCES_DIR="${BASENAM}-${PV}"
 BUILD_IN_SEPARATE_DIR=yes
@@ -32,7 +38,12 @@ BUILD_IN_SEPARATE_DIR=yes
 src_prepare()
 {
 	epatch "${BASENAM}-${PATCHED_VERSION}-drop-texinfo.patch"
-	epatch "${BASENAM}-4.8.2-mingw-w64.patch"
+	#epatch "${BASENAM}-${PV}-fpermissive-w64.patch"
+	
+	#mkdir -p gcc/winsup/mingw/include
+	#cd gcc/winsup/mingw/include || eend "Can't cd to winsup/mingw/include"
+	#cp -pr "${PREFIX}"/x86_64-w64-mingw32/include/* .
+	#cd ../../../..
 }
 
 src_configure()
@@ -43,7 +54,8 @@ src_configure()
 	local econfp=
 	case ${CHOST} in
 	x86_64-w64-*)
-		econfp="--with-sysroot=${PREFIX} --target=x86_64-w64-mingw32 --enable-sjlj-exceptions --without-dwarf2"
+		#econfp="--with-sysroot=/mingw --enable-sjlj-exceptions --without-dwarf2"
+		econfp="--enable-sjlj-exceptions --without-dwarf2"
 		;;
 	*)
 		econfp="--disable-sjlj-exceptions --with-dwarf2"
@@ -55,23 +67,22 @@ src_configure()
 		--disable-debug --enable-threads=win32 --enable-libgomp --enable-lto \
 		--with-gmp --with-mpc --with-cloog --with-libelf \
 		--with-system-zlib --disable-werror \
-		--enable-languages=c,c++ --enable-fully-dynamic-string \
+		--enable-languages=c,c++ \
 		--enable-bootstrap --disable-nls --disable-multilib \
 		${econfp}
 }
 
-src_compile()
-{
-	case ${CHOST} in
-	x86_64-w64-*)
-		emake CFLAGS_FOR_TARGET=\"-O2 -pipe -I${PREFIX}/include -L${PREFIX}/lib\" \
-				CXXFLAGS_FOR_TARGET=\"-O2 -pipe -I${PREFIX}/include -L${PREFIX}/lib\"
-		;;
-	*)
-		emake
-		;;
-	esac
-}
+#src_compile()
+#{
+#	case ${CHOST} in
+#	x86_64-w64-*)
+#		emake BOOT_CFLAGS=\"-fpermissive -g -O2\" STAGE1_TFLAGS=\"-I${PREFIX}/include\"
+#		;;
+#	*)
+#		emake
+#		;;
+#	esac
+#}
 
 src_install()
 {
