@@ -1,0 +1,12 @@
+diff -urBb qt-everywhere-opensource-src-4.8.6-orig/src/plugins/bearer/nativewifi/platformdefs.h qt-everywhere-opensource-src-4.8.6/src/plugins/bearer/nativewifi/platformdefs.h
+--- qt-everywhere-opensource-src-4.8.6-orig/src/plugins/bearer/nativewifi/platformdefs.h	2014-05-05 22:45:21 +0400
++++ qt-everywhere-opensource-src-4.8.6/src/plugins/bearer/nativewifi/platformdefs.h	2014-05-05 22:42:27 +0400
+@@ -42,7 +42,7 @@
+ #ifndef PLATFORMDEFS_H
+ #define PLATFORMDEFS_H
+ 
+-#include <wtypes.h>
++#include <windows.h>
+ #undef interface
+ 
+ //proper header is wlanapi.h, but that is not included in windows XP

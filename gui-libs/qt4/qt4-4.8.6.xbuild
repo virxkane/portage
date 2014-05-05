@@ -28,10 +28,10 @@ SRC_URI="http://download.qt-project.org/official_releases/qt/4.8/${PV}/qt-everyw
 
 SOURCES_DIR="${MY_P}"
 
-#src_prepare()
-#{
-#	epatch "${PN}-4.8.5-mingw-w64-3.patch"
-#}
+src_prepare()
+{
+	epatch "${P}-mingwrt-4.0.patch"
+}
 
 src_configure()
 {
