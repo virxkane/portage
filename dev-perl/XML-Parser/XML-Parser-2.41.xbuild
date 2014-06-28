@@ -1,4 +1,4 @@
-# Copyright 2011-2012 Chernov A.A.
+# Copyright 2011-2014 Chernov A.A.
 # Distributed under the terms of the GNU General Public License v2
 
 DESCRIPTION=" A Perl extension interface to James Clark's XML parser, expat"
@@ -14,13 +14,12 @@ LICENSE="|| ( Artistic GPL-1 GPL-2 GPL-3 )"
 
 SRC_URI="http://search.cpan.org/CPAN/authors/id/C/CH/CHORNY/${P}.tar.gz"
 
+export PATH="${PERL_PATH}/bin:${PATH}"
+
 src_configure()
 {
-	export PATH="${PERL_PATH}/bin:${PATH}"
-
 	perl Makefile.PL
 	checkexitcode $? "configure failed"
-
 
 	# make build script for Windows Console
 	# local prefix_w=`posix_w32path "${PREFIX}"`
