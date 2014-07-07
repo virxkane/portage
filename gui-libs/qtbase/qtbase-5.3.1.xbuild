@@ -1,0 +1,88 @@
+# Copyright 2013-2014 Chernov A.A.
+# Distributed under the terms of the GNU General Public License v2
+
+DESCRIPTION="Qt toolkit (base module)"
+
+HOMEPAGE="http://qt-project.org/ http://qt.digia.com/"
+
+LICENSE="LGPL-2.1 GPL-3"
+
+RESTRICT="strip"
+
+#   dependencies:
+# sys-libs/zlib
+# dev-libs/icu
+# dev-libs/libpcre
+# media-libs/libpng
+# media-libs/libjpeg-turbo
+# media-libs/libmng
+# dev-util/qt5-pathfix
+# dev-lang/perl
+#   optional
+# dev-db/postgresql-libpq
+
+MY_P=${PN}-opensource-src-${PV}
+
+SRC_URI="http://download.qt-project.org/official_releases/qt/5.3/${PV}/submodules/${MY_P}.tar.xz"
+
+SOURCES_DIR="${MY_P}"
+
+src_configure()
+{
+	local prefix_w=`posix_w32path "${PREFIX}"`
+	prefix_w=`echo ${prefix_w} | sed -e 's/\\//\\\/g'`
+	local perl_w=`posix_w32path "${PERL_PATH}"`
+	perl_w=`echo ${perl_w} | sed -e 's/\\//\\\/g'`
+	
+	echo "set PATH=%SystemRoot%\system32;%SystemRoot%;${perl_w}\bin;${prefix_w}\bin" > bconf.cmd
+	echo "echo . > .gitignore" >> bconf.cmd
+	echo "call configure.bat -help" >> bconf.cmd
+	echo "del /q .gitignore" >> bconf.cmd
+	echo "exit" >> bconf.cmd
+	cmd //C bconf.cmd
+	#rm -f bconf.cmd
+
+	local _prefix="${INSTDIR}${PREFIX}"
+	install -d "${_prefix}"
+
+	#	-prefix ${_prefix} -bindir "${_prefix}/bin" -libdir "${_prefix}/lib/qt5" \
+	#	-docdir "${_prefix}/share/doc/qt-${PV}" -headerdir "${_prefix}/include/qt5" \
+	#	-plugindir "${_prefix}/lib/qt5/plugins" -importdir "${_prefix}/lib/qt5/imports" \
+	#	-datadir "${_prefix}/share/qt5" -translationdir "${_prefix}/share/qt5/translations" \
+	#	-examplesdir "${_prefix}/share/qt5/examples" -testsdir "${_prefix}/share/qt5/tests" \
+
+	_prefix=${_prefix}/qt5
+	./configure.exe -prefix ${_prefix} \
+		-release -opensource -confirm-license -shared -ltcg -rtti \
+		-nomake examples -accessibility -largefile \
+		-plugin-sql-sqlite -plugin-sql-odbc -plugin-sql-psql \
+		-platform win32-g++ -opengl desktop \
+		-system-libpng -system-libjpeg -system-zlib -system-pcre \
+		-iconv -icu -no-dbus -openssl
+			2>&1 | tee -a "${BUILDLOG}"
+	if [ ${PIPESTATUS[0]} -eq 0 ]
+	then
+		einfo "configure successfull"
+	else
+		eerror "configure failed"
+	fi
+}
+
+src_install()
+{
+	make install | tee -a "${BUILDLOG}"
+	if [ ${PIPESTATUS[0]} -eq 0 ]
+	then
+		eend "make install successfull."
+	else
+		eerror "make install failed!"
+	fi
+
+	local _prefix="${INSTDIR}${PREFIX}/qt5"
+	local prefix_w=`posix_w32path "${PREFIX}"`\\qt5
+
+	qt5-pathfix --prefix="${prefix_w}" \
+				"${_prefix}/bin/qmake.exe"
+	qt5-pathfix --prefix="${prefix_w}" \
+				"${_prefix}/bin/Qt5Core.dll"
+}
