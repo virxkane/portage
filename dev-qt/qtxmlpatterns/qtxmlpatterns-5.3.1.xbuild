@@ -1,7 +1,7 @@
 # Copyright 2013-2014 Chernov A.A.
 # Distributed under the terms of the GNU General Public License v2
 
-DESCRIPTION="Qt toolkit (SVG module)"
+DESCRIPTION="Qt toolkit (XmlPatterns module)"
 
 HOMEPAGE="http://qt-project.org/ http://qt.digia.com/"
 
