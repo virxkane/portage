@@ -1,0 +1,55 @@
+# Copyright 2013-2014 Chernov A.A.
+# Distributed under the terms of the GNU General Public License v2
+
+DESCRIPTION="Qt toolkit (Multimedia module)"
+
+HOMEPAGE="http://qt-project.org/ http://qt.digia.com/"
+
+LICENSE="LGPL-2.1 GPL-3"
+
+RESTRICT="strip"
+
+#   dependencies:
+# dev-qt/qtbase
+# dev-qt/qtxmlpatterns
+# dev-qt/qtdeclarative
+#   optional
+# media-libs/openal
+
+MY_P=${PN}-opensource-src-${PV}
+SRC_URI="http://download.qt-project.org/official_releases/qt/5.3/${PV}/submodules/${MY_P}.tar.xz"
+
+SOURCES_DIR="${MY_P}"
+
+PATH=/mingw/qt5/bin:$PATH
+
+src_configure()
+{
+	qmake | tee -a "${BUILDLOG}"
+}
+
+src_install()
+{
+	mkdir -p "${INSTDIR}"
+	local inst_root=`posix_w32path "${INSTDIR}"`
+	local prefix_w=`posix_w32path "${PREFIX}"`
+	local prefix_w_d=`echo $prefix_w | sed -e 's/^\(.\):.*/\1/'`
+	prefix_w_d=`echo $prefix_w_d | tr '[:upper:]' '[:lower:]'`
+	local inst_root_d=`echo $inst_root | sed -e 's/^\(.\):.*/\1/'`
+	inst_root_d=`echo $inst_root_d | tr '[:upper:]' '[:lower:]'`
+	local inst_root_p=`echo $inst_root | sed -e 's/^.:\(.*\)/\1/'`
+	if [ "${prefix_w_d}" != "${inst_root_d}" ]
+	then
+		einfo "Drive for \$PREFIX and \$TMPDIR must equal!"
+		eerror "This is Qt limitation."
+		exit 1
+	fi
+
+	make INSTALL_ROOT=${inst_root_p} install | tee -a "${BUILDLOG}"
+	if [ ${PIPESTATUS[0]} -eq 0 ]
+	then
+		eend "make install successfull."
+	else
+		eerror "make install failed!"
+	fi
+}

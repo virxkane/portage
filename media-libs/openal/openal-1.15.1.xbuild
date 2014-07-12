@@ -1,0 +1,25 @@
+# Copyright 2014 Chernov A.A.
+# Copyright 1999-2013 Gentoo Foundation
+# Distributed under the terms of the GNU General Public License v2
+
+DESCRIPTION="A software implementation of the OpenAL 3D audio API"
+
+HOMEPAGE="http://kcat.strangesoft.net/openal.html"
+
+LICENSE="LGPL-2"
+
+#   dependencies:
+# dev-util/cmake
+
+MY_PN="${PN}-soft"
+MY_P="${MY_PN}-${PV}"
+SRC_URI=" http://kcat.strangesoft.net/openal-releases/${MY_P}.tar.bz2"
+
+SOURCES_DIR="${MY_P}"
+
+USE_CMAKE=yes
+
+src_configure()
+{
+	econf -DEXAMPLES=OFF -DREQUIRE_DSOUND=ON
+}
