@@ -7,9 +7,6 @@ HOMEPAGE="http://sources.redhat.com/gdb/"
 
 LICENSE="GPL-2 LGPL-2"
 
-#   dependencies:
-# none?
-
 SRC_URI="http://ftp.gnu.org/gnu/${PN}/${P}.tar.bz2"
 
 BUILD_IN_SEPARATE_DIR=yes

@@ -9,9 +9,9 @@ LICENSE="GPL-3 LGPL-2"
 
 #   dependencies
 # perl (msys)
-# iconv
-#   optional
-# expat
+
+RDEPEND="sys-devel/libiconv
+		dev-libs/expat"
 
 SRC_URI="http://ftp.gnu.org/pub/gnu/${PN}/${P}.tar.gz"
 

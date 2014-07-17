@@ -10,7 +10,8 @@ LICENSE="GPL-2"
 #   dependencies:
 # m4 (msys)
 # perl (msys)
-# autoconf
+
+DEPEND="sys-devel/autoconf"
 
 SRC_URI="http://ftp.gnu.org/gnu/${PN}/${P}.tar.xz"
 

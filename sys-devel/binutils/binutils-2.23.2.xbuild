@@ -10,7 +10,8 @@ LICENSE="GPL-3 LGPL-3"
 #   dependencies:
 # bison (msys)
 # flex (msys)
-# sys-libs/zlib
+
+RDEPEND="sys-libs/zlib"
 
 SRC_URI="http://ftp.gnu.org/gnu/${PN}/${P}.tar.bz2"
 
