@@ -7,9 +7,11 @@ HOMEPAGE="http://www.gnu.org/software/wget/"
 
 LICENSE="GPL-3"
 
-#   dependencies:
+#   external dependencies:
 # perl (msys)
-# dev-libs/openssl
+
+RDEPEND="sys-libs/zlib
+		dev-libs/openssl"
 
 SRC_URI="http://ftp.gnu.org/gnu/${PN}/${P}.tar.xz"
 

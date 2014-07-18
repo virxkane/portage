@@ -7,10 +7,8 @@ HOMEPAGE="http://curl.haxx.se/"
 
 LICENSE="MIT"
 
-#   dependencies:
-# dev-util/pkg-config
-#   optional:
-# sys-libs/zlib
-# dev-libs/openssl
+DEPEND="dev-util/pkg-config"
+RDEPEND="sys-libs/zlib
+		dev-libs/openssl"
 
 SRC_URI="http://curl.haxx.se/download/${P}.tar.lzma"
