@@ -7,8 +7,7 @@ HOMEPAGE="http://lame.sourceforge.net"
 
 LICENSE="LGPL-2.1"
 
-#   dependencies:
-# nasm
+DEPEND="dev-lang/nasm"
 
 SRC_URI="http://downloads.sourceforge.net/${PN}/${P}.tar.gz"
 
