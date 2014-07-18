@@ -7,7 +7,7 @@ HOMEPAGE="http://www.gnu.org/software/autoconf/autoconf.html"
 
 LICENSE="GPL-3"
 
-#   dependencies:
+#   external dependencies:
 # m4 (msys)
 # perl (msys)
 
