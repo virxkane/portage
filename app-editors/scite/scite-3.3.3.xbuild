@@ -8,9 +8,6 @@ HOMEPAGE="http://foo.bar.com/"
 # Neil Hodgson license
 LICENSE="HPND"
 
-#   dependencies:
-# none?
-
 MY_PV=${PV//./}
 
 SRC_URI="http://downloads.sourceforge.net/scintilla/${PN}${MY_PV}.tgz"

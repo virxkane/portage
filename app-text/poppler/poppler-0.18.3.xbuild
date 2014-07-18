@@ -1,4 +1,4 @@
-# Copyright 2010-2013 Chernov A.A.
+# Copyright 2010-2014 Chernov A.A.
 # Distributed under the terms of the GNU General Public License v2
 
 DESCRIPTION="PDF rendering library based on the xpdf-3.0 code base"
@@ -7,22 +7,22 @@ HOMEPAGE="http://poppler.freedesktop.org/"
 
 LICENSE="GPL-2"
 
-#   dependencies:
-# media-libs/freetype
-#   optional:
-# media-libs/jpeg
-# media-libs/libpng
-# dui-libs/cairo
-# dev-libs/glib
-# gui-libs/gtk+
-# gui-libs/qt4
-# sys-devel/libiconv
-# =media-libs/openjpeg-1.5*
-# sys-libs/zlib
-# media-libs/lcms
-# net-misc/curl
+RDEPEND="media-libs/freetype
+		media-libs/libjpeg-turbo
+		media-libs/libpng
+		gui-libs/cairo
+		dev-libs/glib
+		gui-libs/gtk+
+		gui-libs/qt4
+		sys-devel/libiconv
+		=media-libs/openjpeg-1.5*
+		sys-libs/zlib
+		media-libs/lcms
+		net-misc/curl"
 
 SRC_URI="http://dev.gentooexperimental.org/~scarabeus/${P}.tar.gz"
+
+USE_CMAKE=yes
 
 src_prepare()
 {
@@ -31,7 +31,6 @@ src_prepare()
 
 src_configure()
 {
-	USE_CMAKE=yes
 	econf -DBUILD_SHARED_LIBS=ON \
 		-DBUILD_CPP_TESTS=OFF -DENABLE_SPLASH=ON -DENABLE_ZLIB=ON \
 		-DENABLE_LCMS=ON -DENABLE_UTILS=ON -DENABLE_LIBCURL=ON \

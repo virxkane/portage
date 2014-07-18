@@ -8,12 +8,13 @@ HOMEPAGE="http://code.google.com/p/libarchive/"
 LICENSE="BSD"
 
 #   dependencies:
-#   optional
-# dev-libs/openssl
-# sys-libs/zlib
-# app-arch/libbz2
 # lzma ???
-# dev-libs/expat
+
+DEPEND="sys-devel/automake"
+RDEPEND="dev-libs/openssl
+		sys-libs/zlib
+		app-arch/libbz2
+		dev-libs/expat"
 
 # We not use cmake to resolve circular dependencies.
 
@@ -29,7 +30,6 @@ src_configure()
 {
 	econf --enable-shared --enable-static \
 			--without-xml2 --with-expat
-
 
 	#USE_CMAKE=yes
 	#econf -DBUILD_SHARED_LIBS=ON
