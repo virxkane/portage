@@ -10,8 +10,6 @@ LICENSE="BZIP2"
 BASENAM="bzip2"
 SRC_URI="http://www.bzip.org/${PV}/${BASENAM}-${PV}.tar.gz"
 
-DEPEND="sys-devel/automake"
-
 SOURCES_DIR="${BASENAM}-${PV}"
 
 src_prepare()
