@@ -11,9 +11,6 @@ SRC_URI="http://search.cpan.org/CPAN/authors/id/P/PC/PCZERKAS/${PN}-4.12-cvs-200
 
 RESTRICT="mirror"
 
-# dependencies:
-#  none?
-
 SOURCES_DIR="${P}-cvs-20090821-PCZERKAS/${PN}"
 
 #src_prepare()

@@ -33,4 +33,3 @@ diff -urBb cmake-2.8.12.2-orig/Modules/FindBZip2.cmake cmake-2.8.12.2/Modules/Fi
  endif ()
  
  mark_as_advanced(BZIP2_INCLUDE_DIR)
-Only in cmake-2.8.12.2/Modules: FindBZip2.cmake.rej

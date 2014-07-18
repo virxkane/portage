@@ -7,9 +7,8 @@ HOMEPAGE="http://qt.nokia.com/products/developer-tools"
 
 LICENSE="LGPL-2"
 
-#   dependencies:
-# gui-libs/qt4
-# dev-util/mingw32-make
+RDEPEND="gui-libs/qt4"
+DEPEND="dev-util/mingw32-make"
 
 #MY_PV=${PV/_/-}
 MY_P=${PN}-${PV}-src

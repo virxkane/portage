@@ -7,15 +7,10 @@ HOMEPAGE="http://www.sourceforge.net/projects/mingwportage/"
 
 LICENSE="GPL-3"
 
-#   dependencies:
-# none?
+DEPEND="dev-util/cmake"
 
 SRC_URI="http://downloads.sourceforge.net/mingwportage/${P}.tar.xz"
 
 RESTRICT="mirror"
 
-src_configure()
-{
-	USE_CMAKE=yes
-	econf
-}
+USE_CMAKE=yes

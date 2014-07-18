@@ -7,9 +7,6 @@ HOMEPAGE="http://ctags.sourceforge.net"
 
 LICENSE="GPL-2"
 
-#   dependencies:
-# none?
-
 SRC_URI="http://downloads.sourceforge.net/${PN}/${P}.tar.gz"
 
 src_prepare()

@@ -7,8 +7,7 @@ HOMEPAGE="http://pkgconfig.freedesktop.org/wiki/"
 
 LICENSE="GPL-2"
 
-#   dependencies:
-# glib
+RDEPEND="dev-libs/glib"
 
 SRC_URI="http://pkgconfig.freedesktop.org/releases/${P}.tar.gz"
 
