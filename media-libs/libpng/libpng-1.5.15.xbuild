@@ -7,8 +7,7 @@ HOMEPAGE="http://www.libpng.org/"
 
 LICENSE="as-is"
 
-#   dependencies:
-# sys-libs/zlib
+RDEPEND="sys-libs/zlib"
 
 SRC_URI="http://downloads.sourceforge.net/${PN}/${P}.tar.xz"
 
