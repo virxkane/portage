@@ -1,4 +1,4 @@
-# Copyright 2011-2012 Chernov A.A.
+# Copyright 2011-2014 Chernov A.A.
 # Distributed under the terms of the GNU General Public License v2
 
 # Mplayer release: 2012-06-10
@@ -11,22 +11,22 @@ LICENSE="GPL-2"
 
 # to-do: add libdirac & libschroedinger
 
-#   dependencies:
+#   external dependencies:
 # gawk (msys)
-# dev-libs/directx7-headers
-# sys-libs/zlib
-#   optional:
-# app-arch/libbz2
-# sys-devel/libiconv
-# media-libs/x264-snapshot
-# media-sound/lame
-# media-libs/libsdl
-# media-libs/freetype
-# media-libs/fontconfig
-# dev-lang/yasm
-# media-libs/libpng
-# media-libs/giflib
-# media-libs/libjpeg-turbo
+
+DEPEND="dev-lang/yasm"
+RDEPEND="sys-libs/zlib
+		app-arch/libbz2
+		sys-devel/libiconv
+		media-libs/x264
+		media-sound/lame
+		media-libs/libsdl
+		media-libs/freetype
+		media-libs/fontconfig
+		dev-lang/yasm
+		media-libs/libpng
+		media-libs/giflib
+		media-libs/libjpeg-turbo"
 
 MY_N="MPlayer"
 MY_V=`echo ${PV} | sed -e 's/_//'`
