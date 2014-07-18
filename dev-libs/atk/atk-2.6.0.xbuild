@@ -7,8 +7,7 @@ HOMEPAGE="http://live.gnome.org/GAP/"
 
 LICENSE="LGPL-2"
 
-#   dependencies:
-# dev-libs/glib
+RDEPEND="dev-libs/glib"
 
 SRC_URI="http://ftp.gnome.org/pub/GNOME/sources/atk/2.6/${P}.tar.xz"
 

@@ -7,9 +7,6 @@ HOMEPAGE="http://www.mr511.de/software/"
 
 LICENSE="LGPL-2"
 
-#   dependencies:
-# none?
-
 SRC_URI="http://www.mr511.de/software/${P}.tar.gz"
 
 src_configure()

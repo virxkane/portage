@@ -7,9 +7,6 @@ HOMEPAGE="http://mingw-w64.sourceforge.net/"
 
 LICENSE="AS-IS"
 
-#   dependencies:
-# none?
-
 BASENAM="mingw-w64"
 SRC_URI="http://downloads.sourceforge.net/mingw-w64/${BASENAM}-v${PV}.tar.bz2"
 

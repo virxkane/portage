@@ -9,9 +9,6 @@ LICENSE="GPL-2"
 
 RESTRICT="mirror"
 
-#   dependencies:
-# none?
-
 SRC_URI="http://distfiles.macports.org/libgnugetopt/${P}.tar.bz2"
 
 src_prepare()

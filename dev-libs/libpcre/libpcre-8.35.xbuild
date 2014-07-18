@@ -7,9 +7,8 @@ HOMEPAGE="http://www.pcre.org/"
 
 LICENSE="BSD"
 
-#   dependencies:
-# sys-libs/zlib
-# app-arch/libbz2
+RDEPEND="sys-libs/zlib
+		app-arch/libbz2"
 
 MY_P="pcre-${PV}"
 SOURCES_DIR="${MY_P}"

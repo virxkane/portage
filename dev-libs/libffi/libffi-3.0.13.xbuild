@@ -7,9 +7,6 @@ HOMEPAGE="http://sourceware.org/libffi/"
 
 LICENSE="MIT"
 
-#   dependencies:
-# none
-
 SRC_URI="ftp://sourceware.org/pub/${PN}/${P}.tar.gz"
 
 src_configure()

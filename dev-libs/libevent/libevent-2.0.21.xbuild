@@ -9,8 +9,7 @@ SRC_URI="http://github.com/downloads/${PN}/${PN}/${MY_P}.tar.gz"
 
 LICENSE="BSD"
 
-#   dependecies:
-# dev-libs/openssl
+RDEPEND="dev-libs/openssl"
 
 SOURCES_DIR=${MY_P}
 

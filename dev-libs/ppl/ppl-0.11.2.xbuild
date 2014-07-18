@@ -7,8 +7,7 @@ HOMEPAGE="http://www.cs.unipr.it/ppl/"
 
 LICENSE="GPL-3"
 
-#   dependencies:
-# >=dev-libs/gmp-4.6
+RDEPEND=">=dev-libs/gmp-4.6"
 
 SRC_URI="http://www.cs.unipr.it/ppl/Download/ftp/releases/${PV}/${P}.tar.bz2"
 

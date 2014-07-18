@@ -7,8 +7,7 @@ HOMEPAGE="http://freecode.com/projects/isl"
 
 LICENSE="MIT"
 
-#   dependencies:
-# dev-libs/gmp
+RDEPEND="dev-libs/gmp"
 
 SRC_URI="http://isl.gforge.inria.fr/${P}.tar.lzma"
 

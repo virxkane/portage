@@ -7,9 +7,8 @@ HOMEPAGE="http://mpc.multiprecision.org/"
 
 LICENSE="LGPL-2.1"
 
-#   dependencies:
-# >=dev-libs/gmp-4.2
-# >=dev-util/mpfr-2.3.1
+RDEPEND=">=dev-libs/gmp-4.2
+		>=dev-util/mpfr-2.3.1"
 
 SRC_URI="http://www.multiprecision.org/${PN}/download/${P}.tar.gz"
 
