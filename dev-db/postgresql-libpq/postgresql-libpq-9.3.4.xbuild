@@ -7,12 +7,12 @@ HOMEPAGE="http://www.postgresql.org/"
 
 LICENSE="POSTGRESQL"
 
-#   dependencies:
+#   external dependencies:
 # bison (msys)
 # flex (msys)
-#   optional:
-# zlib
-# openssl
+
+RDEPEND="sys-libs/zlib
+		dev-libs/openssl"
 
 BASENAM="postgresql"
 SRC_URI="http://wwwmaster.postgresql.org/download/mirrors-ftp/source/v${PV}/${BASENAM}-${PV}.tar.bz2"
