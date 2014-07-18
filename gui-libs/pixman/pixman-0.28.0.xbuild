@@ -7,8 +7,7 @@ HOMEPAGE="http://xorg.freedesktop.org/"
 
 LICENSE="MIT"
 
-#   dependencies:
-# pkg-config
+DEPEND="dev-util/pkg-config"
 
 SRC_URI="http://www.cairographics.org/releases/${P}.tar.bz2"
 

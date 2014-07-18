@@ -9,17 +9,15 @@ LICENSE="LGPL-2.1 GPL-3"
 
 # to-do: install private headers, for qt-creator.
 
-#   dependencies:
-# sys-libs/zlib
-# media-libs/libpng
-# media-libs/libjpeg-turbo
-# media-libs/libmng
-# media-libs/tiff
-# dev-util/qt4-pathfix
-# dev-util/mingw32-make
-#   optional
-# dev-db/sqlite
-# dev-db/postgresql-libpq
+DEPEND="dev-util/mingw32-make
+		dev-util/qt4-pathfix"
+RDEPEND="sys-libs/zlib
+		media-libs/libpng
+		media-libs/libjpeg-turbo
+		media-libs/libmng
+		media-libs/tiff
+		dev-db/sqlite
+		dev-db/postgresql-libpq"
 
 #MY_PV=${PV/_/-}
 MY_P=qt-everywhere-opensource-src-${PV}

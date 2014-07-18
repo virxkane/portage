@@ -10,10 +10,9 @@ LICENSE="LGPL-2.1 GPL-3"
 
 # to-do: install private headers, for qt-creator.
 
-#   dependencies:
-# dev-util/mingw32-make
-# gui-libs/qt4
-# sys-apps/dbus
+DEPEND="dev-util/mingw32-make"
+RDEPEND="gui-libs/qt4
+		sys-apps/dbus"
 
 MY_P=qt-everywhere-opensource-src-${PV}
 

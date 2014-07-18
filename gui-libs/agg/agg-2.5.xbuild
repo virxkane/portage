@@ -7,11 +7,9 @@ HOMEPAGE="http://www.antigrain.com/"
 
 LICENSE="GPL-2"
 
-#   dependencies:
-# pkg-config
-#   optional
-# libsdl
-# freetype
+DEPEND="dev-util/pkg-config"
+RDEPEND="media-libs/libsdl
+		media-libs/freetype"
 
 SRC_URI="http://www.antigrain.com/${P}.tar.gz"
 

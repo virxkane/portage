@@ -9,13 +9,12 @@ LICENSE="LGPL-2"
 
 # to-do: build with jasper (JPEG-2000)
 
-#   dependencies:
-# dev-libs/glib
+#   external dependencies:
 # perl (msys)
-#
-# media-libs/tiff
-# media-libs/libpng
-# media-libs/libjpeg-turbo
+RDEPEND="dev-libs/glib
+		media-libs/tiff
+		media-libs/libpng
+		media-libs/libjpeg-turbo"
 
 SRC_URI="http://ftp.gnome.org/pub/GNOME/sources/${PN}/2.28/${P}.tar.xz"
 

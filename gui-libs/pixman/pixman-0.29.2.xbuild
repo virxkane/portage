@@ -7,9 +7,8 @@ HOMEPAGE="http://xorg.freedesktop.org/"
 
 LICENSE="MIT"
 
-#   dependencies:
-# dev-utils/pkg-config
-# media-libs/libpng
+DEPEND="dev-util/pkg-config"
+RDEPEND="media-libs/libpng"
 
 SRC_URI="http://www.cairographics.org/releases/${P}.tar.bz2"
 

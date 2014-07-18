@@ -9,13 +9,12 @@ LICENSE="wxWinLL-3 GPL-2 LGPL-2"
 
 RESTRICT="mirror"
 
-#  dependents:
-# expat
-# zlib
-# giflib
-# libpng
-# jpeg
-# tiff
+RDEPEND="dev-libs/expat
+		sys-libs/zlib
+		media-libs/giflib
+		media-libs/libpng
+		media-libs/libjpeg-turbo
+		media-libs/tiff"
 
 SRC_URI="http://prdownloads.sourceforge.net/wxwindows/${P}.tar.bz2"
 

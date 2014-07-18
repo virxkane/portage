@@ -7,10 +7,11 @@ HOMEPAGE="http://www.pango.org/"
 
 LICENSE="LGPL-2 FTL"
 
-#   dependencies:
+#   external dependencies:
 # perl (msys)
-# dev-libs/glib
-# gui-libs/cairo
+
+RDEPEND="dev-libs/glib
+		gui-libs/cairo"
 
 SRC_URI="http://ftp.gnome.org/pub/GNOME/sources/${PN}/1.30/${P}.tar.xz"
 

@@ -7,18 +7,18 @@ HOMEPAGE="http://www.cairographics.org/"
 
 LICENSE="LGPL-2"
 
-#   dependencies:
-# zlib
-# pkg-config
-# libpng
-# freetype
-# fontconfig
-# pixman
-# glew
-# opengl-ext
-#   optional
-# poppler
-# gtk+
+#   circular dependencies:
+# gui-libs/gtk+
+# app-text/poppler
+
+DEPEND="dev-util/pkg-config"
+RDEPEND="sys-libs/zlib
+		media-libs/libpng
+		media-libs/freetype
+		media-libs/fontconfig
+		gui-libs/pixman
+		media-libs/glew
+		media-libs/opengl-ext"
 
 SRC_URI="http://www.cairographics.org/releases/${P}.tar.xz"
 

@@ -11,9 +11,8 @@ LICENSE="LGPL-2.1 GPL-3"
 # make from MSYS can't build this package, then we use mingw32-make & Windows shell to build.
 # But with mingw32-make we lost parallel build feature.
 
-#   dependencies:
-# dev-util/mingw32-make
-# gui-libs/qt4
+DEPEND="dev-util/mingw32-make"
+RDEPEND="gui-libs/qt4"
 
 MY_P=qt-everywhere-opensource-src-${PV}
 
