@@ -7,14 +7,12 @@ HOMEPAGE="http://www.vorbis.com/ http://www.xiph.org/"
 
 LICENSE="GPL-2"
 
-#   dependencies:
-# iconv
-# pkg-config
-# curl
-# libogg
-# libvorbis
-# flac
-# speex
+DEPEND="dev-util/pkg-config"
+RDEPEND="sys-devel/libiconv
+		net-misc/curl
+		media-libs/libvorbis
+		media-libs/flac
+		media-libs/speex"
 
 SRC_URI="http://downloads.xiph.org/releases/vorbis/${P}.tar.gz"
 
