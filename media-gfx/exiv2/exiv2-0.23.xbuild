@@ -7,11 +7,10 @@ HOMEPAGE="http://www.exiv2.org/"
 
 LICENSE="GPL-2"
 
-#   dependencies:
-# sys-devel/zlib
-# sys-devel/libiconv
-# dev-libs/expat
-# sys-devel/gettext
+RDEPEND="sys-libs/zlib
+		sys-devel/libiconv
+		dev-libs/expat
+		sys-devel/gettext"
 
 SRC_URI="http://www.exiv2.org/${P}.tar.gz"
 

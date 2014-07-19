@@ -7,8 +7,7 @@ HOMEPAGE="http://trac.bjourne.webfactional.com/wiki"
 
 LICENSE="LGPL-2.1"
 
-#   dependencies:
-# gtk+
+RDEPEND="gui-libs/gtk+"
 
 SRC_URI="${P}.tar.gz"
 

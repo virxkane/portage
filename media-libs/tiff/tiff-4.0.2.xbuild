@@ -9,7 +9,7 @@ LICENSE="as-is"
 
 # media-libs/freeglut
 # to-do: pthreads-win32 || winpthreads
-RDEPEND="sys-devel/zlib
+RDEPEND="sys-libs/zlib
 		media-libs/libjpeg-turbo"
 
 SRC_URI="http://download.osgeo.org/libtiff/${P}.tar.gz"
