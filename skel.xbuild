@@ -1,4 +1,4 @@
-# Copyright 2013 Chernov A.A.
+# Copyright 2013-2014 Chernov A.A.
 # Distributed under the terms of the GNU General Public License v2
 
 DESCRIPTION="This is a sample skeleton xbuild file"
@@ -7,15 +7,17 @@ HOMEPAGE="http://foo.bar.com/"
 
 LICENSE="GPL-2"
 
-#   dependencies:
-# none?
+# build time dependencies
+#DEPEND=""
+# runtime dependencies
+#RDEPEND=""
 
 SRC_URI="http://foo.bar.com/downloads/${P}.tar.bz2"
 
-src_prepare()
-{
-	epatch "${P}-mingw32.patch"
-}
+#src_prepare()
+#{
+#	epatch "${P}-mingw32.patch"
+#}
 
 src_configure()
 {

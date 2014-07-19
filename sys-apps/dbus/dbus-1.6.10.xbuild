@@ -7,16 +7,16 @@ HOMEPAGE="http://dbus.freedesktop.org/"
 
 LICENSE="GPL-2"
 
-#   dependencies:
-# >=cmake-2.4.4
-# libiconv
-# expat
+DEPEND="dev-util/cmake"
+RDEPEND="sys-devel/libiconv
+		dev-libs/expat"
 
 SRC_URI="http://dbus.freedesktop.org/releases/dbus/${P}.tar.gz"
 
+USE_CMAKE=yes
+
 src_configure()
 {
-	USE_CMAKE=yes
 	CMAKE_SOURCES_DIR="${SOURCES_DIR}/cmake"
 	econf -DDBUS_BUILD_TESTS=OFF -DDBUS_ENABLE_VERBOSE_MODE=OFF
 }

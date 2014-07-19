@@ -7,10 +7,9 @@ HOMEPAGE="http://dbus.freedesktop.org/"
 
 LICENSE="GPL-2"
 
-#   dependencies:
-# >=cmake-2.4.4
-# libiconv
-# expat
+DEPEND="dev-util/cmake"
+RDEPEND="sys-devel/libiconv
+		dev-libs/expat"
 
 SRC_URI="http://dbus.freedesktop.org/releases/dbus/${P}.tar.gz"
 
