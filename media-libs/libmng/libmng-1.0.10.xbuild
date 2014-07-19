@@ -7,18 +7,15 @@ HOMEPAGE="http://www.libmng.com/"
 
 LICENSE="as-is"
 
-#   dependencies:
-# zlib
-# jpeg
-# lcms
+RDEPEND="sys-libs/zlib
+		media-libs/libjpeg-turbo
+		media-libs/lcms"
 
 SRC_URI="http://downloads.sourceforge.net/${PN}/${P}.tar.gz"
 
 src_prepare()
 {
 	cp -pv makefiles/configure.in configure.ac
-	cp -pv makefiles/Makefile.am .
-	cat Makefile.am | sed -e 's/libmng_la_LDFLAGS\ =\ /libmng_la_LDFLAGS\ =\ -no-undefined\ /' > Makefile.am.new
-	mv -f Makefile.am.new Makefile.am
+	cat makefiles/Makefile.am | sed -e 's/libmng_la_LDFLAGS\ =\ /libmng_la_LDFLAGS\ =\ -no-undefined\ /' > Makefile.am
 	eautoreconf
 }

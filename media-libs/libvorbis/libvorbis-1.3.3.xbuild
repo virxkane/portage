@@ -7,10 +7,9 @@ HOMEPAGE="http://xiph.org/vorbis"
 
 LICENSE="BSD"
 
-#   dependencies:
-# pkg-config
-# libogg-1.0
-# pthreads-win32
+DEPEND="dev-util/pkg-config"
+# to-do: pthreads-win32 || winpthreads
+RDEPEND="media-libs/libogg"
 
 SRC_URI="http://downloads.xiph.org/releases/vorbis/${P}.tar.xz"
 

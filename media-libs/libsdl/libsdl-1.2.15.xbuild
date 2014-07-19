@@ -7,8 +7,7 @@ HOMEPAGE="http://www.libsdl.org/"
 
 LICENSE="LGPL-2.1"
 
-#   dependencies:
-# yasm
+DEPEND="dev-lang/yasm"
 
 SRC_URI="http://www.libsdl.org/release/SDL-${PV}.tar.gz"
 

@@ -7,11 +7,10 @@ HOMEPAGE="http://www.fontconfig.org/"
 
 LICENSE="MIT"
 
-#   dependencies:
-# libiconv
-# freetype
-# pkg-config
-# expat
+DEPEND="dev-util/pkg-config"
+RDEPEND="media-libs/freetype
+		dev-libs/expat
+		sys-devel/libiconv"
 
 SRC_URI="http://www.fontconfig.org/release/${P}.tar.gz"
 

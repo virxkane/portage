@@ -7,9 +7,6 @@ HOMEPAGE="http://www.opengl.org/"
 
 LICENSE="GPL-2"
 
-#   dependencies:
-# none?
-
 SRC_URI="http://www.opengl.org/registry/api/glext.h
 		http://www.opengl.org/registry/api/glxext.h
 		http://www.opengl.org/registry/api/wglext.h"

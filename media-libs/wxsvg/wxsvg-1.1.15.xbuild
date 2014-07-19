@@ -7,14 +7,13 @@ HOMEPAGE="http://wxsvg.sourceforge.net/"
 
 LICENSE="wxWinLL-3"
 
-#   dependencies:
-# >=gui-libs/wxWidgets-2.6.3
-# dev-util/pkg-config
-# gui-libs/cairo
-# gui-libs/pango
-# dev-libs/expat
-#   optional
-# #media-video/ffmpeg
+# media-video/ffmpeg
+DEPEND="dev-util/pkg-config"
+RDEPEND=">=gui-libs/wxWidgets-2.6.3
+		dev-util/pkg-config
+		gui-libs/cairo
+		gui-libs/pango
+		dev-libs/expat"
 
 SRC_URI="http://downloads.sourceforge.net/${PN}/${P}.tar.bz2"
 

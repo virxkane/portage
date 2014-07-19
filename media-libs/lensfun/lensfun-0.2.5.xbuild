@@ -1,4 +1,4 @@
-# Copyright 2010-2012 Chernov A.A.
+# Copyright 2010-2014 Chernov A.A.
 # Distributed under the terms of the GNU General Public License v2
 
 DESCRIPTION="lensfun: A library for rectifying and simulating photographic lens distortions"
@@ -7,13 +7,14 @@ HOMEPAGE="http://lensfun.berlios.de/"
 
 LICENSE="LGPL-3"
 
-#   dependencies:
-# cmake
-# glib
-# zlib
-# libpng
+DEPEND="dev-util/cmake"
+RDEPEND="sys-libs/zlib
+		dev-libs/glib
+		media-libs/libpng"
 
 SRC_URI="http://download.berlios.de/${PN}/${P}.tar.bz2"
+
+USE_CMAKE=yes
 
 src_prepare()
 {
@@ -23,11 +24,5 @@ src_prepare()
 
 src_configure()
 {
-#	mkdir "../${PN}_build"
-#	cd "../${PN}_build"
-#	cmake -G "MSYS Makefiles" -DCMAKE_BUILD_TYPE="Release" \
-#		-DCMAKE_INSTALL_PREFIX=${PREFIX} "../${P}"
-#	checkexitcode $? "cmake failed"
-	USE_CMAKE=yes
 	econf
 }

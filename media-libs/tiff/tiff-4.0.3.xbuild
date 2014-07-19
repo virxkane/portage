@@ -7,12 +7,10 @@ HOMEPAGE="http://www.remotesensing.org/libtiff/"
 
 LICENSE="as-is"
 
-#   dependencies:
-# sys-libs/libz
-# media-libs/jpeg
-# dev-libs/pthreads-win32
-#   optional
 # media-libs/freeglut
+# to-do: pthreads-win32 || winpthreads
+RDEPEND="sys-devel/zlib
+		media-libs/libjpeg-turbo"
 
 SRC_URI="http://download.osgeo.org/libtiff/${P}.tar.gz"
 

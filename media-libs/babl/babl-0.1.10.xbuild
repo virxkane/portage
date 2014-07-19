@@ -7,9 +7,6 @@ HOMEPAGE="http://www.gegl.org/babl/"
 
 LICENSE="LGPL-3"
 
-# dependecies:
-#   none?
-
 SRC_URI="ftp://ftp.gimp.org/pub/${PN}/0.1/${P}.tar.bz2"
 
 src_prepare()

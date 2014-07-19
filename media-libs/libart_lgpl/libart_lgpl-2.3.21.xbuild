@@ -7,9 +7,6 @@ HOMEPAGE="http://www.levien.com/libart"
 
 LICENSE="LGPL-2.1"
 
-#   dependencies:
-# none?
-
 SRC_URI="http://ftp.gnome.org/pub/gnome/sources/${PN}/2.3/${P}.tar.bz2"
 
 src_configure()

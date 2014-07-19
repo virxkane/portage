@@ -8,8 +8,7 @@ HOMEPAGE="http://kcat.strangesoft.net/openal.html"
 
 LICENSE="LGPL-2"
 
-#   dependencies:
-# dev-util/cmake
+DEPEND="dev-util/cmake"
 
 MY_PN="${PN}-soft"
 MY_P="${MY_PN}-${PV}"

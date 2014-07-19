@@ -7,11 +7,10 @@ HOMEPAGE="http://www.xiph.org/"
 
 LICENSE="GPL-2 LGPL-2"
 
-#   dependencies:
-# pkg-config
-# libogg-1.1.3
-# nasm
-# libiconv
+DEPEND="dev-util/pkg-config
+		dev-lang/nasm"
+RDEPEND=">=media-libs/libogg-1.1.3
+		sys-devel/libiconv"
 
 SRC_URI="http://downloads.xiph.org/releases/flac/${P}.tar.gz"
 

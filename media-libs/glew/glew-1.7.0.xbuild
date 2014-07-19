@@ -7,9 +7,6 @@ HOMEPAGE="http://glew.sourceforge.net/"
 
 LICENSE="BSD MIT"
 
-#   dependencies:
-# none?
-
 SRC_URI="http://downloads.sourceforge.net/${PN}/${P}.tgz"
 
 src_prepare()

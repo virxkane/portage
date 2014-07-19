@@ -7,30 +7,23 @@ HOMEPAGE="http://icculus.org/SDL_sound/"
 
 LICENSE="LGPL-2.1"
 
-#   dependencies:
-# libsdl
-#   optional
-# ogg
-# vorbis
-# FLAC
-# speex
+DEPEND="dev-util/cmake"
+# to-do: mikmod, modplug, smpeg
+RDEPEND="media-libs/libsdl
+		media-libs/libogg
+		media-libs/libvorbis
+		media-libs/flac
+		media-libs/speex"
 
-# mikmod
-# modplug
-# smpeg
+MY_P="SDL_sound-${PV}"
+SRC_URI="http://icculus.org/SDL_sound/downloads/${MY_P}.tar.gz"
 
-MY_PN="SDL_sound"
-SRC_URI="http://icculus.org/SDL_sound/downloads/${MY_PN}-${PV}.tar.gz"
+SOURCES_DIR="${MY_P}"
 
-SOURCES_DIR="${MY_PN}-${PV}"
+USE_CMAKE=yes
 
 src_prepare()
 {
 	epatch "${P}-cmake.patch"
 	epatch "${P}-mingw32.patch"
-}
-
-src_configure()
-{
-	USE_CMAKE=yes econf
 }
