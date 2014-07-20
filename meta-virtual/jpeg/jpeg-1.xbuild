@@ -1,0 +1,11 @@
+# Copyright 1999-2014 Gentoo Foundation
+# Copyright 2014 Chernov A.A.
+# Distributed under the terms of the GNU General Public License v2
+
+DESCRIPTION="A virtual for selecting between libjpeg-turbo and IJG peg for source-based packages"
+
+SRC_URI=""
+
+LICENSE=""
+
+RDEPEND=">=media-libs/libjpeg-turbo-1.3.0 || >=media-libs/jpeg-8d"

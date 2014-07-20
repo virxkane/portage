@@ -18,7 +18,7 @@ RDEPEND=">=media-libs/babl-0.1.6
 		gui-libs/pango
 		media-libs/libpng
 		media-libs/libsdl
-		media-libs/libjpeg-turbo
+		meta-virtual/jpeg
 		media-gfx/exiv2"
 
 SRC_URI="ftp://ftp.gimp.org/pub/${PN}/0.1/${P}.tar.bz2"

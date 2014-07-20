@@ -1,0 +1,17 @@
+# Copyright 2014 Chernov A.A.
+# Distributed under the terms of the GNU General Public License v2
+
+DESCRIPTION="A virtual for selecting between pthreads-win32 and winpthreads for source-based packages"
+
+SRC_URI=""
+
+LICENSE=""
+
+case ${CHOST} in
+x86_64-w64-*)
+	RDEPEND="dev-libs/winpthreads"
+	;;
+*)
+	RDEPEND="dev-libs/pthreads-win32"
+	;;
+esac

@@ -7,7 +7,8 @@ HOMEPAGE="http://libjpeg-turbo.virtualgl.org/ http://sourceforge.net/projects/li
 
 LICENSE="BSD"
 
-DEPEND="dev-lang/nasm"
+DEPEND="dev-lang/nasm
+		!media-libs/jpeg"
 
 SRC_URI="http://downloads.sourceforge.net/${PN}/${P}.tar.gz"
 

@@ -8,7 +8,7 @@ HOMEPAGE="http://poppler.freedesktop.org/"
 LICENSE="GPL-2"
 
 RDEPEND="media-libs/freetype
-		media-libs/libjpeg-turbo
+		meta-virtual/jpeg
 		media-libs/libpng
 		gui-libs/cairo
 		dev-libs/glib

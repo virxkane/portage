@@ -8,7 +8,7 @@ HOMEPAGE="http://www.libmng.com/"
 LICENSE="as-is"
 
 RDEPEND="sys-libs/zlib
-		media-libs/libjpeg-turbo
+		meta-virtual/jpeg
 		media-libs/lcms"
 
 SRC_URI="http://downloads.sourceforge.net/${PN}/${P}.tar.gz"

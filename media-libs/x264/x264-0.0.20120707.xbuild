@@ -7,8 +7,8 @@ HOMEPAGE="http://www.videolan.org/developers/x264.html"
 
 LICENSE="GPL-2"
 
-# >=pthreads-win32-2.8
 DEPEND=">=dev-lang/yasm-0.6.2"
+RDEPEND="meta-virtual/pthreads"
 
 MY_P=${PN}-snapshot-20120707-2245
 SRC_URI="http://distfiles.gentoo.org/distfiles/${MY_P}.tar.bz2"

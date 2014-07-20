@@ -1,0 +1,12 @@
+# Copyright 2010 Chernov A.A.
+# Distributed under the terms of the GNU General Public License v2
+
+DESCRIPTION="Library to load, handle and manipulate images in the JPEG format"
+
+HOMEPAGE="http://jpegclub.org/ http://www.ijg.org/"
+
+LICENSE="as-is"
+
+SRC_URI="http://www.ijg.org/files/jpegsrc.v${PV}.tar.gz"
+
+DEPEND="!media-libs/libjpeg-turbo"

@@ -19,7 +19,7 @@ RDEPEND=">=media-libs/babl-0.1.10
 		dev-util/intltool
 		media-libs/libpng
 		media-libs/libsdl
-		media-libs/libjpeg-turbo
+		meta-virtual/jpeg
 		media-gfx/exiv2"
 
 SRC_URI="ftp://ftp.gimp.org/pub/${PN}/0.2/${P}.tar.bz2"

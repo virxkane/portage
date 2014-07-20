@@ -7,9 +7,9 @@ HOMEPAGE="http://www.remotesensing.org/libtiff/"
 
 LICENSE="as-is"
 
-# to-do: pthreads-win32 || winpthreads
 RDEPEND="sys-libs/zlib
-		media-libs/libjpeg-turbo"
+		meta-virtual/jpeg
+		meta-virtual/pthreads"
 
 SRC_URI="http://download.osgeo.org/libtiff/${P}.tar.gz"
 

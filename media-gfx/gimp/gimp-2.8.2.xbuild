@@ -23,7 +23,7 @@ LICENSE="GPL-2"
 # dev-libs/directx7-headers
 # media-libs/lcms
 # media-libs/libexif
-# media-libs/libjpeg-turbo
+# meta-virtual/jpeg
 # media-libs/libpng
 # media-libs/libmng
 # media-libs/tiff

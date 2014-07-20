@@ -26,7 +26,7 @@ RDEPEND="sys-libs/zlib
 		dev-lang/yasm
 		media-libs/libpng
 		media-libs/giflib
-		media-libs/libjpeg-turbo"
+		meta-virtual/jpeg"
 
 MY_N="MPlayer"
 MY_V=`echo ${PV} | sed -e 's/_//'`

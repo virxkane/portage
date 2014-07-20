@@ -13,7 +13,7 @@ DEPEND="dev-util/mingw32-make
 		dev-util/qt4-pathfix"
 RDEPEND="sys-libs/zlib
 		media-libs/libpng
-		media-libs/libjpeg-turbo
+		meta-virtual/jpeg
 		media-libs/libmng
 		media-libs/tiff
 		dev-db/sqlite
