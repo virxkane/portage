@@ -7,21 +7,11 @@ HOMEPAGE="http://www.sourceware.org/pthreads-win32/"
 
 LICENSE="LGPL"
 
+DEPEND="!dev-libs/winpthreads"
+
 SRC_URI="ftp://sourceware.org/pub/${PN}/pthreads-w32-2-9-1-release.tar.gz"
 
 SOURCES_DIR="pthreads-w32-2-9-1-release"
-
-src_prepare()
-{
-	case ${CHOST} in
-	i686-pc-mingw32)
-		:
-		;;
-	*)
-		eerror "This xbuild only for i686-pc-mingw32 platform!"
-		;;
-	esac
-}
 
 src_configure()
 {

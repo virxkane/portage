@@ -7,6 +7,8 @@ HOMEPAGE="http://mingw-w64.sourceforge.net/"
 
 LICENSE="AS-IS"
 
+DEPEND="!dev-libs/pthreads-win32"
+
 BASENAM="mingw-w64"
 SRC_URI="http://downloads.sourceforge.net/mingw-w64/${BASENAM}-v${PV}.tar.bz2"
 
