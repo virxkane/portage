@@ -11,6 +11,8 @@ LICENSE="GPL-3 LGPL-3"
 # bison (msys)
 # flex (msys)
 
+DEPEND="meta-virtual/system-headers
+		meta-virtual/system-libc"
 RDEPEND="sys-libs/zlib"
 
 SRC_URI="http://ftp.gnu.org/gnu/${PN}/${P}.tar.bz2"

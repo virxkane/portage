@@ -1,0 +1,17 @@
+# Copyright 2014 Chernov A.A.
+# Distributed under the terms of the GNU General Public License v2
+
+DESCRIPTION="A virtual for system headers for mingw and mingw-w64"
+
+SRC_URI=""
+
+LICENSE=""
+
+case ${CHOST} in
+x86_64-w64-*)
+	RDEPEND=">=sys-devel/mingw-w64-crt-3.1.0"
+	;;
+*)
+	RDEPEND=">=sys-devel/mingwrt-4.0.3"
+	;;
+esac

@@ -7,20 +7,22 @@ HOMEPAGE="http://gcc.gnu.org/"
 
 LICENSE="GPL-3 LGPL-3 || ( GPL-3 libgcc libstdc++ ) FDL-1.2"
 
-#   dependecies:
+#   external dependecies:
 # bison (msys)
 # perl (msys)
-# >=sys-devel/mingw-w64-headers-3.0.0
-# >=sys-devel/mingw-w64-crt-3.0.0
-# sys-devel/binutils
-# >=dev-libs/gmp-4.3.2
-# >=dev-util/mpfr-2.4.2
-# >=dev-libs/mpc-0.8.1
-# dev-libs/pthreads-win32 (for gomp)
-# sys-devel/libiconv
-# >=dev-libs/cloog-0.17
-# >=dev-libs/isl-0.10
-# >=dev-libs/libelf-0.8.12
+DEPEND=">=sys-devel/mingw-w64-headers-3.0.0 || >=sys-devel/mingwrt-4.0.3
+		>=sys-devel/mingw-w64-crt-3.0.0 || >=sys-devel/mingwrt-4.0.3
+		sys-devel/binutils"
+RDEPEND=">=dev-libs/gmp-4.3.2
+		>=dev-util/mpfr-2.4.2
+		>=dev-libs/mpc-0.8.1
+		meta-virtual/pthreads
+		sys-devel/libiconv
+		!dev-libs/cloog-ppl
+		>=dev-libs/cloog-0.17.0
+		>=dev-libs/isl-0.10
+		>=dev-libs/libelf-0.8.12"
+
 
 BASENAM="gcc"
 PATCHED_VERSION="4.8.0"
