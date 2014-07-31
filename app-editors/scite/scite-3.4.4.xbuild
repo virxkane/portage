@@ -16,7 +16,7 @@ SOURCES_DIR="./"
 
 src_prepare()
 {
-	epatch "${P}-msys-makefile.patch"
+	epatch "${PN}-3.3.3-msys-makefile.patch"
 }
 
 src_configure()
