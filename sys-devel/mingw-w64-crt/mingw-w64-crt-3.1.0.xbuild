@@ -39,6 +39,7 @@ src_configure()
 	PREFIX_S=${PREFIX}
 	PREFIX=${PREFIX}/${CHOST} \
 		econf --disable-lib32 --with-sysroot=${PREFIX_S}
+	PREFRIX=$PREFIX_S
 }
 
 src_compile()
@@ -48,7 +49,6 @@ src_compile()
 
 src_install()
 {
-	PREFIX=${PREFIX_S}
 	emake_install
 	# just copy
 	cp -pvr ${INSTDIR}${PREFIX}/x86_64-w64-mingw32 ${INSTDIR}${PREFIX}/mingw
