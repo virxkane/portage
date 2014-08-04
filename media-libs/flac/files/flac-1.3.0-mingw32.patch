@@ -1,0 +1,12 @@
+diff -urBb flac-1.3.0-orig/include/share/alloc.h flac-1.3.0/include/share/alloc.h
+--- flac-1.3.0-orig/include/share/alloc.h	2013-05-26 13:30:33 +0400
++++ flac-1.3.0/include/share/alloc.h	2014-08-04 17:23:50 +0400
+@@ -56,6 +56,8 @@
+ #   else
+ #    define SIZE_T_MAX 0xffffffff
+ #   endif
++#  elif __MINGW32__
++#   define SIZE_T_MAX 0xffffffff 
+ #  else
+ #   error
+ #  endif
