@@ -1,0 +1,19 @@
+# Copyright 2010-2014 Chernov A.A.
+# Distributed under the terms of the GNU General Public License v2
+
+DESCRIPTION="The Ogg Vorbis sound file format library"
+
+HOMEPAGE="http://xiph.org/vorbis"
+
+LICENSE="BSD"
+
+DEPEND="dev-util/pkg-config"
+RDEPEND="media-libs/libogg
+		meta-virtual/pthreads"
+
+SRC_URI="http://downloads.xiph.org/releases/vorbis/${P}.tar.xz"
+
+src_configure()
+{
+	econf --enable-shared --enable-static --disable-docs
+}

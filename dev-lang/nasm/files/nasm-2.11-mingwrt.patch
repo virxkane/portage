@@ -6,7 +6,7 @@ diff -urBb nasm-2.11-orig/configure.in nasm-2.11/configure.in
  PA_ADD_CFLAGS([-W])
  PA_ADD_CFLAGS([-Wall])
 -PA_ADD_CFLAGS([-std=c99])
-+dnl PA_ADD_CFLAGS([-std=c99])
++PA_ADD_CFLAGS([-std=gnu99])
  PA_ADD_CFLAGS([-pedantic])
  
  dnl Look for programs...

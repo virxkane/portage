@@ -1,0 +1,47 @@
+# Copyright 2010-2014 Chernov A.A.
+# Distributed under the terms of the GNU General Public License v2
+
+DESCRIPTION="PostgreSQL command line client"
+
+HOMEPAGE="http://www.postgresql.org/"
+
+LICENSE="POSTGRESQL"
+
+#   external dependencies:
+# bison (msys)
+# flex (msys)
+# perl (msys)
+
+RDEPEND="sys-libs/zlib
+		dev-libs/openssl"
+
+BASENAM="postgresql"
+SRC_URI="http://wwwmaster.postgresql.org/download/mirrors-ftp/source/v${PV}/${BASENAM}-${PV}.tar.bz2"
+
+SOURCES_DIR="${BASENAM}-${PV}"
+
+src_prepare()
+{
+	epatch "${BASENAM}-9.3.4-mingw32.patch"
+}
+
+src_configure()
+{
+	econf --disable-nls --without-perl --without-python --without-tcl \
+		--enable-thread-safety --with-openssl --with-zlib
+}
+
+src_compile()
+{
+	cd "src/bin/psql"
+	emake -j1
+	cd "../../.."
+}
+
+src_install()
+{
+	mkdir -p ${INSTDIR}${PREFIX}/share/postgresql
+	cd "src/bin/psql"
+	emake_install
+	cd "../../.."
+}
