@@ -1,4 +1,4 @@
-# Copyright 2010-2013 Chernov A.A.
+# Copyright 2010-2014 Chernov A.A.
 # Distributed under the terms of the GNU General Public License v2
 
 DESCRIPTION="A vector graphics library with cross-device output support"
@@ -11,16 +11,14 @@ LICENSE="LGPL-2"
 # gui-libs/gtk+
 # app-text/poppler
 
-# !!! build failed !!!
-
+# media-libs/opengl-ext
 DEPEND="dev-util/pkg-config"
 RDEPEND="sys-libs/zlib
 		media-libs/libpng
 		media-libs/freetype
 		media-libs/fontconfig
 		gui-libs/pixman
-		media-libs/glew
-		media-libs/opengl-ext"
+		media-libs/glew"
 
 SRC_URI="http://www.cairographics.org/releases/${P}.tar.xz"
 
@@ -28,6 +26,7 @@ src_prepare()
 {
 	epatch "${PN}-1.10.2-mingw32.patch"
 	epatch "${PN}-1.12.8-mingw32.patch"
+	epatch "${PN}-1.12.16-mingw32.patch"
 	AT_M4DIR="build" eautoreconf
 }
 
