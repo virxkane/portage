@@ -1,0 +1,28 @@
+diff -urBb fontconfig-2.11.1-orig/conf.d/Makefile.am fontconfig-2.11.1/conf.d/Makefile.am
+--- fontconfig-2.11.1-orig/conf.d/Makefile.am	2014-01-20 12:14:19 +0400
++++ fontconfig-2.11.1/conf.d/Makefile.am	2014-08-06 11:00:03 +0400
+@@ -85,6 +85,15 @@
+ 
+ install-data-hook:
+ 	mkdir -p $(DESTDIR)$(configdir)
++if OS_WIN32
++	@(echo cd $(DESTDIR)$(configdir);			\
++	  cd $(DESTDIR)$(configdir);				\
++	  for i in $(CONF_LINKS); do				\
++	    echo $(RM) $$i";" cp -p $(DESTDIR)$(templatedir)/$$i .;	\
++	    $(RM) $$i;								\
++	    cp -p $(DESTDIR)$(templatedir)/$$i .;	\
++	  done)
++else
+ 	@(echo cd $(DESTDIR)$(configdir);			\
+ 	  cd $(DESTDIR)$(configdir);				\
+ 	  for i in $(CONF_LINKS); do				\
+@@ -92,6 +101,8 @@
+ 	    $(RM) $$i;						\
+ 	    ln -s $(templatedir)/$$i .;				\
+ 	  done)
++endif
++
+ uninstall-local:
+ 	@(echo cd $(DESTDIR)$(configdir);			\
+ 	  cd $(DESTDIR)$(configdir);				\

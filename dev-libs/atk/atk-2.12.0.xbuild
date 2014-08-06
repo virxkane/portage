@@ -1,0 +1,17 @@
+# Copyright 2010-2014 Chernov A.A.
+# Distributed under the terms of the GNU General Public License v2
+
+DESCRIPTION="GTK+ & GNOME Accessibility Toolkit"
+
+HOMEPAGE="http://live.gnome.org/GAP/"
+
+LICENSE="LGPL-2"
+
+RDEPEND="dev-libs/glib"
+
+SRC_URI="http://ftp.gnome.org/pub/GNOME/sources/atk/2.12/${P}.tar.xz"
+
+src_configure()
+{
+	econf --enable-shared --enable-static --disable-gtk-doc
+}
