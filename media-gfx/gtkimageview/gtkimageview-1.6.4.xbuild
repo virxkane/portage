@@ -3,13 +3,13 @@
 
 DESCRIPTION="GtkImageView is a simple image viewer widget for GTK."
 
-HOMEPAGE="http://trac.bjourne.webfactional.com/wiki"
+HOMEPAGE="https://projects.gnome.org/gtkimageview/"
 
 LICENSE="LGPL-2.1"
 
 RDEPEND="gui-libs/gtk+"
 
-SRC_URI="${P}.tar.gz"
+SRC_URI="http://distfiles.gentoo.org/distfiles/${P}.tar.gz"
 
 src_prepare()
 {
