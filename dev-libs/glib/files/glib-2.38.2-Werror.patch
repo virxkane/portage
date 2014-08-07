@@ -1,0 +1,12 @@
+diff -urBb glib-2.38.2-orig/configure.ac glib-2.38.2/configure.ac
+--- glib-2.38.2-orig/configure.ac	2013-11-12 09:30:22 +0400
++++ glib-2.38.2/configure.ac	2014-08-07 20:22:14 +0400
+@@ -3712,7 +3712,7 @@
+    -Wall -Wstrict-prototypes -Werror=declaration-after-statement \
+    -Werror=missing-prototypes -Werror=implicit-function-declaration \
+    -Werror=pointer-arith -Werror=init-self -Werror=format-security \
+-   -Werror=format=2 -Werror=missing-include-dirs])
++   -Werror=missing-include-dirs])
+ ])
+ AC_SUBST(GLIB_WARN_CFLAGS)
+ 

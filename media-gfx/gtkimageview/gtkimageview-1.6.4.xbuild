@@ -7,7 +7,7 @@ HOMEPAGE="https://projects.gnome.org/gtkimageview/"
 
 LICENSE="LGPL-2.1"
 
-RDEPEND="gui-libs/gtk+"
+RDEPEND=">=gui-libs/gtk+-2.6.0"
 
 SRC_URI="http://distfiles.gentoo.org/distfiles/${P}.tar.gz"
 
