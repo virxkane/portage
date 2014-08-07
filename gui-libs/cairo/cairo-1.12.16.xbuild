@@ -36,8 +36,6 @@ src_prepare()
 # glActiveTexture() which now ommited in mingw/mingw-w64.
 src_configure()
 {
-	# MinGW don't have POSIX function 'ffs' but gcc have internal implementation.
-	export CFLAGS="${CFLAGS} -Dffs=__builtin_ffs"
 	econf --enable-shared --enable-static \
 		--enable-win32 --enable-win32-font --enable-pdf \
 		--enable-xml --disable-gl --disable-qt \
