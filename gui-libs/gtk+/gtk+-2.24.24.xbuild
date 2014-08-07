@@ -1,4 +1,4 @@
-# Copyright 2010-2012 Chernov A.A.
+# Copyright 2010-2014 Chernov A.A.
 # Distributed under the terms of the GNU General Public License v2
 
 DESCRIPTION="Gimp ToolKit +"
@@ -18,11 +18,6 @@ SRC_URI="http://ftp.gnome.org/pub/GNOME/sources/${PN}/2.24/${P}.tar.xz"
 # For Windows Vista & 7:
 #  Build with administrative privileges:
 #  gtk-update-icon-cache failed otherwise - contain "keyword" `update`
-
-#src_prepare()
-#{
-#	epatch "${P}-mingw32.patch"
-#}
 
 src_configure()
 {
