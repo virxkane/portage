@@ -7,6 +7,8 @@ HOMEPAGE="http://www.icu-project.org/"
 
 LICENSE="BSD"
 
+MJ_PV="52"
+
 SRC_URI="http://download.icu-project.org/files/icu4c/${PV/_/}/icu4c-${PV//./_}-src.tgz"
 
 SOURCES_DIR="${PN}/source"
@@ -22,4 +24,8 @@ src_install()
 {
 	emake_install
 	mv -fv ${INSTDIR}${PREFIX}/lib/*.dll ${INSTDIR}${PREFIX}/bin/
+	for i in dt in io le lx test tu uc
+	do
+		ln -s ${INSTDIR}${PREFIX}/lib/icu${i}.dll.a ${INSTDIR}${PREFIX}/lib/libicu${i}${MJ_PV}.dll.a
+	done
 }
