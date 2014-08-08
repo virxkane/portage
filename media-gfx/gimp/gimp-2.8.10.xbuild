@@ -14,7 +14,7 @@ LICENSE="GPL-2"
 RDEPEND=">=dev-libs/glib-2.31
 		>=gui-libs/gtk+-2.24.10
 		>=gui-libs/gdk-pixbuf-2.24.1
-		>=gui-libs/pango
+		gui-libs/pango
 		>=gui-libs/cairo-1.10.2
 		>=media-libs/babl-0.1.10
 		>=media-libs/gegl-0.2.0
