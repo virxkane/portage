@@ -1,4 +1,4 @@
-# Copyright 2010-2013 Chernov A.A.
+# Copyright 2010-2014 Chernov A.A.
 # Distributed under the terms of the GNU General Public License v2
 
 DESCRIPTION="GtkImageView is a simple image viewer widget for GTK."
@@ -14,6 +14,8 @@ SRC_URI="http://distfiles.gentoo.org/distfiles/${P}.tar.gz"
 src_prepare()
 {
 	epatch "${P}-cflags.patch"
+	epatch "${P}-no-gtk-doc.patch"
+	eautoreconf
 }
 
 src_configure()
