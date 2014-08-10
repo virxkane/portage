@@ -3,7 +3,7 @@
 
 DESCRIPTION="GNU Image Manipulation Program"
 
-HOMEPAGE="http://www.gimp.org/ ftp://ftp.gimp.org/pub/gimp/"
+HOMEPAGE="http://www.gimp.org/"
 
 LICENSE="GPL-2"
 
@@ -29,7 +29,7 @@ DEPEND=">=dev-util/intltool-0.40.1
 		>=dev-lang/perl-5.12
 		dev-perl/XML-Parser"
 
-SRC_URI="ftp://ftp.gimp.org/pub/gimp/v2.8/${P}.tar.bz2"
+SRC_URI="http://download.gimp.org/pub/gimp/v2.8/${P}.tar.bz2"
 
 export PATH="${PERL_PATH}/bin:${PATH}"
 
