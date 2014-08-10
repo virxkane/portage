@@ -34,13 +34,9 @@ src_configure()
 		--enable-extras --enable-contrast
 
 	local gimpdir_w32=`pkg-config --variable=gimplibdir gimp-2.0`
-#echo "gimpdir_w32=$gimpdir_w32"
 	local gimpdir=`w32path_posix "${gimpdir_w32}"`
-#echo "gimpdir=$gimpdir"
 	local gimpdir_w32_p=`echo "${gimpdir_w32}" | sed -e 's/\\//\\\\\//g'`
-#echo "gimpdir_w32_p=$gimpdir_w32_p"
 	local gimpdir_p=`echo "${gimpdir}" | sed -e 's/\\//\\\\\//g'`
-#echo "gimpdir_p=$gimpdir_p"
 	cat Makefile | sed -e "s/GIMP_LIBDIR = ${gimpdir_w32_p}/GIMP_LIBDIR = ${gimpdir_p}/" > Makefile.new
 	mv -f Makefile.new Makefile
 }
