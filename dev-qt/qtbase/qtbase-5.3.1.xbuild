@@ -9,17 +9,15 @@ LICENSE="LGPL-2.1 GPL-3"
 
 RESTRICT="strip"
 
-#   dependencies:
-# sys-libs/zlib
-# dev-libs/icu
-# dev-libs/libpcre
-# media-libs/libpng
-# media-libs/libjpeg-turbo
-# media-libs/libmng
-# dev-util/qt5-pathfix
-# dev-lang/perl
-#   optional
-# dev-db/postgresql-libpq
+DEPEND="dev-util/qt5-pathfix
+		dev-lang/perl"
+RDEPEND="sys-libs/zlib
+		dev-libs/icu
+		dev-libs/libpcre
+		media-libs/libpng
+		meta-virtual/jpeg
+		media-libs/libmng
+		dev-db/postgresql-libpq"
 
 MY_P=${PN}-opensource-src-${PV}
 
@@ -70,16 +68,19 @@ src_configure()
 
 src_install()
 {
-	make install | tee -a "${BUILDLOG}"
-	if [ ${PIPESTATUS[0]} -eq 0 ]
+	make install
+	if [ $? -eq 0 ]
 	then
 		eend "make install successfull."
 	else
 		eerror "make install failed!"
 	fi
+}
 
-	local _prefix="${INSTDIR}${PREFIX}/qt5"
-	local prefix_w=`posix_w32path "${PREFIX}"`\\qt5
+pkg_postinst()
+{
+	local _prefix="${PREFIX}/qt5"
+	local prefix_w=`posix_w32path "${PREFIX}/qt5"`
 
 	qt5-pathfix --prefix="${prefix_w}" \
 				"${_prefix}/bin/qmake.exe"
