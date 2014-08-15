@@ -1,0 +1,21 @@
+# Copyright 2010-2014 Chernov A.A.
+# Distributed under the terms of the GNU General Public License v2
+
+DESCRIPTION="Improved make"
+
+HOMEPAGE="http://code.google.com/a/apache-extras.org/p/dmake/"
+
+SRC_URI="http://${PN}.apache-extras.org.codespot.com/files/${P}.tar.bz2"
+
+LICENSE="GPL-1"
+
+src_prepare()
+{
+	epatch "${PN}-4.11-config.patch"
+}
+
+src_install()
+{
+	emake_install
+	ln -sv ${INSTDIR}${PREFIX}/share/startup/ ${INSTDIR}${PREFIX}/bin/startup
+}
