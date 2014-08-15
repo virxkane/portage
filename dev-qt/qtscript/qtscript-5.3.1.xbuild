@@ -1,0 +1,55 @@
+# Copyright 2013-2014 Chernov A.A.
+# Distributed under the terms of the GNU General Public License v2
+
+DESCRIPTION="Qt toolkit (Script module)"
+
+HOMEPAGE="http://qt-project.org/ http://qt.digia.com/"
+
+LICENSE="LGPL-2.1 GPL-3"
+
+RESTRICT="strip"
+
+RDEPEND=">=dev-qt/qtbase-${PV}"
+
+MY_P=${PN}-opensource-src-${PV}
+SRC_URI="http://download.qt-project.org/official_releases/qt/5.3/${PV}/submodules/${MY_P}.tar.xz"
+
+SOURCES_DIR="${MY_P}"
+
+PATH=/mingw/qt5/bin:$PATH
+
+src_configure()
+{
+	qmake -recursive
+}
+
+src_install()
+{
+	mkdir -p "${INSTDIR}/${PREFIX}"
+
+	local prefix_w=`posix_w32path "${PREFIX}"`
+	local prefix_w_d=`echo $prefix_w | sed -e 's/^\(.\):.*/\1/'`
+	      prefix_w_d=`echo $prefix_w_d | tr '[:upper:]' '[:lower:]'`
+	local prefix_w_p=`echo $prefix_w | sed -e 's/^.:\(.*\)/\1/'`
+	# replace pattern
+	local r_pat="${prefix_w_d}:\$(INSTALL_ROOT)${prefix_w_p}"
+	# replace string
+	local inst_root_w=`posix_w32path "${INSTDIR}/${PREFIX}"`
+
+	local mkfiles=`find . -name 'Makefile.Release'`
+	local mkfile
+	for mkfile in ${mkfiles}
+	do
+		echo "Patching ${mkfile}..."
+		cat "${mkfile}" | sed -e "s|$r_pat|$inst_root_w|g" > "${mkfile}.new"
+		mv -f "${mkfile}.new" "${mkfile}"
+	done
+
+	make install
+	if [ $? -eq 0 ]
+	then
+		eend "make install successfull."
+	else
+		eerror "make install failed!"
+	fi
+}
