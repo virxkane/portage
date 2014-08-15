@@ -20,7 +20,7 @@ PATH=/mingw/qt5/bin:$PATH
 
 src_configure()
 {
-	qmake
+	qmake -recursive
 }
 
 src_install()

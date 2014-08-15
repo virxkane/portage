@@ -26,7 +26,7 @@ PATH=${PYTHON_PATH}:$PATH
 
 src_configure()
 {
-	qmake
+	qmake -recursive
 }
 
 src_install()
