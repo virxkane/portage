@@ -1,0 +1,10 @@
+# Copyright 2014 Chernov A.A.
+# Distributed under the terms of the GNU General Public License v2
+
+DESCRIPTION="A perfect hash function generator"
+
+HOMEPAGE="http://www.gnu.org/software/gperf/gperf.html"
+
+SRC_URI="http://ftp.gnu.org/gnu/gperf/${P}.tar.gz"
+
+LICENSE="GPL-2"
