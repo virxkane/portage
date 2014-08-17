@@ -7,8 +7,6 @@ HOMEPAGE="http://www.python.org/"
 
 LICENSE="PSF-2"
 
-DEPEND="!dev-lang/python"
-
 case ${CHOST} in
 x86_64-w64-*)
 	SRC_URI="http://downloads.sourceforge.net/mingwportage/python3.4.1-windows-x86_64-bin.tar.xz"

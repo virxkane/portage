@@ -1,0 +1,22 @@
+# Copyright 2014 Chernov A.A.
+# Distributed under the terms of the GNU General Public License v2
+
+DESCRIPTION="A lossy image compression format"
+
+HOMEPAGE="http://code.google.com/p/webp/"
+
+SRC_URI="http://webp.googlecode.com/files/${P}.tar.gz"
+
+LICENSE="BSD"
+
+RDEPEND="meta-virtual/jpeg
+		media-libs/libpng
+		media-libs/tiff
+		media-libs/giflib
+		media-libs/freeglut"
+
+src_configure()
+{
+	econf --enable-shared --enable-static \
+		--enable-libwebpmux --enable-libwebpdemux --enable-libwebpdecoder
+}
