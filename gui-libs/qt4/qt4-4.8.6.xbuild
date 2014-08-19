@@ -47,9 +47,8 @@ src_configure()
 		-graphicssystem raster \
 		-openssl -no-dbus -no-phonon -multimedia -no-webkit -audio-backend -script -scripttools -declarative \
 		-no-dsp -no-vcproj -nomake examples -nomake demos \
-		-platform win32-g++-4.6 \
-			2>&1 | tee -a "${BUILDLOG}"
-	if [ ${PIPESTATUS[0]} -eq 0 ]
+		-platform win32-g++-4.6
+	if [ $? -eq 0 ]
 	then
 		einfo "configure successfull"
 	else
@@ -59,8 +58,8 @@ src_configure()
 
 src_install()
 {
-	make install | tee -a "${BUILDLOG}"
-	if [ ${PIPESTATUS[0]} -eq 0 ]
+	make install
+	if [ $? -eq 0 ]
 	then
 		eend "make install successfull."
 	else
