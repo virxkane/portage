@@ -1,4 +1,4 @@
-# Copyright 2010-2013 Chernov A.A.
+# Copyright 2010-2014 Chernov A.A.
 # Distributed under the terms of the GNU General Public License v2
 
 DESCRIPTION="DirecX 7 header files"
@@ -12,10 +12,6 @@ RESTRICT="strip mirror"
 DEPEND="!sys-devel/mingw-w64-headers"
 
 SRC_URI="http://www.mplayerhq.hu/MPlayer/contrib/win32/dx7headers.tgz"
-
-# this xbuild replace following files from `mingw-w64-headers' package:
-# dmksctrl.h
-# multimon.h
 
 SOURCES_DIR="./"
 
