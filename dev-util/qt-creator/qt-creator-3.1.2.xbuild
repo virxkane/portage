@@ -53,22 +53,25 @@ src_configure()
 	echo "mingw32-make INSTALL_ROOT=${qtc_prefix} install" >> binstall.cmd
 	echo "exit" >> binstall.cmd
 	
-	echo -n "Wait external process qmake inside windows console... "
-	start //I //WAIT bqmake.cmd -recursive
-	echo "done"
+	#echo -n "Wait external process qmake inside windows console... "
+	#start //I //WAIT bqmake.cmd -recursive
+	#echo "done"
 	#start //I //WAIT bqmake.cmd
+	cmd //C bqmake.cmd -recursive
 }
 
 src_compile()
 {
-	echo -n "Wait external process mingw32-make inside windows console... "
-	start //I //WAIT bmake.cmd
-	echo "done"
+	#echo -n "Wait external process mingw32-make inside windows console... "
+	#start //I //WAIT bmake.cmd
+	#echo "done"
+	cmd //C bmake.cmd
 }
 
 src_install()
 {
-	echo -n "Wait external process mingw32-make inside windows console... "
-	start //I //WAIT binstall.cmd
-	echo "done"
+	#echo -n "Wait external process mingw32-make inside windows console... "
+	#start //I //WAIT binstall.cmd
+	#echo "done"
+	cmd //C binstall.cmd
 }
