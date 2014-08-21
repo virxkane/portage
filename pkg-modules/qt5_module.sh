@@ -3,7 +3,7 @@
 # http://sourceforge.net/projects/mingwportage/
 # Distributed under the terms of the GNU General Public License v3
 
-PATH="${PREFIX}/qt5/bin":${PATH}
+PATH="${PREFIX}/qt5/bin":"${PERL_PATH}/bin":${PATH}
 
 qt5_module_src_configure()
 {

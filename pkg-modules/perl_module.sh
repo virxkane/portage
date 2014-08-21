@@ -3,7 +3,7 @@
 # http://sourceforge.net/projects/mingwportage/
 # Distributed under the terms of the GNU General Public License v3
 
-export PATH="${PERL_PATH}/bin:${PATH}"
+export PATH="${PERL_PATH}/bin":${PATH}
 
 perl_module_src_configure()
 {

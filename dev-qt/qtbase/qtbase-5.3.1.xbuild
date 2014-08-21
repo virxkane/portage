@@ -26,6 +26,8 @@ SRC_URI="http://download.qt-project.org/official_releases/qt/5.3/${PV}/submodule
 
 SOURCES_DIR="${MY_P}"
 
+PATH="${PERL_PATH}/bin":${PATH}
+
 src_configure()
 {
 	local prefix_w=`posix_w32path "${PREFIX}"`
@@ -57,9 +59,8 @@ src_configure()
 		-plugin-sql-sqlite -plugin-sql-odbc -plugin-sql-psql \
 		-platform win32-g++ -opengl desktop \
 		-system-libpng -system-libjpeg -system-zlib -system-pcre \
-		-iconv -icu -no-dbus -openssl
-			2>&1 | tee -a "${BUILDLOG}"
-	if [ ${PIPESTATUS[0]} -eq 0 ]
+		-iconv -icu -dbus-linked -openssl
+	if [ $? -eq 0 ]
 	then
 		einfo "configure successfull"
 	else
