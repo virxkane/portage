@@ -17,7 +17,8 @@ RDEPEND="sys-libs/zlib
 		media-libs/libpng
 		meta-virtual/jpeg
 		media-libs/libmng
-		dev-db/postgresql-libpq"
+		dev-db/postgresql-libpq
+		sys-apps/dbus"
 
 MY_P=${PN}-opensource-src-${PV}
 
