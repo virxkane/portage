@@ -26,7 +26,7 @@ src_configure()
 # key --parallel=${MAKEOPTS} give variuos failures...
 
 	LDFLAGS="-Wl,--enable-auto-import" \
-		./bootstrap --prefix="${PREFIX}" --system-libs --no-qt-gui 2>&1 | tee -a "${BUILDLOG}"
+		./bootstrap --prefix="${PREFIX}" --system-libs --no-qt-gui
 	checkexitcode $? "bootstrap failed"
 
 	# fix native path of install prefix back to MSYS path
