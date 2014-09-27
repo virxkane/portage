@@ -16,7 +16,7 @@ qt5_modules_src_install()
 
 	local prefix_w=`posix_w32path "${PREFIX}"`
 	local prefix_w_d=`echo $prefix_w | sed -e 's/^\(.\):.*/\1/'`
-	      prefix_w_d=`echo $prefix_w_d | tr '[:upper:]' '[:lower:]'`
+	      prefix_w_d=`echo $prefix_w_d`
 	local prefix_w_p=`echo $prefix_w | sed -e 's/^.:\(.*\)/\1/'`
 	# replace pattern
 	local r_pat="${prefix_w_d}:\$(INSTALL_ROOT)${prefix_w_p}"
@@ -28,7 +28,7 @@ qt5_modules_src_install()
 	for mkfile in ${mkfiles}
 	do
 		echo "Patching ${mkfile}..."
-		cat "${mkfile}" | sed -e "s|$r_pat|$inst_root_w|g" > "${mkfile}.new"
+		cat "${mkfile}" | sed -e "s|$r_pat|$inst_root_w|gi" > "${mkfile}.new"
 		mv -f "${mkfile}.new" "${mkfile}"
 	done
 
