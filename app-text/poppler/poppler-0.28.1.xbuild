@@ -1,0 +1,44 @@
+# Copyright 2010-2014 Chernov A.A.
+# Distributed under the terms of the GNU General Public License v2
+
+DESCRIPTION="PDF rendering library based on the xpdf-3.0 code base"
+
+HOMEPAGE="http://poppler.freedesktop.org/"
+
+LICENSE="GPL-2"
+
+DEPEND="dev-util/pkg-config"
+
+# TODO: add >=gui-libs/gtk+-3.8.0
+# TODO: add >=dev-qt/qtbase
+
+RDEPEND="meta-virtual/pthreads
+		media-libs/freetype
+		meta-virtual/jpeg
+		sys-libs/zlib
+		media-libs/libpng
+		media-libs/tiff
+		>=gui-libs/cairo-1.10.0
+		>=dev-libs/glib-2.18
+		gui-libs/qt4
+		sys-devel/libiconv
+		=media-libs/openjpeg-1.5.*
+		media-libs/lcms2
+		net-misc/curl"
+
+SRC_URI="http://poppler.freedesktop.org/${P}.tar.xz"
+
+USE_CMAKE=yes
+
+src_prepare()
+{
+	epatch "${PN}-0.26.2-mingw32-cmake.patch"
+}
+
+src_configure()
+{
+	econf -DBUILD_SHARED_LIBS=ON \
+		-DBUILD_CPP_TESTS=OFF -DBUILD_GTK_TESTS=OFF -DBUILD_QT4_TESTS=OFF -DBUILD_QT5_TESTS=OFF \
+		-DENABLE_SPLASH=ON -DENABLE_ZLIB=ON -DENABLE_LIBOPENJPEG=ON -DENABLE_UTILS=ON \
+		-DENABLE_LIBCURL=ON -DENABLE_XPDF_HEADERS=ON
+}
