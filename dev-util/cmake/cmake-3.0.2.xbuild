@@ -1,4 +1,4 @@
-# Copyright 2010-2012 Chernov A.A.
+# Copyright 2010-2014 Chernov A.A.
 # Distributed under the terms of the GNU General Public License v2
 
 DESCRIPTION="Cross platform Make"
@@ -18,20 +18,20 @@ SRC_URI="http://www.cmake.org/files/v2.8/${P}.tar.gz"
 src_prepare()
 {
 	epatch "${P}-mingw32-bz2_check.patch"
+	epatch "${P}-1.patch"
 }
-
-# BUG: possible write to d:\msys_4_64\mingw64\
 
 src_configure()
 {
 
 # key --parallel=${MAKEOPTS} give variuos failures...
 
-	LDFLAGS="-Wl,--enable-auto-import" \
-		./bootstrap --prefix="${PREFIX}" --system-libs --no-qt-gui
+	./bootstrap --prefix="${PREFIX}" --system-libs --no-qt-gui
 	checkexitcode $? "bootstrap failed"
 
 	# fix native path of install prefix back to MSYS path
 	cat CMakeCache.txt | sed -e "s/^CMAKE_INSTALL_PREFIX:PATH=.*$/CMAKE_INSTALL_PREFIX:PATH=\\${PREFIX}/" > CMakeCache.txt.new
 	mv -f CMakeCache.txt.new CMakeCache.txt
+	cat cmake_install.cmake | sed -e "s/^\ *SET(CMAKE_INSTALL_PREFIX\ .*)\ *$/  SET(CMAKE_INSTALL_PREFIX\ \\${PREFIX})/" > cmake_install.cmake.new
+	mv -f cmake_install.cmake.new cmake_install.cmake
 }

@@ -1,0 +1,14 @@
+diff -urBb cmake-3.0.2-orig/Source/CPack/WiX/cmWIXPatchParser.cxx cmake-3.0.2/Source/CPack/WiX/cmWIXPatchParser.cxx
+--- cmake-3.0.2-orig/Source/CPack/WiX/cmWIXPatchParser.cxx	2014-09-11 17:24:00 +0400
++++ cmake-3.0.2/Source/CPack/WiX/cmWIXPatchParser.cxx	2014-11-20 20:32:23 +0300
+@@ -134,8 +134,8 @@
+ 
+ void cmWIXPatchParser::ReportValidationError(const std::string& message)
+ {
+-  ReportError(XML_GetCurrentLineNumber(Parser),
+-    XML_GetCurrentColumnNumber(Parser),
++  ReportError(XML_GetCurrentLineNumber((XML_Parser)Parser),
++    XML_GetCurrentColumnNumber((XML_Parser)Parser),
+     message.c_str());
+ }
+ 

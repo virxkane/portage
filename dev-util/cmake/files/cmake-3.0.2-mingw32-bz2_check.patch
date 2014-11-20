@@ -1,13 +1,12 @@
-diff -urBb cmake-2.8.10.1-orig/Modules/FindBZip2.cmake cmake-2.8.10.1/Modules/FindBZip2.cmake
---- cmake-2.8.10.1-orig/Modules/FindBZip2.cmake	2012-11-06 23:41:36 +0400
-+++ cmake-2.8.10.1/Modules/FindBZip2.cmake	2012-11-28 00:50:14 +0400
-@@ -49,8 +49,28 @@
+diff -urBb cmake-3.0.2-orig/Modules/FindBZip2.cmake cmake-3.0.2/Modules/FindBZip2.cmake
+--- cmake-3.0.2-orig/Modules/FindBZip2.cmake	2014-09-11 17:24:00 +0400
++++ cmake-3.0.2/Modules/FindBZip2.cmake	2014-11-20 17:29:13 +0300
+@@ -56,8 +56,29 @@
                                    VERSION_VAR BZIP2_VERSION_STRING)
  
  if (BZIP2_FOUND)
--   include(CheckLibraryExists)
+-   include(${CMAKE_CURRENT_LIST_DIR}/CheckLibraryExists.cmake)
 -   CHECK_LIBRARY_EXISTS("${BZIP2_LIBRARIES}" BZ2_bzCompressInit "" BZIP2_NEED_PREFIX)
--endif ()
 +   include(CheckCSourceCompiles)
 +
 +   set(CMAKE_REQUIRED_LIBRARIES_save ${CMAKE_REQUIRED_LIBRARIES})
@@ -21,7 +20,7 @@ diff -urBb cmake-2.8.10.1-orig/Modules/FindBZip2.cmake cmake-2.8.10.1/Modules/Fi
 +{
 +  return BZ2_bzlibVersion ();
 +}" BZIP2_COMPILES)
- 
++ 
 +   if(BZIP2_COMPILES)
 +      set(BZIP2_NEED_PREFIX TRUE)
 +   endif(BZIP2_COMPILES)
@@ -31,5 +30,6 @@ diff -urBb cmake-2.8.10.1-orig/Modules/FindBZip2.cmake cmake-2.8.10.1/Modules/Fi
 +   unset(CMAKE_REQUIRED_LIBRARIES_save)
 +   unset(CMAKE_REQUIRED_INCLUDES_save)
 +   unset(BZIP2_COMPILES)
-+endif ()
+ endif ()
+ 
  mark_as_advanced(BZIP2_INCLUDE_DIR)
