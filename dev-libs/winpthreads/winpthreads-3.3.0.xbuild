@@ -1,0 +1,36 @@
+# Copyright 2014 Chernov A.A.
+# Distributed under the terms of the GNU General Public License v3
+
+DESCRIPTION="Posix Threads library for Microsoft Windows "
+
+HOMEPAGE="http://mingw-w64.sourceforge.net/"
+
+LICENSE="AS-IS"
+
+DEPEND="!dev-libs/pthreads-win32"
+
+BASENAM="mingw-w64"
+SRC_URI="http://downloads.sourceforge.net/mingw-w64/${BASENAM}-v${PV}.tar.bz2"
+
+SOURCES_DIR="${BASENAM}-v${PV}/${BASENAM}-libraries/${PN}"
+
+BUILD_IN_SEPARATE_DIR=yes
+
+src_prepare()
+{
+	case ${CHOST} in
+	x86_64-w64*)
+		:
+		;;
+	*)
+		eerror "This xbuild only for x86_64-w64 platform!"
+		;;
+	esac
+}
+
+src_install()
+{
+	emake_install
+	cp -pv ${INSTDIR}${PREFIX}/lib/libwinpthread.la \
+		${INSTDIR}${PREFIX}/lib/libpthread.la
+}
