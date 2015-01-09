@@ -7,11 +7,11 @@ HOMEPAGE="http://www.gnu.org/software/make/make.html"
 
 LICENSE="GPL-2"
 
-BASNAM="make"
+MY_PN="make"
 
-SRC_URI="http://ftp.gnu.org/gnu/${BASNAM}/${BASNAM}-${PV}.tar.bz2"
+SRC_URI="http://ftp.gnu.org/gnu/${MY_PN}/${MY_PN}-${PV}.tar.bz2"
 
-SOURCES_DIR="${BASNAM}-${PV}"
+SOURCES_DIR="${MY_PN}-${PV}"
 
 src_configure()
 {
