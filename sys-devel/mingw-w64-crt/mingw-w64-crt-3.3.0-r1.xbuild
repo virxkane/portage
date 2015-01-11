@@ -1,4 +1,6 @@
-# Copyright 2010-2014 Chernov A.A.
+# Copyright 2010-2015 Chernov A.A.
+# This is a part of mingw-portage project: 
+# http://sourceforge.net/projects/mingwportage/
 # Distributed under the terms of the GNU General Public License v3
 
 DESCRIPTION="Free Win64 runtime and import library definitions"
@@ -36,7 +38,7 @@ src_configure()
 {
 	# as writed in docs: https://sourceforge.net/apps/trac/mingw-w64/wiki/Native%20Win64%20compiler
 	# we must redefined PREFIX:
-	PREFIX_S=${PREFIX}
+	local PREFIX_S=${PREFIX}
 	PREFIX=${PREFIX}/${CHOST} \
 		econf --disable-lib32 --with-sysroot=${PREFIX_S}
 	PREFIX=$PREFIX_S
@@ -45,11 +47,4 @@ src_configure()
 src_compile()
 {
 	emake -j1
-}
-
-src_install()
-{
-	emake_install
-	# just copy
-	cp -pvr ${INSTDIR}${PREFIX}/x86_64-w64-mingw32 ${INSTDIR}${PREFIX}/mingw
 }
