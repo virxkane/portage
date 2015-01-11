@@ -1,6 +1,6 @@
-diff -urBb gcc-4.8.0-orig/libiberty/Makefile.in gcc-4.8.0/libiberty/Makefile.in
---- gcc-4.8.0-orig/libiberty/Makefile.in	2013-01-02 06:04:42 +0400
-+++ gcc-4.8.0/libiberty/Makefile.in	2013-04-07 22:01:44 +0400
+diff -urBb gcc-4.9.2-orig/libiberty/Makefile.in gcc-4.9.2/libiberty/Makefile.in
+--- gcc-4.9.2-orig/libiberty/Makefile.in	2013-06-01 03:20:49 +0300
++++ gcc-4.9.2/libiberty/Makefile.in	2015-01-10 00:49:52 +0300
 @@ -344,7 +344,7 @@
  @MAINT@	echo stamp > stamp-functions
  

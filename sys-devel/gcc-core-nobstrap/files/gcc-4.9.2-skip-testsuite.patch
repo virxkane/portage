@@ -1,0 +1,136 @@
+diff -urBb gcc-4.9.2-orig/libgomp/Makefile.am gcc-4.9.2/libgomp/Makefile.am
+--- gcc-4.9.2-orig/libgomp/Makefile.am	2013-10-11 13:43:48 +0300
++++ gcc-4.9.2/libgomp/Makefile.am	2015-01-10 00:17:55 +0300
+@@ -1,7 +1,7 @@
+ ## Process this file with automake to produce Makefile.in
+ 
+ ACLOCAL_AMFLAGS = -I .. -I ../config
+-SUBDIRS = testsuite
++SUBDIRS = 
+ 
+ ## May be used by toolexeclibdir.
+ gcc_version := $(shell cat $(top_srcdir)/../gcc/BASE-VER)
+diff -urBb gcc-4.9.2-orig/libgomp/Makefile.in gcc-4.9.2/libgomp/Makefile.in
+--- gcc-4.9.2-orig/libgomp/Makefile.in	2014-10-30 11:28:58 +0300
++++ gcc-4.9.2/libgomp/Makefile.in	2015-01-10 00:18:02 +0300
+@@ -288,7 +288,7 @@
+ top_builddir = @top_builddir@
+ top_srcdir = @top_srcdir@
+ ACLOCAL_AMFLAGS = -I .. -I ../config
+-SUBDIRS = testsuite
++SUBDIRS = 
+ gcc_version := $(shell cat $(top_srcdir)/../gcc/BASE-VER)
+ search_path = $(addprefix $(top_srcdir)/config/, $(config_path)) $(top_srcdir)
+ fincludedir = $(libdir)/gcc/$(target_alias)/$(gcc_version)/finclude
+diff -urBb gcc-4.9.2-orig/libgomp/configure gcc-4.9.2/libgomp/configure
+--- gcc-4.9.2-orig/libgomp/configure	2014-10-30 11:28:58 +0300
++++ gcc-4.9.2/libgomp/configure	2015-01-10 00:20:36 +0300
+@@ -16268,7 +16268,7 @@
+ 
+ ac_config_files="$ac_config_files omp.h omp_lib.h omp_lib.f90 libgomp_f.h"
+ 
+-ac_config_files="$ac_config_files Makefile testsuite/Makefile libgomp.spec"
++ac_config_files="$ac_config_files Makefile libgomp.spec"
+ 
+ cat >confcache <<\_ACEOF
+ # This file is a shell script that caches the results of configure
+diff -urBb gcc-4.9.2-orig/libgomp/configure.ac gcc-4.9.2/libgomp/configure.ac
+--- gcc-4.9.2-orig/libgomp/configure.ac	2013-11-07 18:07:34 +0300
++++ gcc-4.9.2/libgomp/configure.ac	2015-01-10 00:19:39 +0300
+@@ -346,5 +346,5 @@
+ CFLAGS="$save_CFLAGS"
+ 
+ AC_CONFIG_FILES(omp.h omp_lib.h omp_lib.f90 libgomp_f.h)
+-AC_CONFIG_FILES(Makefile testsuite/Makefile libgomp.spec)
++AC_CONFIG_FILES(Makefile libgomp.spec)
+ AC_OUTPUT
+diff -urBb gcc-4.9.2-orig/libiberty/Makefile.in gcc-4.9.2/libiberty/Makefile.in
+--- gcc-4.9.2-orig/libiberty/Makefile.in	2013-06-01 03:20:49 +0300
++++ gcc-4.9.2/libiberty/Makefile.in	2015-01-10 00:17:26 +0300
+@@ -98,7 +98,7 @@
+ 	"tooldir=$(tooldir)"
+ 
+ # Subdirectories to recurse into. We need to override this during cleaning
+-SUBDIRS = testsuite
++SUBDIRS = 
+ 
+ # FIXME: add @BUILD_INFO@ once we're sure it works for everyone.
+ all: stamp-picdir $(TARGETLIB) required-list all-subdir
+diff -urBb gcc-4.9.2-orig/libiberty/configure gcc-4.9.2/libiberty/configure
+--- gcc-4.9.2-orig/libiberty/configure	2014-01-06 21:15:31 +0300
++++ gcc-4.9.2/libiberty/configure	2015-01-10 00:21:41 +0300
+@@ -6951,7 +6951,7 @@
+ 
+ 
+ # We need multilib support, but only if configuring for the target.
+-ac_config_files="$ac_config_files Makefile testsuite/Makefile"
++ac_config_files="$ac_config_files Makefile"
+ 
+ ac_config_commands="$ac_config_commands default"
+ 
+diff -urBb gcc-4.9.2-orig/libiberty/configure.ac gcc-4.9.2/libiberty/configure.ac
+--- gcc-4.9.2-orig/libiberty/configure.ac	2014-01-06 21:15:31 +0300
++++ gcc-4.9.2/libiberty/configure.ac	2015-01-10 00:20:54 +0300
+@@ -704,7 +704,7 @@
+ AC_SUBST(htmldir)
+ 
+ # We need multilib support, but only if configuring for the target.
+-AC_CONFIG_FILES([Makefile testsuite/Makefile])
++AC_CONFIG_FILES([Makefile])
+ AC_CONFIG_COMMANDS([default],
+   [[test -z "$CONFIG_HEADERS" || echo timestamp > stamp-h
+ if test -n "$CONFIG_FILES"; then
+diff -urBb gcc-4.9.2-orig/libstdc++-v3/Makefile.am gcc-4.9.2/libstdc++-v3/Makefile.am
+--- gcc-4.9.2-orig/libstdc++-v3/Makefile.am	2014-01-03 01:30:10 +0300
++++ gcc-4.9.2/libstdc++-v3/Makefile.am	2015-01-10 00:35:42 +0300
+@@ -23,7 +23,7 @@
+ include $(top_srcdir)/fragment.am
+ 
+ if GLIBCXX_HOSTED
+-  hosted_source = src doc po testsuite
++  hosted_source = src doc po
+ endif
+ 
+ ## Keep this list sync'd with acinclude.m4:GLIBCXX_CONFIGURE.
+diff -urBb gcc-4.9.2-orig/libstdc++-v3/Makefile.in gcc-4.9.2/libstdc++-v3/Makefile.in
+--- gcc-4.9.2-orig/libstdc++-v3/Makefile.in	2013-08-07 06:38:59 +0300
++++ gcc-4.9.2/libstdc++-v3/Makefile.in	2015-01-10 00:36:14 +0300
+@@ -94,7 +94,7 @@
+ 	$(RECURSIVE_CLEAN_TARGETS:-recursive=) tags TAGS ctags CTAGS
+ ETAGS = etags
+ CTAGS = ctags
+-DIST_SUBDIRS = include libsupc++ src doc po testsuite python
++DIST_SUBDIRS = include libsupc++ src doc po python
+ ABI_TWEAKS_SRCDIR = @ABI_TWEAKS_SRCDIR@
+ ACLOCAL = @ACLOCAL@
+ ALLOCATOR_H = @ALLOCATOR_H@
+@@ -316,7 +316,7 @@
+ 
+ # -I/-D flags to pass when compiling.
+ AM_CPPFLAGS = $(GLIBCXX_INCLUDES)
+-@GLIBCXX_HOSTED_TRUE@hosted_source = src doc po testsuite
++@GLIBCXX_HOSTED_TRUE@hosted_source = src doc po
+ SUBDIRS = include libsupc++ $(hosted_source) python
+ ACLOCAL_AMFLAGS = -I . -I .. -I ../config
+ @BUILD_XML_FALSE@STAMP_XML = 
+diff -urBb gcc-4.9.2-orig/libstdc++-v3/configure gcc-4.9.2/libstdc++-v3/configure
+--- gcc-4.9.2-orig/libstdc++-v3/configure	2014-03-20 21:57:07 +0300
++++ gcc-4.9.2/libstdc++-v3/configure	2015-01-10 00:34:41 +0300
+@@ -4884,7 +4884,7 @@
+   # expandable list at autoconf time; the second provides an expandable list
+   # (i.e., shell variable) at configure time.
+ 
+-  SUBDIRS='include libsupc++ python src src/c++98 src/c++11 doc po testsuite'
++  SUBDIRS='include libsupc++ python src src/c++98 src/c++11 doc po'
+ 
+   # These need to be absolute paths, yet at the same time need to
+   # canonicalize only relative paths, because then amd will not unmount
+@@ -79547,7 +79547,7 @@
+ # append it here.  Only modify Makefiles that have just been created.
+ #
+ # Also, get rid of this simulated-VPATH thing that automake does.
+-ac_config_files="$ac_config_files include/Makefile libsupc++/Makefile python/Makefile src/Makefile src/c++98/Makefile src/c++11/Makefile doc/Makefile po/Makefile testsuite/Makefile"
++ac_config_files="$ac_config_files include/Makefile libsupc++/Makefile python/Makefile src/Makefile src/c++98/Makefile src/c++11/Makefile doc/Makefile po/Makefile"
+ 
+ 
+ ac_config_commands="$ac_config_commands generate-headers"

@@ -1,13 +1,11 @@
-# Copyright 2010-2014 Chernov A.A.
+# Copyright 2010-2015 Chernov A.A.
 # Distributed under the terms of the GNU General Public License v2
 
-DESCRIPTION="The GNU Compiler Collection. Includes C/C++"
+DESCRIPTION="The GNU Compiler Collection. Only C/C++"
 
 HOMEPAGE="http://gcc.gnu.org/"
 
 LICENSE="GPL-3 LGPL-3 || ( GPL-3 libgcc libstdc++ ) FDL-1.2"
-
-# TODO: Fix spec file (pkg_postinst()) to add `-isystem %(mingw_prefix)/include' for C complier.
 
 #   external dependecies:
 # bison (msys)
@@ -15,7 +13,8 @@ LICENSE="GPL-3 LGPL-3 || ( GPL-3 libgcc libstdc++ ) FDL-1.2"
 DEPEND=">=sys-devel/mingw-w64-headers-3.1.0 || >=sys-devel/mingwrt-4.0.3
 		>=sys-devel/mingw-w64-crt-3.1.0 || >=sys-devel/mingwrt-4.0.3
 		sys-devel/binutils"
-RDEPEND=">=dev-libs/gmp-5.1.3
+RDEPEND="!sys-devel/gcc-core
+		>=dev-libs/gmp-5.1.3
 		>=dev-util/mpfr-3.1.2
 		>=dev-libs/mpc-1.0.2
 		meta-virtual/pthreads
@@ -25,19 +24,59 @@ RDEPEND=">=dev-libs/gmp-5.1.3
 		>=dev-libs/isl-0.12
 		>=dev-libs/libelf-0.8.12"
 
-BASENAM="gcc"
-PATCHED_VERSION="4.8.0"
-SRC_URI="http://ftp.gnu.org/gnu/gcc/${BASENAM}-${PV}/${BASENAM}-${PV}.tar.bz2"
-#SRC_URI="${BASENAM}-core-${PV}.tar.xz ${BASENAM}-g++-${PV}.tar.xz"
+MY_PN="gcc"
+MY_P="${MY_PN}-${PV}"
+SRC_URI="http://ftp.gnu.org/gnu/gcc/${MY_P}/${MY_P}.tar.bz2"
 
-#RESTRICT="fetch"
-
-SOURCES_DIR="${BASENAM}-${PV}"
+SOURCES_DIR="${MY_P}"
 BUILD_IN_SEPARATE_DIR=yes
+
+src_unpack()
+{
+	local exclude_parts="
+		boehm-gc
+		gcc/ada
+		gcc/testsuite
+		gnattools
+		libada
+		libatomic
+		libcilkrts
+		libffi
+		libgfortran
+		libgo
+		libgomp/testsuite
+		libiberty/testsuite
+		libitm
+		libjava
+		libobjc
+		libsanitizer
+		libstdc++-v3/testsuite
+		libvtv
+		maintainer-scripts"
+	local part=
+	local exclude_opts=
+	local tarball="${MY_P}.tar.bz2"
+	for part in ${exclude_parts}
+	do
+		exclude_opts+="--exclude=${SOURCES_DIR}/${part} "
+	done
+	ebegin "Unpacking parts of ${tarball}... "
+	local f=`find_srcpackage ${tarball}`
+	tar -xjf ${f} ${exclude_opts} 2>&1 > /dev/null
+	if [ $? -eq 0 ]
+	then
+		eend "OK"
+	else
+		eend "failed"
+		eerror "failed to unpack"
+	fi
+	cd "${SOURCES_DIR}" || eerror "failed to cd to source dir :("
+}
 
 src_prepare()
 {
-	epatch "${BASENAM}-${PATCHED_VERSION}-drop-texinfo.patch"
+	epatch "${MY_P}-skip-texinfo.patch"
+	epatch "${MY_P}-skip-testsuite.patch"
 }
 
 src_configure()
@@ -48,8 +87,8 @@ src_configure()
 	local econfp=
 	case ${CHOST} in
 	x86_64-w64-*)
-		#econfp="--with-sysroot=/mingw --enable-sjlj-exceptions --without-dwarf2"
-		econfp="--enable-sjlj-exceptions --without-dwarf2"
+		#econfp="--enable-sjlj-exceptions --without-dwarf2"
+		# without options assumed SEH
 		;;
 	*)
 		econfp="--disable-sjlj-exceptions --with-dwarf2"
@@ -58,25 +97,15 @@ src_configure()
 
 	econf --enable-shared \
 		--disable-win32-registry --enable-version-specific-runtime-libs \
-		--disable-debug --enable-threads=win32 --enable-libgomp --enable-lto \
-		--with-gmp --with-mpc --with-cloog --with-libelf \
-		--with-system-zlib --disable-werror \
+		--disable-debug --enable-checking=release --enable-threads=win32 --enable-libgomp \
+		--enable-lto --enable-graphite \
+		--with-gmp --with-mpc --with-cloog --with-libelf --with-libiconv \
+		--with-system-zlib --enable-libquadmath-support --disable-libada \
 		--enable-languages=c,c++ \
-		--enable-bootstrap --disable-nls --disable-multilib \
+		--enable-libstdcxx-time=yes --disable-werror --disable-nls --disable-multilib \
+		--disable-bootstrap
 		${econfp}
 }
-
-#src_compile()
-#{
-#	case ${CHOST} in
-#	x86_64-w64-*)
-#		emake BOOT_CFLAGS=\"-fpermissive -g -O2\" STAGE1_TFLAGS=\"-I${PREFIX}/include\"
-#		;;
-#	*)
-#		emake
-#		;;
-#	esac
-#}
 
 src_install()
 {
@@ -89,7 +118,6 @@ src_install()
 		;;
 	esac
 }
-
 
 pkg_postinst()
 {
