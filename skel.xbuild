@@ -1,4 +1,6 @@
-# Copyright 2013-2014 Chernov A.A.
+# Copyright 2013-2015 Chernov A.A.
+# This is a part of mingw-portage project: 
+# http://sourceforge.net/projects/mingwportage/
 # Distributed under the terms of the GNU General Public License v2
 
 DESCRIPTION="This is a sample skeleton xbuild file"
