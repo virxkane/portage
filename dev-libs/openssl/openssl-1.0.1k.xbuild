@@ -1,0 +1,52 @@
+# Copyright 2010-2015 Chernov A.A.
+# This is a part of mingw-portage project: 
+# http://sourceforge.net/projects/mingwportage/
+# Distributed under the terms of the GNU General Public License v3
+
+DESCRIPTION="Toolkit for SSL v2/v3 and TLS v1"
+
+HOMEPAGE="http://www.openssl.org/"
+
+LICENSE="openssl"
+
+#   external dependencies:
+# perl (msys)
+
+# dev-libs/gmp (not work now)
+RDEPEND="sys-libs/zlib"
+
+SRC_URI="http://www.openssl.org/source/${P}.tar.gz"
+
+src_configure()
+{
+	local _targ=mingw
+	case ${CHOST} in
+	x86_64-w64-*)
+		_targ=mingw64
+		;;
+	esac
+	perl Configure --prefix="${PREFIX}" --openssldir="${PREFIX}/etc/ssl" \
+		enable-camellia enable-ec enable-idea enable-mdc2 enable-rc5 \
+		enable-tlsext enable-zlib disable-capieng \
+		shared threads \
+		${_targ}
+	checkexitcode $? "configure failed"
+}
+
+src_compile()
+{
+	emake -j1 depend
+	emake -j1
+}
+
+src_install()
+{
+	emake_install INSTALL_PREFIX="${INSTDIR}"
+	pwd1=`pwd`
+	cd "${INSTDIR}${PREFIX}/lib/" || die "Can't cd to ${INSTDIR}${PREFIX}/lib/"
+	ln -sv "libcrypto.a"     "libeay32.a"
+	ln -sv "libcrypto.dll.a" "libeay32.dll.a"
+	ln -sv "libssl.a"        "libssleay32.a"
+	ln -sv "libssl.dll.a"    "libssleay32.dll.a"
+	cd "${pwd1}"
+}

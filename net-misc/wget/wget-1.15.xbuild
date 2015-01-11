@@ -27,7 +27,7 @@ src_configure()
 		--enable-threads=windows --disable-ipv6
 
 	# in mingwrt-4.x libmsvcrt.a contain all symbols for all
-	# Windows version, we disable some of this to provide work 
+	# Windows version, we disable some of this to provide working 
 	# in Windows XP.
 	case ${CHOST} in
 	i[4-6]86-pc-mingw32)
