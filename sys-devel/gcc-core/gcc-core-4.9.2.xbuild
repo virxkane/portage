@@ -12,7 +12,7 @@ LICENSE="GPL-3 LGPL-3 || ( GPL-3 libgcc libstdc++ ) FDL-1.2"
 # Known problems:
 # Build failed if $TMPDIR point to other drive that pointed $PREFIX.
 
-# TODO: Fix spec file (pkg_postinst()) to add `-isystem %(mingw_prefix)/include' for C complier.
+# TODO: Remove postinst phase - fixing spec file may be useless now...
 
 #   external dependecies:
 # bison (msys)
