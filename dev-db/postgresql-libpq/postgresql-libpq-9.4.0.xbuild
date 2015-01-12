@@ -39,7 +39,7 @@ src_compile()
 	emake -C "src/port"
 	emake -C "src/common"
 	emake -C "src/interfaces/libpq"
-	emake -j1 -C "src/bin/pg_config"
+	emake -C "src/bin/pg_config"
 }
 
 src_install()
