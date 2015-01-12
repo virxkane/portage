@@ -7,6 +7,9 @@ HOMEPAGE="http://sources.redhat.com/gdb/"
 
 LICENSE="GPL-2 LGPL-2"
 
+RDEPEND="dev-libs/expat
+		sys-libs/zlib"
+
 SRC_URI="http://ftp.gnu.org/gnu/${PN}/${P}.tar.xz"
 
 BUILD_IN_SEPARATE_DIR=yes
@@ -18,5 +21,6 @@ src_prepare()
 
 src_configure()
 {
-	econf --disable-werror --disable-nls
+	econf --disable-werror --disable-nls \
+		--with-expat --with-zlib --with-python=no
 }
