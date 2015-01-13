@@ -1,0 +1,83 @@
+diff -urBb mysql-connector-c-6.1.5-src-orig/configure.cmake mysql-connector-c-6.1.5-src/configure.cmake
+--- mysql-connector-c-6.1.5-src-orig/configure.cmake	2014-06-11 06:10:44 +0300
++++ mysql-connector-c-6.1.5-src/configure.cmake	2015-01-13 15:05:04 +0300
+@@ -777,6 +777,7 @@
+ }" HAVE_BUILTIN_EXPECT)
+ 
+ # GCC has __builtin_stpcpy but still calls stpcpy
++IF(NOT WIN32)
+ IF(NOT CMAKE_SYSTEM_NAME MATCHES "SunOS" OR NOT CMAKE_COMPILER_IS_GNUCC)
+ CHECK_C_SOURCE_COMPILES("
+ int main()
+@@ -787,6 +788,7 @@
+   return 0;
+ }" HAVE_BUILTIN_STPCPY)
+ ENDIF()
++ENDIF()
+ 
+ CHECK_CXX_SOURCE_COMPILES("
+     #undef inline
+diff -urBb mysql-connector-c-6.1.5-src-orig/include/m_string.h mysql-connector-c-6.1.5-src/include/m_string.h
+--- mysql-connector-c-6.1.5-src-orig/include/m_string.h	2014-06-11 06:10:43 +0300
++++ mysql-connector-c-6.1.5-src/include/m_string.h	2015-01-13 10:42:40 +0300
+@@ -141,7 +141,7 @@
+ 
+ static inline char *my_strtok_r(char *str, const char *delim, char **saveptr)
+ {
+-#if defined _WIN32
++#if defined(_WIN32) && !defined(__MINGW32__)
+   return strtok_s(str, delim, saveptr);
+ #else
+   return strtok_r(str, delim, saveptr);
+diff -urBb mysql-connector-c-6.1.5-src-orig/libmysql/authentication_win/handshake.h mysql-connector-c-6.1.5-src/libmysql/authentication_win/handshake.h
+--- mysql-connector-c-6.1.5-src-orig/libmysql/authentication_win/handshake.h	2014-06-11 06:10:43 +0300
++++ mysql-connector-c-6.1.5-src/libmysql/authentication_win/handshake.h	2015-01-13 15:10:50 +0300
+@@ -100,7 +100,7 @@
+   Handshake(const char *ssp, side_t side);
+   virtual ~Handshake();
+ 
+-  int Handshake::packet_processing_loop();
++  int packet_processing_loop();
+ 
+   bool virtual is_complete() const
+   {
+diff -urBb mysql-connector-c-6.1.5-src-orig/mysys/stacktrace.c mysql-connector-c-6.1.5-src/mysys/stacktrace.c
+--- mysql-connector-c-6.1.5-src-orig/mysys/stacktrace.c	2014-06-11 06:10:43 +0300
++++ mysql-connector-c-6.1.5-src/mysys/stacktrace.c	2015-01-13 10:42:40 +0300
+@@ -526,15 +526,8 @@
+ 
+ void my_safe_puts_stderr(const char *val, int len)
+ {
+-  __try
+-  {
+-    my_write_stderr(val, len);
+-    my_safe_printf_stderr("%s", "\n");
+-  }
+-  __except(EXCEPTION_EXECUTE_HANDLER)
+-  {
++  if (!my_write_stderr(val, len)) 
+     my_safe_printf_stderr("%s", "is an invalid string pointer\n");
+-  }
+ }
+ #endif /* _WIN32 */
+ 
+@@ -543,9 +536,16 @@
+ size_t my_write_stderr(const void *buf, size_t count)
+ {
+   DWORD bytes_written;
+-  SetFilePointer(GetStdHandle(STD_ERROR_HANDLE), 0, NULL, FILE_END);
+-  WriteFile(GetStdHandle(STD_ERROR_HANDLE), buf, count, &bytes_written, NULL);
+-  return bytes_written;
++  HANDLE hnd = GetStdHandle(STD_ERROR_HANDLE);
++  if (NULL != hnd)
++  {
++	if (INVALID_SET_FILE_POINTER != SetFilePointer(hnd, 0, NULL, FILE_END))
++	{
++		if (WriteFile(hnd, buf, count, &bytes_written, NULL))
++			return (size_t)bytes_written;
++	}
++  }
++  return 0; 
+ }
+ #else
+ size_t my_write_stderr(const void *buf, size_t count)
