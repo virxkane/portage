@@ -37,4 +37,6 @@ src_install()
 	install -d ${INSTDIR}/${PREFIX}/bin/
 	mv ${INSTDIR}/${PREFIX}/lib/liblibmysql.dll \
 		${INSTDIR}/${PREFIX}/bin/liblibmysql.dll
+	mv ${INSTDIR}/${PREFIX}/{COPYING,README} \
+		${INSTDIR}/${PREFIX}/docs/
 }
