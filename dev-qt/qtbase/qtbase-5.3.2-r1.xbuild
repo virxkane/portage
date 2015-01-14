@@ -92,7 +92,7 @@ src_configure()
 	./configure.exe -prefix ${_prefix} \
 		-release -opensource -confirm-license -shared -ltcg -rtti \
 		-nomake examples -accessibility -largefile \
-		-plugin-sql-sqlite -plugin-sql-odbc -plugin-sql-psql \
+		-plugin-sql-sqlite -plugin-sql-odbc -plugin-sql-psql  -plugin-sql-mysql \
 		-platform win32-g++ -opengl desktop \
 		-system-libpng -system-libjpeg -system-zlib -system-pcre \
 		-system-freetype -system-harfbuzz \
