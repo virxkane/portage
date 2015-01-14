@@ -1,0 +1,29 @@
+diff -urBb glib-2.42.1-orig/configure.ac glib-2.42.1/configure.ac
+--- glib-2.42.1-orig/configure.ac	2014-11-10 02:18:06 +0300
++++ glib-2.42.1/configure.ac	2015-01-14 11:02:24 +0300
+@@ -1031,6 +1031,25 @@
+ fi
+ 
+ AC_CHECK_FUNCS(getprotobyname_r endservent if_nametoindex if_indextoname)
++if test $glib_native_win32 = yes
++then
++	if test "x$ac_cv_func_if_nametoindex" != "xyes"
++	then
++	  AC_CHECK_LIB(iphlpapi, if_nametoindex)
++	  if test "x$ac_cv_lib_iphlpapi_if_nametoindex" = "xyes"
++	  then
++		AC_DEFINE(HAVE_IF_NAMETOINDEX)
++	  fi
++	fi
++	if test "x$ac_cv_func_if_indextoname" != "xyes"
++	then
++	  AC_CHECK_LIB(iphlpapi, if_indextoname)
++	  if test "x$ac_cv_lib_iphlpapi_if_indextoname" = "xyes"
++	  then
++		AC_DEFINE(HAVE_IF_INDEXTONAME)
++	  fi
++	fi
++fi
+ 
+ AS_IF([test $glib_native_win32 = yes], [
+   # <wspiapi.h> in the Windows SDK and in mingw-w64 has wrappers for
