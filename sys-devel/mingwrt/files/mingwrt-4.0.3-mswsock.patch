@@ -1,0 +1,17 @@
+diff -urBb mingwrt-4.0.3-1-mingw32-src-orig/include/mswsock.h mingwrt-4.0.3-1-mingw32-src/include/mswsock.h
+--- mingwrt-4.0.3-1-mingw32-src-orig/include/mswsock.h	2013-09-18 20:14:50 +0300
++++ mingwrt-4.0.3-1-mingw32-src/include/mswsock.h	2015-01-15 09:12:57 +0300
+@@ -121,9 +121,10 @@
+ BOOL PASCAL DisconnectEx(SOCKET,LPOVERLAPPED,DWORD,DWORD);
+ int PASCAL WSARecvMsg(SOCKET,LPWSAMSG,LPDWORD,LPWSAOVERLAPPED,LPWSAOVERLAPPED_COMPLETION_ROUTINE);
+ 
+-#if (_WIN32_WINNT >= _WIN32_WINNT_VISTA)
+-int WSAAPI WSAPoll(WSAPOLLFD, ULONG, INT);
+-#endif
++// WSAPOLLFD already undefined!
++//#if (_WIN32_WINNT >= _WIN32_WINNT_VISTA)
++//int WSAAPI WSAPoll(WSAPOLLFD, ULONG, INT);
++//#endif
+ 
+ #endif /* _WINSOCK2_H */
+ 

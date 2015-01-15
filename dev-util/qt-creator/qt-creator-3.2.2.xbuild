@@ -1,0 +1,58 @@
+# Copyright 2010-2015 Chernov A.A.
+# This is a part of mingw-portage project: 
+# http://sourceforge.net/projects/mingwportage/
+# Distributed under the terms of the GNU General Public License v2
+
+DESCRIPTION="Lightweight IDE for C++ development centering around Qt"
+
+HOMEPAGE="http://qt-project.org/wiki/Category:Tools::QtCreator"
+
+LICENSE="LGPL-2.1"
+
+MIN_QT_PV="5.3.1"
+
+DEPEND="dev-lang/perl"
+RDEPEND=">=dev-qt/qtbase-${MIN_QT_PV}
+		>=dev-qt/qtsvg-${MIN_QT_PV}
+		>=dev-qt/qtscript-${MIN_QT_PV}
+		>=dev-qt/qttools-${MIN_QT_PV}
+		>=dev-qt/qtdeclarative-${MIN_QT_PV}"
+
+MY_P=${PN}-opensource-src-${PV}
+
+SRC_URI="http://download.qt-project.org/official_releases/qtcreator/3.2/${PV}/${MY_P}.tar.gz"
+
+SOURCES_DIR="${MY_P}"
+
+PATH=${PERL_PATH}:${PREFIX}/qt5/bin:${PATH}
+
+src_unpack()
+{
+	unpack_one "${MY_P}.tar.gz" ign
+	cd "${MY_P}"
+}
+
+src_prepare()
+{
+	epatch "${PN}-3.2.0-mingw.patch"
+}
+
+src_configure()
+{
+	qmake -recursive
+}
+
+src_install()
+{
+	make INSTALL_ROOT=${INSTDIR}/${PREFIX}/qt5/QtCreator install
+	if [ $? -eq 0 ]
+	then
+		eend "make install successfull."
+	else
+		eerror "make install failed!"
+	fi
+	local prefix_w=`posix_w32path "${PREFIX}"`
+	prefix_w=`echo ${prefix_w} | sed -e 's/\\//\\\/g'`
+	echo "@SET PATH=${prefix_w}\\qt5\\bin;${prefix_w}\\bin;%PATH%" > ${INSTDIR}/${PREFIX}/qt5/QtCreator/bin/qtcreator.bat
+	echo "@start qtcreator.exe" >> ${INSTDIR}/${PREFIX}/qt5/QtCreator/bin/qtcreator.bat
+}
