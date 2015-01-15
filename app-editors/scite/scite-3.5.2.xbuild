@@ -1,4 +1,6 @@
-# Copyright 2013 Chernov A.A.
+# Copyright 2013-2015 Chernov A.A.
+# This is a part of mingw-portage project: 
+# http://sourceforge.net/projects/mingwportage/
 # Distributed under the terms of the GNU General Public License v2
 
 DESCRIPTION="A very powerful editor for programmers"
@@ -8,16 +10,13 @@ HOMEPAGE="http://www.scintilla.org/SciTE.html"
 # Neil Hodgson license
 LICENSE="HPND"
 
+DEPEND="dev-util/mingw32-make"
+
 MY_PV=${PV//./}
 
 SRC_URI="http://downloads.sourceforge.net/scintilla/${PN}${MY_PV}.tgz"
 
 SOURCES_DIR="./"
-
-src_prepare()
-{
-	epatch "${P}-msys-makefile.patch"
-}
 
 src_configure()
 {
@@ -26,8 +25,8 @@ src_configure()
 
 src_compile()
 {
-	emake -C scintilla/win32
-	emake -C scite/win32
+	mingw32-make -C scintilla/win32 || die
+	mingw32-make -C scite/win32 || die
 }
 
 src_install()
