@@ -1,4 +1,4 @@
-# Copyright 2010-2014 Chernov A.A.
+# Copyright 2010-2015 Chernov A.A.
 # Distributed under the terms of the GNU General Public License v2
 
 DESCRIPTION="GNU debugger"
@@ -8,7 +8,8 @@ HOMEPAGE="http://sources.redhat.com/gdb/"
 LICENSE="GPL-2 LGPL-2"
 
 RDEPEND="dev-libs/expat
-		sys-libs/zlib"
+	sys-libs/zlib
+	dev-lang/python"
 
 SRC_URI="http://ftp.gnu.org/gnu/${PN}/${P}.tar.xz"
 
@@ -22,5 +23,5 @@ src_prepare()
 src_configure()
 {
 	econf --disable-werror --disable-nls \
-		--with-expat --with-zlib --with-python=no
+		--with-expat --with-zlib --with-python=yes
 }
