@@ -186,14 +186,13 @@ src_install()
 	# clean-up reference to build directory
 	sed -i "s#${WORKDIR}/${SOURCES_DIR}:##" "${INSTDIR}${PREFIX}"/lib/python${_pybasever}/config/Makefile
 
-	for fscripts in 2to3 idle pydoc; do
+	for fscripts in 2to3 idle pydoc smtpd.py; do
 		sed -e "s|${w32prefix}/bin/python${_pybasever}.exe|/usr/bin/env python${_pybasever}.exe|g" -i "${INSTDIR}${PREFIX}"/bin/$fscripts
 	done
 
-	sed -i "s|#!${PREFIX}/bin/python${_pybasever}.exe|#!/usr/bin/env python${_pybasever}.exe|" "${INSTDIR}${PREFIX}"/bin/python${_pybasever}-config
-	sed -i "s|#!${PREFIX}/bin/python${_pybasever}.exe|#!/usr/bin/env python${_pybasever}.exe|" "${INSTDIR}${PREFIX}"/bin/python2-config
-	sed -i "s|#!${PREFIX}/bin/python${_pybasever}.exe|#!/usr/bin/env python${_pybasever}.exe|" "${INSTDIR}${PREFIX}"/bin/python-config
-
+	for fscripts in python${_pybasever}-config python2-config python-config; do
+		sed -i "s|#!${PREFIX}/bin/python${_pybasever}.exe|#!/usr/bin/env python${_pybasever}.exe|" "${INSTDIR}${PREFIX}"/bin/$fscripts
+	done
 
 	# Fix up two instances of MSYS2 paths in python-config.sh in-case the final consumer of the results are native executables.
 	#sed -i "s|${PREFIX}|${w32prefix}|" "${INSTDIR}${PREFIX}"/bin/python-config.sh
