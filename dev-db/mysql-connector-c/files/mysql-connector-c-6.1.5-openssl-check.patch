@@ -1,0 +1,12 @@
+diff -urBb mysql-connector-c-6.1.5-src-orig/cmake/ssl.cmake mysql-connector-c-6.1.5-src/cmake/ssl.cmake
+--- mysql-connector-c-6.1.5-src-orig/cmake/ssl.cmake	2014-06-11 07:10:43.000000000 +0400
++++ mysql-connector-c-6.1.5-src/cmake/ssl.cmake	2015-04-08 19:48:34.449142400 +0300
+@@ -166,7 +166,7 @@
+     # Encoded as MNNFFPPS: major minor fix patch status
+     FILE(STRINGS "${OPENSSL_INCLUDE_DIR}/openssl/opensslv.h"
+       OPENSSL_VERSION_NUMBER
+-      REGEX "^#define[\t ]+OPENSSL_VERSION_NUMBER[\t ]+0x[0-9].*"
++      REGEX "^#[\t ]*define[\t ]+OPENSSL_VERSION_NUMBER[\t ]+0x[0-9].*"
+     )
+     STRING(REGEX REPLACE
+       "^.*OPENSSL_VERSION_NUMBER[\t ]+0x([0-9]).*$" "\\1"
