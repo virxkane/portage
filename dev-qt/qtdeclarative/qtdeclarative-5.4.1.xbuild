@@ -1,25 +1,24 @@
-# Copyright 2013-2014 Chernov A.A.
+# Copyright 2013-2015 Chernov A.A.
 # Distributed under the terms of the GNU General Public License v2
 
 DESCRIPTION="Qt toolkit (Declarative module)"
 
-HOMEPAGE="http://qt-project.org/ http://qt.digia.com/"
+HOMEPAGE="http://www.qt.io/"
 
 LICENSE="LGPL-2.1 GPL-3"
 
 RESTRICT="strip"
 
 DEPEND="dev-lang/perl
-		dev-lang/python-bin"
+	dev-lang/python"
 RDEPEND=">=dev-qt/qtbase-${PV}
-		>=dev-qt/qtxmlpatterns-${PV}"
+	>=dev-qt/qtxmlpatterns-${PV}"
 
 MY_P=${PN}-opensource-src-${PV}
-SRC_URI="http://download.qt-project.org/official_releases/qt/5.3/${PV}/submodules/${MY_P}.tar.xz"
+SRC_URI="http://download.qt.io/official_releases/qt/5.4/${PV}/submodules/${MY_P}.tar.xz"
 
 SOURCES_DIR="${MY_P}"
 
 PATH=${PERL_PATH}/bin:$PATH
-PATH=${PYTHON_PATH}:$PATH
 
 load_module qt5_module

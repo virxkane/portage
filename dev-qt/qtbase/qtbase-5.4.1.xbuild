@@ -1,9 +1,9 @@
-# Copyright 2013-2014 Chernov A.A.
+# Copyright 2013-2015 Chernov A.A.
 # Distributed under the terms of the GNU General Public License v2
 
 DESCRIPTION="Qt toolkit (base module)"
 
-HOMEPAGE="http://qt-project.org/ http://qt.digia.com/"
+HOMEPAGE="http://www.qt.io/"
 
 LICENSE="LGPL-2.1 GPL-3"
 
@@ -21,11 +21,12 @@ RDEPEND="sys-libs/zlib
 		media-libs/harfbuzz
 		media-libs/freetype
 		dev-db/postgresql-libpq
+		dev-db/mysql-connector-c
 		sys-apps/dbus"
 
 MY_P=${PN}-opensource-src-${PV}
 
-SRC_URI="http://download.qt-project.org/official_releases/qt/5.3/${PV}/submodules/${MY_P}.tar.xz"
+SRC_URI="http://download.qt.io/official_releases/qt/5.4/${PV}/submodules/${MY_P}.tar.xz"
 
 SOURCES_DIR="${MY_P}"
 
@@ -33,7 +34,7 @@ PATH="${PERL_PATH}/bin":${PATH}
 
 src_prepare()
 {
-	epatch "${P}-system-freetype.patch"
+	epatch "${PN}-5.3.2-system-freetype.patch"
 }
 
 src_configure()
@@ -91,7 +92,7 @@ src_configure()
 	./configure.exe -prefix ${_prefix} \
 		-release -opensource -confirm-license -shared -ltcg -rtti \
 		-nomake examples -accessibility -largefile \
-		-plugin-sql-sqlite -plugin-sql-odbc -plugin-sql-psql \
+		-plugin-sql-sqlite -plugin-sql-odbc -plugin-sql-psql  -plugin-sql-mysql \
 		-platform win32-g++ -opengl desktop \
 		-system-libpng -system-libjpeg -system-zlib -system-pcre \
 		-system-freetype -system-harfbuzz \
