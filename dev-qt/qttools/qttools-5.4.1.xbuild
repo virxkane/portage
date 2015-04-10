@@ -1,7 +1,7 @@
 # Copyright 2013-2015 Chernov A.A.
 # Distributed under the terms of the GNU General Public License v2
 
-DESCRIPTION="Qt toolkit (Declarative module)"
+DESCRIPTION="Qt toolkit (Tools module)"
 
 HOMEPAGE="http://www.qt.io/"
 
@@ -9,20 +9,18 @@ LICENSE="LGPL-2.1 GPL-3"
 
 RESTRICT="strip"
 
-DEPEND="dev-lang/perl
-	dev-lang/python"
+# TODO: check for requirement of qtwebkit
 RDEPEND=">=dev-qt/qtbase-${PV}
-	>=dev-qt/qtxmlpatterns-${PV}"
+		>=dev-qt/qtxmlpatterns-${PV}
+		>=dev-qt/qtdeclarative-${PV}
+		>=dev-qt/qtactiveqt-${PV}"
 
 MY_P=${PN}-opensource-src-${PV}
 SRC_URI="http://download.qt.io/official_releases/qt/5.4/${PV}/submodules/${MY_P}.tar.xz"
 
 SOURCES_DIR="${MY_P}"
 
-PATH=${PERL_PATH}/bin:$PATH
-
 load_module qt5_module
 
 # TODO: fix know bug - broken library directories search order:
-# to successfull compile new version you MUST uninstall previous version:
-# quicktestresult.cpp:(.text+0x15db): undefined reference to `__imp__ZN9QV8Engine9toVariantEN3QV48ValueRefEibP4QSetIPNS0_6ObjectEE'
+# to successfull compile new version you MUST uninstall previous version.
