@@ -1,0 +1,53 @@
+# Copyright 2010-2015 Chernov A.A.
+# This is a part of mingw-portage project: 
+# http://sourceforge.net/projects/mingwportage/
+# Distributed under the terms of the GNU General Public License v3
+
+DESCRIPTION="Free Win64 runtime and import library definitions"
+
+HOMEPAGE="http://mingw-w64.sourceforge.net/"
+
+LICENSE="ZPL"
+
+RESTRICT="strip"
+
+#   dependencies:
+DEPEND=">=sys-devel/mingw-w64-headers-${PV}"
+
+MY_PN="mingw-w64"
+MY_P="${MY_PN}-v${PV}"
+SRC_URI="http://downloads.sourceforge.net/${MY_PN}/${MY_P}.tar.bz2"
+
+SOURCES_DIR="${MY_P}/${MY_PN}-crt"
+BUILD_IN_SEPARATE_DIR=yes
+
+src_prepare()
+{
+	case ${CHOST} in
+	*-w64-mingw*)
+		;;
+	*)
+		eerror "This xbuild only for mingw-w64 platforms!"
+		;;
+	esac
+}
+
+
+src_configure()
+{
+	local confp=
+	case ${CHOST} in
+	x86_64-w64-mingw*)
+		econfp="--disable-lib32"
+		;;
+	esac
+	# as writed in docs: https://sourceforge.net/apps/trac/mingw-w64/wiki/Native%20Win64%20compiler
+	# we must redefined PREFIX:
+	PREFIX=${PREFIX}/${CHOST} \
+		econf --with-sysroot=${PREFIX_S} ${econfp}
+}
+
+src_compile()
+{
+	emake -j1
+}
