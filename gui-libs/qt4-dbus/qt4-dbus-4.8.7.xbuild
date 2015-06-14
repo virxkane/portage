@@ -8,8 +8,6 @@ HOMEPAGE="http://qt-project.org/ http://qt.digia.com/"
 
 LICENSE="LGPL-2.1 GPL-3"
 
-# to-do: install private headers, for qt-creator.
-
 DEPEND="dev-util/pkg-config"
 RDEPEND=">=gui-libs/qt4-${PV}
 		sys-apps/dbus"
