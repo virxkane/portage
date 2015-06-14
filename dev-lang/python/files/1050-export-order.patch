@@ -1,0 +1,27 @@
+diff -urBb Python-2.7.9-orig/Makefile.pre.in Python-2.7.9/Makefile.pre.in
+--- Python-2.7.9-orig/Makefile.pre.in	2015-04-12 09:26:07.923610000 +0300
++++ Python-2.7.9/Makefile.pre.in	2015-04-12 09:22:07.553861600 +0300
+@@ -1087,17 +1087,17 @@
+ $(srcdir)/Lib/$(PLATDIR):
+ 	mkdir $(srcdir)/Lib/$(PLATDIR)
+ 	cp $(srcdir)/Lib/plat-generic/regen $(srcdir)/Lib/$(PLATDIR)/regen
+-	export PATH; PATH="`pwd`:$$PATH"; \
+-	export PYTHONPATH; PYTHONPATH="$(srcdir)/Lib:$(abs_builddir)/`cat pybuilddir.txt`"; \
+-	export DYLD_FRAMEWORK_PATH; DYLD_FRAMEWORK_PATH="`pwd`"; \
+-	export EXE; EXE="$(BUILDEXE)"; \
+-	if [ -n "$(MULTIARCH)" ]; then export MULTIARCH; MULTIARCH=$(MULTIARCH); fi; \
+-	export PYTHON_FOR_BUILD; \
++	PATH="`pwd -W`:$$PATH"; export PATH; \
++	PYTHONPATH="$(srcdir)/Lib:$(abs_builddir)/`cat pybuilddir.txt`"; export PYTHONPATH; \
++	DYLD_FRAMEWORK_PATH="`pwd`"; export DYLD_FRAMEWORK_PATH; \
++	EXE="$(BUILDEXE)"; export EXE; \
++	if [ -n "$(MULTIARCH)" ]; then MULTIARCH=$(MULTIARCH); export MULTIARCH; fi; \
+ 	if [ "$(build)" = "$(host)" ]; then \
+ 	  PYTHON_FOR_BUILD="$(BUILDPYTHON)"; \
+ 	else \
+ 	  PYTHON_FOR_BUILD="$(PYTHON_FOR_BUILD)"; \
+ 	fi; \
++	export PYTHON_FOR_BUILD; \
+ 	cd $(srcdir)/Lib/$(PLATDIR); $(RUNSHARED) ./regen "$(CC)"
+ 
+ python-config: $(srcdir)/Misc/python-config.in
