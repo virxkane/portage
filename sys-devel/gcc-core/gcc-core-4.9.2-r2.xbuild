@@ -28,7 +28,7 @@ RDEPEND="!sys-devel/gcc-core-nobstrap
 		sys-devel/libiconv
 		!dev-libs/cloog-ppl
 		>=dev-libs/cloog-0.18.0
-		>=dev-libs/isl-0.12
+		=dev-libs/isl-0.12*
 		>=dev-libs/libelf-0.8.12"
 
 MY_PN="gcc"
