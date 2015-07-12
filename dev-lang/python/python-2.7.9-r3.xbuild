@@ -124,9 +124,6 @@ src_prepare()
 	echo "Apply Renato Silva's patch to distutils"
 	epatch "2000-distutils-add-windmc-to-cygwinccompiler.patch"
 
-	# my own patches...
-	epatch "1050-export-order.patch"
-
 	eautoreconf
 
 	  # Enable built-in SQLite module to load extensions (fix FS#22122)
