@@ -11,7 +11,7 @@ LICENSE="GPL-3 LGPL-3 || ( GPL-3 libgcc libstdc++ ) FDL-1.2"
 
 # Known problems:
 # Build failed if $TMPDIR point to other drive that pointed $PREFIX.
-# Build failed on i686-w32-mingw32.
+# Build failed on i686-w64-mingw32 (with dward2 eh).
 
 # TODO: Remove postinst phase - fixing spec file may be useless now...
 
@@ -95,6 +95,8 @@ src_prepare()
 	epatch "${MY_PN}-4.8-libstdc++export.patch"
 	epatch "${MY_P}-mingw-w64-native-dir.patch"
 	epatch "${MY_P}-mingw-w64-bootstrap-target-flags.patch"
+	# for compatibility with mingwrt-4.0.3 (i686-pc-mingw32)
+	epatch "${MY_P}-mingwrt4.patch"
 }
 
 src_configure()
@@ -109,11 +111,22 @@ src_configure()
 		# without options assumed SEH
 		;;
 	*)
-		econfp="--disable-sjlj-exceptions --with-dwarf2"
+		# for DWARF2 EH (broken in 5.1.0 on i686-w64-mingw32)
+		#econfp="--disable-sjlj-exceptions --with-dwarf2"
+		# for SJLJ EH
+		econfp="--enable-sjlj-exceptions --without-dwarf2"
+		;;
+	esac
+	case ${CHOST} in
+	*-w64-mingw32)
+		econfp="${econfp} --with-native-system-header-dir=${PREFIX}/${CHOST}/include"
+		;;
+	*-pc-mingw32)
+		econfp="${econfp} --with-native-system-header-dir=${PREFIX}/include"
 		;;
 	esac
 
-	econf --with-native-system-header-dir=${PREFIX}/${CHOST}/include --enable-shared \
+	econf --enable-shared \
 		--disable-win32-registry --enable-version-specific-runtime-libs \
 		--disable-debug --enable-checking=release \
 		--enable-threads=win32 --enable-libgomp --enable-lto --enable-graphite \
