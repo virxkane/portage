@@ -1,0 +1,34 @@
+diff -urBb gdb-7.9.1-orig/gdb/gnulib/import/wctype.in.h gdb-7.9.1/gdb/gnulib/import/wctype.in.h
+--- gdb-7.9.1-orig/gdb/gnulib/import/wctype.in.h	2014-06-11 19:34:41 +0300
++++ gdb-7.9.1/gdb/gnulib/import/wctype.in.h	2015-07-13 10:32:53 +0300
+@@ -25,6 +25,16 @@
+  * wctrans_t, and wctype_t are not yet implemented.
+  */
+ 
++/*
++2013-03-27  Daiki Ueno  <address@hidden>
++
++       wctype-h: fix gettext link error on mingw
++       Reported by Josue Andrade Gomes and Takayuki Tsunakawa in
++       <https://lists.gnu.org/archive/html/bug-gettext/2013-03/msg00086.html>.
++       * lib/wctype.in.h [__MINGW32__]: Include <ctype.h> before defining
++       rpl_towupper and rpl_towupper.
++*/
++
+ #ifndef _@GUARD_PREFIX@_WCTYPE_H
+ 
+ #if __GNUC__ >= 3
+@@ -44,6 +54,13 @@
+ # include <wchar.h>
+ #endif
+ 
++/* mingw has declarations of towupper and towlower in <ctype.h> as
++   well <wctype.h>.  Include <ctype.h> in advance to avoid rpl_ prefix
++   being added to the declarations.  */
++#if __MINGW32__
++# include <ctype.h>
++#endif
++
+ /* Include the original <wctype.h> if it exists.
+    BeOS 5 has the functions but no <wctype.h>.  */
+ /* The include_next requires a split double-inclusion guard.  */
