@@ -1,0 +1,12 @@
+diff -urBb Python-2.7.9-orig/Lib/distutils/util.py Python-2.7.9/Lib/distutils/util.py
+--- Python-2.7.9-orig/Lib/distutils/util.py	2015-07-13 10:04:07 +0300
++++ Python-2.7.9/Lib/distutils/util.py	2015-07-13 09:59:22 +0300
+@@ -168,7 +168,7 @@
+         if path_r and path_r[0] == os.sep:
+             path_r = path_r[1:]
+         drive_used = ''
+-        if len(drive) == 2 and len(drive_r) == 2 and drive != drive_r:
++        if len(drive) == 2 and len(drive_r) == 2 and drive.lower() != drive_r.lower():
+             raise DistutilsChangeRootError("root and pathname not on same drive (%s, %s)"
+                    % (drive_r,drive))
+         elif len(drive_r) == 2:

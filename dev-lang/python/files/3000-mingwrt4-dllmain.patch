@@ -1,0 +1,14 @@
+diff -urBb Python-2.7.9-orig/PC/dl_nt.c Python-2.7.9/PC/dl_nt.c
+--- Python-2.7.9-orig/PC/dl_nt.c	2014-12-10 18:59:58 +0300
++++ Python-2.7.9/PC/dl_nt.c	2015-07-13 09:28:49 +0300
+@@ -76,8 +76,8 @@
+             OutputDebugString("Python failed to de-activate the activation context\n");
+ }
+ 
+-BOOL    WINAPI  DllMain (HANDLE hInst,
+-                                                ULONG ul_reason_for_call,
++BOOL    WINAPI  DllMain (HINSTANCE hInst,
++                                                DWORD ul_reason_for_call,
+                                                 LPVOID lpReserved)
+ {
+     switch (ul_reason_for_call)
