@@ -1,0 +1,27 @@
+diff -urBb cmake-3.2.2-orig/Source/cmGeneratorExpressionEvaluationFile.h cmake-3.2.2/Source/cmGeneratorExpressionEvaluationFile.h
+--- cmake-3.2.2-orig/Source/cmGeneratorExpressionEvaluationFile.h	2015-04-13 20:09:00.000000000 +0300
++++ cmake-3.2.2/Source/cmGeneratorExpressionEvaluationFile.h	2015-07-14 10:50:22.303287400 +0300
+@@ -12,6 +12,9 @@
+ #ifndef cmGeneratorExpressionEvaluationFile_h
+ #define cmGeneratorExpressionEvaluationFile_h
+ 
++// for mode_t
++#include <sys/types.h>
++
+ #include "cmStandardIncludes.h"
+ #include <cmsys/auto_ptr.hxx>
+ 
+diff -urBb cmake-3.2.2-orig/Source/CPack/WiX/cmWIXPatchParser.cxx cmake-3.2.2/Source/CPack/WiX/cmWIXPatchParser.cxx
+--- cmake-3.2.2-orig/Source/CPack/WiX/cmWIXPatchParser.cxx	2015-04-13 20:09:00.000000000 +0300
++++ cmake-3.2.2/Source/CPack/WiX/cmWIXPatchParser.cxx	2015-07-14 12:29:22.055021700 +0300
+@@ -132,8 +132,8 @@
+ 
+ void cmWIXPatchParser::ReportValidationError(std::string const& message)
+ {
+-  ReportError(XML_GetCurrentLineNumber(Parser),
+-    XML_GetCurrentColumnNumber(Parser),
++  ReportError(XML_GetCurrentLineNumber((XML_Parser)Parser),
++    XML_GetCurrentColumnNumber((XML_Parser)Parser),
+     message.c_str());
+ }
+ 
