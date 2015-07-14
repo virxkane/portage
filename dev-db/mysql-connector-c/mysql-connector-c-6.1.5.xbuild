@@ -13,6 +13,8 @@ SRC_URI="http://dev.mysql.com/get/Downloads/Connector-C/${MY_P}.tar.gz"
 
 LICENSE="GPL-2"
 
+RESTRICT="mirror"
+
 DEPEND="dev-util/cmake"
 RDEPEND="dev-libs/openssl
 		sys-libs/zlib"

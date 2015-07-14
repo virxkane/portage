@@ -1,0 +1,350 @@
+diff -urBb mysql-connector-c-6.1.6-src-orig/CMakeLists.txt mysql-connector-c-6.1.6-src/CMakeLists.txt
+--- mysql-connector-c-6.1.6-src-orig/CMakeLists.txt	2015-02-26 00:09:49.000000000 +0300
++++ mysql-connector-c-6.1.6-src/CMakeLists.txt	2015-07-14 14:30:29.554698900 +0300
+@@ -63,6 +63,11 @@
+ # custom packaging steps.
+ OPTION(COMMUNITY_BUILD "Set to true if this is a community build" ON) 
+ 
++# For compatibility with mingw-w64
++# MySQL threads implementation uses some incompatible definitions/types with mingw-w64,
++# for example, struct timespec.
++OPTION(FORCE_USE_PTHREADS_WIN32 "For mingw use external pthreads library instead of using mysql thread implementation" OFF)
++
+ # Use a default manufacturer if no manufacturer was identified.
+ SET(MANUFACTURER_DOCSTRING
+   "Set the entity that appears as the manufacturer of packages that support a manufacturer field.")
+diff -urBb mysql-connector-c-6.1.6-src-orig/configure.cmake mysql-connector-c-6.1.6-src/configure.cmake
+--- mysql-connector-c-6.1.6-src-orig/configure.cmake	2015-02-26 00:09:49.000000000 +0300
++++ mysql-connector-c-6.1.6-src/configure.cmake	2015-07-14 16:49:48.301791900 +0300
+@@ -298,6 +298,14 @@
+ # Figure out threading library
+ # Defines CMAKE_USE_PTHREADS_INIT and CMAKE_THREAD_LIBS_INIT.
+ FIND_PACKAGE (Threads)
++if(FORCE_USE_PTHREADS_WIN32 AND WIN32)
++  if(CMAKE_USE_PTHREADS_INIT)
++    set(CMAKE_USE_WIN32_THREADS_INIT 0)
++    add_definitions(-DHAVE_PTHREAD_H=1)
++  else(CMAKE_USE_PTHREADS_INIT)
++    message(FATAL_ERROR "pthread not found on this system!")
++  endif(CMAKE_USE_PTHREADS_INIT)
++endif(FORCE_USE_PTHREADS_WIN32 AND WIN32)
+ 
+ IF(UNIX)
+   MY_SEARCH_LIBS(floor m LIBM)
+diff -urBb mysql-connector-c-6.1.6-src-orig/extra/CMakeLists.txt mysql-connector-c-6.1.6-src/extra/CMakeLists.txt
+--- mysql-connector-c-6.1.6-src-orig/extra/CMakeLists.txt	2015-02-26 00:09:49.000000000 +0300
++++ mysql-connector-c-6.1.6-src/extra/CMakeLists.txt	2015-07-14 16:24:41.817626000 +0300
+@@ -23,6 +23,9 @@
+ IF(NOT CMAKE_CROSSCOMPILING)
+  ADD_EXECUTABLE(comp_err comp_err.c)
+  TARGET_LINK_LIBRARIES(comp_err mysys mysys_ssl)
++ IF(FORCE_USE_PTHREADS_WIN32 AND CMAKE_THREAD_LIBS_INIT)
++  TARGET_LINK_LIBRARIES(comp_err ${CMAKE_THREAD_LIBS_INIT})
++ ENDIF(FORCE_USE_PTHREADS_WIN32 AND CMAKE_THREAD_LIBS_INIT)
+  SET_TARGET_PROPERTIES(comp_err PROPERTIES LINKER_LANGUAGE CXX)
+ ENDIF()
+ 
+@@ -75,3 +78,9 @@
+   MY_SEARCH_LIBS(inet_aton  "nsl;socket;resolv" SOLARIS_NSL)
+   TARGET_LINK_LIBRARIES(resolveip ${SOLARIS_NSL})
+ ENDIF()
++
++IF(FORCE_USE_PTHREADS_WIN32 AND CMAKE_THREAD_LIBS_INIT)
++  TARGET_LINK_LIBRARIES(my_print_defaults ${CMAKE_THREAD_LIBS_INIT})
++  TARGET_LINK_LIBRARIES(perror ${CMAKE_THREAD_LIBS_INIT})
++  TARGET_LINK_LIBRARIES(resolveip ${CMAKE_THREAD_LIBS_INIT})
++ENDIF(FORCE_USE_PTHREADS_WIN32 AND CMAKE_THREAD_LIBS_INIT)
+diff -urBb mysql-connector-c-6.1.6-src-orig/include/my_pthread.h mysql-connector-c-6.1.6-src/include/my_pthread.h
+--- mysql-connector-c-6.1.6-src-orig/include/my_pthread.h	2015-02-26 00:09:49.000000000 +0300
++++ mysql-connector-c-6.1.6-src/include/my_pthread.h	2015-07-13 12:20:28.492933300 +0300
+@@ -20,7 +20,7 @@
+ 
+ #include "my_global.h"                          /* myf */
+ 
+-#if !defined(_WIN32)
++#if !defined(_WIN32) || defined(HAVE_PTHREAD_H)
+ #include <pthread.h>
+ #endif
+ 
+@@ -35,7 +35,7 @@
+ #define EXTERNC
+ #endif /* __cplusplus */ 
+ 
+-#if defined(_WIN32)
++#if defined(_WIN32) && !defined(HAVE_PTHREAD_H)
+ typedef DWORD		 pthread_t;
+ #define pthread_self() GetCurrentThreadId()
+ #define pthread_handler_t EXTERNC void * __cdecl
+@@ -51,7 +51,7 @@
+ #include "thr_cond.h"
+ #include "thr_rwlock.h"
+ 
+-#if defined(_WIN32)
++#if defined(_WIN32) && !defined(HAVE_PTHREAD_H)
+ /*
+   Existing mysql_thread_create() or pthread_create() does not work well
+   in windows platform when threads are joined because
+diff -urBb mysql-connector-c-6.1.6-src-orig/include/thr_cond.h mysql-connector-c-6.1.6-src/include/thr_cond.h
+--- mysql-connector-c-6.1.6-src-orig/include/thr_cond.h	2015-02-26 00:09:49.000000000 +0300
++++ mysql-connector-c-6.1.6-src/include/thr_cond.h	2015-07-14 15:29:55.905682600 +0300
+@@ -33,13 +33,13 @@
+        See include/mysql/psi/mysql_thread.h
+ */
+ 
+-#ifdef _WIN32
++#if defined(_WIN32) && !defined(HAVE_PTHREAD_H)
+ typedef CONDITION_VARIABLE native_cond_t;
+ #else
+ typedef pthread_cond_t native_cond_t;
+ #endif
+ 
+-#ifdef _WIN32
++#if defined(_WIN32) && !defined(HAVE_PTHREAD_H)
+ /**
+   Convert abstime to milliseconds
+ */
+@@ -54,6 +54,7 @@
+ 
+   GetSystemTimeAsFileTime(&now.ft);
+ 
++#ifndef _TIMESPEC_DEFINED
+   /*
+     Calculate time left to abstime
+     - subtract start time from current time(values are in 100ns units)
+@@ -71,6 +72,12 @@
+   */
+   if (millis > abstime->max_timeout_msec)
+     millis= abstime->max_timeout_msec;
++#else
++  long long abs_millis = abstime->tv_sec*1000 + abstime->tv_nsec/1000000;
++  millis = abs_millis - now.i64/10000;
++  if (millis < 0)
++    return 0;
++#endif
+ 
+   if (millis > UINT_MAX)
+     millis= UINT_MAX;
+@@ -81,7 +88,7 @@
+ 
+ static inline int native_cond_init(native_cond_t *cond)
+ {
+-#ifdef _WIN32
++#if defined(_WIN32) && !defined(HAVE_PTHREAD_H)
+   InitializeConditionVariable(cond);
+   return 0;
+ #else
+@@ -92,7 +99,7 @@
+ 
+ static inline int native_cond_destroy(native_cond_t *cond)
+ {
+-#ifdef _WIN32
++#if defined(_WIN32) && !defined(HAVE_PTHREAD_H)
+   return 0; /* no destroy function */
+ #else
+   return pthread_cond_destroy(cond);
+@@ -103,7 +110,7 @@
+                                         native_mutex_t *mutex,
+                                         const struct timespec *abstime)
+ {
+-#ifdef _WIN32
++#if defined(_WIN32) && !defined(HAVE_PTHREAD_H)
+   DWORD timeout= get_milliseconds(abstime);
+   if (!SleepConditionVariableCS(cond, mutex, timeout))
+     return ETIMEDOUT;
+@@ -115,7 +122,7 @@
+ 
+ static inline int native_cond_wait(native_cond_t *cond, native_mutex_t *mutex)
+ {
+-#ifdef _WIN32
++#if defined(_WIN32) && !defined(HAVE_PTHREAD_H)
+   return native_cond_timedwait(cond, mutex, NULL);
+ #else
+   return pthread_cond_wait(cond, mutex);
+@@ -124,7 +131,7 @@
+ 
+ static inline int native_cond_signal(native_cond_t *cond)
+ {
+-#ifdef _WIN32
++#if defined(_WIN32) && !defined(HAVE_PTHREAD_H)
+   WakeConditionVariable(cond);
+   return 0;
+ #else
+@@ -134,7 +141,7 @@
+ 
+ static inline int native_cond_broadcast(native_cond_t *cond)
+ {
+-#ifdef _WIN32
++#if defined(_WIN32) && !defined(HAVE_PTHREAD_H)
+   WakeAllConditionVariable(cond);
+   return 0;
+ #else
+diff -urBb mysql-connector-c-6.1.6-src-orig/include/thr_mutex.h mysql-connector-c-6.1.6-src/include/thr_mutex.h
+--- mysql-connector-c-6.1.6-src-orig/include/thr_mutex.h	2015-02-26 00:09:49.000000000 +0300
++++ mysql-connector-c-6.1.6-src/include/thr_mutex.h	2015-07-13 12:26:11.755566800 +0300
+@@ -33,7 +33,7 @@
+        See include/mysql/psi/mysql_thread.h
+ */
+ 
+-#ifdef _WIN32
++#if defined(_WIN32) && !defined(HAVE_PTHREAD_H)
+ typedef CRITICAL_SECTION native_mutex_t;
+ typedef int native_mutexattr_t;
+ #else
+@@ -44,7 +44,7 @@
+ static inline int native_mutex_init(native_mutex_t *mutex,
+                                     const native_mutexattr_t *attr)
+ {
+-#ifdef _WIN32
++#if defined(_WIN32) && !defined(HAVE_PTHREAD_H)
+   InitializeCriticalSection(mutex);
+   return 0;
+ #else
+@@ -54,7 +54,7 @@
+ 
+ static inline int native_mutex_lock(native_mutex_t *mutex)
+ {
+-#ifdef _WIN32
++#if defined(_WIN32) && !defined(HAVE_PTHREAD_H)
+   EnterCriticalSection(mutex);
+   return 0;
+ #else
+@@ -64,7 +64,7 @@
+ 
+ static inline int native_mutex_trylock(native_mutex_t *mutex)
+ {
+-#ifdef _WIN32
++#if defined(_WIN32) && !defined(HAVE_PTHREAD_H)
+   if (TryEnterCriticalSection(mutex))
+   {
+     /* Don't allow recursive lock */
+@@ -82,7 +82,7 @@
+ 
+ static inline int native_mutex_unlock(native_mutex_t *mutex)
+ {
+-#ifdef _WIN32
++#if defined(_WIN32) && !defined(HAVE_PTHREAD_H)
+   LeaveCriticalSection(mutex);
+   return 0;
+ #else
+@@ -92,7 +92,7 @@
+ 
+ static inline int native_mutex_destroy(native_mutex_t *mutex)
+ {
+-#ifdef _WIN32
++#if defined(_WIN32) && !defined(HAVE_PTHREAD_H)
+   DeleteCriticalSection(mutex);
+   return 0;
+ #else
+diff -urBb mysql-connector-c-6.1.6-src-orig/include/thr_rwlock.h mysql-connector-c-6.1.6-src/include/thr_rwlock.h
+--- mysql-connector-c-6.1.6-src-orig/include/thr_rwlock.h	2015-02-26 00:09:49.000000000 +0300
++++ mysql-connector-c-6.1.6-src/include/thr_rwlock.h	2015-07-13 12:31:16.051971500 +0300
+@@ -33,7 +33,7 @@
+   are mysql_prlock_*() - see include/mysql/psi/mysql_thread.h
+ */
+ 
+-#ifdef _WIN32
++#if defined(_WIN32) && !defined(HAVE_PTHREAD_H)
+ typedef struct st_my_rw_lock_t
+ {
+   SRWLOCK srwlock;             /* native reader writer lock */
+@@ -45,7 +45,7 @@
+ 
+ static inline int native_rw_init(native_rw_lock_t *rwp)
+ {
+-#ifdef _WIN32
++#if defined(_WIN32) && !defined(HAVE_PTHREAD_H)
+   InitializeSRWLock(&rwp->srwlock);
+   rwp->have_exclusive_srwlock = FALSE;
+   return 0;
+@@ -57,7 +57,7 @@
+ 
+ static inline int native_rw_destroy(native_rw_lock_t *rwp)
+ {
+-#ifdef _WIN32
++#if defined(_WIN32) && !defined(HAVE_PTHREAD_H)
+   return 0; /* no destroy function */
+ #else
+   return pthread_rwlock_destroy(rwp);
+@@ -66,7 +66,7 @@
+ 
+ static inline int native_rw_rdlock(native_rw_lock_t *rwp)
+ {
+-#ifdef _WIN32
++#if defined(_WIN32) && !defined(HAVE_PTHREAD_H)
+   AcquireSRWLockShared(&rwp->srwlock);
+   return 0;
+ #else
+@@ -76,7 +76,7 @@
+ 
+ static inline int native_rw_tryrdlock(native_rw_lock_t *rwp)
+ {
+-#ifdef _WIN32
++#if defined(_WIN32) && !defined(HAVE_PTHREAD_H)
+   if (!TryAcquireSRWLockShared(&rwp->srwlock))
+     return EBUSY;
+   return 0;
+@@ -87,7 +87,7 @@
+ 
+ static inline int native_rw_wrlock(native_rw_lock_t *rwp)
+ {
+-#ifdef _WIN32
++#if defined(_WIN32) && !defined(HAVE_PTHREAD_H)
+   AcquireSRWLockExclusive(&rwp->srwlock);
+   rwp->have_exclusive_srwlock= TRUE;
+   return 0;
+@@ -98,7 +98,7 @@
+ 
+ static inline int native_rw_trywrlock(native_rw_lock_t *rwp)
+ {
+-#ifdef _WIN32
++#if defined(_WIN32) && !defined(HAVE_PTHREAD_H)
+   if (!TryAcquireSRWLockExclusive(&rwp->srwlock))
+     return EBUSY;
+   rwp->have_exclusive_srwlock= TRUE;
+@@ -110,7 +110,7 @@
+ 
+ static inline int native_rw_unlock(native_rw_lock_t *rwp)
+ {
+-#ifdef _WIN32
++#if defined(_WIN32) && !defined(HAVE_PTHREAD_H)
+   if (rwp->have_exclusive_srwlock)
+   {
+     rwp->have_exclusive_srwlock= FALSE;
+diff -urBb mysql-connector-c-6.1.6-src-orig/libmysql/CMakeLists.txt mysql-connector-c-6.1.6-src/libmysql/CMakeLists.txt
+--- mysql-connector-c-6.1.6-src-orig/libmysql/CMakeLists.txt	2015-02-26 00:09:49.000000000 +0300
++++ mysql-connector-c-6.1.6-src/libmysql/CMakeLists.txt	2015-07-14 16:24:17.752249500 +0300
+@@ -252,6 +252,9 @@
+   MERGE_LIBRARIES(libmysql SHARED ${LIBS}
+     EXPORTS ${CLIENT_API_FUNCTIONS}
+     COMPONENT SharedLibraries)
++  IF(FORCE_USE_PTHREADS_WIN32 AND CMAKE_THREAD_LIBS_INIT)
++    TARGET_LINK_LIBRARIES(libmysql ${CMAKE_THREAD_LIBS_INIT})
++  ENDIF(FORCE_USE_PTHREADS_WIN32 AND CMAKE_THREAD_LIBS_INIT)
+   IF(UNIX)
+     # libtool compatability
+     IF(CMAKE_SYSTEM_NAME MATCHES "FreeBSD" OR APPLE)
+diff -urBb mysql-connector-c-6.1.6-src-orig/mysys/my_winthread.c mysql-connector-c-6.1.6-src/mysys/my_winthread.c
+--- mysql-connector-c-6.1.6-src-orig/mysys/my_winthread.c	2015-02-26 00:09:49.000000000 +0300
++++ mysql-connector-c-6.1.6-src/mysys/my_winthread.c	2015-07-14 15:34:44.778205100 +0300
+@@ -16,7 +16,7 @@
+ /*****************************************************************************
+ ** Simulation of posix threads calls for Windows
+ *****************************************************************************/
+-#if defined (_WIN32)
++#if defined (_WIN32) && !defined(HAVE_PTHREAD_H)
+ #include "mysys_priv.h"
+ #include <process.h>
+ #include <signal.h>
+diff -urBb mysql-connector-c-6.1.6-src-orig/tests/CMakeLists.txt mysql-connector-c-6.1.6-src/tests/CMakeLists.txt
+--- mysql-connector-c-6.1.6-src-orig/tests/CMakeLists.txt	2015-02-26 00:09:49.000000000 +0300
++++ mysql-connector-c-6.1.6-src/tests/CMakeLists.txt	2015-07-14 16:22:08.844876400 +0300
+@@ -19,6 +19,9 @@
+ 
+ ADD_EXECUTABLE(mysql_client_test mysql_client_test.c)
+ TARGET_LINK_LIBRARIES(mysql_client_test mysqlclient)
++IF(FORCE_USE_PTHREADS_WIN32 AND CMAKE_THREAD_LIBS_INIT)
++  TARGET_LINK_LIBRARIES(mysql_client_test ${CMAKE_THREAD_LIBS_INIT})
++ENDIF(FORCE_USE_PTHREADS_WIN32 AND CMAKE_THREAD_LIBS_INIT)
+ SET_TARGET_PROPERTIES(mysql_client_test PROPERTIES LINKER_LANGUAGE CXX)
+ 
+ #
