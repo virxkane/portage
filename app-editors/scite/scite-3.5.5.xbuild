@@ -1,0 +1,41 @@
+# Copyright 2013-2015 Chernov A.A.
+# This is a part of mingw-portage project: 
+# http://sourceforge.net/projects/mingwportage/
+# Distributed under the terms of the GNU General Public License v2
+
+DESCRIPTION="A very powerful editor for programmers"
+
+HOMEPAGE="http://www.scintilla.org/SciTE.html"
+
+# Neil Hodgson license
+LICENSE="HPND"
+
+DEPEND="dev-util/mingw32-make"
+
+MY_PV=${PV//./}
+
+SRC_URI="http://downloads.sourceforge.net/scintilla/${PN}${MY_PV}.tgz"
+
+SOURCES_DIR="./"
+
+src_configure()
+{
+	:
+}
+
+src_compile()
+{
+	mingw32-make -C scintilla/win32 || die
+	mingw32-make -C scite/win32 || die
+}
+
+src_install()
+{
+	install -d "${INSTDIR}${PREFIX}/SciTE"
+	install -m 755 scite/bin/*.exe "${INSTDIR}${PREFIX}/SciTE/"
+	install -m 755 scite/bin/*.dll "${INSTDIR}${PREFIX}/SciTE/"
+	install -m 644 scite/bin/*.properties "${INSTDIR}${PREFIX}/SciTE/"
+	install -m 644 scite/doc/*.html "${INSTDIR}${PREFIX}/SciTE/"
+	install -m 644 scite/doc/SciTEIco.png "${INSTDIR}${PREFIX}/SciTE/"
+	install -m 644 scite/doc/PrintHi.png "${INSTDIR}${PREFIX}/SciTE/"
+}
