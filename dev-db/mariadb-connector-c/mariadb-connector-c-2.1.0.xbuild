@@ -7,18 +7,26 @@ DESCRIPTION="MariaDB client library that can be used to connect to MySQL or Mari
 
 HOMEPAGE="http://www.mariadb.org/"
 
-MY_P="mariadb_client-${PV}-src"
+MY_P="mariadb-connector-c-${PV}-src"
 
-SRC_URI="http://mirror.mephi.ru/mariadb/client-native-${PV}/src/${MY_P}.tar.gz"
+SRC_URI="http://mirror.mephi.ru/mariadb/connector-c-${PV}/source-tgz/${MY_P}.tar.gz"
 
 LICENSE="LGPL-2.1"
 
+RESTRICT="mirror"
+
 DEPEND="dev-util/cmake"
-RDEPEND="dev-libs/openssl
+RDEPEND="!dev-db/mariadb-client
+		dev-libs/openssl
 		sys-libs/zlib"
 
 SOURCES_DIR="${MY_P}"
 USE_CMAKE=yes
+
+src_prepare()
+{
+	epatch ${P}-1.patch
+}
 
 src_configure()
 {
