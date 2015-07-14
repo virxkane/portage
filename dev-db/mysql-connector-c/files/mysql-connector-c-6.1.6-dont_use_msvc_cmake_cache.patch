@@ -7,10 +7,10 @@ diff -urBb mysql-connector-c-6.1.6-src-orig/cmake/os/Windows.cmake mysql-connect
  # a VC solution.
 -GET_FILENAME_COMPONENT(_SCRIPT_DIR ${CMAKE_CURRENT_LIST_FILE} PATH)
 -INCLUDE(${_SCRIPT_DIR}/WindowsCache.cmake)
-+IF(NOT MINGW)
++IF(MSVC)
 +  GET_FILENAME_COMPONENT(_SCRIPT_DIR ${CMAKE_CURRENT_LIST_FILE} PATH)
 +  INCLUDE(${_SCRIPT_DIR}/WindowsCache.cmake)
-+ENDIF(NOT MINGW)
++ENDIF(MSVC)
  
  # We require at least Visual Studio 2013 (aka 12.0) which has version nr 1800.
  IF(NOT FORCE_UNSUPPORTED_COMPILER AND MSVC_VERSION LESS 1800)
