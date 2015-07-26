@@ -1,4 +1,4 @@
-# Copyright 2014 Chernov A.A. <valexlin@gmail.com>
+# Copyright 2014-2015 Chernov A.A. <valexlin@gmail.com>
 # This is a part of mingw-portage project: 
 # http://sourceforge.net/projects/mingwportage/
 # Distributed under the terms of the GNU General Public License v3
@@ -9,22 +9,11 @@ perl_module_src_configure()
 {
 	perl Makefile.PL
 	checkexitcode $? "configure failed"
-
-	# make build script for Windows Console
-	# local prefix_w=`posix_w32path "${PREFIX}"`
-	# prefix_w=`echo ${prefix_w} | sed -e 's/\\//\\\/g'`
-	# local perl_path_w=`posix_w32path "${PERL_PATH}"`
-	# perl_path_w=`echo ${perl_path_w} | sed -e 's/\\//\\\/g'`
-	# echo "set PATH=%SystemRoot%\system32;%SystemRoot%;${prefix_w}\bin;${perl_path_w}\bin" > build.cmd
-	# echo "dmake %*" >> build.cmd
-	# #echo "pause" >> build.cmd
-	# echo "exit" >> build.cmd
 }
 
 perl_module_src_compile()
 {
-	# cmd //C build.cmd
-	dmake
+	SHELL= dmake
 }
 
 perl_module_src_install()
@@ -138,7 +127,7 @@ perl_module_src_install()
 	mv -f Makefile.new Makefile
 
 	install -d "${INSTDIR}"
-	dmake DESTDIR="${INSTDIR}" install
+	SHELL= dmake DESTDIR="${INSTDIR}" install
 
 	# lib/.packlist
 	f="${INSTDIR}${PREFIX}/perl/site/lib/auto/XML/Parser/.packlist"
