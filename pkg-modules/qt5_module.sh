@@ -1,4 +1,4 @@
-# Copyright 2014 Chernov A.A. <valexlin@gmail.com>
+# Copyright 2014-2015 Chernov A.A. <valexlin@gmail.com>
 # This is a part of mingw-portage project: 
 # http://sourceforge.net/projects/mingwportage/
 # Distributed under the terms of the GNU General Public License v3
@@ -38,6 +38,12 @@ qt5_modules_src_install()
 		eend "make install successfull."
 	else
 		eerror "make install failed!"
+	fi
+	if find "${INSTDIR}${PREFIX}/qt5/bin/"*.dll > /dev/null 2>&1
+	then
+		install -d "${INSTDIR}${PREFIX}/bin/"
+		mv -f "${INSTDIR}${PREFIX}/qt5/bin/"*.dll \
+				"${INSTDIR}${PREFIX}/bin/"
 	fi
 }
 
