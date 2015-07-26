@@ -1,4 +1,6 @@
-# Copyright 2010-2014 Chernov A.A.
+# Copyright 2010-2015 Chernov A.A.
+# This is a part of mingw-portage project: 
+# http://sourceforge.net/projects/mingwportage/
 # Distributed under the terms of the GNU General Public License v2
 
 DESCRIPTION="Improved make"
@@ -11,7 +13,7 @@ LICENSE="GPL-1"
 
 src_prepare()
 {
-	epatch "${PN}-4.11-config.patch"
+	epatch "${P}-mingw.patch"
 }
 
 src_install()

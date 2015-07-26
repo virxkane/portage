@@ -1,0 +1,29 @@
+# Copyright 2010-2015 Chernov A.A.
+# This is a part of mingw-portage project: 
+# http://sourceforge.net/projects/mingwportage/
+# Distributed under the terms of the GNU General Public License v2
+
+DESCRIPTION="The OpenGL Extension Wrangler Library"
+
+HOMEPAGE="http://glew.sourceforge.net/"
+
+LICENSE="BSD MIT"
+
+SRC_URI="http://downloads.sourceforge.net/${PN}/${P}.tgz"
+
+src_configure()
+{
+	:
+}
+
+src_compile()
+{
+	make POPT="${CFLAGS}" GLEW_DEST="${PREFIX}" ${MAKEOPTS}
+}
+
+src_install()
+{
+	emake_install DESTDIR="${INSTDIR}" GLEW_DEST="${PREFIX}"
+	install bin/glewinfo.exe "${INSTDIR}${PREFIX}/bin/"
+	install bin/visualinfo.exe "${INSTDIR}${PREFIX}/bin/"
+}

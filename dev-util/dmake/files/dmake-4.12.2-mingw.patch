@@ -1,0 +1,33 @@
+diff -urBb dmake-4.12.2-orig/configure dmake-4.12.2/configure
+--- dmake-4.12.2-orig/configure	2012-02-07 18:38:39.000000000 +0400
++++ dmake-4.12.2/configure	2015-07-16 13:06:17.831988100 +0300
+@@ -4349,7 +4349,7 @@
+ 	  OS_VERSION=cygwin
+ 	  CASE_INSENSITIVE_FS=true
+ 	  ;;
+-	"MINGW")
++	"MINGW"*)
+ 	  OS_VERSION=mingw
+ 	  OS_TYPE=winnt
+ 	  BUILDINFO="Windows / MinGW"
+diff -urBb dmake-4.12.2-orig/sysintf.c dmake-4.12.2/sysintf.c
+--- dmake-4.12.2-orig/sysintf.c	2012-02-07 18:36:45.000000000 +0400
++++ dmake-4.12.2/sysintf.c	2015-07-16 13:07:51.402340100 +0300
+@@ -649,7 +649,7 @@
+ {
+    int fd; /* file descriptor */
+ 
+-#if defined(HAVE_MKSTEMP)
++#if defined(HAVE_MKSTEMP) && !defined(__MINGW32__)
+    mode_t       mask;
+ 
+    *path = DmStrJoin( tmpdir, DirSepStr, -1, FALSE);
+@@ -704,6 +704,8 @@
+ 
+    tmpdir = Read_env_string( "TMPDIR" );
+    if( tmpdir == NIL(char) )
++      tmpdir = Read_env_string( "TEMP" );
++   if( tmpdir == NIL(char) )
+       tmpdir = "/tmp";
+ 
+    while( --tries )

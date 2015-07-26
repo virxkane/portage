@@ -1,0 +1,27 @@
+# Copyright 2010-2015 Chernov A.A.
+# This is a part of mingw-portage project: 
+# http://sourceforge.net/projects/mingwportage/
+# Distributed under the terms of the GNU General Public License v2
+
+DESCRIPTION="Improved make (formerly used by openoffice.org)"
+
+HOMEPAGE="https://github.com/mohawk2/dmake"
+
+SRC_URI="https://github.com/mohawk2/dmake/archive/DMAKE_4_12_2_2.tar.gz"
+
+LICENSE="GPL-1"
+
+RESTRICT="mirror"
+
+SOURCES_DIR="dmake-DMAKE_4_12_2_2"
+
+src_prepare()
+{
+	epatch "${P}-mingw.patch"
+}
+
+src_install()
+{
+	emake_install
+	ln -sv ${INSTDIR}${PREFIX}/share/startup/ ${INSTDIR}${PREFIX}/bin/startup
+}

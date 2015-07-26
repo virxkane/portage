@@ -21,7 +21,7 @@ RDEPEND="sys-libs/zlib
 #MY_PV=${PV/_/-}
 MY_P=qt-everywhere-opensource-src-${PV}
 
-SRC_URI="http://download.qt-project.org/official_releases/qt/4.8/${PV}/${MY_P}.tar.gz"
+SRC_URI="http://download.qt.io/official_releases/qt/4.8/${PV}/${MY_P}.tar.gz"
 
 SOURCES_DIR="${MY_P}"
 

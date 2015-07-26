@@ -1,0 +1,22 @@
+# Copyright 2010-2015 Chernov A.A.
+# This is a part of mingw-portage project: 
+# http://sourceforge.net/projects/mingwportage/
+# Distributed under the terms of the GNU General Public License v2
+
+DESCRIPTION="Low-level pixel manipulation routines"
+
+HOMEPAGE="http://xorg.freedesktop.org/"
+
+LICENSE="MIT"
+
+DEPEND="dev-util/pkg-config"
+RDEPEND="media-libs/libpng"
+
+SRC_URI="http://www.cairographics.org/releases/${P}.tar.bz2"
+
+# --disable-gtk отключает только тесты gtk+
+src_configure()
+{
+	econf --enable-shared --enable-static \
+		--disable-gtk
+}
