@@ -1,0 +1,25 @@
+# Copyright 2011-2015 Chernov A.A.
+# This is a part of mingw-portage project: 
+# http://sourceforge.net/projects/mingwportage/
+# Distributed under the terms of the GNU General Public License v2
+
+DESCRIPTION="Utility scripts for internationalizing XML"
+
+HOMEPAGE="https://launchpad.net/intltool"
+
+SRC_URI="https://launchpad.net/${PN}/trunk/${PV}/+download/${P}.tar.gz"
+
+LICENSE="GPL-2"
+
+RESTRICT="strip"
+
+DEPEND="dev-perl/XML-Parser"
+RDEPEND="dev-lang/perl
+		sys-devel/gettext"
+
+export PATH="${PERL_PATH}/bin:${PATH}"
+
+src_configure()
+{
+	econf
+}
