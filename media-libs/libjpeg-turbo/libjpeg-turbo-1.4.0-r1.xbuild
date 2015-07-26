@@ -1,0 +1,26 @@
+# Copyright 2013-2015 Chernov A.A.
+# This is a part of mingw-portage project: 
+# http://sourceforge.net/projects/mingwportage/
+# Distributed under the terms of the GNU General Public License v2
+
+DESCRIPTION="MMX, SSE, and SSE2 SIMD accelerated JPEG library"
+
+HOMEPAGE="http://libjpeg-turbo.virtualgl.org/ http://sourceforge.net/projects/libjpeg-turbo/"
+
+LICENSE="BSD"
+
+DEPEND="dev-lang/nasm
+		!media-libs/jpeg"
+
+SRC_URI="http://downloads.sourceforge.net/${PN}/${P}.tar.gz"
+
+src_prepare()
+{
+	epatch "${P}-mingw32.patch"
+}
+
+src_configure()
+{
+	econf --enable-shared --enable-static \
+		--with-jpeg8
+}

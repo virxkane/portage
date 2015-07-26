@@ -1,0 +1,9 @@
+diff -urBb qtbase-opensource-src-5.5.0-orig/src/3rdparty/freetype_dependency.pri qtbase-opensource-src-5.5.0/src/3rdparty/freetype_dependency.pri
+--- qtbase-opensource-src-5.5.0-orig/src/3rdparty/freetype_dependency.pri	2015-06-29 23:04:19.000000000 +0300
++++ qtbase-opensource-src-5.5.0/src/3rdparty/freetype_dependency.pri	2015-07-16 20:05:25.390066000 +0300
+@@ -4,4 +4,5 @@
+ } else:contains(QT_CONFIG, system-freetype) {
+     # pull in the proper freetype2 include directory
+     include($$QT_SOURCE_TREE/config.tests/unix/freetype/freetype.pri)
++    LIBS_PRIVATE += -lfreetype
+ }

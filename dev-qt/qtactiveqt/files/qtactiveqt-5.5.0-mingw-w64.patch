@@ -1,0 +1,11 @@
+diff -urBb qtactiveqt-opensource-src-5.5.0-orig/src/activeqt/container/qaxscript.cpp qtactiveqt-opensource-src-5.5.0/src/activeqt/container/qaxscript.cpp
+--- qtactiveqt-opensource-src-5.5.0-orig/src/activeqt/container/qaxscript.cpp	2015-06-29 23:10:37.000000000 +0300
++++ qtactiveqt-opensource-src-5.5.0/src/activeqt/container/qaxscript.cpp	2015-07-17 02:17:45.072223700 +0300
+@@ -58,6 +58,7 @@
+ 
+ #include <qt_windows.h>
+ #ifndef QT_NO_QAXSCRIPT
++#define _NO_SCRIPT_GUIDS
+ #include <initguid.h>
+ #include <activscp.h>
+ #endif
