@@ -1,0 +1,43 @@
+diff -urBb qtwebkit-opensource-src-5.5.0-orig/Source/WebCore/dom/make_names.pl qtwebkit-opensource-src-5.5.0/Source/WebCore/dom/make_names.pl
+--- qtwebkit-opensource-src-5.5.0-orig/Source/WebCore/dom/make_names.pl	2015-06-29 23:11:31.000000000 +0300
++++ qtwebkit-opensource-src-5.5.0/Source/WebCore/dom/make_names.pl	2015-07-26 11:17:13.744309900 +0300
+@@ -83,6 +83,17 @@
+     'fonts=s' => \$fontNamesIn
+ );
+ 
++# With native win32 perl, open() failed to execute preprocessor if it's name with quotes => remove quotes.
++# But with msys2 perl open() failed when used backsplash => replace with normal slash.
++# remove quotes and replace backslashes
++if ($preprocessor =~ m/^'(.*)'(.*)$/)
++{
++	my $cmd = $1;
++	my $args = $2;
++	$cmd =~ s/\\/\//g;
++	$preprocessor = "${cmd}${args}"
++}
++
+ mkpath($outputDir);
+ 
+ if (length($fontNamesIn)) {
+@@ -312,7 +323,7 @@
+     $InParser->parse($names, \&parametersHandler, $handler);
+ 
+     close($names);
+-    die "Failed to read names from file: $namesFile" if (keys %{$hashToFillRef} == 0);
++    die "Failed to read names from file: $namesFile" if (scalar(keys %{$hashToFillRef}) == 0);
+     return $hashToFillRef;
+ }
+ 
+diff -urBb qtwebkit-opensource-src-5.5.0-orig/Tools/qmake/mkspecs/features/functions.prf qtwebkit-opensource-src-5.5.0/Tools/qmake/mkspecs/features/functions.prf
+--- qtwebkit-opensource-src-5.5.0-orig/Tools/qmake/mkspecs/features/functions.prf	2015-06-29 23:10:53.000000000 +0300
++++ qtwebkit-opensource-src-5.5.0/Tools/qmake/mkspecs/features/functions.prf	2015-07-24 11:11:02.477210500 +0300
+@@ -200,7 +200,8 @@
+     else: program = $$1
+ 
+     PATH = "$$(PATH)"
+-    paths=$$split(PATH, $$QMAKE_DIRLIST_SEP)
++    equals(QMAKE_HOST.os, Windows): paths=$$split(PATH, ;)
++    else: paths=$$split(PATH, $$QMAKE_DIRLIST_SEP)
+ 
+     GNUTOOLS_DIR=$$[QT_HOST_DATA]/../gnuwin32/bin
+     exists($$GNUTOOLS_DIR): paths += $$GNUTOOLS_DIR

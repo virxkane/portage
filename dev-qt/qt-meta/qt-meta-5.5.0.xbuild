@@ -1,0 +1,36 @@
+# Copyright 2013-2015 Chernov A.A.
+# This is a part of mingw-portage project: 
+# http://sourceforge.net/projects/mingwportage/
+# Distributed under the terms of the GNU General Public License v2
+
+DESCRIPTION="Meta package for Qt 5"
+
+HOMEPAGE="http://www.qt.io/"
+
+LICENSE="LGPL-2.1 GPL-3"
+
+# Already included as dependencies:
+#	>=dev-qt/qtxmlpatterns-${PV}
+#	>=dev-qt/qtwebchannel-${PV}
+#	>=dev-qt/qtwebsockets-${PV}
+#	>=dev-qt/qtsvg-${PV}
+#	>=dev-qt/qtsensors-${PV}
+#	>=dev-qt/qtmultimedia-${PV}
+
+
+RDEPEND="
+	>=dev-qt/qtbase-${PV}
+	>=dev-qt/qtconnectivity-${PV}
+	>=dev-qt/qtdeclarative-${PV}
+	>=dev-qt/qtenginio-${PV}
+	>=dev-qt/qtgraphicaleffects-${PV}
+	>=dev-qt/qtimageformats-${PV}
+	>=dev-qt/qtlocation-${PV}
+	>=dev-qt/qtquickcontrols-${PV}
+	>=dev-qt/qtscript-${PV}
+	>=dev-qt/qtserialport-${PV}
+	>=dev-qt/qttools-${PV}
+	>=dev-qt/qttranslations-${PV}
+	>=dev-qt/qtwebkit-${PV}
+	>=dev-qt/qtwinextras-${PV}
+"
