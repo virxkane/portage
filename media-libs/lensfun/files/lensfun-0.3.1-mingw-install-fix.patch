@@ -1,0 +1,67 @@
+diff -urBb lensfun-0.3.1-orig/CMakeLists.txt lensfun-0.3.1/CMakeLists.txt
+--- lensfun-0.3.1-orig/CMakeLists.txt	2015-05-10 15:04:53.000000000 +0300
++++ lensfun-0.3.1/CMakeLists.txt	2015-07-27 10:33:56.899485400 +0300
+@@ -74,7 +74,7 @@
+ FIND_PACKAGE(GLIB2 REQUIRED)
+ INCLUDE_DIRECTORIES(${GLIB2_INCLUDE_DIRS})
+ # install glib dll on windows next to lensfun.dll
+-IF (GLIB2_DLL)
++IF (GLIB2_DLL AND MSVC)
+     INSTALL(FILES ${GLIB2_DLL} DESTINATION ${BINDIR})
+ ENDIF()
+ 
+@@ -86,13 +86,13 @@
+   SET(DOCDIR share/doc/lensfun-${VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_MICRO}.${VERSION_BUGFIX} CACHE PATH "Directory to put library documentation in")
+ ENDIF(BUILD_DOC)
+ 
+-IF(WIN32)
++IF(WIN32 AND NOT MINGW)
+   # install into place in build-dir  
+   SET(LENSFUN_INSTALL_PREFIX "${CMAKE_SOURCE_DIR}/install" CACHE PATH "Install prefix for lensfun")    
++  SET(CMAKE_INSTALL_PREFIX "${LENSFUN_INSTALL_PREFIX}" CACHE INTERNAL "" FORCE)
+ ELSE()
+   SET(LENSFUN_INSTALL_PREFIX "${CMAKE_INSTALL_PREFIX}" CACHE PATH "Install prefix for lensfun")    
+ ENDIF()
+-SET(CMAKE_INSTALL_PREFIX "${LENSFUN_INSTALL_PREFIX}" CACHE INTERNAL "" FORCE)
+ 
+ IF(WIN32)
+   SET(PLATFORM_WINDOWS 1)  
+@@ -143,9 +143,6 @@
+ 
+ # install include files
+ INSTALL(FILES ${CMAKE_BINARY_DIR}/lensfun.h DESTINATION ${INCLUDEDIR}/lensfun)
+-IF(NOT HAVE_REGEX_H)
+-  INSTALL(FILES include/regex/regex.h DESTINATION ${INCLUDEDIR}/regex)
+-ENDIF()
+ 
+ # install db files
+ FILE(GLOB DATABASE_FILES data/db/*.xml)
+@@ -157,7 +154,7 @@
+   ADD_SUBDIRECTORY(docs)
+ ENDIF()
+ 
+-IF(WIN32 AND NOT BUILD_STATIC)
++IF(WIN32 AND MSVC AND NOT BUILD_STATIC)
+   FIND_FILE(GLIB2_DLL 
+             NAMES glib-2.dll glib-2-vs9.dll
+             PATHS "${GLIB2_BASE_DIR}/bin"
+diff -urBb lensfun-0.3.1-orig/libs/CMakeLists.txt lensfun-0.3.1/libs/CMakeLists.txt
+--- lensfun-0.3.1-orig/libs/CMakeLists.txt	2015-05-10 15:04:53.000000000 +0300
++++ lensfun-0.3.1/libs/CMakeLists.txt	2015-07-27 10:20:38.151809100 +0300
+@@ -5,6 +5,6 @@
+ ADD_SUBDIRECTORY(lensfun)
+ 
+ # also build getopt on windows
+-IF(WIN32 AND BUILD_TESTS)
++IF(WIN32 AND (BUILD_TESTS OR BUILD_LENSTOOL))
+   ADD_SUBDIRECTORY(getopt)
+ ENDIF()
+diff -urBb lensfun-0.3.1-orig/libs/regex/CMakeLists.txt lensfun-0.3.1/libs/regex/CMakeLists.txt
+--- lensfun-0.3.1-orig/libs/regex/CMakeLists.txt	2015-05-10 15:04:53.000000000 +0300
++++ lensfun-0.3.1/libs/regex/CMakeLists.txt	2015-07-27 10:00:09.145111900 +0300
+@@ -5,5 +5,4 @@
+ ADD_LIBRARY(tre_regex STATIC ${REGEX_SRC})
+ SET_TARGET_PROPERTIES(tre_regex PROPERTIES COMPILE_FLAGS "-DHAVE_SYS_TYPES_H -DTRE_REGEX_T_FIELD=value -DTRE_VERSION=\\\"0.8.0\\\" -Dinline=_inline")
+ SET_TARGET_PROPERTIES(tre_regex PROPERTIES VERSION "${VERSION_MAJOR}.${VERSION_MINOR}).${VERSION_MICRO}")  
+-INSTALL(TARGETS tre_regex ARCHIVE DESTINATION ${LIBDIR})
+ ENDIF()
