@@ -1,0 +1,49 @@
+# Copyright 2011-2015 Chernov A.A.
+# This is a part of mingw-portage project: 
+# http://sourceforge.net/projects/mingwportage/
+# Distributed under the terms of the GNU General Public License v2
+
+DESCRIPTION="GNU Image Manipulation Program"
+
+HOMEPAGE="http://www.gimp.org/"
+
+LICENSE="GPL-2"
+
+RESTRICT="mirror"
+
+# TODO: librsvg,
+#        libpoppler (for pdf)
+#        webkit-gtk (help, html)
+
+RDEPEND=">=dev-libs/glib-2.40
+		>=gui-libs/gtk+-2.26.0
+		>=gui-libs/gdk-pixbuf-2.31.0
+		>=gui-libs/pango-1.29.4
+		>=gui-libs/cairo-1.12.2
+		>=media-libs/babl-0.1.12
+		>=media-libs/gegl-0.3.0
+		media-libs/lcms
+		media-libs/libexif
+		meta-virtual/jpeg
+		media-libs/libpng
+		media-libs/libmng
+		media-libs/tiff
+		net-misc/curl"
+DEPEND=">=dev-util/intltool-0.40.1
+		>=dev-lang/perl-5.12
+		dev-perl/XML-Parser"
+
+MY_PV=`echo ${PV} | sed -e 's/\([[:digit:]]\+\.[[:digit:]]\+\.[[:digit:]]\+\)\.\(.*\)/\1-\2/'`
+
+SRC_URI="http://downloads.sourceforge.net/mingwportage/${PN}-${MY_PV}.tar.xz"
+
+export PATH="${PERL_PATH}/bin:${PATH}"
+
+SOURCES_DIR="${PN}-${MY_PV}"
+
+# --with-directx-sdk=/mingw for dinput failed - directx7-headers too old for this app
+# for python integration needed PyGTK!
+src_configure()
+{
+	econf --enable-shared --disable-python --disable-gtk-doc
+}
