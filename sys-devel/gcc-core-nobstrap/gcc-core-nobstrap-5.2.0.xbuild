@@ -9,19 +9,13 @@ HOMEPAGE="http://gcc.gnu.org/"
 
 LICENSE="GPL-3 LGPL-3 || ( GPL-3 libgcc libstdc++ ) FDL-1.2"
 
-# Known problems:
-# Build failed if $TMPDIR point to other drive that pointed $PREFIX.
-# Build failed on i686-w64-mingw32 (with dward2 eh).
-
-# TODO: Remove postinst phase - fixing spec file may be useless now...
-
 #   external dependecies:
 # bison (msys)
 # perl (msys)
 DEPEND=">=sys-devel/mingw-w64-headers-3.1.0 || >=sys-devel/mingwrt-4.0.3
 		>=sys-devel/mingw-w64-crt-3.1.0 || >=sys-devel/mingwrt-4.0.3
 		>=sys-devel/binutils-2.20"
-RDEPEND="!sys-devel/gcc-core-nobstrap
+RDEPEND="!sys-devel/gcc-core
 		>=dev-libs/gmp-5.1.3
 		>=dev-util/mpfr-3.1.2
 		>=dev-libs/mpc-1.0.2
@@ -56,7 +50,7 @@ src_unpack()
 	exclude_parts+=" gcc/testsuite libgomp/testsuite libiberty/testsuite libstdc++-v3/testsuite"
 	# other unused directories
 	exclude_parts+=" maintainer-scripts zlib"
-	
+
 	local part=
 	local exclude_opts=
 	local tarball="${MY_P}.tar.bz2"
@@ -88,15 +82,10 @@ src_unpack()
 
 src_prepare()
 {
-	epatch "${MY_P}-skip-texinfo.patch"
-	epatch "${MY_P}-skip-testsuite.patch"
-	epatch "${MY_PN}-4.7-stdthreads.patch"
-	#epatch "${MY_PN}-4.8-iconv.patch"
-	epatch "${MY_PN}-4.8-libstdc++export.patch"
-	epatch "${MY_P}-mingw-w64-native-dir.patch"
-	epatch "${MY_P}-mingw-w64-bootstrap-target-flags.patch"
+	epatch "${MY_PN}-5.1.0-skip-texinfo.patch"
+	epatch "${MY_PN}-5.1.0-skip-testsuite.patch"
 	# for compatibility with mingwrt-4.0.3 (i686-pc-mingw32)
-	epatch "${MY_P}-mingwrt4.patch"
+	epatch "${MY_PN}-5.1.0-mingwrt4.patch"
 }
 
 src_configure()
@@ -117,24 +106,16 @@ src_configure()
 		econfp="--enable-sjlj-exceptions --without-dwarf2"
 		;;
 	esac
-	case ${CHOST} in
-	*-w64-mingw32)
-		econfp="${econfp} --with-native-system-header-dir=${PREFIX}/${CHOST}/include"
-		;;
-	*-pc-mingw32)
-		econfp="${econfp} --with-native-system-header-dir=${PREFIX}/include"
-		;;
-	esac
 
 	econf --enable-shared \
 		--disable-win32-registry --enable-version-specific-runtime-libs \
-		--disable-debug --enable-checking=release \
-		--enable-threads=win32 --enable-libgomp --enable-lto --enable-graphite \
+		--disable-debug --enable-checking=release --enable-threads=win32 --enable-libgomp \
+		--enable-lto --enable-graphite \
 		--with-gmp --with-mpc --with-cloog --with-libiconv \
-		--with-system-zlib --disable-werror \
+		--with-system-zlib --enable-libquadmath-support --disable-libada \
 		--enable-languages=c,c++ \
-		--enable-libstdcxx-time=yes \
-		--enable-bootstrap --disable-nls --disable-multilib \
+		--enable-libstdcxx-time=yes --disable-werror --disable-nls --disable-multilib \
+		--disable-bootstrap \
 		${econfp}
 }
 
@@ -149,7 +130,6 @@ src_install()
 		;;
 	esac
 }
-
 
 pkg_postinst()
 {
