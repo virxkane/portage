@@ -1,0 +1,22 @@
+# Copyright 1999-2014 Gentoo Foundation
+# Copyright 2015 Chernov A.A.
+# Distributed under the terms of the GNU General Public License v2
+
+DESCRIPTION="AAC audio decoding library"
+
+HOMEPAGE="http://www.audiocoding.com/faad2.html"
+
+SRC_URI="http://downloads.sourceforge.net/${PN}/${P}.tar.gz"
+
+LICENSE="GPL-2"
+
+src_prepare()
+{
+	epatch "${P}-mingw.patch"
+	eautoreconf
+}
+
+src_configure()
+{
+	econf --enable-shared --enable-static
+}

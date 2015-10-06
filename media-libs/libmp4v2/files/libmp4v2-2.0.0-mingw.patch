@@ -1,0 +1,49 @@
+diff -urBb mp4v2-2.0.0-orig/configure.ac mp4v2-2.0.0/configure.ac
+--- mp4v2-2.0.0-orig/configure.ac	2012-05-21 02:11:55.000000000 +0400
++++ mp4v2-2.0.0/configure.ac	2015-10-06 22:49:34.836369400 +0300
+@@ -18,9 +18,8 @@
+ 
+ m4_define([PRJ_version_hex],m4_format([0x%04x%02x%02x],PRJ_version_major,PRJ_version_minor,PRJ_version_point))
+ 
+-m4_define([PRJ_version],ifelse(
+-    PRJ_repo_type,[stable],m4_format([%s],PRJ_repo_branch),
+-    m4_format([%s-r%d],PRJ_repo_branch,PRJ_repo_rev)))
++#m4_define([PRJ_version],ifelse(PRJ_repo_type,[stable],m4_format([%s],PRJ_repo_branch),m4_format([%s-r%d],PRJ_repo_branch,PRJ_repo_rev)))
++m4_define([PRJ_version],2.0.0)
+ 
+ ###############################################################################
+ # initialization
+@@ -99,8 +98,6 @@
+     fi
+     ;;
+ *-*-mingw*)
+-    # do not support shared
+-    enable_shared=no
+     X_PLATFORM=win32
+     X_MINGW_LIBS="$X_MINGW_LIBS"
+     X_CXX_W="$X_CXX_W -Wno-format"
+@@ -382,6 +379,12 @@
+     changequote([,])dnl
+ fi
+ 
++case ${host} in
++    *-*-mingw*)
++        CXXFLAGS="$CXXFLAGS -DMP4V2_EXPORTS"
++        ;;
++esac
++
+ ###############################################################################
+ # checks for library functions
+ ###############################################################################
+diff -urBb mp4v2-2.0.0-orig/GNUmakefile.am mp4v2-2.0.0/GNUmakefile.am
+--- mp4v2-2.0.0-orig/GNUmakefile.am	2012-05-21 02:11:55.000000000 +0400
++++ mp4v2-2.0.0/GNUmakefile.am	2015-10-06 22:44:46.278864800 +0300
+@@ -8,7 +8,7 @@
+ 
+ libmp4v2_la_LDFLAGS = \
+     $(AM_LDFLAGS) \
+-    -version-number $(PROJECT_version_major):$(PROJECT_version_minor):$(PROJECT_version_point) $(X_libmp4v2_la_LDFLAGS)
++    -version-number $(PROJECT_version_major):$(PROJECT_version_minor):$(PROJECT_version_point) $(X_libmp4v2_la_LDFLAGS) -no-undefined
+ 
+ libmp4v2_la_SOURCES = \
+     src/3gp.cpp                          \
