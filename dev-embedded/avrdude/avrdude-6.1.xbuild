@@ -1,0 +1,26 @@
+# Copyright 2015 Chernov A.A.
+# This is a part of mingw-portage project: 
+# http://sourceforge.net/projects/mingwportage/
+# Distributed under the terms of the GNU General Public License v2
+
+DESCRIPTION="AVRDUDE is software for programming Atmel AVR Microcontrollers"
+
+HOMEPAGE="http://savannah.nongnu.org/projects/avrdude/"
+
+SRC_URI="http://download.savannah.gnu.org/releases/${PN}/${P}.tar.gz"
+
+LICENSE="GPL-2"
+
+# libelf don't have shared library
+DEPEND="dev-libs/libelf"
+RDEPEND="dev-libs/libusb
+		dev-libs/libusb-compat
+		dev-embedded/libftdi
+		meta-virtual/pthreads"
+
+src_prepare()
+{
+	epatch "${P}-mingw.patch"
+	epatch "${P}-shared-link.patch"
+	eautoreconf
+}

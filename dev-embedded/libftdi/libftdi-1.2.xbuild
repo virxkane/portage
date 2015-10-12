@@ -1,0 +1,26 @@
+# Copyright 2015 Chernov A.A.
+# This is a part of mingw-portage project: 
+# http://sourceforge.net/projects/mingwportage/
+# Distributed under the terms of the GNU General Public License v2
+
+DESCRIPTION="Userspace access to FTDI USB interface chips"
+
+HOMEPAGE="https://www.intra2net.com/en/developer/libftdi/"
+
+MY_P="${PN}1-${PV}"
+SRC_URI="https://www.intra2net.com/en/developer/${PN}/download/${MY_P}.tar.bz2"
+
+LICENSE="LGPL-2"
+
+USE_CMAKE=yes
+SOURCES_DIR="${MY_P}"
+
+DEPEND="dev-util/cmake"
+RDEPEND="dev-libs/libusb
+		dev-libs/confuse"
+
+src_configure()
+{
+	econf -DPYTHON_BINDINGS=OFF -DLINK_PYTHON_LIBRARY=OFF \
+		-DDOCUMENTATION=OFF -DBUILD_TESTS=OFF
+}
