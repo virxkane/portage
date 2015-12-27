@@ -1,0 +1,47 @@
+# Copyright 2010-2015 Chernov A.A.
+# This is a part of mingw-portage project: 
+# http://sourceforge.net/projects/mingwportage/
+# Distributed under the terms of the GNU General Public License v2
+
+DESCRIPTION="Network utility to retrieve files from the WWW"
+
+HOMEPAGE="http://www.gnu.org/software/wget/"
+
+LICENSE="GPL-3"
+
+#   external dependencies:
+# perl (msys)
+
+DEPEND="dev-util/pkg-config"
+RDEPEND="sys-libs/zlib
+	dev-libs/openssl
+	dev-libs/libpcre"
+
+SRC_URI="http://ftp.gnu.org/gnu/${PN}/${P}.tar.xz"
+
+src_prepare()
+{
+	case ${CHOST} in
+	i[4-6]86-pc-mingw32)
+		epatch "${P}-old-perl.patch"
+		AT_M4DIR="m4" eautoreconf
+		;;
+	esac
+}
+
+src_configure()
+{
+	econf --disable-debug --disable-nls --with-ssl=openssl \
+		--enable-threads=windows --disable-ipv6
+
+	# in mingwrt-4.x libmsvcrt.a contain all symbols for all
+	# Windows version, we disable some of this to provide working 
+	# in Windows XP.
+	case ${CHOST} in
+	i[4-6]86-pc-mingw32)
+		echo "#undef HAVE__FSEEKI64" >> src/config.h
+		echo "#undef HAVE__FTELLI64" >> src/config.h
+		echo "#undef HAVE_MSVC_INVALID_PARAMETER_HANDLER" >> src/config.h
+		;;
+	esac
+}

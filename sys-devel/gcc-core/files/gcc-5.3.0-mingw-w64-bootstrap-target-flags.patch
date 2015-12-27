@@ -1,0 +1,13 @@
+diff -urBb gcc-5.3.0-pp/Makefile.in gcc-5.3.0/Makefile.in
+--- gcc-5.3.0-pp/Makefile.in	2015-03-25 15:05:22.000000000 +0300
++++ gcc-5.3.0/Makefile.in	2015-12-27 09:50:56.400177000 +0300
+@@ -243,7 +243,8 @@
+ 	  `if $(LEAN); then echo ' -isystem '; else echo ' -I'; fi`$$r/prev-$(TARGET_SUBDIR)/libstdc++-v3/include \
+ 	  `if $(LEAN); then echo ' -isystem '; else echo ' -I'; fi`$$s/libstdc++-v3/libsupc++ \
+ 	  -L$$r/prev-$(TARGET_SUBDIR)/libstdc++-v3/src/.libs \
+-	  -L$$r/prev-$(TARGET_SUBDIR)/libstdc++-v3/libsupc++/.libs"; \
++	  -L$$r/prev-$(TARGET_SUBDIR)/libstdc++-v3/libsupc++/.libs \
++	  $(XGCC_FLAGS_FOR_TARGET) $$TFLAGS"; \
+ 	  export CXX; \
+ 	CXX_FOR_BUILD="$$CXX"; export CXX_FOR_BUILD;
+ @endif target-libstdc++-v3-bootstrap

@@ -1,0 +1,17 @@
+# Copyright 2010-2015 Chernov A.A.
+# This is a part of mingw-portage project: 
+# http://sourceforge.net/projects/mingwportage/
+# Distributed under the terms of the GNU General Public License v2
+
+DESCRIPTION="Package config system that manages compile/link flags"
+
+HOMEPAGE="http://pkgconfig.freedesktop.org/wiki/"
+
+LICENSE="GPL-2"
+
+SRC_URI="http://pkgconfig.freedesktop.org/releases/${P}.tar.gz"
+
+src_configure()
+{
+	econf --disable-debug --with-internal-glib
+}
