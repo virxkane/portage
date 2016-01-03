@@ -1,0 +1,18 @@
+diff -urBb libjpeg-turbo-1.4.2-orig/jconfig.h.in libjpeg-turbo-1.4.2/jconfig.h.in
+--- libjpeg-turbo-1.4.2-orig/jconfig.h.in	2015-09-21 21:48:32.000000000 +0300
++++ libjpeg-turbo-1.4.2/jconfig.h.in	2016-01-01 13:09:33.650648600 +0300
+@@ -63,6 +63,14 @@
+ # undef __CHAR_UNSIGNED__
+ #endif
+ 
++/* Define "boolean" as unsigned char, not int, on Windows systems. */
++#ifdef _WIN32
++#ifndef __RPCNDR_H__		/* don't conflict if rpcndr.h already read */
++typedef unsigned char boolean;
++#endif
++#define HAVE_BOOLEAN		/* prevent jmorecfg.h from redefining it */
++#endif
++ 
+ /* Define to empty if `const' does not conform to ANSI C. */
+ #undef const
+ 

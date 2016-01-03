@@ -1,0 +1,45 @@
+# Copyright 2013-2015 Chernov A.A.
+# Distributed under the terms of the GNU General Public License v2
+
+DESCRIPTION="Qt toolkit (WebKit module)"
+
+HOMEPAGE="http://www.qt.io/"
+
+LICENSE="LGPL-2.1 GPL-3"
+
+RESTRICT="strip"
+
+DEPEND="dev-lang/python
+		dev-lang/perl
+		>=dev-lang/ruby-1.9
+		dev-util/gperf"
+RDEPEND=">=dev-qt/qtbase-${PV}
+		>=dev-qt/qtdeclarative-${PV}
+		>=dev-qt/qtmultimedia-${PV}
+		>=dev-qt/qtimageformats-${PV}
+		>=dev-qt/qtsvg-${PV}
+		>=dev-qt/qtsensors-${PV}
+		>=dev-qt/qtlocation-${PV}
+		>=dev-qt/qtwebchannel-${PV}
+		media-libs/fontconfig
+		media-libs/libwebp
+		dev-libs/libxml2
+		dev-libs/icu"
+
+MY_P=${PN}-opensource-src-${PV}
+SRC_URI="http://download.qt.io/official_releases/qt/5.5/${PV}/submodules/${MY_P}.tar.xz
+	http://download.qt.io/official_releases/qt/5.5/${PV}/submodules/qt5-opensource-src-${PV}.tar.xz"
+
+SOURCES_DIR="${MY_P}"
+
+load_module qt5_module
+
+export PATH=${PATH}:${WORKDIR}/qt-everywhere-opensource-src-${PV}/gnuwin32/bin
+
+# TODO: replace precompiled gnuwin32 package to separate packages:
+# m4, flex, bison
+
+src_prepare()
+{
+	epatch "${PN}-5.5.0-mingw.patch"
+}

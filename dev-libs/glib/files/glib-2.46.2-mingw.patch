@@ -1,0 +1,69 @@
+diff -urBb glib-2.46.2-orig/configure.ac glib-2.46.2/configure.ac
+--- glib-2.46.2-orig/configure.ac	2015-11-07 01:27:54.000000000 +0300
++++ glib-2.46.2/configure.ac	2016-01-02 17:30:05.831602500 +0300
+@@ -1030,6 +1030,40 @@
+ fi
+ 
+ AC_CHECK_FUNCS(getprotobyname_r endservent if_nametoindex if_indextoname sendmmsg)
++if test $glib_native_win32 = yes
++then
++  AC_CHECK_HEADERS(netioapi.h, [], [], [#include <winsock2.h>])
++  if test "x$ac_cv_func_if_nametoindex" != "xyes"; then
++    AC_MSG_CHECKING([for if_nametoindex in -liphlpapi])
++    _save_LIBS=${LIBS}
++    LIBS="${LIBS} -liphlpapi"
++    AC_LINK_IFELSE([AC_LANG_PROGRAM([[
++#include <winsock2.h>
++#include <netioapi.h>]],
++[[return if_nametoindex("i");]])],
++                     [ac_cv_func_if_nametoindex=yes], [LIBS=${_save_LIBS}])
++    if test x$ac_cv_func_if_nametoindex = xyes; then
++      AC_DEFINE(HAVE_IF_NAMETOINDEX)
++    fi
++    AC_MSG_RESULT($ac_cv_func_if_nametoindex)
++  fi
++  if test "x$ac_cv_func_if_indextoname" != "xyes"; then
++    AC_MSG_CHECKING([for if_indextoname in -liphlpapi])
++    _save_LIBS=${LIBS}
++    if test x$ac_cv_func_if_nametoindex != xyes; then
++      LIBS="${LIBS} -liphlpapi"
++    fi
++    AC_LINK_IFELSE([AC_LANG_PROGRAM([[
++#include <winsock2.h>
++#include <netioapi.h>]],
++[[return if_indextoname(0, 0);]])],
++                     [ac_cv_func_if_indextoname=yes], [LIBS=${_save_LIBS}])
++    if test x$ac_cv_func_if_indextoname = xyes; then
++      AC_DEFINE(HAVE_IF_INDEXTONAME)
++    fi
++    AC_MSG_RESULT($ac_cv_func_if_indextoname)
++  fi
++fi
+ 
+ AS_IF([test $glib_native_win32 = yes], [
+   # <wspiapi.h> in the Windows SDK and in mingw-w64 has wrappers for
+diff -urBb glib-2.46.2-orig/gio/gsocket.c glib-2.46.2/gio/gsocket.c
+--- glib-2.46.2-orig/gio/gsocket.c	2015-11-06 21:12:04.000000000 +0300
++++ glib-2.46.2/gio/gsocket.c	2016-01-02 16:44:54.827815200 +0300
+@@ -67,6 +67,9 @@
+ #ifdef G_OS_WIN32
+ /* For Windows XP runtime compatibility, but use the system's if_nametoindex() if available */
+ #include "gwin32networking.h"
++#ifdef HAVE_NETIOAPI_H
++#include <netioapi.h>
++#endif
+ #endif
+ 
+ /**
+diff -urBb glib-2.46.2-orig/glib/gstrfuncs.c glib-2.46.2/glib/gstrfuncs.c
+--- glib-2.46.2-orig/glib/gstrfuncs.c	2015-11-06 21:12:04.000000000 +0300
++++ glib-2.46.2/glib/gstrfuncs.c	2016-01-02 17:51:02.222244000 +0300
+@@ -1272,7 +1272,7 @@
+       gchar buf[1024];
+       GError *error = NULL;
+ 
+-#if defined(G_OS_WIN32)
++#if defined(G_OS_WIN32) && !defined(__MINGW32__)
+       strerror_s (buf, sizeof (buf), errnum);
+       msg = buf;
+ #elif defined(HAVE_STRERROR_R)
