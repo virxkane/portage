@@ -1,0 +1,11 @@
+diff -urBb lensfun-0.3.2-orig/libs/CMakeLists.txt lensfun-0.3.2/libs/CMakeLists.txt
+--- lensfun-0.3.2-orig/libs/CMakeLists.txt	2015-11-15 20:07:26.000000000 +0300
++++ lensfun-0.3.2/libs/CMakeLists.txt	2016-01-08 12:57:36.893666800 +0300
+@@ -5,6 +5,6 @@
+ ADD_SUBDIRECTORY(lensfun)
+ 
+ # also build getopt on windows
+-IF(WIN32 AND BUILD_TESTS)
++IF(WIN32 AND (BUILD_TESTS OR BUILD_LENSTOOL))
+   ADD_SUBDIRECTORY(getopt)
+ ENDIF()
