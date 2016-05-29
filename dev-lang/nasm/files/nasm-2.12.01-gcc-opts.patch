@@ -1,0 +1,12 @@
+diff -urBb nasm-2.12.01-orig/configure.in nasm-2.12.01/configure.in
+--- nasm-2.12.01-orig/configure.in	2016-03-18 04:24:03.000000000 +0400
++++ nasm-2.12.01/configure.in	2016-05-29 09:25:42.732232200 +0400
+@@ -78,7 +78,7 @@
+ dnl If we have gcc, add appropriate options
+ PA_ADD_CFLAGS([-W])
+ PA_ADD_CFLAGS([-Wall])
+-PA_ADD_CFLAGS([-std=c99])
++PA_ADD_CFLAGS([-std=gnu99])
+ PA_ADD_CFLAGS([-fwrapv])
+ 
+ dnl Look for programs...
