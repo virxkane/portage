@@ -9,12 +9,6 @@ HOMEPAGE="http://gcc.gnu.org/"
 
 LICENSE="GPL-3 LGPL-3 || ( GPL-3 libgcc libstdc++ ) FDL-1.2"
 
-# Known problems:
-# Build failed on i686-w64-mingw32 (with dward2 eh).
-
-# TODO: postinst phase needed only for i686-pc-mingw32
-# BUG: after compile for mingw: d:\mingw\lib\gcc\i686-pc-mingw32\6.1.0\include\c++\cstdlib:75:25: fatal error: stdlib.h: No such file or directory
-
 #   external dependecies:
 # bison (msys)
 # perl (msys)
@@ -96,6 +90,7 @@ src_prepare()
 	epatch "${MY_P}-libstdc++export.patch"
 	epatch "${MY_P}-mingw-w64-native-dir.patch"
 	epatch "${MY_P}-mingw-w64-bootstrap-target-flags.patch"
+	epatch "${MY_P}-mingw-float.h.patch"
 }
 
 src_configure()
@@ -106,14 +101,13 @@ src_configure()
 	local econfp=
 	case ${CHOST} in
 	x86_64-w64-*)
+		# for SJLJ EH
 		#econfp="--enable-sjlj-exceptions --without-dwarf2"
 		# without options assumed SEH
 		;;
 	*)
-		# for DWARF2 EH (broken in 5.1.0 on i686-w64-mingw32)
-		#econfp="--disable-sjlj-exceptions --with-dwarf2"
-		# for SJLJ EH
-		econfp="--enable-sjlj-exceptions --without-dwarf2"
+		# for DWARF2 EH (broken in 5.1.0, 5.2.0, 5.3.0 on i686-w64-mingw32)
+		econfp="--disable-sjlj-exceptions --with-dwarf2"
 		;;
 	esac
 	case ${CHOST} in
@@ -127,8 +121,8 @@ src_configure()
 
 	econf --enable-shared \
 		--disable-win32-registry --enable-version-specific-runtime-libs \
-		--disable-debug --enable-checking=release \
-		--enable-threads=win32 --enable-libgomp --enable-lto --enable-graphite \
+		--disable-debug --enable-checking=release --enable-threads=win32 \
+		--enable-libgomp --enable-lto --enable-graphite --enable-fully-dynamic-string \
 		--with-gmp --with-mpc --with-cloog --with-libiconv \
 		--with-system-zlib --disable-werror \
 		--enable-languages=c,c++ \
@@ -163,20 +157,19 @@ src_install()
 	esac
 }
 
-
-pkg_postinst()
-{
-	einfo "Fix specs file..."
-	local targspecs=`dirname \`gcc --print-libgcc-file-name\``/specs
-	
-	local specs="${TMPDIR}/specs"
-	local prefix_w=`posix_w32path "${PREFIX}"`
-
-	echo "*mingw_prefix:" > ${specs}
-	echo ${prefix_w} >> ${specs}
-	echo "" >> ${specs}
-
-	gcc -dumpspecs >> ${specs}
-
-	sed ':a;N;$!ba;s/*cc1plus:\n\n/*cc1plus:\n\-isystem\ \%(mingw_prefix)\/include\n/' ${specs} > ${targspecs}
-}
+#pkg_postinst()
+#{
+#	einfo "Fix specs file..."
+#	local targspecs=`dirname \`gcc --print-libgcc-file-name\``/specs
+#	
+#	local specs="${TMPDIR}/specs"
+#	local prefix_w=`posix_w32path "${PREFIX}"`
+#
+#	echo "*mingw_prefix:" > ${specs}
+#	echo ${prefix_w} >> ${specs}
+#	echo "" >> ${specs}
+#
+#	gcc -dumpspecs >> ${specs}
+#
+#	sed ':a;N;$!ba;s/*cc1plus:\n\n/*cc1plus:\n\-isystem\ \%(mingw_prefix)\/include\n/' ${specs} > ${targspecs}
+#}
