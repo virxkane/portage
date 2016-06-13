@@ -1,0 +1,59 @@
+diff -urBb ca-certificates-orig/Makefile ca-certificates/Makefile
+--- ca-certificates-orig/Makefile	2015-12-20 13:49:23.000000000 +0400
++++ ca-certificates/Makefile	2016-06-12 11:54:57.046791600 +0400
+@@ -2,7 +2,7 @@
+ # Makefile
+ #
+ 
+-CERTSDIR = /usr/share/ca-certificates
++CERTSDIR = /mingw/share/ca-certificates
+ SUBDIRS = mozilla
+ 
+ all:
+diff -urBb ca-certificates-orig/sbin/Makefile ca-certificates/sbin/Makefile
+--- ca-certificates-orig/sbin/Makefile	2015-12-20 13:49:23.000000000 +0400
++++ ca-certificates/sbin/Makefile	2016-06-12 11:54:49.745426900 +0400
+@@ -8,4 +8,4 @@
+ clean:
+ 
+ install:
+-	install -m755 update-ca-certificates $(DESTDIR)/usr/sbin/
++	install -m755 update-ca-certificates $(DESTDIR)/mingw/bin/
+diff -urBb ca-certificates-orig/sbin/update-ca-certificates ca-certificates/sbin/update-ca-certificates
+--- ca-certificates-orig/sbin/update-ca-certificates	2015-12-20 13:49:23.000000000 +0400
++++ ca-certificates/sbin/update-ca-certificates	2016-06-13 09:43:35.349108400 +0400
+@@ -24,12 +24,12 @@
+ verbose=0
+ fresh=0
+ default=0
+-CERTSCONF=/etc/ca-certificates.conf
+-CERTSDIR=/usr/share/ca-certificates
++CERTSCONF=/mingw/etc/ca-certificates.conf
++CERTSDIR=/mingw/share/ca-certificates
+ LOCALCERTSDIR=/usr/local/share/ca-certificates
+ CERTBUNDLE=ca-certificates.crt
+-ETCCERTSDIR=/etc/ssl/certs
+-HOOKSDIR=/etc/ca-certificates/update.d
++ETCCERTSDIR=/mingw/etc/ssl/certs
++HOOKSDIR=/mingw/etc/ca-certificates/update.d
+ 
+ while [ $# -gt 0 ];
+ do
+@@ -94,7 +94,7 @@
+                                                   -e 's/,/_/g').pem"
+   if ! test -e "$PEM" || [ "$(readlink "$PEM")" != "$CERT" ]
+   then
+-    ln -sf "$CERT" "$PEM"
++    cp -f "$CERT" "$PEM"
+     echo "+$PEM" >> "$ADDED"
+   fi
+   # Add trailing newline to certificate, if it is missing (#635570)
+@@ -104,7 +104,7 @@
+ remove() {
+   CERT="$1"
+   PEM="$ETCCERTSDIR/$(basename "$CERT" .crt).pem"
+-  if test -L "$PEM"
++  if test -f "$PEM"
+   then
+     rm -f "$PEM"
+     echo "-$PEM" >> "$REMOVED"
