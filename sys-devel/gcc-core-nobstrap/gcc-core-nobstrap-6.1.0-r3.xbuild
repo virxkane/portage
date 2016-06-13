@@ -21,7 +21,7 @@ RDEPEND="!sys-devel/gcc-core
 		>=dev-libs/mpc-1.0.2
 		meta-virtual/pthreads
 		sys-devel/libiconv
-		>=dev-libs/isl-0.15"
+		>=dev-libs/isl-0.16"
 
 MY_PN="gcc"
 MY_P="${MY_PN}-${PV}"
@@ -38,7 +38,7 @@ src_unpack()
 	exclude_parts+=" gcc/ada libada gnattools"
 	# exclude 'fortran' language parts
 	# We can't remove unused gcc/{language} directories - this will not be delete
-	# internal dependenciesf from build orber, see gcc/configure.ac, gcc/{language}/config-lang.in.
+	# internal dependencies from build order, see gcc/configure.ac, gcc/{language}/config-lang.in.
 	exclude_parts+=" libgfortran libffi"
 	# exclude 'java' language parts
 	exclude_parts+=" libjava"
@@ -94,26 +94,25 @@ src_configure()
 	local econfp=
 	case ${CHOST} in
 	x86_64-w64-*)
+		# for SJLJ EH
 		#econfp="--enable-sjlj-exceptions --without-dwarf2"
 		# without options assumed SEH
 		;;
 	*)
 		# for DWARF2 EH (broken in 5.1.0 on i686-w64-mingw32)
-		#econfp="--disable-sjlj-exceptions --with-dwarf2"
-		# for SJLJ EH
-		econfp="--enable-sjlj-exceptions --without-dwarf2"
+		econfp="--disable-sjlj-exceptions --with-dwarf2"
 		;;
 	esac
 
 	econf --enable-shared \
 		--disable-win32-registry --enable-version-specific-runtime-libs \
-		--disable-debug --enable-checking=release --enable-threads=win32 --enable-libgomp \
-		--enable-lto --enable-graphite \
+		--disable-debug --enable-checking=release --enable-threads=win32 \
+		--enable-libgomp --enable-lto --enable-graphite --enable-fully-dynamic-string \
 		--with-gmp --with-mpc --with-cloog --with-libiconv \
-		--with-system-zlib --enable-libquadmath-support --disable-libada \
+		--with-system-zlib --disable-werror --disable-libada \
 		--enable-languages=c,c++ \
-		--enable-libstdcxx-time=yes --disable-werror --disable-nls --disable-multilib \
-		--disable-bootstrap \
+		--enable-libstdcxx-time=yes \
+		--disable-bootstrap --disable-nls --disable-multilib \
 		${econfp}
 }
 
@@ -127,22 +126,27 @@ src_install()
 				${INSTDIR}${PREFIX}/lib/gcc/${CHOST}/${PV}/
 		rmdir ${INSTDIR}${PREFIX}/lib/gcc/${CHOST}/lib/
 		;;
+	*-pc-mingw32)
+		echo "#ifndef _MINGW_FLOAT_H_" >> ${INSTDIR}${PREFIX}/lib/gcc/${CHOST}/${PV}/include/float.h
+		echo "#include_next <float.h>" >> ${INSTDIR}${PREFIX}/lib/gcc/${CHOST}/${PV}/include/float.h
+		echo "#endif" >> ${INSTDIR}${PREFIX}/lib/gcc/${CHOST}/${PV}/include/float.h
+		;;
 	esac
 }
 
-pkg_postinst()
-{
-	einfo "Fix specs file..."
-	local targspecs=`dirname \`gcc --print-libgcc-file-name\``/specs
-	
-	local specs="${TMPDIR}/specs"
-	local prefix_w=`posix_w32path "${PREFIX}"`
-
-	echo "*mingw_prefix:" > ${specs}
-	echo ${prefix_w} >> ${specs}
-	echo "" >> ${specs}
-
-	gcc -dumpspecs >> ${specs}
-
-	sed ':a;N;$!ba;s/*cc1plus:\n\n/*cc1plus:\n\-isystem\ \%(mingw_prefix)\/include\n/' ${specs} > ${targspecs}
-}
+#pkg_postinst()
+#{
+#	einfo "Fix specs file..."
+#	local targspecs=`dirname \`gcc --print-libgcc-file-name\``/specs
+#	
+#	local specs="${TMPDIR}/specs"
+#	local prefix_w=`posix_w32path "${PREFIX}"`
+#
+#	echo "*mingw_prefix:" > ${specs}
+#	echo ${prefix_w} >> ${specs}
+#	echo "" >> ${specs}
+#
+#	gcc -dumpspecs >> ${specs}
+#
+#	sed ':a;N;$!ba;s/*cc1plus:\n\n/*cc1plus:\n\-isystem\ \%(mingw_prefix)\/include\n/' ${specs} > ${targspecs}
+#}
