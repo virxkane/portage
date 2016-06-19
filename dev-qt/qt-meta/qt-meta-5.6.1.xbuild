@@ -33,6 +33,7 @@ RDEPEND="
 	>=dev-qt/qtquickcontrols-${PV}
 	>=dev-qt/qtquickcontrols2-${PV}
 	>=dev-qt/qtscript-${PV}
+	>=dev-qt/qtsensors-${PV}
 	>=dev-qt/qtserialport-${PV}
 	>=dev-qt/qtserialbus-${PV}
 	>=dev-qt/qttools-${PV}

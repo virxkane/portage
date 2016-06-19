@@ -40,11 +40,26 @@ qt5_modules_src_install()
 	else
 		eerror "make install failed!"
 	fi
+
 	if find "${INSTDIR}${PREFIX}/qt5/bin/"*.dll > /dev/null 2>&1
 	then
 		install -d "${INSTDIR}${PREFIX}/bin/"
 		mv -f "${INSTDIR}${PREFIX}/qt5/bin/"*.dll \
 				"${INSTDIR}${PREFIX}/bin/"
+	fi
+
+	if [ -d "${INSTDIR}${PREFIX}/lib/qt5/cmake/" ]
+	then
+		#echo "Move cmake files..."
+		mv "${INSTDIR}${PREFIX}/lib/qt5/cmake/" "${INSTDIR}${PREFIX}/lib/"
+		local configFiles=`find "${INSTDIR}${PREFIX}/lib/" -name "*Config.cmake"`
+		for f in ${configFiles}
+		do
+			echo "Fixing file ${f}"
+			sed -i "${f}" -e "s|^get_filename_component(\(.*\)\ \"\${CMAKE_CURRENT_LIST_DIR}/\.\./\.\./\.\./\.\./\"\ ABSOLUTE)$|get_filename_component(\1 \"\${CMAKE_CURRENT_LIST_DIR}/\.\./\.\./\.\./\" ABSOLUTE)|"
+			sed -i "${f}" -e "s|set(imported_location\ \"\${\(.*_install_prefix\)}/qt5/bin/\${LIB_LOCATION}|set(imported_location\ \"\${\1}/bin/\${LIB_LOCATION}|"
+			sed -i "${f}" -e "s|\"\${\(.*_install_prefix\)}/qt5/bin/\(.*\.dll\)\"|\"\${\1}/bin/\2\"|"
+		done
 	fi
 }
 
