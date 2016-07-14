@@ -17,6 +17,7 @@ LICENSE="LGPL-2.1 GPL-3"
 #	>=dev-qt/qtmultimedia-${PV}
 #	>=dev-qt/qtactiveqt-${PV}
 
+# TODO: add ">=dev-qt/qttranslations-${PV}" when done
 
 RDEPEND="
 	>=dev-qt/qtbase-${PV}
