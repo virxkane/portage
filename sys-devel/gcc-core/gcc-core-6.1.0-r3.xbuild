@@ -122,7 +122,7 @@ src_configure()
 		--disable-win32-registry --enable-version-specific-runtime-libs \
 		--disable-debug --enable-checking=release --enable-threads=win32 \
 		--enable-libgomp --enable-lto --enable-graphite --enable-fully-dynamic-string \
-		--with-gmp --with-mpc --with-cloog --with-libiconv \
+		--with-gmp --with-mpc --with-libiconv \
 		--with-system-zlib --disable-werror \
 		--enable-languages=c,c++ \
 		--enable-libstdcxx-time=yes \
