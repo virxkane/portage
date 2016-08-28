@@ -1,0 +1,12 @@
+diff -urBb gcc-6.2.0-orig/libgcc/gthr-posix.h gcc-6.2.0/libgcc/gthr-posix.h
+--- gcc-6.2.0-orig/libgcc/gthr-posix.h	2016-01-04 18:30:50.000000000 +0400
++++ gcc-6.2.0/libgcc/gthr-posix.h	2016-08-28 11:37:24.802035100 +0400
+@@ -82,7 +82,7 @@
+ # define __GTHREAD_COND_INIT_FUNCTION __gthread_cond_init_function
+ #endif
+ 
+-#if SUPPORTS_WEAK && GTHREAD_USE_WEAK
++#if SUPPORTS_WEAK && GTHREAD_USE_WEAK && !defined(__MINGW32__)
+ # ifndef __gthrw_pragma
+ #  define __gthrw_pragma(pragma)
+ # endif
