@@ -1,0 +1,32 @@
+# Copyright 2010-2013 Chernov A.A.
+# Distributed under the terms of the GNU General Public License v2
+
+DESCRIPTION="A library for configuring and customizing font access"
+
+HOMEPAGE="http://www.fontconfig.org/"
+
+LICENSE="MIT"
+
+DEPEND="dev-util/pkg-config"
+RDEPEND="media-libs/freetype
+		dev-libs/expat
+		sys-devel/libiconv"
+
+SRC_URI="http://www.fontconfig.org/release/${P}.tar.bz2"
+
+src_prepare()
+{
+	epatch "${P}-mingw32.patch"
+	AT_M4DIR="m4" eautoreconf
+}
+
+src_configure()
+{
+	econf --enable-iconv --disable-docs
+}
+
+pkg_postinst()
+{
+	einfo "Run fc-cache..."
+	fc-cache
+}

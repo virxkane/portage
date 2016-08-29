@@ -1,0 +1,186 @@
+# Copyright 2013-2016 Chernov A.A.
+# This is a part of mingw-portage project: 
+# http://sourceforge.net/projects/mingwportage/
+# Distributed under the terms of the GNU General Public License v2
+
+DESCRIPTION="Qt toolkit (base module)"
+
+HOMEPAGE="http://www.qt.io/"
+
+LICENSE="LGPL-2.1 GPL-3"
+
+RESTRICT="strip"
+
+DEPEND=">=dev-util/qt5-pathfix-0.1.1
+		dev-lang/perl
+		dev-util/pkg-config
+		dev-util/mingw32-make"
+RDEPEND="sys-libs/zlib
+		dev-libs/icu
+		dev-libs/libpcre
+		media-libs/libpng
+		meta-virtual/jpeg
+		media-libs/harfbuzz
+		media-libs/freetype
+		dev-db/postgresql-libpq
+		dev-db/mysql-connector-c
+		sys-apps/dbus"
+
+MY_P=${PN}-opensource-src-${PV}
+
+SRC_URI="http://download.qt.io/official_releases/qt/5.7/${PV}/submodules/${MY_P}.tar.xz"
+
+SOURCES_DIR="${MY_P}"
+
+PATH="${PERL_PATH}/bin":${PATH}
+
+src_prepare()
+{
+	epatch "${PN}-5.5.0-system-freetype.patch"
+}
+
+src_configure()
+{
+	local prefix_w=`posix_w32path "${PREFIX}"`
+	prefix_w=`echo ${prefix_w} | sed -e 's/\\//\\\/g'`
+	local perl_w=`posix_w32path "${PERL_PATH}"`
+	perl_w=`echo ${perl_w} | sed -e 's/\\//\\\/g'`
+
+	# add arguments to configure for dbus
+	local dbus_cflags=`pkg-config --cflags dbus-1`
+	local freetype2_cflags=`pkg-config --cflags freetype2`
+	local flag=
+	local qt_add_includes=
+	for flag in $dbus_cflags
+	do
+		flag=`echo ${flag} | sed -e s'/^-I\(.*\)$/\1/'`
+		if [ "${flag}" ]
+		then
+			qt_add_includes="${qt_add_includes} -I ${flag}"
+		fi
+	done
+	for flag in $freetype2_cflags
+	do
+		flag=`echo ${flag} | sed -e s'/^-I\(.*\)$/\1/'`
+		if [ "${flag}" ]
+		then
+			qt_add_includes="${qt_add_includes} -I ${flag}"
+		fi
+	done
+	unset -v dbus_cflags
+	unset -v freetype2_cflags
+	unset -v flag
+
+	# build configure.exe
+	if [ ! -f "configure.exe" ]
+	then
+		echo "set PATH=%SystemRoot%\system32;%SystemRoot%;${perl_w}\bin;${prefix_w}\bin" > bconf.cmd
+		echo "echo . > .gitignore" >> bconf.cmd
+		echo "call configure.bat -help" >> bconf.cmd
+		echo "del /q .gitignore" >> bconf.cmd
+		echo "exit" >> bconf.cmd
+		cmd //C bconf.cmd
+		#rm -f bconf.cmd
+	fi
+
+	local _prefix="${INSTDIR}${PREFIX}"
+	install -d "${_prefix}"
+
+	#	-prefix ${_prefix}/qt5 \
+
+	#	-prefix "${_prefix}" -bindir "${_prefix}/qt5bin" -libdir "${_prefix}/lib/qt5" \
+	#	-docdir "${_prefix}/share/doc/qt-${PV}" -headerdir "${_prefix}/include/qt5" \
+	#	-plugindir "${_prefix}/lib/qt5/plugins" -importdir "${_prefix}/lib/qt5/imports" \
+	#	-datadir "${_prefix}/share/qt5" -translationdir "${_prefix}/share/qt5/translations" \
+	#	-examplesdir "${_prefix}/share/qt5/examples" -testsdir "${_prefix}/share/qt5/tests" \
+
+	./configure.exe \
+		-prefix "${_prefix}" -bindir "${_prefix}/qt5/bin" -libdir "${_prefix}/lib/qt5" \
+		-docdir "${_prefix}/share/doc/qt-${PV}" -headerdir "${_prefix}/include/qt5" \
+		-plugindir "${_prefix}/lib/qt5/plugins" -importdir "${_prefix}/lib/qt5/imports" \
+		-qmldir "${_prefix}/qt5/qml" \
+		-archdatadir "${_prefix}/qt5" -libexecdir "${_prefix}/qt5/bin" \
+		-datadir "${_prefix}/share/qt5" -translationdir "${_prefix}/share/qt5/translations" \
+		-examplesdir "${_prefix}/share/qt5/examples" -testsdir "${_prefix}/share/qt5/tests" \
+		-release -opensource -confirm-license -shared -ltcg -rtti \
+		-nomake examples -accessibility -largefile \
+		-plugin-sql-sqlite -plugin-sql-odbc -plugin-sql-psql  -plugin-sql-mysql \
+		-platform win32-g++ -opengl desktop \
+		-system-libpng -system-libjpeg -system-zlib -system-pcre \
+		-system-freetype -system-harfbuzz \
+		-iconv -icu -dbus -ssl -openssl \
+		-strip \
+		${qt_add_includes}
+	if [ $? -eq 0 ]
+	then
+		einfo "configure successfull"
+	else
+		eerror "configure failed"
+	fi
+}
+
+patch_qt5_binary()
+{
+	local prefix_w=`posix_w32path "${PREFIX}"`
+	qt5-pathfix \
+			--prefix "${prefix_w}" \
+			--extprefix "${prefix_w}" \
+			--docdir "${prefix_w}/share/doc/qt-${PV}" \
+			--headerdir "${prefix_w}/include/qt5" \
+			--libdir "${prefix_w}/lib/qt5" \
+			--libexecdir "${prefix_w}/qt5/bin" \
+			--bindir "${prefix_w}/qt5/bin" \
+			--plugindir "${prefix_w}/lib/qt5/plugins" \
+			--importdir "${prefix_w}/lib/qt5/imports" \
+			--qmldir "${prefix_w}/qt5/qml" \
+			--archdatadir "${prefix_w}/qt5" \
+			--datadir "${prefix_w}/share/qt5" \
+			--translationdir "${prefix_w}/share/qt5/translations" \
+			--examplesdir "${prefix_w}/share/qt5/examples" \
+			--testsdir "${prefix_w}/share/qt5/tests" \
+			"${1}"
+}
+
+src_install()
+{
+	make install
+	if [ $? -eq 0 ]
+	then
+		eend "make install successfull."
+	else
+		eerror "make install failed!"
+	fi
+	install -d "${INSTDIR}${PREFIX}/bin/"
+	mv -f "${INSTDIR}${PREFIX}/qt5/bin/"*.dll \
+		"${INSTDIR}${PREFIX}/bin/"
+
+	#Move cmake files...
+	mv "${INSTDIR}${PREFIX}/lib/qt5/cmake/" "${INSTDIR}${PREFIX}/lib/" || die "mv cmake files failed!"
+	local configFiles=`find "${INSTDIR}${PREFIX}/lib/" -name "*Config.cmake"`
+	for f in ${configFiles}
+	do
+		echo "Fixing file ${f}"
+		sed -i "${f}" -e "s|^get_filename_component(\(.*\)\ \"\${CMAKE_CURRENT_LIST_DIR}/\.\./\.\./\.\./\.\./\"\ ABSOLUTE)$|get_filename_component(\1 \"\${CMAKE_CURRENT_LIST_DIR}/\.\./\.\./\.\./\" ABSOLUTE)|"
+		sed -i "${f}" -e "s|set(imported_location\ \"\${\(.*_install_prefix\)}/qt5/bin/\${LIB_LOCATION}|set(imported_location\ \"\${\1}/bin/\${LIB_LOCATION}|"
+		sed -i "${f}" -e "s|\"\${\(.*_install_prefix\)}/qt5/bin/\(.*\.dll\)\"|\"\${\1}/bin/\2\"|"
+	done
+
+	local _prefix="${INSTDIR}${PREFIX}"
+	local patch_files="qt5/bin/qmake.exe bin/Qt5Core.dll"
+	local _file=
+	for _file in ${patch_files}
+	do
+		patch_qt5_binary "${_prefix}/${_file}"
+	done
+}
+
+pkg_postinst()
+{
+	# For instalation from binary.
+	local patch_files="qt5/bin/qmake.exe bin/Qt5Core.dll"
+	local _file=
+	for _file in ${patch_files}
+	do
+		patch_qt5_binary "${PREFIX}/${_file}"
+	done
+}
