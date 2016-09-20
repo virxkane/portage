@@ -20,16 +20,6 @@ RDEPEND="sys-libs/zlib
 
 SRC_URI="http://ftp.gnu.org/gnu/${PN}/${P}.tar.xz"
 
-src_prepare()
-{
-	case ${CHOST} in
-	i[4-6]86-pc-mingw32)
-		epatch "${P}-old-perl.patch"
-		AT_M4DIR="m4" eautoreconf
-		;;
-	esac
-}
-
 src_configure()
 {
 	econf --disable-debug --disable-nls --with-ssl=openssl \
