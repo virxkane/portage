@@ -1,0 +1,16 @@
+diff -urBb pthreads-w32-2-9-1-release-orig/pthread.h pthreads-w32-2-9-1-release/pthread.h
+--- pthreads-w32-2-9-1-release-orig/pthread.h	2012-05-27 08:16:45 +0400
++++ pthreads-w32-2-9-1-release/pthread.h	2016-12-25 13:23:09 +0400
+@@ -317,10 +317,12 @@
+ #define HAVE_STRUCT_TIMESPEC
+ #if !defined(_TIMESPEC_DEFINED)
+ #define _TIMESPEC_DEFINED
++#if !defined(__struct_timespec_defined)
+ struct timespec {
+         time_t tv_sec;
+         long tv_nsec;
+ };
++#endif
+ #endif /* _TIMESPEC_DEFINED */
+ #endif /* HAVE_STRUCT_TIMESPEC */
+ 

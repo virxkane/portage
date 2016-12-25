@@ -1,0 +1,32 @@
+# Copyright 2010-2016 Chernov A.A.
+# Distributed under the terms of the GNU General Public License v2
+
+DESCRIPTION="Free headers and libraries for the Win32 API"
+
+HOMEPAGE="http://www.mingw.org/"
+
+LICENSE="as-is"
+
+RESTRICT="strip"
+
+MINGWRT_PV="3.22.4"
+SRC_URI="http://downloads.sourceforge.net/mingw/${P}-mingw32-src.tar.xz
+		http://downloads.sourceforge.net/mingw/mingwrt-${MINGWRT_PV}-mingw32-src.tar.xz"
+
+src_prepare()
+{
+	case ${CHOST} in
+	i[4-6]86-pc-mingw32)
+		:
+		;;
+	*)
+		eerror "This xbuild only for i686-pc-mingw32 platform!"
+		;;
+	esac
+#	epatch "${P}-openssl-fix.patch"
+}
+
+src_compile()
+{
+	emake -j1
+}

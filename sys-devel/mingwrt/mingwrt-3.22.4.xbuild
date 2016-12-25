@@ -1,6 +1,4 @@
-# Copyright 2010-2015 Chernov A.A.
-# This is a part of mingw-portage project: 
-# http://sourceforge.net/projects/mingwportage/
+# Copyright 2010-2016 Chernov A.A.
 # Distributed under the terms of the GNU General Public License v2
 
 DESCRIPTION="Free Microsoft C Runtime and import library definitions"
@@ -9,9 +7,11 @@ HOMEPAGE="http://www.mingw.org/"
 
 LICENSE="as-is"
 
-SRC_URI="http://downloads.sourceforge.net/mingw/${P}-1-mingw32-src.tar.lzma"
+RESTRICT="strip"
 
-SOURCES_DIR="${P}-1-mingw32-src"
+W32API_PV="3.18.2"
+SRC_URI="http://downloads.sourceforge.net/mingw/${P}-mingw32-src.tar.xz
+	http://downloads.sourceforge.net/mingw/w32api-${W32API_PV}-mingw32-src.tar.xz"
 
 src_prepare()
 {
@@ -23,12 +23,10 @@ src_prepare()
 		eerror "This xbuild only for i686-pc-mingw32 platform!"
 		;;
 	esac
-	epatch "${P}-1.patch"
-	#epatch "${P}-file64.patch"
-	epatch "${P}-mswsock.patch"
+	#epatch "${PN}-3.18-file64.patch"
 }
 
-src_configure()
+src_compile()
 {
-	econf
+	emake -j1
 }

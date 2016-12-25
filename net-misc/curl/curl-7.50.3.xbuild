@@ -13,4 +13,4 @@ DEPEND="dev-util/pkg-config"
 RDEPEND="sys-libs/zlib
 		dev-libs/openssl"
 
-SRC_URI="http://curl.haxx.se/download/${P}.tar.lzma"
+SRC_URI="https://curl.haxx.se/download/${P}.tar.lzma"
