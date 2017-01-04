@@ -24,7 +24,7 @@ qt5_modules_src_install()
 	# replace string
 	local inst_root_w=`posix_w32path "${INSTDIR}/${PREFIX}"`
 
-	local mkfiles=`find . -name 'Makefile.Release' -o -name "Makefile.*.Release"`
+	local mkfiles=`find . -name 'Makefile.Release' -o -name "Makefile.*.Release" -o -name 'Makefile'`
 	local mkfile
 	for mkfile in ${mkfiles}
 	do
