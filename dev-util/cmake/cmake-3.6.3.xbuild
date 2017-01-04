@@ -1,4 +1,4 @@
-# Copyright 2010-2016 Chernov A.A.
+# Copyright 2010-2017 Chernov A.A.
 # This is a part of mingw-portage project: 
 # http://sourceforge.net/projects/mingwportage/
 # Distributed under the terms of the GNU General Public License v2
@@ -19,6 +19,11 @@ RDEPEND="net-misc/curl
 		app-arch/xz-utils"
 
 SRC_URI="http://www.cmake.org/files/v3.6/${P}.tar.gz"
+
+src_prepare()
+{
+	epatch "${P}-FindSDL_sound.patch"
+}
 
 src_configure()
 {
