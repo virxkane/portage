@@ -1,4 +1,4 @@
-# Copyright 2014-2016 Chernov A.A. <valexlin@gmail.com>
+# Copyright 2014-2017 Chernov A.A. <valexlin@gmail.com>
 # This is a part of mingw-portage project: 
 # http://sourceforge.net/projects/mingwportage/
 # Distributed under the terms of the GNU General Public License v2
@@ -7,7 +7,11 @@ PATH="${PREFIX}/qt5/bin":"${PERL_PATH}/bin":${PATH}
 
 qt5_module_src_configure()
 {
-	qmake -recursive
+	qmake
+	if [ $? -ne 0 ]
+	then
+		eerror "qmake failed!"
+	fi
 }
 
 qt5_modules_src_install()
