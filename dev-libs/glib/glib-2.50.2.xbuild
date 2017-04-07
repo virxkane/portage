@@ -17,7 +17,7 @@ DEPEND="dev-util/pkg-config
 		sys-devel/libiconv
 		dev-libs/libpcre"
 
-SRC_URI="http://ftp.gnome.org/pub/GNOME/sources/${PN}/2.48/${P}.tar.xz"
+SRC_URI="http://ftp.gnome.org/pub/GNOME/sources/${PN}/2.50/${P}.tar.xz"
 
 src_prepare()
 {
