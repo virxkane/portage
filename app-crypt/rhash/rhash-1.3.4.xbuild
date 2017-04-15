@@ -1,0 +1,39 @@
+# Copyright 2017 Chernov A.A.
+# This is a part of mingw-portage project: 
+# http://sourceforge.net/projects/mingwportage/
+# Distributed under the terms of the GNU General Public License v2
+
+DESCRIPTION="Console utility and library for computing and verifying file hash sums"
+
+HOMEPAGE="http://rhash.anz.ru/"
+
+SRC_URI="http://downloads.sourceforge.net/${PN}/${P}-src.tar.gz"
+
+LICENSE="MIT"
+
+src_prepare()
+{
+	epatch "${P}-mingw.patch"
+}
+
+src_configure()
+{
+	:
+}
+
+src_compile()
+{
+	make PREFIX=${PREFIX} EXE=.exe ${MAKEOPTS} || die
+	cd librhash || die
+	make PREFIX=${PREFIX} dll ${MAKEOPTS} || die
+}
+
+src_install()
+{
+	make DESTDIR=${INSTDIR} PREFIX=${PREFIX} EXE=.exe install || die
+	# Windows version search config in user's directories nor /etc
+	mv "${INSTDIR}/etc" "${INSTDIR}/${PREFIX}/" || die
+	cd librhash || die
+	make DESTDIR=${INSTDIR} PREFIX=${PREFIX} install-dll || die
+	make DESTDIR=${INSTDIR} PREFIX=${PREFIX} install-lib-static || die
+}
