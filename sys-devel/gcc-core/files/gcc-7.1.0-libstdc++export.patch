@@ -1,0 +1,12 @@
+diff -urBb gcc-7.1.0-orig/libstdc++-v3/config/abi/pre/gnu.ver gcc-7.1.0/libstdc++-v3/config/abi/pre/gnu.ver
+--- gcc-7.1.0-orig/libstdc++-v3/config/abi/pre/gnu.ver	2017-02-01 11:41:48.000000000 +0000
++++ gcc-7.1.0/libstdc++-v3/config/abi/pre/gnu.ver	2017-05-09 10:55:25.971531300 +0000
+@@ -2163,7 +2163,7 @@
+     __cxa_allocate_dependent_exception;
+     __cxa_free_dependent_exception;
+     __cxa_deleted_virtual;
+-
++    _ZTC*;
+ } CXXABI_1.3.5;
+ 
+ CXXABI_1.3.7 {
