@@ -1,0 +1,25 @@
+diff -urBb cmake-3.8.1-orig/bootstrap cmake-3.8.1/bootstrap
+--- cmake-3.8.1-orig/bootstrap	2017-05-02 16:59:44.000000000 +0400
++++ cmake-3.8.1/bootstrap	2017-05-13 07:30:42.769019900 +0400
+@@ -1419,6 +1419,7 @@
+ cmake_c_flags_String="-DKWSYS_STRING_C"
+ if ${cmake_system_mingw}; then
+   cmake_c_flags_EncodingC="-DKWSYS_ENCODING_DEFAULT_CODEPAGE=CP_ACP"
++  cmake_cxx_flags_EncodingCXX="-DKWSYS_ENCODING_DEFAULT_CODEPAGE=CP_ACP"
+   cmake_cxx_flags_cmProcessOutput="${cmake_c_flags_EncodingC}"
+ fi
+ cmake_cxx_flags_SystemTools="
+diff -urBb cmake-3.8.1-orig/Source/cmFileCommand.cxx cmake-3.8.1/Source/cmFileCommand.cxx
+--- cmake-3.8.1-orig/Source/cmFileCommand.cxx	2017-05-02 16:59:43.000000000 +0400
++++ cmake-3.8.1/Source/cmFileCommand.cxx	2017-05-13 07:28:17.118100500 +0400
+@@ -20,6 +20,10 @@
+ // include sys/stat.h after sys/types.h
+ #include <sys/stat.h>
+ 
++#if defined(_WIN32)
++#include <stringapiset.h>
++#endif
++
+ #include "cmAlgorithms.h"
+ #include "cmCommandArgumentsHelper.h"
+ #include "cmCryptoHash.h"
