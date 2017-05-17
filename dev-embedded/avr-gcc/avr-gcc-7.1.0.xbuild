@@ -3,7 +3,7 @@
 # http://sourceforge.net/projects/mingwportage/
 # Distributed under the terms of the GNU General Public License v2
 
-DESCRIPTION="The GNU Compiler Collection. Only C/C++"
+DESCRIPTION="The GNU Compiler Collection. Only C/C++ (cross compiler for avr8)"
 
 HOMEPAGE="http://gcc.gnu.org/"
 
