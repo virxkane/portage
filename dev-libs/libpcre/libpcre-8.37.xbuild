@@ -14,7 +14,7 @@ RDEPEND="sys-libs/zlib
 
 MY_P="pcre-${PV}"
 SOURCES_DIR="${MY_P}"
-SRC_URI="http://downloads.sourceforge.net/${PN}/${MY_P}.tar.bz2"
+SRC_URI="http://downloads.sourceforge.net/pcre/${MY_P}.tar.bz2"
 
 src_configure()
 {

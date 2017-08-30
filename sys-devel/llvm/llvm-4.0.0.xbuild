@@ -1,0 +1,31 @@
+# Copyright 2010-2017 Chernov A.A.
+# Distributed under the terms of the GNU General Public License v3
+
+DESCRIPTION="Low Level Virtual Machine"
+
+HOMEPAGE="http://llvm.org/"
+
+SRC_URI="http://releases.llvm.org/${PV/_//}/${P/_/}.src.tar.xz"
+
+LICENSE="UoI-NCSA rc BSD public-domain LLVM-Grant"
+
+DEPEND="dev-util/cmake"
+RDEPEND="sys-libs/zlib"
+
+SOURCES_DIR="${P}.src"
+
+USE_CMAKE=yes
+
+src_configure()
+{
+	econf -DBUILD_SHARED_LIBS=OFF \
+		-DLLVM_ENABLE_EH=ON \
+		-DLLVM_ENABLE_RTTI=ON \
+		-DLLVM_HOST_TRIPLE="${CHOST}"
+}
+
+src_install()
+{
+	emake_install
+	#cp lib/lib*.a "${INSTDIR}/${PREFIX}/lib/" || die
+}

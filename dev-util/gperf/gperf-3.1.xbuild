@@ -1,0 +1,12 @@
+# Copyright 2014-2017 Chernov A.A.
+# This is a part of mingw-portage project: 
+# http://sourceforge.net/projects/mingwportage/
+# Distributed under the terms of the GNU General Public License v2
+
+DESCRIPTION="A perfect hash function generator"
+
+HOMEPAGE="https://www.gnu.org/software/gperf/"
+
+SRC_URI="http://ftp.gnu.org/gnu/gperf/${P}.tar.gz"
+
+LICENSE="GPL-2"

@@ -1,0 +1,12 @@
+diff -urBb pcre2-10.23-orig/src/pcre2grep.c pcre2-10.23/src/pcre2grep.c
+--- pcre2-10.23-orig/src/pcre2grep.c	2017-02-12 17:29:54.000000000 +0400
++++ pcre2-10.23/src/pcre2grep.c	2017-06-10 23:30:54.170256500 +0400
+@@ -628,7 +628,7 @@
+ 
+ /************* Directory scanning Unix-style and z/OS ***********/
+ 
+-#if (defined HAVE_SYS_STAT_H && defined HAVE_DIRENT_H && defined HAVE_SYS_TYPES_H) || defined NATIVE_ZOS
++#if ((defined HAVE_SYS_STAT_H && defined HAVE_DIRENT_H && defined HAVE_SYS_TYPES_H) || defined NATIVE_ZOS) && !defined WIN32
+ #include <sys/types.h>
+ #include <sys/stat.h>
+ #include <dirent.h>
