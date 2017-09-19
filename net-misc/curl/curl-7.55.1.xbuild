@@ -1,0 +1,16 @@
+# Copyright 2010-2017 Chernov A.A.
+# This is a part of mingw-portage project: 
+# http://sourceforge.net/projects/mingwportage/
+# Distributed under the terms of the GNU General Public License v2
+
+DESCRIPTION="A Client that groks URLs"
+
+HOMEPAGE="http://curl.haxx.se/"
+
+LICENSE="MIT"
+
+DEPEND="dev-util/pkg-config"
+RDEPEND="sys-libs/zlib
+		dev-libs/openssl"
+
+SRC_URI="https://curl.haxx.se/download/${P}.tar.xz"
