@@ -3,7 +3,7 @@
 # http://sourceforge.net/projects/mingwportage/
 # Distributed under the terms of the GNU General Public License v2
 
-PATH="${PREFIX}/qt5/bin":"${PERL_PATH}/bin":${PATH}
+PATH="${PERL_PATH}/bin":${PATH}
 
 qt5_module_src_configure()
 {
@@ -45,13 +45,6 @@ qt5_modules_src_install()
 		eerror "make install failed!"
 	fi
 
-	if find "${INSTDIR}${PREFIX}/qt5/bin/"*.dll > /dev/null 2>&1
-	then
-		install -d "${INSTDIR}${PREFIX}/bin/"
-		mv -f "${INSTDIR}${PREFIX}/qt5/bin/"*.dll \
-				"${INSTDIR}${PREFIX}/bin/"
-	fi
-
 	if [ -d "${INSTDIR}${PREFIX}/lib/qt5/cmake/" ]
 	then
 		#echo "Move cmake files..."
@@ -61,8 +54,18 @@ qt5_modules_src_install()
 		do
 			echo "Fixing file ${f}"
 			sed -i "${f}" -e "s|^get_filename_component(\(.*\)\ \"\${CMAKE_CURRENT_LIST_DIR}/\.\./\.\./\.\./\.\./\"\ ABSOLUTE)$|get_filename_component(\1 \"\${CMAKE_CURRENT_LIST_DIR}/\.\./\.\./\.\./\" ABSOLUTE)|"
-			sed -i "${f}" -e "s|set(imported_location\ \"\${\(.*_install_prefix\)}/qt5/bin/\${LIB_LOCATION}|set(imported_location\ \"\${\1}/bin/\${LIB_LOCATION}|"
-			sed -i "${f}" -e "s|\"\${\(.*_install_prefix\)}/qt5/bin/\(.*\.dll\)\"|\"\${\1}/bin/\2\"|"
+		done
+	fi
+
+	if [ -d "${INSTDIR}${PREFIX}/lib/qt5/pkgconfig/" ]
+	then
+		#Move pkg-config files...
+		mv "${INSTDIR}${PREFIX}/lib/qt5/pkgconfig/" "${INSTDIR}${PREFIX}/lib/" || die "mv pkg-config files failed!"
+		local pkgconfigFiles=`find "${INSTDIR}${PREFIX}/lib/pkgconfig/" -name "*.pc"`
+		for f in ${pkgconfigFiles}
+		do
+			echo "Fixing file ${f}"
+			sed -i "${f}" -e "s|^prefix=.*$|prefix=${PREFIX}|"
 		done
 	fi
 }
