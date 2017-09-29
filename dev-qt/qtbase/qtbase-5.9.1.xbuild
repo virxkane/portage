@@ -67,7 +67,7 @@ src_configure()
 			-prefix "${_prefix}" \
 			-bindir "${_prefix}/bin/" \
 			-libdir "${_prefix}/lib/qt5/" \
-			-docdir "${_prefix}/share/doc/qt-5.9.1/" \
+			-docdir "${_prefix}/share/doc/qt-${PV}/" \
 			-headerdir "${_prefix}/include/qt5/" \
 			-plugindir "${_prefix}/lib/qt5/plugins/" \
 			-importdir "${_prefix}/lib/qt5/imports/" \
