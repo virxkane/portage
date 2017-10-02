@@ -9,7 +9,7 @@ HOMEPAGE="http://qt-project.org/ http://qt.digia.com/"
 LICENSE="LGPL-2.1 GPL-3"
 
 DEPEND="dev-util/pkg-config"
-RDEPEND=">=gui-libs/qt4-4.8.7-r3
+RDEPEND=">=gui-libs/qt4-4.8.7-r4
 		sys-apps/dbus"
 
 MY_P=qt-everywhere-opensource-src-${PV}
@@ -74,7 +74,7 @@ src_configure()
 	local _prefix_w=`posix_w32path "${_prefix}"`
 
 	qt4-pathfix --prefix="${_prefix_w}" \
-				--bindir="${_prefix_w}/bin" \
+				--bindir="${_prefix_w}/qt4/bin" \
 				--libdir="${_prefix_w}/lib/qt4" \
 				--docdir="${_prefix_w}/share/doc/qt-${PV}" \
 				--headerdir="${_prefix_w}/include/qt4" \
@@ -100,7 +100,7 @@ src_configure()
 		fi
 	done
 
-	./configure.exe -prefix ${_prefix} -bindir "${_prefix}/bin" -libdir "${_prefix}/lib/qt4" \
+	./configure.exe -prefix ${_prefix} -bindir "${_prefix}/qt4/bin" -libdir "${_prefix}/lib/qt4" \
 		-docdir "${_prefix}/share/doc/qt-${PV}" -headerdir "${_prefix}/include/qt4" \
 		-plugindir "${_prefix}/lib/qt4/plugins" -importdir "${_prefix}/lib/qt4/imports" \
 		-datadir "${_prefix}/share/qt4" -translationdir "${_prefix}/share/qt4/translations" \
@@ -148,7 +148,7 @@ src_install()
 	done
 
 	install -d "${INSTDIR}${PREFIX}/qt4/bin/"
-	mv "${INSTDIR}${PREFIX}/bin/"*.exe "${INSTDIR}${PREFIX}/qt4/bin/"
+	mv "${INSTDIR}${PREFIX}/qt4/bin/"*.dll "${INSTDIR}${PREFIX}/bin/"
 	rm -f ${INSTDIR}${PREFIX}/lib/qt4/*.dll
 	rm -rf ${INSTDIR}${PREFIX}/share/qt4/mkspecs/
 	rm -rf "${INSTDIR}${PREFIX}/lib/qt4/pkgconfig/"

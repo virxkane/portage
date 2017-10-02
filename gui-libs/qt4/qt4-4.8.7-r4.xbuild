@@ -80,7 +80,7 @@ src_configure()
 {
 	local _prefix="${INSTDIR}${PREFIX}"
 	install -d "${_prefix}"
-	./configure.exe -prefix ${_prefix} -bindir "${_prefix}/bin" -libdir "${_prefix}/lib/qt4" \
+	./configure.exe -prefix ${_prefix} -bindir "${_prefix}/qt4/bin" -libdir "${_prefix}/lib/qt4" \
 		-docdir "${_prefix}/share/doc/qt-${PV}" -headerdir "${_prefix}/include/qt4" \
 		-plugindir "${_prefix}/lib/qt4/plugins" -importdir "${_prefix}/lib/qt4/imports" \
 		-datadir "${_prefix}/share/qt4" -translationdir "${_prefix}/share/qt4/translations" \
@@ -117,7 +117,7 @@ src_install()
 	local prefix_w=`posix_w32path "${PREFIX}"`
 
 	install -d "${_prefix}/qt4/bin/"
-	mv -fv "${_prefix}/bin/"*.exe "${_prefix}/qt4/bin/"
+	mv -fv "${_prefix}/qt4/bin/"*.dll "${_prefix}/bin/"
 
 	#mv -fv "${_prefix}/lib/qt4/"*.dll "${_prefix}/bin/"
 	rm -f "${_prefix}/lib/qt4/"*.dll
@@ -128,7 +128,7 @@ src_install()
 	for _file in ${patch_files}
 	do
 		qt4-pathfix --prefix="${prefix_w}" \
-				--bindir="${prefix_w}/bin" \
+				--bindir="${prefix_w}/qt4/bin" \
 				--libdir="${prefix_w}/lib/qt4" \
 				--docdir="${prefix_w}/share/doc/qt-${PV}" \
 				--headerdir="${prefix_w}/include/qt4" \

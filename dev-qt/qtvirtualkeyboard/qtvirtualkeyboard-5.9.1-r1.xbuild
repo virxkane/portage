@@ -12,7 +12,8 @@ LICENSE="LGPL-2.1 GPL-3"
 RESTRICT="strip"
 
 RDEPEND=">=dev-qt/qtbase-${PV}
-		>=dev-qt/qtdeclarative-${PV}"
+		>=dev-qt/qtdeclarative-${PV}
+		>=dev-qt/qtsvg-${PV}"
 
 MY_P=${PN}-opensource-src-${PV}
 SRC_URI="http://download.qt.io/official_releases/qt/5.9/${PV}/submodules/${MY_P}.tar.xz"
