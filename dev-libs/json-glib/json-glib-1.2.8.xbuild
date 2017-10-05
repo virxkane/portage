@@ -1,0 +1,22 @@
+# Copyright 2013-2017 Chernov A.A.
+# This is a part of mingw-portage project: 
+# http://sourceforge.net/projects/mingwportage/
+# Distributed under the terms of the GNU General Public License v2
+
+DESCRIPTION="A library providing GLib serialization and deserialization support for the JSON format"
+
+HOMEPAGE="https://wiki.gnome.org/Projects/JsonGlib"
+
+SRC_URI="https://download.gnome.org/sources/${PN}/1.2/${P}.tar.xz"
+
+LICENSE="GPL-2"
+
+DEPEND="dev-util/pkg-config
+		sys-devel/gettext
+		sys-devel/libiconv"
+RDEPEND=">=dev-libs/glib-2.37.6"
+
+src_configure()
+{
+	econf --enable-shared --enable-static
+}
