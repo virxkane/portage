@@ -10,3 +10,15 @@ LICENSE="LGPL-2.1"
 SRC_URI="http://www.libsdl.org/release/SDL2-${PV}.tar.gz"
 
 SOURCES_DIR="SDL2-${PV}"
+
+src_configure()
+{
+	econf \
+		--enable-shared --enable-static \
+		--enable-audio --enable-video --enable-render --enable-events --enable-joystick --enable-haptic \
+		--enable-power --enable-filesystem --enable-threads --enable-timers --enable-file --enable-loadso \
+		--enable-cpuinfo --enable-assembly --enable-ssemath \
+		--enable-video-dummy --enable-video-opengl --enable-render-d3d \
+		--enable-pthreads --enable-pthread-sem --enable-directx \
+		--enable-sdl-dlopen --enable-clock_gettime
+}
