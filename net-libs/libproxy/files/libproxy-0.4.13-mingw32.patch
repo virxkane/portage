@@ -1,0 +1,15 @@
+diff -urBb libproxy-0.4.13-orig/libmodman/test/main.cpp libproxy-0.4.13/libmodman/test/main.cpp
+--- libproxy-0.4.13-orig/libmodman/test/main.cpp	2016-04-28 21:04:41.000000000 +0400
++++ libproxy-0.4.13/libmodman/test/main.cpp	2017-10-17 10:08:52.388276700 +0400
+@@ -30,11 +30,6 @@
+ 
+ int main(int argc, const char** argv) {
+ 	module_manager mm;
+-#ifdef WIN32
+-#ifdef SYMB
+-	void* symb = recv;
+-#endif
+-#endif
+ 
+ 	if (argc < 2) {
+ 		cout << "Usage: " << argv[0] << " MODULEDIR MODNAME ..." << endl;

@@ -1,0 +1,29 @@
+# Copyright 2017 Chernov A.A.
+# This is a part of mingw-portage project: 
+# http://sourceforge.net/projects/mingwportage/
+# Distributed under the terms of the GNU General Public License v2
+
+DESCRIPTION="Library for automatic proxy configuration management"
+
+HOMEPAGE="https://github.com/libproxy/libproxy"
+
+SRC_URI="https://github.com/libproxy/libproxy/archive/${PV}.tar.gz -> ${P}.tar.gz"
+
+LICENSE="LGPL-2.1"
+
+DEPEND="dev-util/cmake"
+
+USE_CMAKE=yes
+
+src_prepare()
+{
+	epatch "${PN}-0.4.13-mingw32.patch"
+}
+
+src_install()
+{
+	emake_install
+	install -d "${INSTDIR}${PREFIX}/bin/"
+	mv "${INSTDIR}${PREFIX}/lib/"*.dll "${INSTDIR}${PREFIX}/bin/"
+	mv "${INSTDIR}${PREFIX}/lib/liblibproxy.dll.a" "${INSTDIR}${PREFIX}/lib/libproxy.dll.a"
+}

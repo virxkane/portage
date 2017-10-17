@@ -1,0 +1,28 @@
+# Copyright 2017 Chernov A.A.
+# This is a part of mingw-portage project: 
+# http://sourceforge.net/projects/mingwportage/
+# Distributed under the terms of the GNU General Public License v2
+
+DESCRIPTION="A TLS 1.2 and SSL 3.0 implementation for the GNU project"
+
+HOMEPAGE="https://www.gnutls.org/"
+
+SRC_URI="https://www.gnupg.org/ftp/gcrypt/gnutls/v3.6/${P}.tar.xz"
+
+LICENSE="GPL-3 LGPL-2.1"
+
+DEPEND="dev-util/pkg-config"
+RDEPEND="dev-libs/libtasn1
+		dev-libs/libunistring
+		app-crypt/p11-kit
+		dev-libs/nettle
+		dev-libs/gmp
+		net-dns/libidn2
+		sys-devel/gettext
+		sys-devel/libiconv"
+
+src_configure()
+{
+	econf --enable-shared \
+		--disable-doc --disable-guile
+}

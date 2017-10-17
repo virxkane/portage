@@ -1,0 +1,22 @@
+# Copyright 2017 Chernov A.A.
+# This is a part of mingw-portage project: 
+# http://sourceforge.net/projects/mingwportage/
+# Distributed under the terms of the GNU General Public License v2
+
+DESCRIPTION="An implementation of the IDNA2008 specifications (RFCs 5890, 5891, 5892, 5893)"
+
+HOMEPAGE="https://www.gnu.org/software/libidn/#libidn2 https://gitlab.com/jas/libidn2"
+
+SRC_URI="https://ftp.gnu.org/gnu/libidn/${P}.tar.gz"
+
+LICENSE="GPL-2 LGPL-3"
+
+DEPEND="dev-util/pkg-config"
+RDEPEND="dev-libs/libunistring
+		sys-devel/libiconv
+		sys-devel/gettext"
+
+src_configure()
+{
+	econf --enable-shared --enable-static
+}

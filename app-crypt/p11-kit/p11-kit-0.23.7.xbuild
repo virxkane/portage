@@ -1,0 +1,27 @@
+# Copyright 2017 Chernov A.A.
+# This is a part of mingw-portage project: 
+# http://sourceforge.net/projects/mingwportage/
+# Distributed under the terms of the GNU General Public License v2
+
+DESCRIPTION="Provides a standard configuration setup for installing PKCS#11"
+
+HOMEPAGE="https://p11-glue.freedesktop.org/p11-kit.html https://github.com/p11-glue/p11-kit"
+
+SRC_URI="https://github.com/p11-glue/${PN}/releases/download/${PV}/${P}.tar.gz"
+
+LICENSE="MIT"
+
+DEPEND="dev-util/pkg-config"
+RDEPEND="dev-libs/libffi
+	dev-libs/libtasn1
+	sys-devel/gettext
+	sys-devel/libiconv
+	app-misc/ca-certificates"
+
+src_configure()
+{
+	econf --enable-shared --disable-static \
+		--with-trust-paths=${PREFIX}/etc/sslcerts/ca-certificates.crt \
+		--with-libtasn1 \
+		--with-hash-impl=internal
+}

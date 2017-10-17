@@ -1,0 +1,17 @@
+# Copyright 2017 Chernov A.A.
+# This is a part of mingw-portage project: 
+# http://sourceforge.net/projects/mingwportage/
+# Distributed under the terms of the GNU General Public License v2
+
+DESCRIPTION="Library for manipulating Unicode and C strings according to Unicode standard"
+
+HOMEPAGE="https://www.gnu.org/software/libunistring/"
+
+SRC_URI="https://ftp.gnu.org/gnu/libunistring/${P}.tar.xz"
+
+LICENSE="GPL-3 LGPL-3"
+
+src_configure()
+{
+	econf --enable-shared --enable-static
+}
