@@ -1,0 +1,64 @@
+# Copyright 2016-2018 Chernov A.A.
+# This is a part of mingw-portage project: 
+# http://sourceforge.net/projects/mingwportage/
+# Distributed under the terms of the GNU General Public License v2
+
+DESCRIPTION="Common CA Certificates PEM files"
+
+HOMEPAGE="http://packages.debian.org/sid/ca-certificates"
+
+SRC_URI="http://ftp.debian.org/debian/pool/main/c/${PN}/${PN}_${PV}.tar.xz"
+
+LICENSE="MPL-1.1"
+
+RESTRICT="strip"
+
+DEPEND="dev-lang/python"
+RDEPEND="dev-libs/openssl"
+
+SOURCES_DIR="${PN}"
+
+src_prepare()
+{
+	epatch "${PN}-20160104-mingw.patch"
+	rm -r "examples"
+}
+
+src_configure()
+{
+	:
+}
+
+src_compile()
+{
+	emake -j1
+}
+
+src_install()
+{
+	mkdir -p "${INSTDIR}${PREFIX}/share/ca-certificates/mozilla"
+	mkdir -p "${INSTDIR}${PREFIX}/bin"
+	mkdir -p "${INSTDIR}${PREFIX}/etc/ssl/certs"
+	make DESTDIR="${INSTDIR}" install
+
+	# generate /etc/ca-certicates.conf
+	cd "${INSTDIR}${PREFIX}/share/ca-certificates" || die
+	find * -name '*.crt' | LC_ALL=C sort > "${INSTDIR}${PREFIX}/etc/ca-certificates.conf"
+
+	local CERTBUNDLE="${INSTDIR}${PREFIX}/etc/ssl/certs/ca-certificates.crt"
+	local pem=
+	find * -type f -name '*.crt' | sort | while read crt
+	do
+		pem="$(basename "$crt" .crt | sed -e 's/ /_/g' \
+                                          -e 's/[()]/=/g' \
+                                          -e 's/,/_/g').pem"
+		cp -f "${crt}" "${INSTDIR}${PREFIX}/etc/ssl/certs/${pem}"
+		# Add trailing newline to certificate, if it is missing (#635570)
+		sed -e '$a\' "$crt" >> "$CERTBUNDLE" 
+	done
+
+	local w32prefix=`posix_w32path ${PREFIX}`
+	cd "${INSTDIR}${PREFIX}/etc/ssl/certs" || die
+	export OPENSSL_CONF="${w32prefix}/etc/ssl/openssl.cnf"
+	c_rehash .
+}
