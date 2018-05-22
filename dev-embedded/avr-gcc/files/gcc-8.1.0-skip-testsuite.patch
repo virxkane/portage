@@ -1,0 +1,242 @@
+diff -urBb gcc-8.1.0-p/libatomic/configure gcc-8.1.0/libatomic/configure
+--- gcc-8.1.0-p/libatomic/configure	2018-05-02 12:19:58.000000000 +0400
++++ gcc-8.1.0/libatomic/configure	2018-05-21 10:49:20.931880100 +0400
+@@ -15453,7 +15453,7 @@
+   multilib_arg=
+ fi
+ 
+-ac_config_files="$ac_config_files Makefile testsuite/Makefile"
++ac_config_files="$ac_config_files Makefile"
+ 
+ cat >confcache <<\_ACEOF
+ # This file is a shell script that caches the results of configure
+@@ -16505,7 +16505,6 @@
+     "libtool") CONFIG_COMMANDS="$CONFIG_COMMANDS libtool" ;;
+     "gstdint.h") CONFIG_COMMANDS="$CONFIG_COMMANDS gstdint.h" ;;
+     "Makefile") CONFIG_FILES="$CONFIG_FILES Makefile" ;;
+-    "testsuite/Makefile") CONFIG_FILES="$CONFIG_FILES testsuite/Makefile" ;;
+ 
+   *) as_fn_error "invalid argument: \`$ac_config_target'" "$LINENO" 5;;
+   esac
+diff -urBb gcc-8.1.0-p/libatomic/configure.ac gcc-8.1.0/libatomic/configure.ac
+--- gcc-8.1.0-p/libatomic/configure.ac	2018-01-03 14:03:58.000000000 +0400
++++ gcc-8.1.0/libatomic/configure.ac	2018-05-21 10:49:20.936763300 +0400
+@@ -279,5 +279,5 @@
+   multilib_arg=
+ fi
+ 
+-AC_CONFIG_FILES(Makefile testsuite/Makefile)
++AC_CONFIG_FILES(Makefile)
+ AC_OUTPUT
+diff -urBb gcc-8.1.0-p/libatomic/Makefile.am gcc-8.1.0/libatomic/Makefile.am
+--- gcc-8.1.0-p/libatomic/Makefile.am	2018-01-03 14:03:58.000000000 +0400
++++ gcc-8.1.0/libatomic/Makefile.am	2018-05-21 10:49:20.938716600 +0400
+@@ -23,7 +23,7 @@
+ ##  <http://www.gnu.org/licenses/>.
+ 
+ ACLOCAL_AMFLAGS = -I .. -I ../config
+-SUBDIRS = testsuite
++SUBDIRS = 
+ 
+ ## May be used by toolexeclibdir.
+ gcc_version := $(shell @get_gcc_base_ver@ $(top_srcdir)/../gcc/BASE-VER)
+diff -urBb gcc-8.1.0-p/libatomic/Makefile.in gcc-8.1.0/libatomic/Makefile.in
+--- gcc-8.1.0-p/libatomic/Makefile.in	2018-05-02 12:19:58.000000000 +0400
++++ gcc-8.1.0/libatomic/Makefile.in	2018-05-21 10:49:20.939693400 +0400
+@@ -302,7 +302,7 @@
+ top_builddir = @top_builddir@
+ top_srcdir = @top_srcdir@
+ ACLOCAL_AMFLAGS = -I .. -I ../config
+-SUBDIRS = testsuite
++SUBDIRS = 
+ gcc_version := $(shell @get_gcc_base_ver@ $(top_srcdir)/../gcc/BASE-VER)
+ search_path = $(addprefix $(top_srcdir)/config/, $(config_path)) \
+ 	$(top_srcdir) $(top_builddir)
+diff -urBb gcc-8.1.0-p/libgomp/configure gcc-8.1.0/libgomp/configure
+--- gcc-8.1.0-p/libgomp/configure	2018-05-02 12:19:58.000000000 +0400
++++ gcc-8.1.0/libgomp/configure	2018-05-21 10:49:20.948484900 +0400
+@@ -16920,9 +16920,9 @@
+ 
+ ac_config_files="$ac_config_files omp.h omp_lib.h omp_lib.f90 libgomp_f.h"
+ 
+-ac_config_files="$ac_config_files Makefile testsuite/Makefile libgomp.spec"
++ac_config_files="$ac_config_files Makefile libgomp.spec"
+ 
+-ac_config_files="$ac_config_files testsuite/libgomp-test-support.pt.exp:testsuite/libgomp-test-support.exp.in"
++ac_config_files="$ac_config_files"
+ 
+ cat >confcache <<\_ACEOF
+ # This file is a shell script that caches the results of configure
+diff -urBb gcc-8.1.0-p/libgomp/configure.ac gcc-8.1.0/libgomp/configure.ac
+--- gcc-8.1.0-p/libgomp/configure.ac	2018-05-02 12:19:58.000000000 +0400
++++ gcc-8.1.0/libgomp/configure.ac	2018-05-21 10:49:20.953365900 +0400
+@@ -388,6 +388,5 @@
+ GCC_BASE_VER
+ 
+ AC_CONFIG_FILES(omp.h omp_lib.h omp_lib.f90 libgomp_f.h)
+-AC_CONFIG_FILES(Makefile testsuite/Makefile libgomp.spec)
+-AC_CONFIG_FILES([testsuite/libgomp-test-support.pt.exp:testsuite/libgomp-test-support.exp.in])
++AC_CONFIG_FILES(Makefile libgomp.spec)
+ AC_OUTPUT
+diff -urBb gcc-8.1.0-p/libgomp/Makefile.am gcc-8.1.0/libgomp/Makefile.am
+--- gcc-8.1.0-p/libgomp/Makefile.am	2018-05-02 12:19:58.000000000 +0400
++++ gcc-8.1.0/libgomp/Makefile.am	2018-05-21 10:49:20.954343100 +0400
+@@ -1,7 +1,7 @@
+ ## Process this file with automake to produce Makefile.in
+ 
+ ACLOCAL_AMFLAGS = -I .. -I ../config
+-SUBDIRS = testsuite
++SUBDIRS = 
+ 
+ ## May be used by toolexeclibdir.
+ gcc_version := $(shell @get_gcc_base_ver@ $(top_srcdir)/../gcc/BASE-VER)
+diff -urBb gcc-8.1.0-p/libgomp/Makefile.in gcc-8.1.0/libgomp/Makefile.in
+--- gcc-8.1.0-p/libgomp/Makefile.in	2018-05-02 12:19:58.000000000 +0400
++++ gcc-8.1.0/libgomp/Makefile.in	2018-05-21 10:49:20.956296100 +0400
+@@ -401,7 +401,7 @@
+ top_builddir = @top_builddir@
+ top_srcdir = @top_srcdir@
+ ACLOCAL_AMFLAGS = -I .. -I ../config
+-SUBDIRS = testsuite
++SUBDIRS = 
+ gcc_version := $(shell @get_gcc_base_ver@ $(top_srcdir)/../gcc/BASE-VER)
+ search_path = $(addprefix $(top_srcdir)/config/, $(config_path)) $(top_srcdir) \
+ 	      $(top_srcdir)/../include
+diff -urBb gcc-8.1.0-p/libiberty/configure gcc-8.1.0/libiberty/configure
+--- gcc-8.1.0-p/libiberty/configure	2017-05-31 08:16:45.000000000 +0400
++++ gcc-8.1.0/libiberty/configure	2018-05-21 10:49:20.959225700 +0400
+@@ -7391,7 +7391,7 @@
+ 
+ 
+ # We need multilib support, but only if configuring for the target.
+-ac_config_files="$ac_config_files Makefile testsuite/Makefile"
++ac_config_files="$ac_config_files Makefile"
+ 
+ ac_config_commands="$ac_config_commands default"
+ 
+diff -urBb gcc-8.1.0-p/libiberty/configure.ac gcc-8.1.0/libiberty/configure.ac
+--- gcc-8.1.0-p/libiberty/configure.ac	2017-05-31 08:16:45.000000000 +0400
++++ gcc-8.1.0/libiberty/configure.ac	2018-05-21 10:49:20.962155500 +0400
+@@ -729,7 +729,7 @@
+ AC_SUBST(htmldir)
+ 
+ # We need multilib support, but only if configuring for the target.
+-AC_CONFIG_FILES([Makefile testsuite/Makefile])
++AC_CONFIG_FILES([Makefile])
+ AC_CONFIG_COMMANDS([default],
+   [[test -z "$CONFIG_HEADERS" || echo timestamp > stamp-h
+ if test -n "$CONFIG_FILES"; then
+diff -urBb gcc-8.1.0-p/libiberty/Makefile.in gcc-8.1.0/libiberty/Makefile.in
+--- gcc-8.1.0-p/libiberty/Makefile.in	2018-01-03 14:03:58.000000000 +0400
++++ gcc-8.1.0/libiberty/Makefile.in	2018-05-21 10:49:20.964108900 +0400
+@@ -97,7 +97,7 @@
+ 	"tooldir=$(tooldir)"
+ 
+ # Subdirectories to recurse into. We need to override this during cleaning
+-SUBDIRS = testsuite
++SUBDIRS = 
+ 
+ # FIXME: add @BUILD_INFO@ once we're sure it works for everyone.
+ all: stamp-picdir stamp-noasandir $(TARGETLIB) required-list all-subdir
+diff -urBb gcc-8.1.0-p/libstdc++-v3/configure gcc-8.1.0/libstdc++-v3/configure
+--- gcc-8.1.0-p/libstdc++-v3/configure	2018-04-24 20:45:26.000000000 +0400
++++ gcc-8.1.0/libstdc++-v3/configure	2018-05-21 10:49:20.978758200 +0400
+@@ -4964,7 +4964,7 @@
+   # expandable list at autoconf time; the second provides an expandable list
+   # (i.e., shell variable) at configure time.
+ 
+-  SUBDIRS='include libsupc++ src src/c++98 src/c++11 src/filesystem doc po testsuite python'
++  SUBDIRS='include libsupc++ src src/c++98 src/c++11 src/filesystem doc po python'
+ 
+   # These need to be absolute paths, yet at the same time need to
+   # canonicalize only relative paths, because then amd will not unmount
+@@ -81668,7 +81668,7 @@
+ # append it here.  Only modify Makefiles that have just been created.
+ #
+ # Also, get rid of this simulated-VPATH thing that automake does.
+-ac_config_files="$ac_config_files include/Makefile libsupc++/Makefile src/Makefile src/c++98/Makefile src/c++11/Makefile src/filesystem/Makefile doc/Makefile po/Makefile testsuite/Makefile python/Makefile"
++ac_config_files="$ac_config_files include/Makefile libsupc++/Makefile src/Makefile src/c++98/Makefile src/c++11/Makefile src/filesystem/Makefile doc/Makefile po/Makefile python/Makefile"
+ 
+ 
+ ac_config_commands="$ac_config_commands generate-headers"
+diff -urBb gcc-8.1.0-p/libstdc++-v3/Makefile.am gcc-8.1.0/libstdc++-v3/Makefile.am
+--- gcc-8.1.0-p/libstdc++-v3/Makefile.am	2018-01-03 14:03:58.000000000 +0400
++++ gcc-8.1.0/libstdc++-v3/Makefile.am	2018-05-21 10:49:20.987548100 +0400
+@@ -24,7 +24,7 @@
+ 
+ if GLIBCXX_HOSTED
+ ## Note that python must come after src.
+-  hosted_source = src doc po testsuite python
++  hosted_source = src doc po python
+ endif
+ 
+ ## Keep this list sync'd with acinclude.m4:GLIBCXX_CONFIGURE.
+diff -urBb gcc-8.1.0-p/libstdc++-v3/Makefile.in gcc-8.1.0/libstdc++-v3/Makefile.in
+--- gcc-8.1.0-p/libstdc++-v3/Makefile.in	2017-11-18 01:28:10.000000000 +0400
++++ gcc-8.1.0/libstdc++-v3/Makefile.in	2018-05-21 10:49:20.988524600 +0400
+@@ -55,7 +55,6 @@
+ 	$(srcdir)/Makefile.in $(srcdir)/Makefile.am \
+ 	$(top_srcdir)/configure $(am__configure_deps) \
+ 	$(srcdir)/config.h.in $(srcdir)/../mkinstalldirs \
+-	$(top_srcdir)/scripts/testsuite_flags.in \
+ 	$(top_srcdir)/scripts/extract_symvers.in \
+ 	$(top_srcdir)/doc/xsl/customization.xsl.in
+ subdir = .
+@@ -117,7 +116,7 @@
+ 	$(RECURSIVE_CLEAN_TARGETS:-recursive=) tags TAGS ctags CTAGS
+ ETAGS = etags
+ CTAGS = ctags
+-DIST_SUBDIRS = include libsupc++ src doc po testsuite python
++DIST_SUBDIRS = include libsupc++ src doc po python
+ ABI_TWEAKS_SRCDIR = @ABI_TWEAKS_SRCDIR@
+ ACLOCAL = @ACLOCAL@
+ ALLOCATOR_H = @ALLOCATOR_H@
+@@ -343,7 +342,7 @@
+ 
+ # -I/-D flags to pass when compiling.
+ AM_CPPFLAGS = $(GLIBCXX_INCLUDES) $(CPPFLAGS)
+-@GLIBCXX_HOSTED_TRUE@hosted_source = src doc po testsuite python
++@GLIBCXX_HOSTED_TRUE@hosted_source = src doc po python
+ SUBDIRS = include libsupc++ $(hosted_source)
+ ACLOCAL_AMFLAGS = -I . -I .. -I ../config
+ @BUILD_XML_FALSE@STAMP_XML = 
+diff -urBb gcc-8.1.0-p/libvtv/configure gcc-8.1.0/libvtv/configure
+--- gcc-8.1.0-p/libvtv/configure	2018-05-02 12:19:58.000000000 +0400
++++ gcc-8.1.0/libvtv/configure	2018-05-21 10:49:20.993407800 +0400
+@@ -15553,11 +15553,6 @@
+ ac_config_files="$ac_config_files Makefile"
+ 
+ 
+-if test "x$VTV_SUPPORTED" = "xyes"; then
+-  ac_config_files="$ac_config_files testsuite/Makefile"
+-
+-fi
+-
+ case "$target_os" in
+   cygwin*|mingw32*)
+     vtv_cygmin="yes"
+diff -urBb gcc-8.1.0-p/libvtv/configure.ac gcc-8.1.0/libvtv/configure.ac
+--- gcc-8.1.0-p/libvtv/configure.ac	2017-11-18 02:29:19.000000000 +0400
++++ gcc-8.1.0/libvtv/configure.ac	2018-05-21 10:49:20.998291000 +0400
+@@ -166,21 +166,6 @@
+ 
+ AC_CONFIG_FILES([Makefile])
+ 
+-if test "x$VTV_SUPPORTED" = "xyes"; then
+-  AC_CONFIG_FILES(AC_FOREACH([DIR], [testsuite], [DIR/Makefile ]), 
+-    [cat > vpsed$$ << \_EOF
+-s!`test -f '$<' || echo '$(srcdir)/'`!!
+-_EOF
+-    sed -f vpsed$$ $ac_file > tmp$$
+-    mv tmp$$ $ac_file
+-    rm vpsed$$
+-    echo 'MULTISUBDIR =' >> $ac_file
+-    ml_norecursion=yes
+-    . ${multi_basedir}/config-ml.in
+-    AS_UNSET([ml_norecursion])
+-])
+-fi
+-
+ case "$target_os" in
+   cygwin*|mingw32*)
+     vtv_cygmin="yes"

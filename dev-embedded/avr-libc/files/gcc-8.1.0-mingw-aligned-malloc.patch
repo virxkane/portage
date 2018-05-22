@@ -1,0 +1,46 @@
+diff -urBb gcc-8.1.0-p/libstdc++-v3/libsupc++/del_opa.cc gcc-8.1.0/libstdc++-v3/libsupc++/del_opa.cc
+--- gcc-8.1.0-p/libstdc++-v3/libsupc++/del_opa.cc	2018-01-03 14:03:58.000000000 +0400
++++ gcc-8.1.0/libstdc++-v3/libsupc++/del_opa.cc	2018-05-21 10:40:03.743999600 +0400
+@@ -24,6 +24,7 @@
+ // <http://www.gnu.org/licenses/>.
+ 
+ #include <bits/c++config.h>
++#include <malloc.h>
+ 
+ #if !_GLIBCXX_HOSTED
+ // A freestanding C runtime may not provide "free" -- but there is no
+@@ -49,6 +50,8 @@
+ #if _GLIBCXX_HAVE_ALIGNED_ALLOC || _GLIBCXX_HAVE_POSIX_MEMALIGN \
+     || _GLIBCXX_HAVE_MEMALIGN
+   std::free (ptr);
++#elif defined(__MINGW32__) && !defined(__MINGW64_VERSION_MAJOR)
++  __mingw_aligned_free (ptr);
+ #elif _GLIBCXX_HAVE__ALIGNED_MALLOC
+   _aligned_free (ptr);
+ #else
+diff -urBb gcc-8.1.0-p/libstdc++-v3/libsupc++/new_opa.cc gcc-8.1.0/libstdc++-v3/libsupc++/new_opa.cc
+--- gcc-8.1.0-p/libstdc++-v3/libsupc++/new_opa.cc	2018-01-03 14:03:58.000000000 +0400
++++ gcc-8.1.0/libstdc++-v3/libsupc++/new_opa.cc	2018-05-21 10:40:03.745952600 +0400
+@@ -25,6 +25,7 @@
+ 
+ #include <bits/c++config.h>
+ #include <stdlib.h>
++#include <malloc.h>
+ #include <bits/exception_defines.h>
+ #include "new"
+ 
+@@ -84,6 +85,14 @@
+ #endif
+ #endif
+ 
++// Redefine aligned_alloc for mingw (not mingw-w64).
++#ifdef __MINGW32__
++#ifndef __MINGW64_VERSION_MAJOR
++#undef aligned_alloc
++#define aligned_alloc __mingw_aligned_malloc
++#endif
++#endif
++
+ _GLIBCXX_WEAK_DEFINITION void *
+ operator new (std::size_t sz, std::align_val_t al)
+ {
