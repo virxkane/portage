@@ -1,0 +1,44 @@
+diff -urBb ../icu-orig/source/i18n/digitlst.cpp source/i18n/digitlst.cpp
+--- ../icu-orig/source/i18n/digitlst.cpp	2018-03-26 17:38:30.000000000 +0400
++++ source/i18n/digitlst.cpp	2018-05-22 13:41:33.255049200 +0400
+@@ -493,7 +493,20 @@
+ 
+ #if U_USE_STRTOD_L && U_PLATFORM_USES_ONLY_WIN32_API
+ # define locale_t _locale_t
++// Stubs
++#if defined(__MINGW32__)
++inline  locale_t createlocale(int _Category,const char *_Locale) {
++    locale_t loc;
++    return loc;
++}
++
++inline void freelocale(locale_t _Locale) {
++
++}
++#else
+ # define freelocale _free_locale
++# define createlocale _create_locale
++#endif
+ # define strtod_l _strtod_l
+ #endif
+ 
+@@ -518,7 +531,7 @@
+     ucln_i18n_registerCleanup(UCLN_I18N_DIGITLIST, digitList_cleanup);
+ #if U_USE_STRTOD_L
+ # if U_PLATFORM_USES_ONLY_WIN32_API
+-    gCLocale = _create_locale(LC_ALL, "C");
++    gCLocale = createlocale(LC_ALL, "C");
+ # else
+     gCLocale = newlocale(LC_ALL_MASK, "C", (locale_t)0);
+ # endif
+diff -urBb ../icu-orig/source/tools/toolutil/pkg_genc.cpp source/tools/toolutil/pkg_genc.cpp
+--- ../icu-orig/source/tools/toolutil/pkg_genc.cpp	2018-03-26 17:38:31.000000000 +0400
++++ source/tools/toolutil/pkg_genc.cpp	2018-05-22 13:41:33.269698800 +0400
+@@ -43,6 +43,7 @@
+ #include "cmemory.h"
+ #include "cstring.h"
+ #include "filestrm.h"
++#include "filetools.h"
+ #include "toolutil.h"
+ #include "unicode/uclean.h"
+ #include "uoptions.h"

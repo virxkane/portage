@@ -1,0 +1,12 @@
+diff -urBb libpng-1.6.34-orig/Makefile.in libpng-1.6.34/Makefile.in
+--- libpng-1.6.34-orig/Makefile.in	2017-09-29 12:41:05.000000000 +0400
++++ libpng-1.6.34/Makefile.in	2018-05-23 22:44:35.232568700 +0400
+@@ -2315,7 +2315,7 @@
+ # The following addition ensures that 'make all' always builds the test programs
+ # too.  It used to, but some change either in libpng or configure stopped this
+ # working.
+-all-am: $(check_PROGRAMS)
++#all-am: $(check_PROGRAMS)
+ 
+ # Tell versions [3.59,3.63) of GNU make to not export all variables.
+ # Otherwise a system limit (for SysV at least) may be exceeded.

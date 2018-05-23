@@ -1,0 +1,13 @@
+diff -urBb postgresql-10.4-orig/src/include/port.h postgresql-10.4/src/include/port.h
+--- postgresql-10.4-orig/src/include/port.h	2018-05-08 00:51:40.000000000 +0400
++++ postgresql-10.4/src/include/port.h	2018-05-23 12:41:41.759932000 +0400
+@@ -276,6 +276,9 @@
+ #include <sys/stat.h>
+ extern int	pgwin32_safestat(const char *path, struct stat *buf);
+ 
++#ifdef stat
++#undef stat
++#endif
+ #define stat(a,b) pgwin32_safestat(a,b)
+ #endif
+ 

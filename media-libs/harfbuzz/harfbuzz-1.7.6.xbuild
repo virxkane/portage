@@ -1,0 +1,43 @@
+# Copyright 2010-2018 Chernov A.A.
+# This is a part of mingw-portage project: 
+# http://sourceforge.net/projects/mingwportage/
+# Distributed under the terms of the GNU General Public License v2
+
+DESCRIPTION="An OpenType text shaping engine"
+
+HOMEPAGE="http://www.freedesktop.org/wiki/Software/HarfBuzz"
+
+LICENSE="Old-MIT ISC icu"
+
+# TODO: add graphite2
+
+DEPEND="dev-util/pkg-config
+		dev-lang/python"
+RDEPEND=">=dev-libs/glib-2.19.1
+		>=media-libs/freetype-2.4.2
+		media-libs/fontconfig
+		>=gui-libs/cairo-1.8.0
+		>=dev-libs/icu-51.2"
+
+SRC_URI="http://www.freedesktop.org/software/${PN}/release/${P}.tar.bz2"
+
+src_prepare()
+{
+	# With original utf8 encoding if failed:
+	#Traceback (most recent call last):
+	#  File "./gen-def.py", line 10, in <module>
+	#    with io.open(h, encoding='utf8') as f: headers_content.append (f.read ())
+	#  File "D:/mingw64/lib/python2.7/codecs.py", line 314, in decode
+	#    (result, consumed) = self._buffer_decode(data, self.errors, final)
+	#UnicodeDecodeError: 'utf8' codec can't decode byte 0xa9 in position 228: invalid start byte
+
+	epatch "${P}-gen-def-latin1.patch"
+}
+
+src_configure()
+{
+	econf --enable-shared --enable-static \
+		--with-glib=yes --with-gobject=yes \
+		--with-icu=yes --with-freetype=yes --with-fontconfig=yes \
+		--with-graphite2=no
+}

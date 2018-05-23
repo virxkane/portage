@@ -1,4 +1,4 @@
-# Copyright 2010-2017 Chernov A.A.
+# Copyright 2010-2018 Chernov A.A.
 # This is a part of mingw-portage project: 
 # http://sourceforge.net/projects/mingwportage/
 # Distributed under the terms of the GNU General Public License v2
@@ -20,12 +20,7 @@ RDEPEND="net-misc/curl
 		app-crypt/rhash
 		dev-libs/libuv"
 
-SRC_URI="http://www.cmake.org/files/v3.8/${P}.tar.gz"
-
-src_prepare()
-{
-	epatch "${P}-mingw.patch"
-}
+SRC_URI="http://www.cmake.org/files/v3.11/${P}.tar.gz"
 
 src_configure()
 {
@@ -41,6 +36,6 @@ src_configure()
 	# fix native path of install prefix back to MSYS path
 	cat CMakeCache.txt | sed -e "s/^CMAKE_INSTALL_PREFIX:PATH=.*$/CMAKE_INSTALL_PREFIX:PATH=\\${PREFIX}/" > CMakeCache.txt.new
 	mv -f CMakeCache.txt.new CMakeCache.txt
-	cat cmake_install.cmake | sed -e "s/^\ *SET(CMAKE_INSTALL_PREFIX\ .*)\ *$/  SET(CMAKE_INSTALL_PREFIX\ \\${PREFIX})/" > cmake_install.cmake.new
+	cat cmake_install.cmake | sed -e "s/^\ *set(CMAKE_INSTALL_PREFIX\ .*)\ *$/  set(CMAKE_INSTALL_PREFIX\ \\${PREFIX})/" > cmake_install.cmake.new
 	mv -f cmake_install.cmake.new cmake_install.cmake
 }
