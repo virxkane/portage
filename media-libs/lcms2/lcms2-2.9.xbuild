@@ -1,0 +1,17 @@
+# Copyright 2010-2018 Chernov A.A.
+# This is a part of mingw-portage project: 
+# http://sourceforge.net/projects/mingwportage/
+# Distributed under the terms of the GNU General Public License v2
+
+DESCRIPTION="A lightweight, speed optimized color management engine"
+
+HOMEPAGE="http://www.littlecms.com/ http://sourceforge.net/projects/lcms/"
+
+LICENSE="MIT"
+
+RDEPEND="sys-libs/zlib
+		media-libs/libpng
+		media-libs/tiff
+		meta-virtual/jpeg"
+
+SRC_URI="http://www.littlecms.com/${P}.tar.gz"

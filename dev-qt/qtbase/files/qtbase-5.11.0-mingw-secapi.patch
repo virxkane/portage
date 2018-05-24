@@ -1,0 +1,21 @@
+diff -urBb qtbase-everywhere-src-5.11.0-orig/mkspecs/win32-g++/qmake.conf qtbase-everywhere-src-5.11.0/mkspecs/win32-g++/qmake.conf
+--- qtbase-everywhere-src-5.11.0-orig/mkspecs/win32-g++/qmake.conf	2018-05-14 08:46:28.000000000 +0400
++++ qtbase-everywhere-src-5.11.0/mkspecs/win32-g++/qmake.conf	2018-05-24 11:56:16.219648300 +0400
+@@ -22,4 +22,7 @@
+ QMAKE_LINK              = $${CROSS_COMPILE}g++
+ QMAKE_LINK_C            = $${CROSS_COMPILE}gcc
+ 
++# Enable MinGW Secure API
++DEFINES                += MINGW_HAS_SECURE_API=1
++
+ load(qt_config)
+diff -urBb qtbase-everywhere-src-5.11.0-orig/qmake/Makefile.unix.win32 qtbase-everywhere-src-5.11.0/qmake/Makefile.unix.win32
+--- qtbase-everywhere-src-5.11.0-orig/qmake/Makefile.unix.win32	2018-05-14 08:46:28.000000000 +0400
++++ qtbase-everywhere-src-5.11.0/qmake/Makefile.unix.win32	2018-05-24 11:46:50.246807700 +0400
+@@ -1,5 +1,5 @@
+ EXEEXT = .exe
+-EXTRA_CXXFLAGS = -DUNICODE
++EXTRA_CXXFLAGS = -DUNICODE -DMINGW_HAS_SECURE_API
+ EXTRA_LFLAGS = -static -s -lole32 -luuid -ladvapi32 -lkernel32 -lnetapi32
+ QTOBJS = \
+     qfilesystemengine_win.o \
