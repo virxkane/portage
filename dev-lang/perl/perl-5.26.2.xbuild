@@ -1,4 +1,4 @@
-# Copyright 2011-2017 Chernov A.A.
+# Copyright 2011-2018 Chernov A.A.
 # This is a part of mingw-portage project: 
 # http://sourceforge.net/projects/mingwportage/
 # Distributed under the terms of the GNU General Public License v2
@@ -21,6 +21,16 @@ SRC_URI="http://www.cpan.org/src/${P}.tar.xz"
 RESTRICT="strip"
 
 SOURCES_DIR="${P}/win32"
+
+src_prepare()
+{
+	# Fix strange bug in gcc8 (or in other part of toolchain)
+	# that segfaults at struct copy via operator '='.
+	# Not affected on i686-w64-mingw32
+	cd ..
+	epatch "${P}-dis-struct-cp.patch"
+	cd win32
+}
 
 src_configure()
 {

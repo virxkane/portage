@@ -1,0 +1,24 @@
+diff -urBb perl-5.26.2-orig/win32/config.gc perl-5.26.2/win32/config.gc
+--- perl-5.26.2-orig/win32/config.gc	2018-03-23 23:34:44.000000000 +0400
++++ perl-5.26.2/win32/config.gc	2018-05-24 10:40:28.420314600 +0400
+@@ -548,7 +548,7 @@
+ d_stdstdio='define'
+ d_strchr='define'
+ d_strcoll='define'
+-d_strctcpy='define'
++d_strctcpy='undef'
+ d_strerrm='strerror(e)'
+ d_strerror='define'
+ d_strerror_l='undef'
+diff -urBb perl-5.26.2-orig/win32/config_H.gc perl-5.26.2/win32/config_H.gc
+--- perl-5.26.2-orig/win32/config_H.gc	2018-03-23 23:34:45.000000000 +0400
++++ perl-5.26.2/win32/config_H.gc	2018-05-24 10:43:00.938731300 +0400
+@@ -2485,7 +2485,7 @@
+  *	to copy structures.  If undefined, you'll need to use a block copy
+  *	routine of some sort instead.
+  */
+-#define	USE_STRUCT_COPY	/**/
++/*#define	USE_STRUCT_COPY	/ **/
+ 
+ /* HAS_STRERROR:
+  *	This symbol, if defined, indicates that the strerror routine is
