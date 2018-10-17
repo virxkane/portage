@@ -1,0 +1,42 @@
+# Copyright 2017-2018 Chernov A.A.
+# Distributed under the terms of the GNU General Public License v2
+
+DESCRIPTION="Tools necessary to build programs (avr8-toolchain's part)"
+
+HOMEPAGE="http://www.gnu.org/software/binutils/"
+
+LICENSE="GPL-3 LGPL-3"
+
+#   external dependencies:
+# bison (msys)
+# flex (msys)
+
+DEPEND="meta-virtual/system-headers
+		meta-virtual/system-libc"
+RDEPEND="sys-libs/zlib"
+
+MY_PN="binutils"
+MY_P="${MY_PN}-${PV}"
+
+SRC_URI="http://ftp.gnu.org/gnu/${MY_PN}/${MY_P}.tar.xz"
+
+BUILD_IN_SEPARATE_DIR=yes
+
+SOURCES_DIR="${MY_P}"
+
+src_prepare()
+{
+	epatch "${MY_PN}-2.20-notexinfo.patch"
+}
+
+src_configure()
+{
+	econf --target=avr \
+		--with-system-zlib --disable-nls --disable-werror || die
+}
+
+src_install()
+{
+	emake_install
+	rm -rf "${INSTDIR}${PREFIX}/share/info/"
+}
