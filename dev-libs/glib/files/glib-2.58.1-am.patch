@@ -1,0 +1,40 @@
+diff -urBb glib-2.58.1-orig/docs/reference/gio/Makefile.am glib-2.58.1/docs/reference/gio/Makefile.am
+--- glib-2.58.1-orig/docs/reference/gio/Makefile.am	2018-09-21 18:23:52.000000000 +0400
++++ glib-2.58.1/docs/reference/gio/Makefile.am	2018-10-19 10:22:53.796349000 +0400
+@@ -15,6 +15,9 @@
+ # The directory containing the source code. Relative to $(srcdir)
+ DOC_SOURCE_DIR =$(top_srcdir)/gio $(top_builddir)/gio
+ 
++CLEANFILES =
++EXTRA_DIST =
++
+ HFILE_GLOB= \
+     $(top_srcdir)/gio/*.h \
+     $(top_builddir)/gio/gioenumtypes.h
+diff -urBb glib-2.58.1-orig/docs/reference/glib/Makefile.am glib-2.58.1/docs/reference/glib/Makefile.am
+--- glib-2.58.1-orig/docs/reference/glib/Makefile.am	2018-09-21 18:23:52.000000000 +0400
++++ glib-2.58.1/docs/reference/glib/Makefile.am	2018-10-19 10:22:14.407987400 +0400
+@@ -13,6 +13,9 @@
+     $(top_srcdir)/glib $(top_srcdir)/gmodule \
+     $(top_builddir)/glib $(top_builddir)/gmodule
+ 
++CLEANFILES =
++EXTRA_DIST =
++
+ # Extra options to supply to gtkdoc-scan
+ SCAN_OPTIONS = \
+ 	--deprecated-guards="G_DISABLE_DEPRECATED" \
+Только в glib-2.58.1/docs/reference/glib: Makefile.in
+diff -urBb glib-2.58.1-orig/docs/reference/gobject/Makefile.am glib-2.58.1/docs/reference/gobject/Makefile.am
+--- glib-2.58.1-orig/docs/reference/gobject/Makefile.am	2018-09-21 18:23:52.000000000 +0400
++++ glib-2.58.1/docs/reference/gobject/Makefile.am	2018-10-19 10:23:14.361602100 +0400
+@@ -11,6 +11,9 @@
+ # The directory containing the source code. Relative to $(srcdir)
+ DOC_SOURCE_DIR =$(top_srcdir)/gobject $(top_builddir)/gobject
+ 
++CLEANFILES =
++EXTRA_DIST =
++
+ # Extra options to supply to gtkdoc-scan
+ SCAN_OPTIONS = \
+ 	--rebuild-types \

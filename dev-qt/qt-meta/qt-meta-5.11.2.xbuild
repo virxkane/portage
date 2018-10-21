@@ -1,0 +1,46 @@
+# Copyright 2013-2018 Chernov A.A.
+# This is a part of mingw-portage project: 
+# http://sourceforge.net/projects/mingwportage/
+# Distributed under the terms of the GNU General Public License v2
+
+DESCRIPTION="Meta package for Qt 5"
+
+HOMEPAGE="http://www.qt.io/"
+
+LICENSE="LGPL-2.1 GPL-3"
+
+# Already included as dependencies:
+#	>=dev-qt/qtxmlpatterns-${PV}
+#	>=dev-qt/qtwebsockets-${PV}
+#	>=dev-qt/qtsvg-${PV}
+#	>=dev-qt/qtsensors-${PV}
+#	>=dev-qt/qtmultimedia-${PV}
+#	>=dev-qt/qtactiveqt-${PV}
+
+RDEPEND="
+	>=dev-qt/qtbase-${PV}
+	>=dev-qt/qtcharts-${PV}
+	>=dev-qt/qtconnectivity-${PV}
+	>=dev-qt/qtdatavis3d-${PV}
+	>=dev-qt/qtdeclarative-${PV}
+	>=dev-qt/qt3d-${PV}
+	>=dev-qt/qtcanvas3d-${PV}
+	>=dev-qt/qtgraphicaleffects-${PV}
+	>=dev-qt/qtimageformats-${PV}
+	>=dev-qt/qtlocation-${PV}
+	>=dev-qt/qtquickcontrols-${PV}
+	>=dev-qt/qtquickcontrols2-${PV}
+	>=dev-qt/qtscript-${PV}
+	>=dev-qt/qtsensors-${PV}
+	>=dev-qt/qtserialport-${PV}
+	>=dev-qt/qtserialbus-${PV}
+	>=dev-qt/qttools-${PV}
+	>=dev-qt/qtwinextras-${PV}
+	>=dev-qt/qtwebchannel-${PV}
+	>=dev-qt/qttranslations-${PV}
+	>=dev-qt/qtgamepad-${PV}
+	>=dev-qt/qtremoteobjects-${PV}
+	>=dev-qt/qtscxml-${PV}
+	>=dev-qt/qtspeech-${PV}
+	>=dev-qt/qtvirtualkeyboard-${PV}
+"

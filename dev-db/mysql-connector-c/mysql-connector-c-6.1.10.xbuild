@@ -16,7 +16,8 @@ LICENSE="GPL-2"
 RESTRICT="mirror"
 
 DEPEND="dev-util/cmake"
-RDEPEND="dev-libs/openssl
+RDEPEND="!dev-db/mysql-libmysql
+		dev-libs/openssl
 		sys-libs/zlib"
 
 SOURCES_DIR="${MY_P}"

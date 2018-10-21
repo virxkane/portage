@@ -29,6 +29,7 @@ src_prepare()
 	epatch ${PN}-6.1.10-mingw.patch
 	epatch ${PN}-6.1.10-mingw-threads.patch
 	epatch ${PN}-6.1.10-openssl-check.patch
+	epatch ${P}-openssl-1.1.patch
 }
 
 src_configure()

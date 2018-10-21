@@ -1,0 +1,11 @@
+diff -urBb ../icu-orig/source/tools/toolutil/pkg_genc.cpp source/tools/toolutil/pkg_genc.cpp
+--- ../icu-orig/source/tools/toolutil/pkg_genc.cpp	2018-06-21 13:39:24.000000000 +0400
++++ source/tools/toolutil/pkg_genc.cpp	2018-10-18 21:28:14.154604200 +0400
+@@ -43,6 +43,7 @@
+ #include "cmemory.h"
+ #include "cstring.h"
+ #include "filestrm.h"
++#include "filetools.h"
+ #include "toolutil.h"
+ #include "unicode/uclean.h"
+ #include "uoptions.h"

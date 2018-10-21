@@ -1,0 +1,12 @@
+diff -urBb mysql-5.7.23-orig/cmake/ssl.cmake mysql-5.7.23/cmake/ssl.cmake
+--- mysql-5.7.23-orig/cmake/ssl.cmake	2018-06-08 13:56:29.000000000 +0400
++++ mysql-5.7.23/cmake/ssl.cmake	2018-10-20 10:51:52.208734000 +0400
+@@ -167,7 +167,7 @@
+     # Encoded as MNNFFPPS: major minor fix patch status
+     FILE(STRINGS "${OPENSSL_INCLUDE_DIR}/openssl/opensslv.h"
+       OPENSSL_VERSION_NUMBER
+-      REGEX "^#[ ]*define[\t ]+OPENSSL_VERSION_NUMBER[\t ]+0x[0-9].*"
++      REGEX "^#[\t ]*define[\t ]+OPENSSL_VERSION_NUMBER[\t ]+0x[0-9].*"
+     )
+     STRING(REGEX REPLACE
+       "^.*OPENSSL_VERSION_NUMBER[\t ]+0x([0-9]).*$" "\\1"

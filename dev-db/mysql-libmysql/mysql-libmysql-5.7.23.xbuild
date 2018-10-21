@@ -1,0 +1,56 @@
+# Copyright 2018 Chernov A.A.
+# This is a part of mingw-portage project: 
+# http://sourceforge.net/projects/mingwportage/
+# Distributed under the terms of the GNU General Public License v2
+
+DESCRIPTION="MySQL client library for C language"
+
+HOMEPAGE="https://www.mysql.com/"
+
+SRC_URI="https://cdn.mysql.com/archives/mysql-5.7/mysql-boost-${PV}.tar.gz"
+
+LICENSE="GPL-2"
+
+DEPEND="dev-util/cmake"
+RDEPEND="!dev-db/mysql-connector-c
+		dev-libs/openssl
+		sys-libs/zlib"
+
+MY_PN="mysql"
+MY_P="mysql-${PV}"
+
+SOURCES_DIR="${MY_PN}-${PV}"
+USE_CMAKE=yes
+
+src_prepare()
+{
+	epatch ${MY_P}-mingw-w64.patch
+	epatch ${MY_P}-openssl-check.patch
+}
+
+src_configure()
+{
+	econf -DWITH_SSL=system -DWITH_ZLIB=system \
+		-DWITH_UNIT_TESTS=OFF \
+		-DWITH_BOOST=../${MY_P}/boost/boost_1_59_0
+}
+
+src_compile()
+{
+	cd include || die "Can't chdir"
+	emake
+	cd ../libmysql || die "Can't chdir"
+	emake
+	cd ..
+}
+
+src_install()
+{
+	cd include || die "Can't chdir"
+	emake_install
+	cd ../libmysql || die "Can't chdir"
+	emake_install
+	cd ..
+	install -d "${INSTDIR}/${PREFIX}/bin/"
+	mv "${INSTDIR}/${PREFIX}/lib/liblibmysql.dll" "${INSTDIR}/${PREFIX}/bin/"
+}

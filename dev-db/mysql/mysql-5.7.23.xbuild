@@ -1,0 +1,42 @@
+# Copyright 2018 Chernov A.A.
+# This is a part of mingw-portage project: 
+# http://sourceforge.net/projects/mingwportage/
+# Distributed under the terms of the GNU General Public License v2
+
+DESCRIPTION="A fast, multi-threaded, multi-user SQL database server"
+
+HOMEPAGE="https://www.mysql.com/"
+
+SRC_URI="https://cdn.mysql.com/archives/mysql-5.7/mysql-boost-${PV}.tar.gz"
+
+LICENSE="GPL-2"
+
+DEPEND="dev-util/cmake"
+RDEPEND="dev-libs/openssl
+		sys-libs/zlib"
+
+USE_CMAKE=yes
+
+src_prepare()
+{
+	epatch ${P}-mingw-w64.patch
+	epatch ${P}-openssl-check.patch
+}
+
+src_configure()
+{
+	econf -DWITH_SSL=system -DWITH_ZLIB=system \
+		-DWITH_UNIT_TESTS=OFF \
+		-DWITH_BOOST=../${P}/boost/boost_1_59_0
+}
+
+src_install()
+{
+	emake_install
+	rm -rf "${INSTDIR}/${PREFIX}/include"
+	rm -f "${INSTDIR}/${PREFIX}/lib/liblibmysql.dll"
+	rm -f "${INSTDIR}/${PREFIX}/lib/liblibmysql.dll.a"
+	rm -f "${INSTDIR}/${PREFIX}/lib/libmysqlclient.a"
+	rm -f "${INSTDIR}/${PREFIX}/lib/libmysqlserver.a"
+	rm -f "${INSTDIR}/${PREFIX}/lib/libmysqlservices.a"
+}
