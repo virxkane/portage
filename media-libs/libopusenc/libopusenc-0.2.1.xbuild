@@ -1,0 +1,12 @@
+# Copyright 2018 Chernov A.A.
+# Distributed under the terms of the GNU General Public License v2
+
+DESCRIPTION="High-level API for encoding .opus files"
+
+HOMEPAGE="https://opus-codec.org/"
+
+LICENSE="BSD"
+
+SRC_URI="https://archive.mozilla.org/pub/opus/${P}.tar.gz"
+
+RDEPEND=">=media-libs/opus-1.1"
