@@ -1,4 +1,4 @@
-# Copyright 2017 Chernov A.A.
+# Copyright 2017-2019 Chernov A.A.
 # This is a part of mingw-portage project: 
 # http://sourceforge.net/projects/mingwportage/
 # Distributed under the terms of the GNU General Public License v2
@@ -20,9 +20,8 @@ DEPEND=">=meta-virtual/system-headers-3
 		>=meta-virtual/pthreads-2
 		>=sys-devel/binutils-2.25
 		>=dev-embedded/avr-binutils-2.27
-		>=dev-embedded/avr-libc-2.0.0"
-RDEPEND="!sys-devel/gcc-core-nobstrap
-		>=dev-libs/gmp-5.1.3
+		=dev-embedded/avr-libc-2.0.0-r6"
+RDEPEND=">=dev-libs/gmp-5.1.3
 		>=dev-util/mpfr-3.1.2
 		>=dev-libs/mpc-1.0.2
 		meta-virtual/pthreads
@@ -31,7 +30,7 @@ RDEPEND="!sys-devel/gcc-core-nobstrap
 
 MY_PN="gcc"
 MY_P="${MY_PN}-${PV}"
-SRC_URI="http://ftp.gnu.org/gnu/gcc/${MY_P}/${MY_P}.tar.bz2"
+SRC_URI="http://ftp.gnu.org/gnu/gcc/${MY_P}/${MY_P}.tar.xz"
 
 SOURCES_DIR="${MY_P}"
 BUILD_IN_SEPARATE_DIR=yes
@@ -39,27 +38,25 @@ BUILD_IN_SEPARATE_DIR=yes
 src_unpack()
 {
 	# exclude unsupported by mingw/mingw64 platform
-	local exclude_parts="libcilkrts libsanitizer libitm libmpx liboffloadmic"
+	local exclude_parts="libsanitizer libhsail-rt libitm liboffloadmic"
 	# exclude 'ada' language parts
 	exclude_parts+=" gcc/ada libada gnattools"
 	# exclude 'fortran' language parts
 	# We can't remove unused gcc/{language} directories - this will not be delete
 	# internal dependencies from build order, see gcc/configure.ac, gcc/{language}/config-lang.in.
 	exclude_parts+=" libgfortran libffi"
-	# exclude 'java' language parts
-	exclude_parts+=" libjava"
 	# exclude 'objc'&'objcpp' language parts
-	exclude_parts+=" libobjc boehm-gc"
+	exclude_parts+=" libobjc"
 	# exclude 'go' language parts
 	exclude_parts+=" libgo gotools"
 	# exclude testsuite directories
-	exclude_parts+=" gcc/testsuite libgomp/testsuite libiberty/testsuite libstdc++-v3/testsuite"
+	exclude_parts+=" libatomic/testsuite libgomp/testsuite libiberty/testsuite libstdc++-v3/testsuite libvtv/testsuite"
 	# other unused directories
 	exclude_parts+=" maintainer-scripts zlib"
 
 	local part=
 	local exclude_opts=
-	local tarball="${MY_P}.tar.bz2"
+	local tarball="${MY_P}.tar.xz"
 	for part in ${exclude_parts}
 	do
 		exclude_opts+="--exclude=${SOURCES_DIR}/${part} "
@@ -71,7 +68,7 @@ src_unpack()
 		then
 			ebegin "Unpacking parts of ${tarball}... "
 			local f=`find_srcpackage ${tarball}`
-			tar -xjf ${f} ${exclude_opts} > /dev/null 2>&1
+			tar -xJf ${f} ${exclude_opts} > /dev/null 2>&1
 			if [ $? -eq 0 ]
 			then
 				eend "OK"
@@ -111,7 +108,9 @@ src_configure()
 src_install()
 {
 	emake_install
+	rm -rf "${INSTDIR}${PREFIX}/share/info/"
+	rm -rf "${INSTDIR}${PREFIX}/share/man/man7/"
 	# strip libgcc
 	local _avr_strip=${PREFIX}/bin/avr-strip.exe
-	find "${INSTDIR}/${PREFIX}/lib/gcc/avr/${PV}" -iname '*.a' -execdir ${_avr_strip} --strip-debug {} +
+	find "${INSTDIR}${PREFIX}/lib/gcc/avr/${PV}" -iname '*.a' -execdir ${_avr_strip} --strip-debug {} +
 }

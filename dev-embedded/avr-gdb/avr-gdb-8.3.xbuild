@@ -1,0 +1,42 @@
+# Copyright 2017-2019 Chernov A.A.
+# Distributed under the terms of the GNU General Public License v2
+
+DESCRIPTION="GNU debugger (avr8-toolchain's part)"
+
+HOMEPAGE="http://sources.redhat.com/gdb/"
+
+LICENSE="GPL-2 LGPL-2"
+
+RDEPEND="dev-libs/expat
+	dev-util/mpfr
+	sys-libs/zlib"
+
+MY_PN="gdb"
+MY_P="${MY_PN}-${PV}"
+
+SRC_URI="http://ftp.gnu.org/gnu/${MY_PN}/${MY_P}.tar.xz"
+
+BUILD_IN_SEPARATE_DIR=yes
+
+SOURCES_DIR="${MY_P}"
+
+src_prepare()
+{
+	epatch "${MY_PN}-8.1-no_install_libs.patch"
+}
+
+src_configure()
+{
+	econf --target=avr --disable-werror --disable-nls \
+		--with-expat --with-system-zlib --with-python=no
+}
+
+src_install()
+{
+	emake_install
+	# Remove files conflicting with sys-devel/gdb
+	rm -f "${INSTDIR}${PREFIX}/include/gdb/jit-reader.h"
+	rm -rf "${INSTDIR}${PREFIX}/share/info/"
+	rm -rf "${INSTDIR}${PREFIX}/share/gdb/syscalls/"
+	rm -rf "${INSTDIR}${PREFIX}/share/gdb/system-gdbinit/"
+}
