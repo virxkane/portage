@@ -1,0 +1,35 @@
+diff -urBb qt-creator-opensource-src-4.9.0-orig/src/libs/sqlite/sqlite.pro qt-creator-opensource-src-4.9.0/src/libs/sqlite/sqlite.pro
+--- qt-creator-opensource-src-4.9.0-orig/src/libs/sqlite/sqlite.pro	2019-04-11 15:49:20.000000000 +0400
++++ qt-creator-opensource-src-4.9.0/src/libs/sqlite/sqlite.pro	2019-05-15 13:28:31.556742800 +0400
+@@ -3,7 +3,13 @@
+ 
+ include(../../qtcreatorlibrary.pri)
+ 
+-win32:DEFINES += SQLITE_API=__declspec(dllexport)
++win32 {
++  equals(MINGW_IN_SHELL, 1) {
++    DEFINES += SQLITE_API=\"__declspec(dllexport)\"
++  } else {
++    DEFINES += SQLITE_API=__declspec(dllexport)
++  }
++}
+ unix:DEFINES += SQLITE_API=\"__attribute__((visibility(\\\"default\\\")))\"
+ 
+ include(sqlite-lib.pri)
+diff -urBb qt-creator-opensource-src-4.9.0-orig/src/tools/winrtdebughelper/winrtdebughelper.cpp qt-creator-opensource-src-4.9.0/src/tools/winrtdebughelper/winrtdebughelper.cpp
+--- qt-creator-opensource-src-4.9.0-orig/src/tools/winrtdebughelper/winrtdebughelper.cpp	2019-04-11 15:49:20.000000000 +0400
++++ qt-creator-opensource-src-4.9.0/src/tools/winrtdebughelper/winrtdebughelper.cpp	2019-05-15 13:42:49.396707400 +0400
+@@ -66,7 +66,13 @@
+ 
+     const size_t msgBufferSize = 15;
+     char pidMessageBuffer[msgBufferSize];
++#if defined(_MSC_VER) || (defined(__MINGW64_VERSION_MAJOR) && MINGW_HAS_SECURE_API==1)
+     int length = sprintf_s(pidMessageBuffer, msgBufferSize, "PID:%d", pid);
++#else
++    snprintf(pidMessageBuffer, msgBufferSize, "PID:%d", pid);
++    pidMessageBuffer[msgBufferSize - 1] = 0;
++    int length = strlen(pidMessageBuffer);
++#endif
+     if (length >= 0)
+         WriteFile(pipe, pidMessageBuffer, length, NULL, NULL);
+ 
