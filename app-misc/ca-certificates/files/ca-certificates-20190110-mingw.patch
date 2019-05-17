@@ -1,0 +1,60 @@
+diff -urBb ca-certificates-20190110-orig/Makefile ca-certificates-20190110/Makefile
+--- ca-certificates-20190110-orig/Makefile	2019-01-11 05:31:31.000000000 +0400
++++ ca-certificates-20190110/Makefile	2019-05-17 15:02:48.109636700 +0400
+@@ -2,7 +2,9 @@
+ # Makefile
+ #
+ 
+-CERTSDIR = /usr/share/ca-certificates
++PREFIX?=/mingw
++
++CERTSDIR = $(PREFIX)/share/ca-certificates
+ SUBDIRS = mozilla
+ 
+ all:
+@@ -16,6 +18,7 @@
+ 	done
+ 
+ install:
++	mkdir -p $(DESTDIR)/$(CERTSDIR)
+ 	for dir in $(SUBDIRS); do \
+ 	  mkdir $(DESTDIR)/$(CERTSDIR)/$$dir; \
+ 	  $(MAKE) -C $$dir install CERTSDIR=$(DESTDIR)/$(CERTSDIR)/$$dir; \
+diff -urBb ca-certificates-20190110-orig/sbin/Makefile ca-certificates-20190110/sbin/Makefile
+--- ca-certificates-20190110-orig/sbin/Makefile	2013-06-10 21:29:57.000000000 +0400
++++ ca-certificates-20190110/sbin/Makefile	2019-05-17 15:07:35.039278400 +0400
+@@ -3,9 +3,12 @@
+ #
+ #
+ 
++PREFIX?=/mingw
++
+ all:
+ 
+ clean:
+ 
+ install:
+-	install -m755 update-ca-certificates $(DESTDIR)/usr/sbin/
++	mkdir -p $(DESTDIR)$(PREFIX)/bin
++	install -m755 update-ca-certificates $(DESTDIR)$(PREFIX)/bin/
+diff -urBb ca-certificates-20190110-orig/sbin/update-ca-certificates ca-certificates-20190110/sbin/update-ca-certificates
+--- ca-certificates-20190110-orig/sbin/update-ca-certificates	2019-01-11 05:31:31.000000000 +0400
++++ ca-certificates-20190110/sbin/update-ca-certificates	2019-05-17 15:13:29.046059200 +0400
+@@ -94,7 +94,7 @@
+                                                   -e 's/,/_/g').pem"
+   if ! test -e "$PEM" || [ "$(readlink "$PEM")" != "$CERT" ]
+   then
+-    ln -sf "$CERT" "$PEM"
++    cp -f "$CERT" "$PEM"
+     echo "+$PEM" >> "$ADDED"
+   fi
+   # Add trailing newline to certificate, if it is missing (#635570)
+@@ -104,7 +104,7 @@
+ remove() {
+   CERT="$1"
+   PEM="$ETCCERTSDIR/$(basename "$CERT" .crt).pem"
+-  if test -L "$PEM"
++  if test -f "$PEM"
+   then
+     rm -f "$PEM"
+     echo "-$PEM" >> "$REMOVED"
