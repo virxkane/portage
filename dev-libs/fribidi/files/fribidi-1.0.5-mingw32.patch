@@ -1,0 +1,15 @@
+diff -urBb fribidi-1.0.5-orig/lib/Makefile.am fribidi-1.0.5/lib/Makefile.am
+--- fribidi-1.0.5-orig/lib/Makefile.am	2018-02-20 01:25:06.000000000 +0400
++++ fribidi-1.0.5/lib/Makefile.am	2019-06-01 21:40:06.628144300 +0400
+@@ -8,11 +8,7 @@
+ libfribidi_la_LIBADD =
+ libfribidi_la_DEPENDENCIES =
+ 
+-if OS_WIN32
+-libfribidi_la_LDFLAGS += -export-symbols $(srcdir)/fribidi.def
+-else
+ libfribidi_la_LDFLAGS += -export-symbols-regex "^fribidi_.*"
+-endif # OS_WIN32
+ 
+ include Headers.mk
+ pkginclude_HEADERS = $(libfribidi_la_headers)
