@@ -1,0 +1,33 @@
+# Copyright 2019 Chernov A.A.
+# This is a part of mingw-portage project: 
+# http://sourceforge.net/projects/mingwportage/
+# Distributed under the terms of the GNU General Public License v2
+
+DESCRIPTION="A RS-274X (Gerber) and NC drill (Excellon) file viewer"
+
+HOMEPAGE="http://gerbv.geda-project.org/"
+
+SRC_URI="http://downloads.sourceforge.net/${PN}/${P}.tar.gz"
+
+LICENSE="GPL-2"
+
+DEPEND="dev-util/pkg-config"
+RDEPEND="sys-devel/gettext
+		gui-libs/gtk+
+		gui-libs/cairo"
+
+src_prepare()
+{
+	epatch "${P}-automake.patch"
+	epatch "${P}-lang.patch"
+	echo > po/LINGUAS
+	autopoint --force
+	AT_M4DIR="m4" eautoreconf
+}
+
+src_configure()
+{
+	# shared library broken 'by design'.
+	econf --disable-shared --enable-static \
+		--disable-update-desktop-database
+}

@@ -1,0 +1,32 @@
+diff -urBb gerbv-2.6.1-orig/configure.ac gerbv-2.6.1/configure.ac
+--- gerbv-2.6.1-orig/configure.ac	2013-07-22 23:09:16.000000000 +0400
++++ gerbv-2.6.1/configure.ac	2019-06-01 23:09:39.738884600 +0400
+@@ -36,7 +36,7 @@
+ 
+ dnl Internationalisation
+ AM_NLS
+-AM_GNU_GETTEXT
++AM_GNU_GETTEXT([external])
+ AM_GNU_GETTEXT_VERSION([0.16])
+ #AX_DESKTOP_I18N
+ 
+@@ -368,7 +368,6 @@
+ ############################################################
+ 
+ AC_OUTPUT(	Makefile \
+-		intl/Makefile \
+ 		desktop/Makefile \
+ 		doc/PNG-print/Makefile \
+ 		doc/eagle/Makefile \
+diff -urBb gerbv-2.6.1-orig/Makefile.am gerbv-2.6.1/Makefile.am
+--- gerbv-2.6.1-orig/Makefile.am	2013-07-22 23:09:16.000000000 +0400
++++ gerbv-2.6.1/Makefile.am	2019-06-01 23:06:42.631548900 +0400
+@@ -19,7 +19,7 @@
+ ##  along with this program; if not, write to the Free Software
+ ##  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111 USA
+ 
+-SUBDIRS = intl src po man doc example desktop scheme test win32
++SUBDIRS = src po man doc example desktop scheme test win32
+ 
+ EXTRA_DIST = BUGS CONTRIBUTORS HACKING AUTHORS ChangeLog COPYING INSTALL \
+ 	NEWS README \
