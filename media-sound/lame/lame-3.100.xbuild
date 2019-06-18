@@ -1,0 +1,24 @@
+# Copyright 2010-2019 Chernov A.A.
+# Distributed under the terms of the GNU General Public License v2
+
+DESCRIPTION="LAME Ain't an MP3 Encoder"
+
+HOMEPAGE="http://lame.sourceforge.net"
+
+LICENSE="LGPL-2.1"
+
+DEPEND="dev-lang/nasm"
+
+SRC_URI="http://downloads.sourceforge.net/${PN}/${P}.tar.gz"
+
+src_prepare()
+{
+	epatch "${P}-dont-export-obsolete-symbols.patch"
+	epatch "${P}-revert-posix-code.patch"
+}
+
+src_configure()
+{
+	econf --enable-shared --enable-static \
+		--enable-nasm --enable-frontend --enable-largefile
+}
