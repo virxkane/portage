@@ -1,0 +1,24 @@
+diff -urBb qtbase-everywhere-src-5.13.1-orig/configure.json qtbase-everywhere-src-5.13.1/configure.json
+--- qtbase-everywhere-src-5.13.1-orig/configure.json	2019-08-31 12:29:31.000000000 +0400
++++ qtbase-everywhere-src-5.13.1/configure.json	2019-09-10 00:00:40.045693100 +0400
+@@ -198,9 +198,9 @@
+                         "debug": "-ldbus-1d",
+                         "release": "-ldbus-1"
+                     },
+-                    "condition": "config.win32"
++                    "condition": "config.msvc"
+                 },
+-                { "libs": "-ldbus-1", "condition": "!config.win32" }
++                { "libs": "-ldbus-1", "condition": "!config.msvc" }
+             ]
+         },
+         "host_dbus": {
+@@ -722,7 +722,7 @@
+         },
+         "pkg-config": {
+             "label": "Using pkg-config",
+-            "autoDetect": "!config.darwin && !config.win32",
++            "autoDetect": "!config.darwin && !config.msvc",
+             "condition": "tests.pkg-config",
+             "output": [
+                 "publicFeature",

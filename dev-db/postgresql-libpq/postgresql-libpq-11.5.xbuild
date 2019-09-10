@@ -22,11 +22,6 @@ SRC_URI="http://ftp.postgresql.org/pub/source/v${PV}/${MY_P}.tar.bz2"
 
 SOURCES_DIR="${MY_P}"
 
-src_prepare()
-{
-	epatch "${MY_P}-fix1.patch"
-}
-
 src_configure()
 {
 	#export PATH="${PERL_PATH}/bin:${PATH}"
