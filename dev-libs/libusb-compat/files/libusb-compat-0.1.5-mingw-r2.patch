@@ -1,0 +1,223 @@
+diff -urBb libusb-compat-0.1.5-orig/libusb/core.c libusb-compat-0.1.5/libusb/core.c
+--- libusb-compat-0.1.5-orig/libusb/core.c	2013-05-05 20:43:46.000000000 +0400
++++ libusb-compat-0.1.5/libusb/core.c	2019-10-18 13:13:19.932073500 +0400
+@@ -30,6 +30,11 @@
+ #include "usb.h"
+ #include "usbi.h"
+ 
++#ifndef ENODATA
++// MinGW dosn't defined ENODATA
++#define ENODATA (-1)
++#endif
++
+ static libusb_context *ctx = NULL;
+ static int usb_debug = 0;
+ 
+diff -urBb libusb-compat-0.1.5-orig/libusb/Makefile.am libusb-compat-0.1.5/libusb/Makefile.am
+--- libusb-compat-0.1.5-orig/libusb/Makefile.am	2013-05-05 20:29:02.000000000 +0400
++++ libusb-compat-0.1.5/libusb/Makefile.am	2019-10-18 13:13:19.933071000 +0400
+@@ -5,5 +5,5 @@
+ libusb_la_CFLAGS = -fvisibility=hidden $(AM_CFLAGS) $(LIBUSB_1_0_CFLAGS)
+ libusb_la_LIBADD = $(LIBUSB_1_0_LIBS)
+ libusb_la_LDFLAGS = -version-info $(LT_MAJOR):$(LT_REVISION):$(LT_AGE) \
+-	-release 0.1
++	-release 0.1 -no-undefined
+ 
+diff -urBb libusb-compat-0.1.5-orig/libusb/usb.h libusb-compat-0.1.5/libusb/usb.h
+--- libusb-compat-0.1.5-orig/libusb/usb.h	2013-05-05 20:29:02.000000000 +0400
++++ libusb-compat-0.1.5/libusb/usb.h	2019-10-18 13:13:52.381159800 +0400
+@@ -31,6 +31,19 @@
+ 
+ #include <dirent.h>
+ 
++#ifdef interface
++#undef interface
++#endif
++
++/* stdint.h is not available on older MSVC */
++#if defined(_MSC_VER) && (_MSC_VER < 1600) && (!defined(_STDINT)) && (!defined(_STDINT_H))
++typedef unsigned __int8   uint8_t;
++typedef unsigned __int16  uint16_t;
++typedef unsigned __int32  uint32_t;
++#else
++#include <stdint.h>
++#endif
++
+ /*
+  * USB spec information
+  *
+@@ -78,40 +91,40 @@
+ 
+ /* All standard descriptors have these 2 fields in common */
+ struct usb_descriptor_header {
+-	u_int8_t  bLength;
+-	u_int8_t  bDescriptorType;
++	uint8_t  bLength;
++	uint8_t  bDescriptorType;
+ };
+ 
+ /* String descriptor */
+ struct usb_string_descriptor {
+-	u_int8_t  bLength;
+-	u_int8_t  bDescriptorType;
+-	u_int16_t wData[1];
++	uint8_t  bLength;
++	uint8_t  bDescriptorType;
++	uint16_t wData[1];
+ };
+ 
+ /* HID descriptor */
+ struct usb_hid_descriptor {
+-	u_int8_t  bLength;
+-	u_int8_t  bDescriptorType;
+-	u_int16_t bcdHID;
+-	u_int8_t  bCountryCode;
+-	u_int8_t  bNumDescriptors;
+-	/* u_int8_t  bReportDescriptorType; */
+-	/* u_int16_t wDescriptorLength; */
++	uint8_t  bLength;
++	uint8_t  bDescriptorType;
++	uint16_t bcdHID;
++	uint8_t  bCountryCode;
++	uint8_t  bNumDescriptors;
++	/* uint8_t  bReportDescriptorType; */
++	/* uint16_t wDescriptorLength; */
+ 	/* ... */
+ };
+ 
+ /* Endpoint descriptor */
+ #define USB_MAXENDPOINTS	32
+ struct usb_endpoint_descriptor {
+-	u_int8_t  bLength;
+-	u_int8_t  bDescriptorType;
+-	u_int8_t  bEndpointAddress;
+-	u_int8_t  bmAttributes;
+-	u_int16_t wMaxPacketSize;
+-	u_int8_t  bInterval;
+-	u_int8_t  bRefresh;
+-	u_int8_t  bSynchAddress;
++	uint8_t  bLength;
++	uint8_t  bDescriptorType;
++	uint8_t  bEndpointAddress;
++	uint8_t  bmAttributes;
++	uint16_t wMaxPacketSize;
++	uint8_t  bInterval;
++	uint8_t  bRefresh;
++	uint8_t  bSynchAddress;
+ 
+ 	unsigned char *extra;	/* Extra descriptors */
+ 	int extralen;
+@@ -129,15 +142,15 @@
+ /* Interface descriptor */
+ #define USB_MAXINTERFACES	32
+ struct usb_interface_descriptor {
+-	u_int8_t  bLength;
+-	u_int8_t  bDescriptorType;
+-	u_int8_t  bInterfaceNumber;
+-	u_int8_t  bAlternateSetting;
+-	u_int8_t  bNumEndpoints;
+-	u_int8_t  bInterfaceClass;
+-	u_int8_t  bInterfaceSubClass;
+-	u_int8_t  bInterfaceProtocol;
+-	u_int8_t  iInterface;
++	uint8_t  bLength;
++	uint8_t  bDescriptorType;
++	uint8_t  bInterfaceNumber;
++	uint8_t  bAlternateSetting;
++	uint8_t  bNumEndpoints;
++	uint8_t  bInterfaceClass;
++	uint8_t  bInterfaceSubClass;
++	uint8_t  bInterfaceProtocol;
++	uint8_t  iInterface;
+ 
+ 	struct usb_endpoint_descriptor *endpoint;
+ 
+@@ -155,14 +168,14 @@
+ /* Configuration descriptor information.. */
+ #define USB_MAXCONFIG		8
+ struct usb_config_descriptor {
+-	u_int8_t  bLength;
+-	u_int8_t  bDescriptorType;
+-	u_int16_t wTotalLength;
+-	u_int8_t  bNumInterfaces;
+-	u_int8_t  bConfigurationValue;
+-	u_int8_t  iConfiguration;
+-	u_int8_t  bmAttributes;
+-	u_int8_t  MaxPower;
++	uint8_t  bLength;
++	uint8_t  bDescriptorType;
++	uint16_t wTotalLength;
++	uint8_t  bNumInterfaces;
++	uint8_t  bConfigurationValue;
++	uint8_t  iConfiguration;
++	uint8_t  bmAttributes;
++	uint8_t  MaxPower;
+ 
+ 	struct usb_interface *interface;
+ 
+@@ -172,28 +185,28 @@
+ 
+ /* Device descriptor */
+ struct usb_device_descriptor {
+-	u_int8_t  bLength;
+-	u_int8_t  bDescriptorType;
+-	u_int16_t bcdUSB;
+-	u_int8_t  bDeviceClass;
+-	u_int8_t  bDeviceSubClass;
+-	u_int8_t  bDeviceProtocol;
+-	u_int8_t  bMaxPacketSize0;
+-	u_int16_t idVendor;
+-	u_int16_t idProduct;
+-	u_int16_t bcdDevice;
+-	u_int8_t  iManufacturer;
+-	u_int8_t  iProduct;
+-	u_int8_t  iSerialNumber;
+-	u_int8_t  bNumConfigurations;
++	uint8_t  bLength;
++	uint8_t  bDescriptorType;
++	uint16_t bcdUSB;
++	uint8_t  bDeviceClass;
++	uint8_t  bDeviceSubClass;
++	uint8_t  bDeviceProtocol;
++	uint8_t  bMaxPacketSize0;
++	uint16_t idVendor;
++	uint16_t idProduct;
++	uint16_t bcdDevice;
++	uint8_t  iManufacturer;
++	uint8_t  iProduct;
++	uint8_t  iSerialNumber;
++	uint8_t  bNumConfigurations;
+ };
+ 
+ struct usb_ctrl_setup {
+-	u_int8_t  bRequestType;
+-	u_int8_t  bRequest;
+-	u_int16_t wValue;
+-	u_int16_t wIndex;
+-	u_int16_t wLength;
++	uint8_t  bRequestType;
++	uint8_t  bRequest;
++	uint16_t wValue;
++	uint16_t wIndex;
++	uint16_t wLength;
+ };
+ 
+ /*
+@@ -254,7 +267,7 @@
+ 
+   void *dev;		/* Darwin support */
+ 
+-  u_int8_t devnum;
++  uint8_t devnum;
+ 
+   unsigned char num_children;
+   struct usb_device **children;
+@@ -266,7 +279,7 @@
+   char dirname[PATH_MAX + 1];
+ 
+   struct usb_device *devices;
+-  u_int32_t location;
++  uint32_t location;
+ 
+   struct usb_device *root_dev;
+ };

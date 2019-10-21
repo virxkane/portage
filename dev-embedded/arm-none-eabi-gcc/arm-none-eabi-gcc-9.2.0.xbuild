@@ -1,0 +1,125 @@
+# Copyright 2019 Chernov A.A.
+# This is a part of mingw-portage project: 
+# http://sourceforge.net/projects/mingwportage/
+# Distributed under the terms of the GNU General Public License v2
+
+DESCRIPTION="The GNU Compiler Collection. Only C/C++ (cross compiler for avr8)"
+
+HOMEPAGE="http://gcc.gnu.org/"
+
+LICENSE="GPL-3 LGPL-3 || ( GPL-3 libgcc libstdc++ ) FDL-1.2"
+
+RESTRICT="strip"
+
+#   external dependecies:
+# bison (msys)
+# perl (msys)
+
+DEPEND=">=meta-virtual/system-headers-3
+		>=meta-virtual/system-libc-3
+		>=meta-virtual/pthreads-2
+		>=sys-devel/binutils-2.25
+		>=dev-embedded/arm-none-eabi-binutils-2.32
+		>=dev-embedded/arm-none-eabi-newlib-2.5.0
+		!dev-embedded/arm-none-eabi-gcc-stage1"
+RDEPEND=">=dev-libs/gmp-5.1.3
+		>=dev-util/mpfr-3.1.2
+		>=dev-libs/mpc-1.0.2
+		meta-virtual/pthreads
+		sys-devel/libiconv
+		>=dev-libs/isl-0.16"
+
+MY_PN="gcc"
+MY_P="${MY_PN}-${PV}"
+SRC_URI="http://ftp.gnu.org/gnu/gcc/${MY_P}/${MY_P}.tar.xz"
+
+SOURCES_DIR="${MY_P}"
+BUILD_IN_SEPARATE_DIR=yes
+
+src_unpack()
+{
+	# exclude unsupported by mingw/mingw64 platform
+	local exclude_parts="libsanitizer libhsail-rt libitm liboffloadmic"
+	# exclude 'ada' language parts
+	exclude_parts+=" gcc/ada libada gnattools"
+	# exclude 'fortran' language parts
+	# We can't remove unused gcc/{language} directories - this will not be delete
+	# internal dependencies from build order, see gcc/configure.ac, gcc/{language}/config-lang.in.
+	exclude_parts+=" libgfortran libffi"
+	# exclude 'objc'&'objcpp' language parts
+	exclude_parts+=" libobjc"
+	# exclude 'go' language parts
+	exclude_parts+=" libgo gotools"
+	# exclude testsuite directories
+	exclude_parts+=" libatomic/testsuite libgomp/testsuite libiberty/testsuite libstdc++-v3/testsuite libvtv/testsuite"
+	# other unused directories
+	exclude_parts+=" maintainer-scripts zlib"
+
+	local part=
+	local exclude_opts=
+	local tarball="${MY_P}.tar.xz"
+	for part in ${exclude_parts}
+	do
+		exclude_opts+="--exclude=${SOURCES_DIR}/${part} "
+	done
+	local f=
+	for f in $A
+	do
+		if [ "$f" = "${tarball}" ]
+		then
+			ebegin "Unpacking parts of ${tarball}... "
+			local f=`find_srcpackage ${tarball}`
+			tar -xJf ${f} ${exclude_opts} > /dev/null 2>&1
+			if [ $? -eq 0 ]
+			then
+				eend "OK"
+			else
+				eend "failed"
+				eerror "failed to unpack"
+			fi
+		else
+			unpack $f
+		fi
+	done
+	cd "${SOURCES_DIR}" || eerror "failed to cd to source dir :("
+}
+
+src_prepare()
+{
+	epatch "${MY_PN}-9.1.0-skip-texinfo.patch"
+	epatch "${MY_PN}-9.1.0-skip-testsuite.patch"
+}
+
+src_configure()
+{
+	export LDFLAGS="-s"
+	econf --target=arm-none-eabi \
+		--enable-shared --disable-win32-registry --disable-debug --enable-checking=release \
+		--with-system-zlib --enable-languages=c,c++ --enable-obsolete --enable-secureplt --disable-werror \
+		--with-newlib --without-headers \
+		--disable-nls --enable-multilib --enable-lto \
+		--without-included-gettext --disable-esp \
+		--disable-libstdcxx-time --disable-libatomic --disable-threads \
+		--disable-altivec --disable-fixed-point --disable-libgomp --disable-libmudflap \
+		--disable-libssp --disable-systemtap --disable-libvtv \
+		--disable-libquadmath --without-isl --disable-libsanitizer \
+		--disable-default-pie --enable-default-ssp \
+		--disable-bootstrap
+}
+
+src_install()
+{
+	emake_install
+	rm -rf "${INSTDIR}${PREFIX}/share/info/"
+	rm -rf "${INSTDIR}${PREFIX}/share/man/man7/"
+
+	# strip libgcc
+	local _arm_strip=${PREFIX}/bin/arm-none-eabi-strip.exe
+	find "${INSTDIR}${PREFIX}/lib/gcc/arm-none-eabi/${PV}/" -iname '*.a' -execdir ${_arm_strip} --strip-debug {} +
+
+	# strip libstdcxx
+	find "${INSTDIR}${PREFIX}/arm-none-eabi/lib/" -iname '*.a' -execdir ${_arm_strip} --strip-debug {} +
+
+	# Remove files conflicting with sys-devel/gcc-core
+	rm -rf "${INSTDIR}${PREFIX}/share/${MY_P}/python"
+}
