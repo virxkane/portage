@@ -1,0 +1,15 @@
+From https://bugreports.qt.io/browse/QTBUG-79033
+Fixes issue with PostgreSQL 12: QSqlTableModel::select() return false.
+
+diff -urBb qtbase-everywhere-src-5.13.1-orig/src/plugins/sqldrivers/psql/qsql_psql.cpp qtbase-everywhere-src-5.13.1/src/plugins/sqldrivers/psql/qsql_psql.cpp
+--- qtbase-everywhere-src-5.13.1-orig/src/plugins/sqldrivers/psql/qsql_psql.cpp	2019-08-31 12:29:31.000000000 +0400
++++ qtbase-everywhere-src-5.13.1/src/plugins/sqldrivers/psql/qsql_psql.cpp	2019-12-06 08:35:32.246057400 +0400
+@@ -1437,7 +1437,7 @@
+ 
+     QString stmt = QStringLiteral("SELECT pg_attribute.attname, pg_attribute.atttypid::int, "
+                                   "pg_attribute.attnotnull, pg_attribute.attlen, pg_attribute.atttypmod, "
+-                                  "pg_attrdef.adsrc "
++                                  "pg_get_expr(pg_attrdef.adbin, pg_attrdef.adrelid) "
+                                   "FROM pg_class, pg_attribute "
+                                   "LEFT JOIN pg_attrdef ON (pg_attrdef.adrelid = "
+                                   "pg_attribute.attrelid AND pg_attrdef.adnum = pg_attribute.attnum) "
