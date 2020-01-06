@@ -1,0 +1,11 @@
+diff -urBb libvpx-1.8.2-orig/vpx/exports_enc libvpx-1.8.2/vpx/exports_enc
+--- libvpx-1.8.2-orig/vpx/exports_enc	2019-12-10 03:09:20.000000000 +0400
++++ libvpx-1.8.2/vpx/exports_enc	2020-01-06 18:56:40.792223000 +0400
+@@ -2,6 +2,7 @@
+ text vpx_codec_enc_config_set
+ text vpx_codec_enc_init_multi_ver
+ text vpx_codec_enc_init_ver
++text vpx_codec_enc_init_multi_ver
+ text vpx_codec_encode
+ text vpx_codec_get_cx_data
+ text vpx_codec_get_global_headers
