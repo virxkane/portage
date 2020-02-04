@@ -1,0 +1,19 @@
+# Copyright 2010-2020 Chernov A.A.
+# This is a part of mingw-portage project: 
+# http://sourceforge.net/projects/mingwportage/
+# Distributed under the terms of the GNU General Public License v2
+
+DESCRIPTION="Library to handle, display and manipulate GIF images"
+
+HOMEPAGE="http://sourceforge.net/projects/giflib/"
+
+LICENSE="MIT"
+
+SRC_URI="http://downloads.sourceforge.net/${PN}/${P}.tar.gz"
+
+src_prepare()
+{
+	epatch "${P}-am.patch"
+	mkdir m4
+	eautoreconf
+}

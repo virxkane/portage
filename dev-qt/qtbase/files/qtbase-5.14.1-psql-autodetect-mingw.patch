@@ -1,0 +1,13 @@
+diff -urBb qtbase-everywhere-src-5.14.1-orig/src/plugins/sqldrivers/configure.json qtbase-everywhere-src-5.14.1/src/plugins/sqldrivers/configure.json
+--- qtbase-everywhere-src-5.14.1-orig/src/plugins/sqldrivers/configure.json	2020-01-23 16:37:32.000000000 +0400
++++ qtbase-everywhere-src-5.14.1/src/plugins/sqldrivers/configure.json	2020-02-02 12:21:52.770104200 +0400
+@@ -88,7 +88,8 @@
+             "sources": [
+                 { "type": "pkgConfig", "args": "libpq" },
+                 { "type": "psqlConfig" },
+-                { "type": "psqlEnv", "libs": "-llibpq -lws2_32 -ladvapi32", "condition": "config.win32" },
++                { "type": "psqlEnv", "libs": "-lpq -lws2_32 -ladvapi32", "condition": "config.win32 && !config.msvc" },
++                { "type": "psqlEnv", "libs": "-llibpq -lws2_32 -ladvapi32", "condition": "config.msvc" },
+                 { "type": "psqlEnv", "libs": "-lpq", "condition": "!config.win32" }
+             ]
+         },

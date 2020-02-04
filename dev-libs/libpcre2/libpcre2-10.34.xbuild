@@ -1,0 +1,32 @@
+# Copyright 2017-2020 Chernov A.A.
+# This is a part of mingw-portage project: 
+# http://sourceforge.net/projects/mingwportage/
+# Distributed under the terms of the GNU General Public License v2
+
+DESCRIPTION="Perl-compatible regular expression library"
+
+HOMEPAGE="http://www.pcre.org/"
+
+LICENSE="BSD"
+
+RDEPEND="sys-libs/zlib
+		app-arch/libbz2"
+
+MY_PN="pcre2"
+MY_P="${MY_PN}-${PV}"
+SOURCES_DIR="${MY_P}"
+SRC_URI="http://downloads.sourceforge.net/pcre/${MY_P}.tar.bz2"
+
+src_prepare()
+{
+	epatch "${MY_PN}-10.23-mingw.patch"
+}
+
+src_configure()
+{
+	econf --enable-shared --enable-static \
+		--enable-newline-is-any --enable-jit \
+		--enable-pcre2-8 --enable-pcre2-16 --enable-pcre2-32 \
+		--enable-unicode \
+		--enable-pcre2grep-libz --enable-pcre2grep-libbz2
+}
