@@ -1,0 +1,35 @@
+# Copyright 2019-2020 Chernov A.A.
+# This is a part of mingw-portage project: 
+# http://sourceforge.net/projects/mingwportage/
+# Distributed under the terms of the GNU General Public License v2
+
+DESCRIPTION="OpenOCD - Open On-Chip Debugger"
+
+HOMEPAGE="http://openocd.sourceforge.net"
+
+SRC_URI="http://downloads.sourceforge.net/${PN}/${P}.tar.bz2"
+
+LICENSE="GPL-2"
+
+RDEPEND="dev-libs/libusb
+		dev-libs/libusb-compat
+		dev-libs/hidapi
+		dev-embedded/libftdi"
+
+src_prepare()
+{
+	epatch libjaylink-dis-werror.patch
+	cd src/jtag/drivers/libjaylink || die
+	eautoreconf || die
+	cd ../../../.. || die
+}
+
+src_configure()
+{
+	econf --disable-shared --disable-werror \
+		--enable-ftdi --enable-stlink --enable-openjtag --enable-jlink \
+		--enable-amtjtagaccel --enable-ep93xx --enable-at91rm9200 \
+		--enable-gw16012 --enable-arm-jtag-ew \
+		--enable-parport --enable-parport-giveio \
+		--enable-internal-jimtcl --enable-internal-libjaylink
+}
