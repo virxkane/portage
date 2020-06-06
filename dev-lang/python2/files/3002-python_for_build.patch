@@ -1,0 +1,12 @@
+diff -urBb Python-2.7.17-orig/Makefile.pre.in Python-2.7.17/Makefile.pre.in
+--- Python-2.7.17-orig/Makefile.pre.in	2020-05-26 09:43:10.167522100 +0400
++++ Python-2.7.17/Makefile.pre.in	2020-05-26 09:45:31.590230000 +0400
+@@ -1188,7 +1188,7 @@
+ 	if [ -n "$(MULTIARCH)" ]; then export MULTIARCH; MULTIARCH=$(MULTIARCH); fi; \
+ 	export PYTHON_FOR_BUILD; \
+ 	if [ "$(build)" = "$(host)" ]; then \
+-	  PYTHON_FOR_BUILD="$(BUILDPYTHON)"; \
++	  PYTHON_FOR_BUILD="$(abs_builddir)/$(BUILDPYTHON)"; \
+ 	else \
+ 	  PYTHON_FOR_BUILD="$(PYTHON_FOR_BUILD)"; \
+ 	fi; \

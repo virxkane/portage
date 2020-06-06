@@ -1,23 +1,9 @@
-diff -Naur Python-2.7.9-orig/configure.ac Python-2.7.9/configure.ac
---- Python-2.7.9-orig/configure.ac	2014-12-11 13:50:30.747800000 +0300
-+++ Python-2.7.9/configure.ac	2014-12-11 13:50:30.857000000 +0300
-@@ -1667,8 +1667,8 @@
- AC_HEADER_STDC
- AC_CHECK_HEADERS(asm/types.h conio.h direct.h dlfcn.h errno.h \
- fcntl.h grp.h \
--ieeefp.h io.h langinfo.h libintl.h poll.h process.h pthread.h \
--shadow.h signal.h stdint.h stropts.h termios.h thread.h \
-+ieeefp.h io.h langinfo.h libintl.h poll.h process.h \
-+shadow.h signal.h stdint.h stropts.h termios.h \
- unistd.h utime.h \
- sys/audioio.h sys/bsdtty.h sys/epoll.h sys/event.h sys/file.h sys/loadavg.h \
- sys/lock.h sys/mkdev.h sys/modem.h \
-diff -Naur Python-2.7.9-orig/Python/thread.c Python-2.7.9/Python/thread.c
---- Python-2.7.9-orig/Python/thread.c	2014-12-10 18:59:59.000000000 +0300
-+++ Python-2.7.9/Python/thread.c	2014-12-11 13:50:30.857000000 +0300
-@@ -8,6 +8,12 @@
- #include "Python.h"
- 
+diff -Naur Python-3.8.0-orig/Include/internal/pycore_condvar.h Python-3.8.0/Include/internal/pycore_condvar.h
+--- Python-3.8.0-orig/Include/internal/pycore_condvar.h	2019-10-14 16:34:47.000000000 +0300
++++ Python-3.8.0/Include/internal/pycore_condvar.h	2019-10-22 10:02:30.231300600 +0300
+@@ -5,6 +5,12 @@
+ #  error "this header requires Py_BUILD_CORE define"
+ #endif
  
 +#ifdef __MINGW32__
 +# if !defined(HAVE_PTHREAD_H) || defined(NT_THREADS)
@@ -28,3 +14,30 @@ diff -Naur Python-2.7.9-orig/Python/thread.c Python-2.7.9/Python/thread.c
  #ifndef _POSIX_THREADS
  /* This means pthreads are not implemented in libc headers, hence the macro
     not present in unistd.h. But they still can be implemented as an external
+@@ -37,6 +43,10 @@
+ /* include windows if it hasn't been done before */
+ #define WIN32_LEAN_AND_MEAN
+ #include <windows.h>
++/* winpthreads are involved via windows header, so need undef _POSIX_THREADS after header include */
++#if defined(_POSIX_THREADS)
++#undef _POSIX_THREADS
++#endif
+ 
+ /* options */
+ /* non-emulated condition variables are provided for those that want
+diff -Naur Python-3.8.0-orig/Include/pythread.h Python-3.8.0/Include/pythread.h
+--- Python-3.8.0-orig/Include/pythread.h	2019-10-14 16:34:47.000000000 +0300
++++ Python-3.8.0/Include/pythread.h	2019-10-22 10:02:30.652501400 +0300
+@@ -9,6 +9,12 @@
+ extern "C" {
+ #endif
+ 
++#ifdef __MINGW32__
++# if !defined(HAVE_PTHREAD_H) || defined(NT_THREADS)
++#  undef _POSIX_THREADS
++# endif
++#endif
++
+ /* Return status codes for Python lock acquisition.  Chosen for maximum
+  * backwards compatibility, ie failure -> 0, success -> 1.  */
+ typedef enum PyLockStatus {

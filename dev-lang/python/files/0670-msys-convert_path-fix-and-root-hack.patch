@@ -1,7 +1,7 @@
-diff -Naur Python-2.7.9-orig/Lib/distutils/command/install.py Python-2.7.9/Lib/distutils/command/install.py
---- Python-2.7.9-orig/Lib/distutils/command/install.py	2014-12-10 18:59:34.000000000 +0300
-+++ Python-2.7.9/Lib/distutils/command/install.py	2014-12-11 13:50:58.983800000 +0300
-@@ -348,7 +348,8 @@
+diff -Naur Python-3.8.0-orig/Lib/distutils/command/install.py Python-3.8.0/Lib/distutils/command/install.py
+--- Python-3.8.0-orig/Lib/distutils/command/install.py	2019-10-14 16:34:47.000000000 +0300
++++ Python-3.8.0/Lib/distutils/command/install.py	2019-10-22 10:03:18.045384600 +0300
+@@ -341,7 +341,8 @@
  
          # Convert directories from Unix /-separated syntax to the local
          # convention.
@@ -11,10 +11,10 @@ diff -Naur Python-2.7.9-orig/Lib/distutils/command/install.py Python-2.7.9/Lib/d
                             'scripts', 'data', 'headers',
                             'userbase', 'usersite')
  
-diff -Naur Python-2.7.9-orig/Lib/distutils/util.py Python-2.7.9/Lib/distutils/util.py
---- Python-2.7.9-orig/Lib/distutils/util.py	2014-12-11 13:50:16.614200000 +0300
-+++ Python-2.7.9/Lib/distutils/util.py	2014-12-11 13:50:58.983800000 +0300
-@@ -132,6 +132,13 @@
+diff -Naur Python-3.8.0-orig/Lib/distutils/util.py Python-3.8.0/Lib/distutils/util.py
+--- Python-3.8.0-orig/Lib/distutils/util.py	2019-10-22 10:01:56.753641800 +0300
++++ Python-3.8.0/Lib/distutils/util.py	2019-10-22 10:03:18.450985300 +0300
+@@ -130,6 +130,13 @@
          paths.remove('.')
      if not paths:
          return os.curdir
@@ -28,7 +28,7 @@ diff -Naur Python-2.7.9-orig/Lib/distutils/util.py Python-2.7.9/Lib/distutils/ut
      return os.path.join(*paths)
  
  # convert_path ()
-@@ -142,6 +149,10 @@
+@@ -140,6 +147,10 @@
      relative, this is equivalent to "os.path.join(new_root,pathname)".
      Otherwise, it requires making 'pathname' relative and then joining the
      two, which is tricky on DOS/Windows and Mac OS.
@@ -39,20 +39,12 @@ diff -Naur Python-2.7.9-orig/Lib/distutils/util.py Python-2.7.9/Lib/distutils/ut
      """
      if os.name == 'posix':
          if not os.path.isabs(pathname):
-@@ -149,17 +160,22 @@
-         else:
-             return os.path.join(new_root, pathname[1:])
+@@ -149,9 +160,20 @@
  
--    elif os.name == 'nt':
--        (drive, path) = os.path.splitdrive(pathname)
--        if path[0] == '\\':
--            path = path[1:]
--        return os.path.join(new_root, path)
--
--    elif os.name == 'os2':
-+    elif os.name == 'nt' or os.name == 'os2':
+     elif os.name == 'nt':
          (drive, path) = os.path.splitdrive(pathname)
-         if path[0] == os.sep:
+-        if path[0] == '\\':
++        if path[0] == os.sep:
              path = path[1:]
 -        return os.path.join(new_root, path)
 +        (drive_r, path_r) = os.path.splitdrive(new_root)
@@ -69,13 +61,13 @@ diff -Naur Python-2.7.9-orig/Lib/distutils/util.py Python-2.7.9/Lib/distutils/ut
 +        return os.path.join(drive_used+path_r, path)
  
      else:
-         raise DistutilsPlatformError, \
-diff -Naur Python-2.7.9-orig/Makefile.pre.in Python-2.7.9/Makefile.pre.in
---- Python-2.7.9-orig/Makefile.pre.in	2014-12-11 13:50:51.012200000 +0300
-+++ Python-2.7.9/Makefile.pre.in	2014-12-11 13:50:58.999400000 +0300
-@@ -1194,6 +1194,12 @@
- 		;; \
- 	esac
+         raise DistutilsPlatformError("nothing known about platform '%s'" % os.name)
+diff -Naur Python-3.8.0-orig/Makefile.pre.in Python-3.8.0/Makefile.pre.in
+--- Python-3.8.0-orig/Makefile.pre.in	2019-10-22 10:02:59.949352800 +0300
++++ Python-3.8.0/Makefile.pre.in	2019-10-22 10:03:18.840986000 +0300
+@@ -1612,6 +1612,12 @@
+ 	else true; \
+ 	fi
  
 +ifeq ($(shell uname -o),Msys)
 +DESTDIRFINAL=$(DESTDIR)
@@ -86,23 +78,16 @@ diff -Naur Python-2.7.9-orig/Makefile.pre.in Python-2.7.9/Makefile.pre.in
  # Install the dynamically loadable modules
  # This goes into $(exec_prefix)
  sharedinstall: sharedmods
-@@ -1201,8 +1207,8 @@
+@@ -1619,9 +1625,9 @@
  	   	--prefix=$(prefix) \
  		--install-scripts=$(BINDIR) \
  		--install-platlib=$(DESTSHARED) \
 -		--root=$(DESTDIR)/
--	-rm $(DESTDIR)$(DESTSHARED)/_sysconfigdata.py*
+-	-rm $(DESTDIR)$(DESTSHARED)/_sysconfigdata_$(ABIFLAGS)_$(MACHDEP)_$(MULTIARCH).py
+-	-rm -r $(DESTDIR)$(DESTSHARED)/__pycache__
 +		--root=$(DESTDIRFINAL)
-+	-rm $(DESTDIRFINAL)$(DESTSHARED)/_sysconfigdata.py
++	-rm $(DESTDIRFINAL)$(DESTSHARED)/_sysconfigdata_$(ABIFLAGS)_$(MACHDEP)_$(MULTIARCH).py
++	-rm -r $(DESTDIRFINAL)$(DESTSHARED)/__pycache__
  
  # Here are a couple of targets for MacOSX again, to install a full
  # framework-based Python. frameworkinstall installs everything, the
-@@ -1274,7 +1280,7 @@
- 	$(PYTHON_FOR_BUILD) $(srcdir)/Tools/scripts/setup.py install \
- 	--prefix=$(prefix) \
- 	--install-scripts=$(BINDIR) \
--	--root=$(DESTDIR)/
-+	--root=$(DESTDIRFINAL)
- 
- # Build the toplevel Makefile
- Makefile.pre: Makefile.pre.in config.status

@@ -1,9 +1,9 @@
-diff -Naur Python-2.7.9-orig/Include/pyport.h Python-2.7.9/Include/pyport.h
---- Python-2.7.9-orig/Include/pyport.h	2014-12-10 18:59:32.000000000 +0300
-+++ Python-2.7.9/Include/pyport.h	2014-12-11 13:49:31.233800000 +0300
-@@ -13,6 +13,21 @@
- #include <stdint.h>
+diff -Naur Python-3.8.0-orig/Include/pyport.h Python-3.8.0/Include/pyport.h
+--- Python-3.8.0-orig/Include/pyport.h	2019-10-14 16:34:47.000000000 +0300
++++ Python-3.8.0/Include/pyport.h	2019-10-22 10:00:36.224300300 +0300
+@@ -26,6 +26,21 @@
  #endif
+ 
  
 +#ifdef __MINGW32__
 +/* Translate GCC[mingw*] platform specific defines to those
@@ -18,7 +18,7 @@ diff -Naur Python-2.7.9-orig/Include/pyport.h Python-2.7.9/Include/pyport.h
 +#if !defined(MS_WINDOWS) && defined(MS_WIN32)
 +#  define MS_WINDOWS
 +#endif
-+#endif /*def __MINGW32__*/
++#endif /* __MINGW32__*/
 +
  /**************************************************************************
  Symbols and macros to supply platform-independent interfaces to basic

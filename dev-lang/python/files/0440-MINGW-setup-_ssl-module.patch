@@ -1,18 +1,12 @@
-diff -Naur Python-2.7.9-orig/setup.py Python-2.7.9/setup.py
---- Python-2.7.9-orig/setup.py	2014-12-11 13:50:14.601800000 +0300
-+++ Python-2.7.9/setup.py	2014-12-11 13:50:20.030600000 +0300
-@@ -832,10 +832,13 @@
- 
-         if (ssl_incs is not None and
-             ssl_libs is not None):
-+            _ssl_libs = ['ssl', 'crypto']
-+            if host_platform.startswith(('mingw', 'win')):
-+                _ssl_libs += ['ws2_32']
-             exts.append( Extension('_ssl', ['_ssl.c'],
-                                    include_dirs = ssl_incs,
-                                    library_dirs = ssl_libs,
--                                   libraries = ['ssl', 'crypto'],
-+                                   libraries = _ssl_libs,
-                                    depends = ['socketmodule.h']), )
-         else:
-             missing.append('_ssl')
+diff -Naur Python-3.8.0-orig/setup.py Python-3.8.0/setup.py
+--- Python-3.8.0-orig/setup.py	2019-10-22 10:01:52.635234600 +0300
++++ Python-3.8.0/setup.py	2019-10-22 10:02:04.772055900 +0300
+@@ -2257,6 +2257,8 @@
+         openssl_includes = split_var('OPENSSL_INCLUDES', '-I')
+         openssl_libdirs = split_var('OPENSSL_LDFLAGS', '-L')
+         openssl_libs = split_var('OPENSSL_LIBS', '-l')
++        if MS_WINDOWS:
++            openssl_libs += ['ws2_32']
+         if not openssl_libs:
+             # libssl and libcrypto not found
+             self.missing.extend(['_ssl', '_hashlib'])

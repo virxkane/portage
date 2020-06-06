@@ -1,9 +1,9 @@
-diff -Naur Python-2.7.9-orig/setup.py Python-2.7.9/setup.py
---- Python-2.7.9-orig/setup.py	2014-12-11 13:51:01.994600000 +0300
-+++ Python-2.7.9/setup.py	2014-12-11 13:51:08.359400000 +0300
-@@ -29,6 +29,17 @@
+diff -Naur Python-3.8.0-orig/setup.py Python-3.8.0/setup.py
+--- Python-3.8.0-orig/setup.py	2019-10-22 10:03:24.597396100 +0300
++++ Python-3.8.0/setup.py	2019-10-22 10:03:35.002614400 +0300
+@@ -38,6 +38,17 @@
      return sys.platform
- host_platform = get_platform()
+ 
  
 +# On MSYS, os.system needs to be wrapped with sh.exe
 +# as otherwise all the io redirection will fail.
@@ -12,10 +12,10 @@ diff -Naur Python-2.7.9-orig/setup.py Python-2.7.9/setup.py
 +if sys.platform == "win32" and "MSYSTEM" in os.environ:
 +    os_system = os.system
 +    def msys_system(command):
-+        command_in_sh = 'sh.exe -c "%s"' % command.replace("\\", "/")
++        command_in_sh = 'sh.exe -c "%s"' % command.replace("\\", "\\\\")
 +        return os_system(command_in_sh)
 +    os.system = msys_system
 +
- # Were we compiled --with-pydebug or with #define Py_DEBUG?
- COMPILED_WITH_PYDEBUG = ('--with-pydebug' in sysconfig.get_config_var("CONFIG_ARGS"))
- 
+ CROSS_COMPILING = ("_PYTHON_HOST_PLATFORM" in os.environ)
+ HOST_PLATFORM = get_platform()
+ MS_WINDOWS = (HOST_PLATFORM == 'win32')

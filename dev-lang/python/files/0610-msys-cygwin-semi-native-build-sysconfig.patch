@@ -1,9 +1,9 @@
-diff -Naur Python-2.7.9-orig/configure.ac Python-2.7.9/configure.ac
---- Python-2.7.9-orig/configure.ac	2014-12-11 13:50:44.553800000 +0300
-+++ Python-2.7.9/configure.ac	2014-12-11 13:50:47.829800000 +0300
-@@ -561,6 +561,65 @@
- AC_MSG_RESULT([$DELIM])
- AC_SUBST(DELIM)
+diff -Naur Python-3.8.0-orig/configure.ac Python-3.8.0/configure.ac
+--- Python-3.8.0-orig/configure.ac	2019-10-22 10:02:29.123698700 +0300
++++ Python-3.8.0/configure.ac	2019-10-22 10:02:56.595346900 +0300
+@@ -598,6 +598,65 @@
+   AC_DEFINE(_INCLUDE__STDC_A1_SOURCE, 1, Define to include mbstate_t for mbrtowc)
+ fi
  
 +# On 'semi-native' build systems (MSYS*/Cygwin targeting MinGW-w64)
 +# _sysconfigdata.py will contain paths that are correct only in the
@@ -67,17 +67,17 @@ diff -Naur Python-2.7.9-orig/configure.ac Python-2.7.9/configure.ac
  AC_MSG_CHECKING([for init system calls])
  AC_SUBST(INITSYS)
  case $host in
-diff -Naur Python-2.7.9-orig/Lib/sysconfig.py Python-2.7.9/Lib/sysconfig.py
---- Python-2.7.9-orig/Lib/sysconfig.py	2014-12-11 13:50:22.963400000 +0300
-+++ Python-2.7.9/Lib/sysconfig.py	2014-12-11 13:50:49.561400000 +0300
-@@ -273,6 +273,14 @@
+diff -Naur Python-3.8.0-orig/Lib/sysconfig.py Python-3.8.0/Lib/sysconfig.py
+--- Python-3.8.0-orig/Lib/sysconfig.py	2019-10-22 10:02:09.342863900 +0300
++++ Python-3.8.0/Lib/sysconfig.py	2019-10-22 10:02:57.000947600 +0300
+@@ -329,6 +329,14 @@
          if isinstance(v, str):
              done[k] = v.strip()
  
 +    # any keys that have one with the same name suffixed with _b2h
 +    # need to be replaced with the value of the _b2h key.
 +    # This converts from MSYS*/Cygwin paths to Windows paths.
-+    for k, v in done.items():
++    for k, v in dict(done).items():
 +        if isinstance(k, str):
 +            if k.endswith("_b2h"):
 +                done[k[:-4]]=v
@@ -85,10 +85,10 @@ diff -Naur Python-2.7.9-orig/Lib/sysconfig.py Python-2.7.9/Lib/sysconfig.py
      # save the results in the global dictionary
      vars.update(done)
      return vars
-diff -Naur Python-2.7.9-orig/Makefile.pre.in Python-2.7.9/Makefile.pre.in
---- Python-2.7.9-orig/Makefile.pre.in	2014-12-11 13:50:46.113800000 +0300
-+++ Python-2.7.9/Makefile.pre.in	2014-12-11 13:50:49.561400000 +0300
-@@ -101,6 +101,13 @@
+diff -Naur Python-3.8.0-orig/Makefile.pre.in Python-3.8.0/Makefile.pre.in
+--- Python-3.8.0-orig/Makefile.pre.in	2019-10-22 10:01:28.376191900 +0300
++++ Python-3.8.0/Makefile.pre.in	2019-10-22 10:02:57.390948300 +0300
+@@ -137,6 +137,13 @@
  # Install prefix for data files
  datarootdir=    @datarootdir@
  
@@ -102,12 +102,3 @@ diff -Naur Python-2.7.9-orig/Makefile.pre.in Python-2.7.9/Makefile.pre.in
  # Expanded directories
  BINDIR=		@bindir@
  LIBDIR=		@libdir@
-@@ -598,7 +605,7 @@
- 		-DPREFIX='"$(prefix)"' \
- 		-DEXEC_PREFIX='"$(exec_prefix)"' \
- 		-DVERSION='"$(VERSION)"' \
--		-DVPATH='"$(VPATH)"' \
-+		-DVPATH='"$(VPATH_b2h)"' \
- 		-o $@ $(srcdir)/Modules/getpath.c
- 
- # default sys.path calculations for windows platforms

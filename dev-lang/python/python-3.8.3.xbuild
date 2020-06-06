@@ -1,0 +1,303 @@
+# Borrowed from project MINGW-packages (https://github.com/Alexpux/MINGW-packages)
+
+DESCRIPTION="An interpreted, interactive, object-oriented programming language"
+
+HOMEPAGE="http://www.python.org/"
+
+LICENSE="PSF-2"
+
+DEPEND="dev-util/pkg-config"
+RDEPEND="!<dev-lang/python2-2.7.17-r1
+		dev-libs/libffi
+		dev-libs/expat
+		dev-db/sqlite
+		dev-libs/openssl
+		app-arch/libbz2
+		app-arch/xz-utils
+		sys-libs/zlib"
+
+MY_P="Python-${PV}"
+_pybasever=3.8
+
+SRC_URI="http://www.python.org/ftp/python/${PV}/${MY_P}.tar.xz"
+
+RESTRICT="strip"
+
+SOURCES_DIR="${MY_P}"
+BUILD_IN_SEPARATE_DIR=yes
+
+
+src_prepare()
+{
+	# these are created by patches
+	rm -f Misc/config_mingw \
+		Misc/cross_mingw32 \
+		Modules/Setup.config.in \
+		Python/fileblocks.c
+
+	einfo "Apply Ray Donnelly's should-be-upstreamed patches"
+	epatch "0000-make-_sysconfigdata.py-relocatable.patch"
+	epatch "0001-fix-_nt_quote_args-using-subprocess-list2cmdline.patch"
+	epatch "0002-restore-setup-config.patch"
+
+	echo "Apply Roumen Petrov's core patches (10)"
+	epatch "0100-MINGW-BASE-use-NT-thread-model.patch"
+	epatch "0110-MINGW-translate-gcc-internal-defines-to-python-platf.patch"
+	epatch "0130-MINGW-configure-MACHDEP-and-platform-for-build.patch"
+	epatch "0140-MINGW-preset-configure-defaults.patch"
+	epatch "0150-MINGW-configure-largefile-support-for-windows-builds.patch"
+	epatch "0170-MINGW-add-srcdir-PC-to-CPPFLAGS.patch"
+	epatch "0180-MINGW-init-system-calls.patch"
+	epatch "0200-MINGW-build-in-windows-modules-winreg.patch"
+	epatch "0210-MINGW-determine-if-pwdmodule-should-be-used.patch"
+
+	echo "Apply Roumen Petrov's compiler patch (2)"
+	epatch "0250-MINGW-compiler-customize-mingw-cygwin-compilers.patch"
+	epatch "0260-MINGW-compiler-enable-new-dtags.patch"
+
+	echo "Apply Roumen Petrov's extensions patches (21)"
+	epatch "0290-issue6672-v2-Add-Mingw-recognition-to-pyport.h-to-al.patch"
+	epatch "0300-MINGW-configure-for-shared-build.patch"
+	epatch "0310-MINGW-dynamic-loading-support.patch"
+	epatch "0330-MINGW-ignore-main-program-for-frozen-scripts.patch"
+	epatch "0350-MINGW-setup-_multiprocessing-module.patch"
+	epatch "0360-MINGW-setup-select-module.patch"
+	epatch "0370-MINGW-setup-_ctypes-module-with-system-libffi.patch"
+	epatch "0380-MINGW-defect-winsock2-and-setup-_socket-module.patch"
+	epatch "0390-MINGW-exclude-unix-only-modules.patch"
+	epatch "0400-MINGW-setup-msvcrt-and-_winapi-modules.patch"
+	epatch "0410-MINGW-build-extensions-with-GCC.patch"
+	epatch "0420-MINGW-use-Mingw32CCompiler-as-default-compiler-for-m.patch"
+	epatch "0430-MINGW-find-import-library.patch"
+	epatch "0440-MINGW-setup-_ssl-module.patch"
+	epatch "0460-MINGW-generalization-of-posix-build-in-sysconfig.py.patch"
+	epatch "0462-MINGW-support-stdcall-without-underscore.patch"
+	epatch "0464-use-replace-instead-rename-to-avoid-failure-on-windo.patch"
+	epatch "0470-MINGW-avoid-circular-dependency-from-time-module-dur.patch"
+	epatch "0480-MINGW-generalization-of-posix-build-in-distutils-sys.patch"
+	epatch "0490-MINGW-customize-site.patch"
+
+	echo "Apply Ray Donnelly's general/cross patches (42)"
+	epatch "0500-add-python-config-sh.patch"
+	epatch "0510-cross-darwin-feature.patch"
+	epatch "0520-py3k-mingw-ntthreads-vs-pthreads.patch"
+	epatch "0530-mingw-system-libffi.patch"
+	epatch "0555-msys-mingw-prefer-unix-sep-if-MSYSTEM.patch"
+	epatch "0560-mingw-use-posix-getpath.patch"
+	epatch "0565-mingw-add-ModuleFileName-dir-to-PATH.patch"
+	epatch "0570-mingw-add-BUILDIN_WIN32_MODULEs-time-msvcrt.patch"
+	# 0610- changed to not using -DVPATH='"$(VPATH_b2h)"' anymore since VPATH is
+	# relative, therefore getpath.c:355: joinpath(prefix, vpath) works naturally
+	epatch "0610-msys-cygwin-semi-native-build-sysconfig.patch"
+	epatch "0620-mingw-sysconfig-like-posix.patch"
+	epatch "0630-mingw-_winapi_as_builtin_for_Popen_in_cygwinccompiler.patch"
+	epatch "0640-mingw-x86_64-size_t-format-specifier-pid_t.patch"
+	epatch "0650-cross-dont-add-multiarch-paths-if-cross-compiling.patch"
+	epatch "0660-mingw-use-backslashes-in-compileall-py.patch"
+	epatch "0670-msys-convert_path-fix-and-root-hack.patch"
+	epatch "0690-allow-static-tcltk.patch"
+
+	epatch "0720-mingw-pdcurses_ISPAD.patch"
+	epatch "0740-grammar-fixes.patch"
+	epatch "0750-builddir-fixes.patch"
+	epatch "0760-msys-monkeypatch-os-system-via-sh-exe.patch"
+	epatch "0770-msys-replace-slashes-used-in-io-redirection.patch"
+	epatch "0800-mingw-install-layout-as-posix.patch"
+	epatch "0810-remove_path_max.default.patch"
+	epatch "0820-dont-link-with-gettext.patch"
+	epatch "0830-ctypes-python-dll.patch"
+	epatch "0840-gdbm-module-includes.patch"
+	epatch "0850-use-gnu_printf-in-format.patch"
+	epatch "0870-mingw-fix-ssl-dont-use-enum_certificates.patch"
+	epatch "0890-mingw-build-optimized-ext.patch"
+	epatch "0900-cygwinccompiler-dont-strip-modules-if-pydebug.patch"
+	epatch "0910-fix-using-dllhandle-and-winver-mingw.patch"
+	epatch "0920-mingw-add-LIBPL-to-library-dirs.patch"
+	epatch "0970-Add-AMD64-to-sys-config-so-msvccompiler-get_build_version-works.patch"
+	epatch "0990-MINGW-link-with-additional-library.patch"
+	epatch "1010-install-msilib.patch"
+	epatch "1060-dont-include-system-ncurses-path.patch"
+
+	echo "New patches added for the update from 3.5.3 to 3.6.1"
+	epatch "1620-fix-signal-module-build.patch"
+	epatch "1630-build-winconsoleio.patch"
+	epatch "1650-expose-sem_unlink.patch"
+
+	# Extend some isatty calls to check for mintty when checking for
+	# a terminal output.
+	# https://github.com/Alexpux/MINGW-packages/issues/2645
+	# https://github.com/Alexpux/MINGW-packages/issues/2656
+	epatch "1700-cygpty-isatty.patch"
+
+	# gdbm is broken and as a result breaks dbm/shelve.
+	# Don't include it so the dbm.dumb backend is used instead,
+	# like with the official CPython build.
+	epatch "1701-disable-broken-gdbm-module.patch"
+
+	# https://github.com/Alexpux/MINGW-packages/issues/3139
+	epatch "1800-link-win-resource-files-and-build-pythonw.patch"
+
+	epatch "1810-3.7-mpdec-mingw.patch"
+	epatch "1830-mingw-implement-setenv-for-PY_COERCE_C_LOCALE.patch"
+	epatch "1850-disable-readline.patch"
+	epatch "1860-fix-isselectable.patch"
+	epatch "1870-use-_wcsnicmp-instead-wcsncasecmp.patch"
+	epatch "1880-make-default-python.patch"
+	epatch "1890-_xxsubinterpretersmodule.patch"
+
+	# https://github.com/msys2/MINGW-packages/issues/5184
+	epatch "2010-configure-have-inet-pton.patch"
+
+	# https://github.com/msys2/MINGW-packages/issues/5155
+	epatch "2030-fix-msvc9-import.patch"
+
+	# https://github.com/msys2/MINGW-packages/issues/5001
+	epatch "2050-undo-venv-redirector.patch"
+	epatch "2051-set-venv-activate-path-unix.patch"
+	epatch "2052-venv-remove-msys-from-env-and-add-exe-prefix.patch"
+
+	epatch "2060-pass-gen-profile-ldflags.patch"
+  
+	epatch "2070-distutils-add-windmc-to-cygwinccompiler.patch"
+	epatch "2080-pkg-config-windows-must-link-ext-with-python-lib.patch"
+
+	# https://github.com/msys2/MINGW-packages/issues/6035
+	epatch "3000-importlib-bootstrap-path-sep.patch"
+	epatch "3001-pathlib-path-sep.patch"
+
+	epatch "5000-warnings-fixes.patch"
+
+	eautoreconf
+
+	touch Include/graminit.h
+	touch Python/graminit.c
+	touch Parser/Python.asdl
+	touch Parser/asdl.py
+	touch Parser/asdl_c.py
+	touch Include/Python-ast.h
+	touch Python/Python-ast.c
+	echo \"\" > Parser/pgen.stamp
+
+	# Ensure that we are using the system copy of various libraries (expat, zlib and libffi),
+	# rather than copies shipped in the tarball
+	rm -r Modules/expat
+	#rm -r Modules/zlib
+	rm -r Modules/_ctypes/{darwin,libffi}*
+}
+
+src_configure()
+{
+	# Workaround for conftest error on 64-bit builds
+	export ac_cv_working_tzset=no
+
+	# Workaround for when dlfcn exists on Windows, which causes
+	# some conftests to succeed when they shouldn't (we don't use dlfcn).
+	export ac_cv_header_dlfcn_h=no
+	export ac_cv_lib_dl_dlopen=no
+	export ac_cv_have_decl_RTLD_GLOBAL=no
+	export ac_cv_have_decl_RTLD_LAZY=no
+	export ac_cv_have_decl_RTLD_LOCAL=no
+	export ac_cv_have_decl_RTLD_NOW=no
+	export ac_cv_have_decl_RTLD_DEEPBIND=no
+	export ac_cv_have_decl_RTLD_MEMBER=no
+	export ac_cv_have_decl_RTLD_NODELETE=no
+	export ac_cv_have_decl_RTLD_NOLOAD=no
+
+	export CFLAGS="${CFLAGS} -fwrapv -D__USE_MINGW_ANSI_STDIO=1 -D_WIN32_WINNT=0x0601 -DNDEBUG"
+	export CXXFLAGS="${CXXFLAGS} -fwrapv -D__USE_MINGW_ANSI_STDIO=1 -D_WIN32_WINNT=0x0601 -DNDEBUG"
+	export LDFLAGS="-s"
+	MSYSTEM=MINGW econf --enable-shared --with-nt-threads \
+		--with-system-ffi --with-system-expat \
+		--without-ensurepip \
+		--enable-optimizations --with-lto
+}
+
+src_compile()
+{
+	# Bootstrap python executable for regen-importlib
+	emake python.exe
+	sed -i -e 's|^PYTHON_FOR_REGEN=.*$|PYTHON_FOR_REGEN=./python.exe -E|' Makefile
+	sed -i -e 's|^UPDATE_FILE=.*$|UPDATE_FILE=./python.exe -E $(srcdir)/Tools/scripts/update_file.py|' Makefile
+	# We patch importlib which is embedded in C headers, so regenerate them
+	emake regen-importlib
+	# rebuild python and build all other
+	emake
+}
+
+src_install()
+{
+	mkdir -p "${INSTDIR}"
+	local PREFIX_WIN=`posix_w32path ${PREFIX}`
+	local PREFIX_WIN_s="${PREFIX_WIN/\//\\\\}"
+	local VERABI=${_pybasever}
+
+	MSYSTEM=MINGW \
+		MSYS2_ARG_CONV_EXCL="--prefix=;--install-scripts=;--install-platlib=" \
+			make DESTDIR="${INSTDIR}" install || die "install failed!"
+
+	# gdb pretty printers for debugging Python itself; to use:
+	# python
+	# sys.path.append('C:/msys64/mingw64/share/gdb/python3')
+	# import python_gdb
+	# reload(python_gdb)
+	# end
+	[[ -d "${INSTDIR}${PREFIX}"/share/gdb/python3/ ]] || mkdir -p "${INSTDIR}${PREFIX}"/share/gdb/python3/
+	cp -f python.exe-gdb.py "${INSTDIR}${PREFIX}"/share/gdb/python3/python_gdb.py
+
+	rm "${INSTDIR}${PREFIX}"/bin/2to3
+
+	# Need for building boost python module
+	cp -f "${INSTDIR}${PREFIX}"/lib/python${_pybasever}/config-${VERABI}/libpython${VERABI}.dll.a "${INSTDIR}${PREFIX}"/lib/libpython${_pybasever}.dll.a
+	#cp -f "${INSTDIR}${PREFIX}"/lib/python${_pybasever}/config-${VERABI}/libpython${VERABI}.dll.a "${INSTDIR}${PREFIX}"/lib/python${_pybasever}/config-${VERABI}/libpython${_pybasever}.dll.a
+
+	# some useful "stuff"
+	install -dm755 "${INSTDIR}${PREFIX}"/lib/python${_pybasever}/Tools/{i18n,scripts}
+	install -m755 "${WORKDIR}/${SOURCES_DIR}"/Tools/i18n/{msgfmt,pygettext}.py "${INSTDIR}${PREFIX}"/lib/python${_pybasever}/Tools/i18n/
+	install -m755 "${WORKDIR}/${SOURCES_DIR}"/Tools/scripts/{README,*py} "${INSTDIR}${PREFIX}"/lib/python${_pybasever}/Tools/scripts/
+
+	# clean up #!s
+	find "${INSTDIR}${PREFIX}"/lib/python${_pybasever}/ -name '*.py' | \
+		xargs sed -i "s|#[ ]*![ ]*/usr/bin/env python$|#!/usr/bin/env python|"
+
+	# clean-up reference to build directory
+	# Useless
+	#sed -i "s#${WORKDIR}/${SOURCES_DIR}:##" "${INSTDIR}${PREFIX}"/lib/python${_pybasever}/config-${VERABI}/Makefile
+
+	for fscripts in 2to3-${_pybasever} idle3 idle${_pybasever} pydoc3 pydoc${_pybasever}; do
+		sed -i "s|${PREFIX_WIN_s}/bin/python${_pybasever}.exe|/usr/bin/env python${_pybasever}.exe|g" "${INSTDIR}${PREFIX}"/bin/${fscripts}
+	done
+
+	# Default names are aliases for Python now
+	cp "${INSTDIR}${PREFIX}"/bin/idle3 "${INSTDIR}${PREFIX}"/bin/idle
+	cp "${INSTDIR}${PREFIX}"/bin/pydoc3 "${INSTDIR}${PREFIX}"/bin/pydoc
+	cp "${INSTDIR}${PREFIX}"/bin/2to3-${_pybasever} "${INSTDIR}${PREFIX}"/bin/2to3
+
+	sed -i "s|#!${INSTDIR}${PREFIX}/bin/python${VERABI}.exe|#!/usr/bin/env python${_pybasever}.exe|" "${INSTDIR}${PREFIX}"/lib/python${_pybasever}/config-${VERABI}/python-config.py
+	sed -i "s|#!${PREFIX}/bin/python${VERABI}.exe|#!/usr/bin/env python${_pybasever}.exe|" "${INSTDIR}${PREFIX}"/lib/python${_pybasever}/config-${VERABI}/python-config.py
+
+	# fix permissons
+	find ${INSTDIR}${PREFIX} -type f \( -name "*.dll" -o -name "*.exe" \) | xargs chmod 0755
+
+	# Fix up two instances of MSYS2 paths in python-config.sh in-case the final consumer of the results are native executables.
+	sed -e "s|${PREFIX}|${PREFIX_WIN}|" \
+		-i "${INSTDIR}${PREFIX}"/bin/python${VERABI}-config \
+		-i "${INSTDIR}${PREFIX}"/bin/python3-config \
+		-i "${INSTDIR}${PREFIX}"/bin/python-config
+
+	# replace paths in sysconfig
+	sed -i "s|${INSTDIR}${PREFIX}|${PREFIX}|g" \
+		"${INSTDIR}${PREFIX}"/lib/python${_pybasever}/lib-dynload/_sysconfigdata*.py \
+		"${INSTDIR}${PREFIX}"/lib/python${_pybasever}/smtpd.py
+}
+
+pkg_postinst()
+{
+	# For instalation from binary.
+	local PREFIX_WIN=`posix_w32path ${PREFIX}`
+
+	# Fix up two instances of MSYS2 paths in python-config.sh in-case the final consumer of the results are native executables.
+	sed -e "s|^prefix=.*$|prefix=\"${PREFIX_WIN}\"|" \
+		-i "${PREFIX}"/bin/python${VERABI}-config \
+		-i "${PREFIX}"/bin/python3-config \
+		-i "${PREFIX}"/bin/python-config
+}
