@@ -1,0 +1,30 @@
+diff -urBb gcc-10.2.0-orig/libgomp/configure gcc-10.2.0/libgomp/configure
+--- gcc-10.2.0-orig/libgomp/configure	2020-10-06 14:26:56.135632400 +0400
++++ gcc-10.2.0/libgomp/configure	2020-10-06 17:19:32.651492200 +0400
+@@ -4614,11 +4614,6 @@
+ # in both places for now and restore CFLAGS at the end of config.
+ save_CFLAGS="$CFLAGS"
+ 
+-# Add -Wall -Werror if we are using GCC.
+-if test "x$GCC" = "xyes"; then
+-  XCFLAGS="$XCFLAGS -Wall -Werror"
+-fi
+-
+ # Find other programs we need.
+ if test -n "$ac_tool_prefix"; then
+   # Extract the first word of "${ac_tool_prefix}ar", so it can be a program name with args.
+diff -urBb gcc-10.2.0-orig/libgomp/configure.ac gcc-10.2.0/libgomp/configure.ac
+--- gcc-10.2.0-orig/libgomp/configure.ac	2020-10-06 14:26:56.137605400 +0400
++++ gcc-10.2.0/libgomp/configure.ac	2020-10-06 17:18:40.706066800 +0400
+@@ -121,11 +121,6 @@
+ # in both places for now and restore CFLAGS at the end of config.
+ save_CFLAGS="$CFLAGS"
+ 
+-# Add -Wall -Werror if we are using GCC.
+-if test "x$GCC" = "xyes"; then
+-  XCFLAGS="$XCFLAGS -Wall -Werror"
+-fi
+-
+ # Find other programs we need.
+ AC_CHECK_TOOL(AR, ar)
+ AC_CHECK_TOOL(RANLIB, ranlib, ranlib-not-found-in-path-error)
