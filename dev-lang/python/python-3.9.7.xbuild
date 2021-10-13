@@ -1,0 +1,209 @@
+# Based on MINGW-packages project (https://github.com/msys2/MINGW-packages)
+
+DESCRIPTION="An interpreted, interactive, object-oriented programming language"
+
+HOMEPAGE="http://www.python.org/"
+
+LICENSE="PSF-2"
+
+DEPEND="dev-util/pkg-config"
+RDEPEND="!<dev-lang/python2-2.7.17-r1
+		dev-libs/libffi
+		dev-libs/expat
+		dev-db/sqlite
+		dev-libs/openssl
+		app-arch/libbz2
+		app-arch/xz-utils
+		sys-libs/zlib"
+
+MY_P="Python-${PV}"
+_pybasever=3.9
+
+SRC_URI="http://www.python.org/ftp/python/${PV}/${MY_P}.tar.xz"
+
+SOURCES_DIR="${MY_P}"
+BUILD_IN_SEPARATE_DIR=yes
+
+
+src_prepare()
+{
+	einfo "Apply patches"
+
+	epatch "3.9/0001-sysconfig-make-_sysconfigdata.py-relocatable.patch"
+	epatch "3.9/0002-restore-setup-config.patch"
+	epatch "3.9/0003-build-add-with-nt-threads-and-make-it-default-on-min.patch"
+	epatch "3.9/0004-MINGW-translate-gcc-internal-defines-to-python-platf.patch"
+	epatch "3.9/0005-MINGW-configure-MACHDEP-and-platform-for-build.patch"
+	epatch "3.9/0006-MINGW-preset-configure-defaults.patch"
+	epatch "3.9/0007-MINGW-configure-largefile-support-for-windows-builds.patch"
+	epatch "3.9/0008-MINGW-add-srcdir-PC-to-CPPFLAGS.patch"
+	epatch "3.9/0009-MINGW-init-system-calls.patch"
+	epatch "3.9/0010-MINGW-build-in-windows-modules-winreg.patch"
+	epatch "3.9/0011-MINGW-determine-if-pwdmodule-should-be-used.patch"
+	epatch "3.9/0012-issue6672-v2-Add-Mingw-recognition-to-pyport.h-to-al.patch"
+	epatch "3.9/0013-MINGW-configure-for-shared-build.patch"
+	epatch "3.9/0014-MINGW-dynamic-loading-support.patch"
+	epatch "3.9/0015-MINGW-ignore-main-program-for-frozen-scripts.patch"
+	epatch "3.9/0016-MINGW-setup-_multiprocessing-module.patch"
+	epatch "3.9/0017-MINGW-setup-select-module.patch"
+	epatch "3.9/0018-MINGW-setup-_ctypes-module-with-system-libffi.patch"
+	epatch "3.9/0019-MINGW-defect-winsock2-and-setup-_socket-module.patch"
+	epatch "3.9/0020-MINGW-exclude-unix-only-modules.patch"
+	epatch "3.9/0021-MINGW-setup-msvcrt-and-_winapi-modules.patch"
+	epatch "3.9/0022-sysconfig-MINGW-build-extensions-with-GCC.patch"
+	epatch "3.9/0023-MINGW-setup-_ssl-module.patch"
+	epatch "3.9/0024-MINGW-generalization-of-posix-build-in-sysconfig.py.patch"
+	epatch "3.9/0025-MINGW-support-stdcall-without-underscore.patch"
+	epatch "3.9/0026-use-replace-instead-rename-to-avoid-failure-on-windo.patch"
+	epatch "3.9/0027-MINGW-customize-site.patch"
+	epatch "3.9/0028-add-python-config-sh.patch"
+	epatch "3.9/0029-cross-darwin-feature.patch"
+	epatch "3.9/0030-mingw-system-libffi.patch"
+	epatch "3.9/0031-msys-mingw-prefer-unix-sep-if-MSYSTEM.patch"
+	epatch "3.9/0032-mingw-use-posix-getpath.patch"
+	epatch "3.9/0033-mingw-add-ModuleFileName-dir-to-PATH.patch"
+	epatch "3.9/0034-mingw-add-BUILDIN_WIN32_MODULEs-time-msvcrt.patch"
+	epatch "3.9/0035-msys-cygwin-semi-native-build-sysconfig.patch"
+	epatch "3.9/0036-sysconfig-mingw-sysconfig-like-posix.patch"
+	epatch "3.9/0037-build-_winapi-earlier-so-we-can-use-it-in-distutils-.patch"
+	epatch "3.9/0038-cross-dont-add-multiarch-paths-if-cross-compiling.patch"
+	epatch "3.9/0039-mingw-use-backslashes-in-compileall-py.patch"
+	epatch "3.9/0040-msys-convert_path-fix-and-root-hack.patch"
+	epatch "3.9/0041-allow-static-tcltk.patch"
+	epatch "3.9/0042-mingw-pdcurses_ISPAD.patch"
+	epatch "3.9/0043-grammar-fixes.patch"
+	epatch "3.9/0044-builddir-fixes.patch"
+	epatch "3.9/0045-msys-monkeypatch-os-system-via-sh-exe.patch"
+	epatch "3.9/0046-msys-replace-slashes-used-in-io-redirection.patch"
+	epatch "3.9/0047-remove_path_max.default.patch"
+	epatch "3.9/0048-dont-link-with-gettext.patch"
+	epatch "3.9/0049-ctypes-python-dll.patch"
+	epatch "3.9/0050-gdbm-module-includes.patch"
+	epatch "3.9/0051-use-gnu_printf-in-format.patch"
+	epatch "3.9/0052-mingw-fix-ssl-dont-use-enum_certificates.patch"
+	epatch "3.9/0053-fix-using-dllhandle-and-winver-mingw.patch"
+	epatch "3.9/0054-Add-AMD64-to-sys-config-so-msvccompiler-get_build_ve.patch"
+	epatch "3.9/0055-MINGW-link-with-additional-library.patch"
+	epatch "3.9/0056-install-msilib.patch"
+	epatch "3.9/0057-fix-signal-module-build.patch"
+	epatch "3.9/0058-build-build-winconsoleio-and-_testconsole.patch"
+	epatch "3.9/0059-expose-sem_unlink.patch"
+	epatch "3.9/0060-cygpty-isatty.patch"
+	epatch "3.9/0061-disable-broken-gdbm-module.patch"
+	epatch "3.9/0062-build-link-win-resource-files-and-build-pythonw.patch"
+	epatch "3.9/0063-3.7-mpdec-mingw.patch"
+	epatch "3.9/0064-disable-readline.patch"
+	epatch "3.9/0065-fix-isselectable.patch"
+	epatch "3.9/0066-use-_wcsnicmp-instead-wcsncasecmp.patch"
+	epatch "3.9/0067-_xxsubinterpretersmodule.patch"
+	epatch "3.9/0068-sqlite3-module-defines.patch"
+	epatch "3.9/0069-configure.ac-fix-inet_pton-check.patch"
+	epatch "3.9/0070-set-venv-activate-path-unix.patch"
+	epatch "3.9/0071-venv-creation-fixes.patch"
+	epatch "3.9/0072-pass-gen-profile-ldflags.patch"
+	epatch "3.9/0073-pkg-config-windows-must-link-ext-with-python-lib.patch"
+	epatch "3.9/0074-importlib-bootstrap-path-sep.patch"
+	epatch "3.9/0075-pathlib-path-sep.patch"
+	epatch "3.9/0076-warnings-fixes.patch"
+	epatch "3.9/0077-fix-build-testinternalcapi.patch"
+	epatch "3.9/0078-extend-MS_WINDOWS-flag.patch"
+	epatch "3.9/0079-clang-arm64.patch"
+	epatch "3.9/0080-configure.ac-set-MINGW-stack-reserve.patch"
+	epatch "3.9/0081-Don-t-use-os.pathsep-to-find-EOF.patch"
+	epatch "3.9/0082-Fix-extension-suffix-for-c-extensions-on-mingw.patch"
+	epatch "3.9/0083-Change-the-get_platform-method-in-sysconfig.patch"
+	epatch "3.9/0084-distutils-compiler-customize-mingw-cygwin-compilers.patch"
+	epatch "3.9/0085-distutils-compiler-enable-new-dtags.patch"
+	epatch "3.9/0086-distutils-MINGW-build-extensions-with-GCC.patch"
+	epatch "3.9/0087-distutils-use-Mingw32CCompiler-as-default-compiler-f.patch"
+	epatch "3.9/0088-distutils-find-import-library.patch"
+	epatch "3.9/0089-distutils-avoid-circular-dependency-from-time-module.patch"
+	epatch "3.9/0090-distutils-generalization-of-posix-build-in-distutils.patch"
+	epatch "3.9/0091-distutils-mingw-sysconfig-like-posix.patch"
+	epatch "3.9/0092-distutils-get_versions-fixes.patch"
+	epatch "3.9/0093-distutils-install-layout-as-posix.patch"
+	epatch "3.9/0094-distutils-msys-convert_path-fix-and-root-hack.patch"
+	epatch "3.9/0095-distutils-mingw-build-optimized-ext.patch"
+	epatch "3.9/0096-distutils-cygwinccompiler-dont-strip-modules-if-pyde.patch"
+	epatch "3.9/0097-distutils-get-compilers-from-env-vars.patch"
+	epatch "3.9/0098-distutils-add-windmc-to-cygwinccompiler.patch"
+	epatch "3.9/0099-distutils-fix-msvc9-import.patch"
+	epatch "3.9/0100-distutils-mingw-add-LIBPL-to-library-dirs.patch"
+	epatch "3.9/0101-distutils-Change-the-get_platform-method-in-distutil.patch"
+	epatch "3.9/0102-build-Fix-ncursesw-include-lookup.patch"
+	epatch "3.9/0103-tests-fix-test_bytes.patch"
+	epatch "3.9/0104-time-fix-strftime-not-raising-for-invalid-year-value.patch"
+	epatch "3.9/0105-ctypes-find_library-c-should-return-None-with-ucrt.patch"
+	epatch "3.9/0106-build-Disable-checks-for-dlopen-dlfcn.patch"
+	epatch "3.9/0107-Fix-install-location-of-the-import-library.patch"
+	epatch "3.9/0108-Set-MSYS2_ARG_CONV_EXCL-for-the-shared-Python-module.patch"
+	epatch "3.9/0109-build-Integrate-venvlauncher-build-installation-into.patch"
+	epatch "3.9/0110-configure.ac-set-_WIN32_WINNT-version.patch"
+	epatch "3.9/0111-configure.ac-don-t-check-for-clock_-functions.patch"
+	epatch "3.9/0112-expanduser-normpath-paths-coming-from-env-vars.patch"
+	epatch "3.9/0113-Add-support-for-Windows-7-Python-3.9.patch"
+	epatch "3.9/0114-Commit-regenerated-importlib.patch"
+	epatch "3.9/0115-CI-test-the-build-and-add-some-mingw-specific-tests.patch"
+	epatch "3.9/0116-decimal-backport-build-fixes.patch"
+	epatch "3.9/0117-smoketests-test-that-_decimal-exists.patch"
+
+	eautoreconf
+}
+
+src_configure()
+{
+	econf --enable-shared \
+		--with-system-ffi --with-system-expat \
+		--without-ensurepip --without-c-locale-coercion \
+		--enable-loadable-sqlite-extensions \
+		--enable-optimizations
+}
+
+src_install()
+{
+	mkdir -p "${INSTDIR}"
+	local PREFIX_WIN=`posix_w32path ${PREFIX}`
+	local PREFIX_WIN_s="${PREFIX_WIN/\//\\\\}"
+
+	make -j1 install DESTDIR="${INSTDIR}" || die "install failed!"
+
+	# gdb pretty printers for debugging Python itself; to use:
+	# python
+	# sys.path.append('C:/msys64/mingw64/share/gdb/python3')
+	# import python_gdb
+	# reload(python_gdb)
+	# end
+	[[ -d "${INSTDIR}${PREFIX}"/share/gdb/python3/ ]] || mkdir -p "${INSTDIR}${PREFIX}"/share/gdb/python3/
+	cp -f python.exe-gdb.py "${INSTDIR}${PREFIX}"/share/gdb/python3/python_gdb.py
+
+	# some useful "stuff"
+	install -dm755 "${INSTDIR}${PREFIX}"/lib/python${_pybasever}/Tools/{i18n,scripts}
+	install -m755 "${WORKDIR}/${SOURCES_DIR}"/Tools/i18n/{msgfmt,pygettext}.py "${INSTDIR}${PREFIX}"/lib/python${_pybasever}/Tools/i18n/
+	install -m755 "${WORKDIR}/${SOURCES_DIR}"/Tools/scripts/{README,*py} "${INSTDIR}${PREFIX}"/lib/python${_pybasever}/Tools/scripts/
+
+	# fixup shebangs
+	for fscripts in 2to3 2to3-${_pybasever} idle3 idle${_pybasever} pydoc3 pydoc${_pybasever}; do
+		sed -i "s|${PREFIX_WIN_s}/bin/python${_pybasever}.exe|/usr/bin/env python${_pybasever}.exe|g" \
+			"${INSTDIR}${PREFIX}"/bin/${fscripts}
+	done
+
+	# default aliases for all scripts/binaries
+	# Default names are aliases for Python now
+	cp "${INSTDIR}${PREFIX}"/bin/python3.exe "${INSTDIR}${PREFIX}"/bin/python.exe
+	cp "${INSTDIR}${PREFIX}"/bin/python3w.exe "${INSTDIR}${PREFIX}"/bin/pythonw.exe
+	cp "${INSTDIR}${PREFIX}"/bin/python3-config "${INSTDIR}${PREFIX}"/bin/python-config
+	cp "${INSTDIR}${PREFIX}"/bin/idle3 "${INSTDIR}${PREFIX}"/bin/idle
+	cp "${INSTDIR}${PREFIX}"/bin/pydoc3 "${INSTDIR}${PREFIX}"/bin/pydoc
+}
+
+pkg_postinst()
+{
+	# For instalation from binary.
+	local PREFIX_WIN=`posix_w32path ${PREFIX}`
+
+	# Fix up two instances of MSYS2 paths in python-config.sh in-case the final consumer of the results are native executables.
+	sed -e "s|^prefix=.*$|prefix=\"${PREFIX_WIN}\"|" \
+		-i "${PREFIX}"/bin/python${_pybasever}-config \
+		-i "${PREFIX}"/bin/python3-config \
+		-i "${PREFIX}"/bin/python-config
+}
