@@ -1,0 +1,67 @@
+diff -urBb gdb-11.1-orig/bfd/Makefile.in gdb-11.1/bfd/Makefile.in
+--- gdb-11.1-orig/bfd/Makefile.in	2021-07-03 21:41:09.000000000 +0400
++++ gdb-11.1/bfd/Makefile.in	2021-10-13 16:12:31.211418700 +0400
+@@ -1747,11 +1747,10 @@
+ 	for dir in "$(DESTDIR)$(bfdlibdir)" "$(DESTDIR)$(bfdincludedir)"; do \
+ 	  test -z "$$dir" || $(MKDIR_P) "$$dir"; \
+ 	done
+-install: $(BUILT_SOURCES)
+-	$(MAKE) $(AM_MAKEFLAGS) install-recursive
+-install-exec: install-exec-recursive
+-install-data: install-data-recursive
+-uninstall: uninstall-recursive
++install:
++install-exec:
++install-data:
++uninstall:
+ 
+ install-am: all-am
+ 	@$(MAKE) $(AM_MAKEFLAGS) install-exec-am install-data-am
+diff -urBb gdb-11.1-orig/libctf/Makefile.in gdb-11.1/libctf/Makefile.in
+--- gdb-11.1-orig/libctf/Makefile.in	2021-09-13 05:32:09.000000000 +0400
++++ gdb-11.1/libctf/Makefile.in	2021-10-13 16:14:50.489733400 +0400
+@@ -1236,10 +1236,10 @@
+ 	for dir in "$(DESTDIR)$(libdir)" "$(DESTDIR)$(includedir)"; do \
+ 	  test -z "$$dir" || $(MKDIR_P) "$$dir"; \
+ 	done
+-install: install-am
+-install-exec: install-exec-am
+-install-data: install-data-am
+-uninstall: uninstall-am
++install:
++install-exec:
++install-data:
++uninstall:
+ 
+ install-am: all-am
+ 	@$(MAKE) $(AM_MAKEFLAGS) install-exec-am install-data-am
+diff -urBb gdb-11.1-orig/libiberty/Makefile.in gdb-11.1/libiberty/Makefile.in
+--- gdb-11.1-orig/libiberty/Makefile.in	2021-09-13 05:32:09.000000000 +0400
++++ gdb-11.1/libiberty/Makefile.in	2021-10-13 16:12:31.221784800 +0400
+@@ -358,7 +358,7 @@
+ @MAINT@	echo stamp > stamp-functions
+ 
+ INSTALL_DEST = @INSTALL_DEST@
+-install: install_to_$(INSTALL_DEST) install-subdir
++install: install-subdir
+ install-strip: install
+ 
+ .PHONY: install install-strip
+diff -urBb gdb-11.1-orig/opcodes/Makefile.in gdb-11.1/opcodes/Makefile.in
+--- gdb-11.1-orig/opcodes/Makefile.in	2021-07-03 21:41:11.000000000 +0400
++++ gdb-11.1/opcodes/Makefile.in	2021-10-13 16:12:31.223763500 +0400
+@@ -1246,10 +1246,10 @@
+ 	for dir in "$(DESTDIR)$(bfdlibdir)" "$(DESTDIR)$(bfdincludedir)"; do \
+ 	  test -z "$$dir" || $(MKDIR_P) "$$dir"; \
+ 	done
+-install: install-recursive
+-install-exec: install-exec-recursive
+-install-data: install-data-recursive
+-uninstall: uninstall-recursive
++install:
++install-exec:
++install-data:
++uninstall:
+ 
+ install-am: all-am
+ 	@$(MAKE) $(AM_MAKEFLAGS) install-exec-am install-data-am
