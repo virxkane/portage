@@ -1,0 +1,87 @@
+# Copyright 2019-2021 Chernov A.A.
+# Distributed under the terms of the GNU General Public License v2
+
+DESCRIPTION="GNU debugger (avr8-toolchain's part)"
+
+HOMEPAGE="http://sources.redhat.com/gdb/"
+
+LICENSE="GPL-2 LGPL-2"
+
+RDEPEND="dev-libs/expat
+	dev-util/mpfr
+	sys-libs/zlib
+	dev-lang/python"
+
+MY_PN="gdb"
+MY_P="${MY_PN}-${PV}"
+
+SRC_URI="http://ftp.gnu.org/gnu/${MY_PN}/${MY_P}.tar.xz"
+
+BUILD_IN_SEPARATE_DIR=yes
+
+SOURCES_DIR="${MY_P}"
+
+PYTHON_BUILDDIR="${WORKDIR}/${PF}-build_python"
+PYTHON_INSTDIR="${WORKDIR}/image_python"
+
+src_prepare()
+{
+	epatch "${MY_P}-no_install_libs.patch"
+}
+
+src_configure()
+{
+	# without python
+	econf --target=arm-none-eabi \
+		--disable-werror \
+		--disable-nls --disable-sim \
+		--disable-gas --disable-binutils \
+		--disable-ld --disable-gprof \
+		--with-lzma=no --with-expat \
+		--disable-source-highlight --with-static-standard-libraries \
+		--with-system-zlib --with-python=no \
+		--with-gdb-datadir="${PREFIX}/arm-none-eabi/share/gdb"
+
+	# with python (gdb-py)
+	mkdir "${PYTHON_BUILDDIR}" || die "Can't create build dir for python build!"
+	cd "${PYTHON_BUILDDIR}" || die
+	econf --target=arm-none-eabi \
+		--disable-werror \
+		--disable-nls --disable-sim \
+		--disable-gas --disable-binutils \
+		--disable-ld --disable-gprof \
+		--with-lzma=no --with-expat \
+		--disable-source-highlight --with-static-standard-libraries \
+		--with-system-zlib --with-python=yes \
+		--with-gdb-datadir="${PREFIX}/arm-none-eabi/share/gdb" \
+		--program-prefix=arm-none-eabi- --program-suffix=-py
+	# return to main build dir
+	cd "${WORKDIR}/${PF}-build" || die "chdir failed!"
+}
+
+src_compile()
+{
+	# build main (without python)
+	emake || die "make failed!"
+
+	# build gdb-py
+	emake -C "${PYTHON_BUILDDIR}" || die "make gdb-py failed!"
+}
+
+src_install()
+{
+	emake_install
+	# Remove files conflicting with sys-devel/gdb
+	rm -f "${INSTDIR}${PREFIX}/include/gdb/jit-reader.h"
+	rm -rf "${INSTDIR}${PREFIX}/share/info/"
+
+	# install gdb-py
+	cd "${PYTHON_BUILDDIR}" || die
+	emake_install DESTDIR="${PYTHON_INSTDIR}" || die "make install failed"
+
+	# copy gdb-py
+	cp -vf "${PYTHON_INSTDIR}/${PREFIX}/bin/arm-none-eabi-gdb-py.exe" \
+		"${INSTDIR}${PREFIX}/bin/"
+	cp -vrf "${PYTHON_INSTDIR}/${PREFIX}/arm-none-eabi/share/gdb/python/" \
+		"${INSTDIR}${PREFIX}/arm-none-eabi/share/gdb/"
+}
