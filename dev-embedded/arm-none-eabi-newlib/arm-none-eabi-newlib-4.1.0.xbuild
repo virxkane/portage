@@ -1,0 +1,112 @@
+# Copyright 2019-2021 Chernov A.A.
+# This is a part of mingw-portage project: 
+# http://sourceforge.net/projects/mingwportage/
+# Distributed under the terms of the GNU General Public License v2
+
+DESCRIPTION="Newlib is a C library intended for use on embedded systems"
+
+HOMEPAGE="https://sourceware.org/newlib/"
+
+RESTRICT="strip"
+
+MY_PN="newlib"
+MY_P="${MY_PN}-${PV}"
+
+SRC_URI="ftp://sourceware.org/pub/newlib/${MY_P}.tar.gz"
+
+LICENSE="NEWLIB LIBGLOSS GPL-2"
+
+DEPEND="dev-embedded/arm-none-eabi-binutils
+		dev-embedded/arm-none-eabi-gcc || dev-embedded/arm-none-eabi-gcc-stage1"
+
+SOURCES_DIR="${MY_P}"
+BUILD_IN_SEPARATE_DIR=yes
+
+CFLAGS_FULL="-O2 -g0 -pipe -ffunction-sections -fdata-sections"
+CFLAGS_NANO="-Os -g0 -pipe -ffunction-sections -fdata-sections"
+
+NANO_BUILDDIR="${WORKDIR}/build_nano"
+NANO_INSTDIR="${WORKDIR}/image_nano"
+
+src_configure()
+{
+	# C compiler options
+	export CFLAGS_FOR_TARGET="${CFLAGS_FULL}"
+	# C++ compiler options
+	export CXXFLAGS_FOR_TARGET="${CFLAGS_FOR_TARGET}"
+	# assembler options
+	export CCASFLAGS="${CFLAGS_FULL}"
+	econf --target=arm-none-eabi \
+		--disable-newlib-mb \
+		--disable-newlib-supplied-syscalls \
+		--enable-newlib-multithread \
+		--enable-newlib-io-long-long \
+		--enable-newlib-io-c99-formats \
+		--enable-newlib-register-fini \
+		--enable-newlib-retargetable-locking \
+		--disable-newlib-supplied-syscalls \
+		--disable-nls
+
+	# configure newlib-nano
+	einfo "Configure newlib-nano..."
+	mkdir "${NANO_BUILDDIR}" || die "Can't create build dir for nano build!"
+	cd "${NANO_BUILDDIR}" || die
+	export CFLAGS_FOR_TARGET="${CFLAGS_NANO}"
+	export CXXFLAGS_FOR_TARGET="${CFLAGS_FOR_TARGET}"
+	export CCASFLAGS="${CFLAGS_NANO}"
+	econf --target=arm-none-eabi \
+		--disable-newlib-supplied-syscalls \
+		--enable-newlib-reent-small \
+		--enable-newlib-retargetable-locking \
+		--disable-newlib-fvwrite-in-streamio \
+		--disable-newlib-fseek-optimization \
+		--disable-newlib-wide-orient \
+		--enable-newlib-nano-malloc \
+		--disable-newlib-unbuf-stream-opt \
+		--enable-lite-exit \
+		--enable-newlib-global-atexit \
+		--enable-newlib-nano-formatted-io \
+		--disable-nls
+	# return to main build dir
+	cd "${WORKDIR}/${PF}-build" || die "chdir failed!"
+}
+
+src_compile()
+{
+	# build main
+	export CFLAGS_FOR_TARGET="${CFLAGS_FULL}"
+	export CXXFLAGS_FOR_TARGET="${CFLAGS_FOR_TARGET}"
+	export CCASFLAGS="${CFLAGS_FULL}"
+	emake || die "make failed!"
+
+	# build newlib-nano
+	export CFLAGS_FOR_TARGET="${CFLAGS_NANO}"
+	export CXXFLAGS_FOR_TARGET="${CFLAGS_FOR_TARGET}"
+	export CCASFLAGS="${CFLAGS_NANO}"
+	emake -C "${NANO_BUILDDIR}" || die "make newlib-nano failed!"
+}
+
+src_install()
+{
+	emake_install || die "make install failed"
+	# strip libgcc
+	local _arm_strip=arm-none-eabi-strip.exe
+	find "${INSTDIR}${PREFIX}/arm-none-eabi/lib/" -iname '*.a' -execdir ${_arm_strip} --strip-debug {} +
+
+	# install newlib-nano
+	cd "${NANO_BUILDDIR}" || die
+	emake_install DESTDIR="${NANO_INSTDIR}" || die "make install failed"
+	local nanolibfiles=
+	local nanofile=
+	local dstnanofile=
+	nanolibfiles=$(find "${NANO_INSTDIR}" -regex ".*/lib\(c\|g\|rdimon\)\.a" -print)
+	for f in ${nanolibfiles}; do
+		nanofile=`echo "$f" | sed -e "s|^\${NANO_INSTDIR}\(.*\)$|\1|"`
+		dstnanofile=`echo "${nanofile}" | sed -e 's/^\(.*\)\.a$/\1_nano\.a/'`
+		mv -fv "${f}" "${INSTDIR}/${dstnanofile}" || die
+	done
+	# Move newlib-nano's version of newlib.h to newlib-nano/newlib.h
+	mkdir -p "${INSTDIR}${PREFIX}/arm-none-eabi/include/newlib-nano" || die
+	mv -fv "${NANO_INSTDIR}${PREFIX}/arm-none-eabi/include/newlib.h" \
+		"${INSTDIR}${PREFIX}/arm-none-eabi/include/newlib-nano" || die 
+}
