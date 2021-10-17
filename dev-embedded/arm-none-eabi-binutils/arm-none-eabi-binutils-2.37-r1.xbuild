@@ -1,7 +1,7 @@
 # Copyright 2019-2021 Chernov A.A.
 # Distributed under the terms of the GNU General Public License v2
 
-DESCRIPTION="Tools necessary to build programs (avr8-toolchain's part)"
+DESCRIPTION="Tools necessary to build programs (arm-none-eabi toolchain's part)"
 
 HOMEPAGE="http://www.gnu.org/software/binutils/"
 

@@ -1,7 +1,7 @@
 # Copyright 2019-2021 Chernov A.A.
 # Distributed under the terms of the GNU General Public License v2
 
-DESCRIPTION="GNU debugger (avr8-toolchain's part)"
+DESCRIPTION="GNU debugger (arm-none-eabi toolchain's part)"
 
 HOMEPAGE="http://sources.redhat.com/gdb/"
 
