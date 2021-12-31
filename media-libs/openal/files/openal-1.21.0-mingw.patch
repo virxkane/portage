@@ -1,0 +1,12 @@
+diff -urBb openal-soft-1.21.0-orig/CMakeLists.txt openal-soft-1.21.0/CMakeLists.txt
+--- openal-soft-1.21.0-orig/CMakeLists.txt	2020-11-04 14:00:35.000000000 +0400
++++ openal-soft-1.21.0/CMakeLists.txt	2021-01-23 23:47:18.981885000 +0400
+@@ -891,7 +891,7 @@
+     # Check MMSystem backend
+     check_include_files("windows.h;mmsystem.h" HAVE_MMSYSTEM_H)
+     find_library(WINMM_LIBRARY NAMES winmm
+-        PATHS ${WINSDK_LIB_DIRS})
++        PATHS ${WINSDK_LIB_DIRS} ${DXSDK_DIR}/lib)
+     if(HAVE_MMSYSTEM_H AND WINMM_LIBRARY)
+         option(ALSOFT_BACKEND_WINMM "Enable Windows Multimedia backend" ON)
+         if(ALSOFT_BACKEND_WINMM)
