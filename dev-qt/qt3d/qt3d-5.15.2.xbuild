@@ -1,9 +1,9 @@
-# Copyright 2013-2020 Chernov A.A.
+# Copyright 2013-2021 Chernov A.A.
 # This is a part of mingw-portage project: 
 # http://sourceforge.net/projects/mingwportage/
 # Distributed under the terms of the GNU General Public License v2
 
-DESCRIPTION="Qt toolkit (Tools module)"
+DESCRIPTION="Qt toolkit (3D module)"
 
 HOMEPAGE="http://www.qt.io/"
 
@@ -11,14 +11,13 @@ LICENSE="LGPL-2.1 GPL-3"
 
 RESTRICT="strip"
 
-# TODO: add libclang for qdoc module
 RDEPEND=">=dev-qt/qtbase-${PV}
 		>=dev-qt/qtxmlpatterns-${PV}
 		>=dev-qt/qtdeclarative-${PV}
-		>=dev-qt/qtactiveqt-${PV}"
+		>=dev-qt/qtimageformats-${PV}"
 
 MY_P=${PN}-everywhere-src-${PV}
-SRC_URI="http://download.qt.io/official_releases/qt/5.14/${PV}/submodules/${MY_P}.tar.xz"
+SRC_URI="http://download.qt.io/official_releases/qt/5.15/${PV}/submodules/${MY_P}.tar.xz"
 
 SOURCES_DIR="${MY_P}"
 

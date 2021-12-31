@@ -1,0 +1,12 @@
+diff -urBb qtmultimedia-everywhere-src-5.15.2-orig/src/plugins/plugins.pro qtmultimedia-everywhere-src-5.15.2/src/plugins/plugins.pro
+--- qtmultimedia-everywhere-src-5.15.2-orig/src/plugins/plugins.pro	2020-10-27 12:02:12.000000000 +0400
++++ qtmultimedia-everywhere-src-5.15.2/src/plugins/plugins.pro	2022-01-01 00:21:57.473630400 +0400
+@@ -35,7 +35,7 @@
+                windowsaudio
+ 
+     qtConfig(directshow): SUBDIRS += directshow
+-    qtConfig(wmf): SUBDIRS += wmf
++    #qtConfig(wmf): SUBDIRS += wmf
+ }
+ 
+ 
