@@ -3,8 +3,6 @@
 # http://sourceforge.net/projects/mingwportage/
 # Distributed under the terms of the GNU General Public License v2
 
-PATH="${PERL_PATH}/bin":${PATH}
-
 qt5_module_src_configure()
 {
 	qmake
