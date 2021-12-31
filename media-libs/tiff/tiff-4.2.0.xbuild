@@ -1,0 +1,23 @@
+# Copyright 2010-2021 Chernov A.A.
+# This is a part of mingw-portage project: 
+# http://sourceforge.net/projects/mingwportage/
+# Distributed under the terms of the GNU General Public License v2
+
+DESCRIPTION="Library for manipulation of TIFF (Tag Image File Format) images"
+
+HOMEPAGE="http://www.remotesensing.org/libtiff/"
+
+LICENSE="as-is"
+
+# media-libs/freeglut
+RDEPEND="sys-libs/zlib
+		meta-virtual/jpeg
+		meta-virtual/pthreads"
+
+SRC_URI="http://download.osgeo.org/libtiff/${P}.tar.gz"
+
+src_configure()
+{
+	econf --enable-shared --enable-static \
+		--enable-zlib --enable-jpeg --enable-cxx
+}
