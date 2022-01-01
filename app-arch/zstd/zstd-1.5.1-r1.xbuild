@@ -1,0 +1,52 @@
+# Copyright 2022 Chernov A.A.
+# This is a part of mingw-portage project: 
+# http://sourceforge.net/projects/mingwportage/
+# Distributed under the terms of the GNU General Public License v2
+
+DESCRIPTION="zstd fast compression library"
+
+HOMEPAGE="https://facebook.github.io/zstd/"
+
+LICENSE="BSD GPL-2"
+
+SRC_URI="https://github.com/facebook/zstd/releases/download/v${PV}/${P}.tar.gz"
+
+DEPEND="meta-virtual/pkg-config
+	sys-libs/zlib
+	app-arch/xz-utils"
+RDEPEND="meta-virtual/pthreads"
+
+# We not use cmake to resolve circular dependencies.
+#USE_CMAKE=yes
+
+src_prepare()
+{
+	epatch "${P}-autotools-minimal.patch"
+	mkdir m4 || die
+	eautoreconf
+}
+
+src_configure()
+{
+	local econfp=
+	case ${CHOST} in
+	x86_64-*)
+		econfp="--enable-amd64-asm-decompressor"
+		;;
+	*)
+		econfp="--disable-amd64-asm-decompressor"
+		;;
+	esac
+
+	econf --enable-shared --enable-static \
+		--with-zlib --with-liblzma \
+		--enable-compression \
+		--enable-decompression \
+		--enable-dictbuilder \
+		--disable-deprecated \
+		--enable-multithreading \
+		--with-zlib \
+		--with-liblzma \
+		--without-liblz4 \
+		${econfp}
+}
