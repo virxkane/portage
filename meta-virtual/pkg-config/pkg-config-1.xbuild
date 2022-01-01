@@ -1,0 +1,12 @@
+# Copyright 2022 Chernov A.A.
+# This is a part of mingw-portage project:
+# http://sourceforge.net/projects/mingwportage/
+# Distributed under the terms of the GNU General Public License v2
+
+DESCRIPTION="Virtual for the pkg-config implementation"
+
+SRC_URI=""
+
+LICENSE=""
+
+RDEPEND=">=dev-util/pkgconf-1.8.0 || >=dev-util/pkg-config-0.29.2-r2"
