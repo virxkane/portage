@@ -14,7 +14,7 @@ LICENSE="GPL-3 LGPL-2"
 
 # circular dependencies:
 #   dev-libs/glib
-DEPEND="dev-util/pkg-config"
+DEPEND="meta-virtual/pkg-config"
 RDEPEND=">=meta-virtual/pthreads-2
 		sys-devel/libiconv
 		dev-libs/libxml2"

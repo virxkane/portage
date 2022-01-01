@@ -8,9 +8,9 @@ HOMEPAGE="http://wxsvg.sourceforge.net/"
 LICENSE="wxWinLL-3"
 
 # media-video/ffmpeg
-DEPEND="dev-util/pkg-config"
+DEPEND="meta-virtual/pkg-config"
 RDEPEND=">=gui-libs/wxWidgets-2.6.3
-		dev-util/pkg-config
+		meta-virtual/pkg-config
 		gui-libs/cairo
 		gui-libs/pango
 		dev-libs/expat"

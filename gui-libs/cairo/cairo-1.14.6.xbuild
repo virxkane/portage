@@ -13,7 +13,7 @@ LICENSE="LGPL-2"
 # gui-libs/gtk+
 # app-text/poppler
 
-DEPEND="dev-util/pkg-config"
+DEPEND="meta-virtual/pkg-config"
 RDEPEND="sys-libs/zlib
 		media-libs/libpng
 		media-libs/freetype

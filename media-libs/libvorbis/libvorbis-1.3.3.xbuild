@@ -7,7 +7,7 @@ HOMEPAGE="http://xiph.org/vorbis"
 
 LICENSE="BSD"
 
-DEPEND="dev-util/pkg-config"
+DEPEND="meta-virtual/pkg-config"
 RDEPEND="media-libs/libogg
 		meta-virtual/pthreads"
 

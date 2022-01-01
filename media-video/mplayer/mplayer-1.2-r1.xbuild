@@ -17,7 +17,7 @@ LICENSE="GPL-2"
 # gawk (msys)
 
 DEPEND="dev-lang/yasm
-		dev-util/pkg-config"
+		meta-virtual/pkg-config"
 RDEPEND="sys-libs/zlib
 		app-arch/libbz2
 		sys-devel/libiconv

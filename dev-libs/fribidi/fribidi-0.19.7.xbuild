@@ -11,7 +11,7 @@ SRC_URI="http://fribidi.org/download/${P}.tar.bz2"
 
 LICENSE="LGPL-2.1"
 
-DEPEND="dev-util/pkg-config"
+DEPEND="meta-virtual/pkg-config"
 #RDEPEND=">=dev-libs/glib-2.42"
 
 src_prepare()

@@ -7,7 +7,7 @@ HOMEPAGE="http://poppler.freedesktop.org/"
 
 LICENSE="GPL-2"
 
-DEPEND="dev-util/pkg-config"
+DEPEND="meta-virtual/pkg-config"
 
 # TODO: add >=gui-libs/gtk+-3.8.0
 # TODO: add >=dev-qt/qtbase

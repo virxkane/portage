@@ -11,7 +11,7 @@ SRC_URI="https://ftp.gnu.org/gnu/libidn/${P}.tar.gz"
 
 LICENSE="GPL-2 LGPL-3"
 
-DEPEND="dev-util/pkg-config"
+DEPEND="meta-virtual/pkg-config"
 RDEPEND="dev-libs/libunistring
 		sys-devel/libiconv
 		sys-devel/gettext"

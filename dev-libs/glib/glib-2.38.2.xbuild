@@ -14,7 +14,7 @@ RDEPEND="sys-devel/gettext
 		sys-libs/zlib
 		>=dev-libs/libffi-3.0.0
 		dev-lang/python-bin"
-DEPEND="dev-util/pkg-config
+DEPEND="meta-virtual/pkg-config
 		sys-devel/libiconv
 		dev-libs/libpcre"
 

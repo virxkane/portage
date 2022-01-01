@@ -7,7 +7,7 @@ HOMEPAGE="http://ufraw.sourceforge.net/"
 
 LICENSE="GPL-2"
 
-DEPEND="dev-util/pkg-config"
+DEPEND="meta-virtual/pkg-config"
 RDEPEND="gui-libs/gtk+
 		media-gfx/gtkimageview
 		media-libs/lcms

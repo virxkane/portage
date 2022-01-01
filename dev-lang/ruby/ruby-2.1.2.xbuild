@@ -10,7 +10,7 @@ SRC_URI="http://cache.ruby-lang.org/pub/ruby/2.1/${P}.tar.bz2"
 LICENSE="Ruby-BSD || BSD-2"
 
 # TODO: tcl/tk, readline/libedit
-DEPEND="dev-util/pkg-config"
+DEPEND="meta-virtual/pkg-config"
 RDEPEND="dev-libs/gmp
 		dev-libs/openssl
 		sys-libs/zlib"

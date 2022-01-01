@@ -9,7 +9,7 @@ HOMEPAGE="http://www.bzip.org/"
 
 LICENSE="BZIP2"
 
-DEPEND="dev-util/pkg-config"
+DEPEND="meta-virtual/pkg-config"
 
 MY_PN="bzip2"
 MY_P=${MY_PN}-${PV}

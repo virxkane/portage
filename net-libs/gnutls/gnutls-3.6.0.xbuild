@@ -11,7 +11,7 @@ SRC_URI="https://www.gnupg.org/ftp/gcrypt/gnutls/v3.6/${P}.tar.xz"
 
 LICENSE="GPL-3 LGPL-2.1"
 
-DEPEND="dev-util/pkg-config"
+DEPEND="meta-virtual/pkg-config"
 RDEPEND="dev-libs/libtasn1
 		dev-libs/libunistring
 		app-crypt/p11-kit

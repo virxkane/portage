@@ -8,7 +8,7 @@ HOMEPAGE="http://ffmpeg.org/"
 LICENSE="GPL-2"
 
 DEPEND="dev-lang/yasm
-		dev-util/pkg-config"
+		meta-virtual/pkg-config"
 RDEPEND="sys-devel/libiconv
 		dev-libs/winpthreads
 		app-arch/libbz2

@@ -12,7 +12,7 @@ LICENSE="LGPL-2 FTL"
 #   external dependencies:
 # perl (msys)
 
-DEPEND="dev-util/pkg-config"
+DEPEND="meta-virtual/pkg-config"
 RDEPEND=">=dev-libs/glib-2.33.12
 		>=dev-libs/fribidi-0.19.7
 		>=gui-libs/cairo-1.12.10

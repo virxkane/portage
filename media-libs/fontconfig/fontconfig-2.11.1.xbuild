@@ -7,7 +7,7 @@ HOMEPAGE="http://www.fontconfig.org/"
 
 LICENSE="MIT"
 
-DEPEND="dev-util/pkg-config"
+DEPEND="meta-virtual/pkg-config"
 RDEPEND="media-libs/freetype
 		dev-libs/expat
 		sys-devel/libiconv"

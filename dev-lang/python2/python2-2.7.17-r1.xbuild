@@ -6,7 +6,7 @@ HOMEPAGE="http://www.python.org/"
 
 LICENSE="PSF-2"
 
-DEPEND="dev-util/pkg-config"
+DEPEND="meta-virtual/pkg-config"
 RDEPEND="dev-libs/libffi
 		dev-libs/expat
 		dev-db/sqlite

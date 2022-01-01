@@ -32,7 +32,7 @@ RDEPEND=">=dev-libs/glib-2.43
 DEPEND=">=dev-util/intltool-0.40.1
 		>=dev-lang/perl-5.12
 		dev-perl/XML-Parser
-		dev-util/pkg-config"
+		meta-virtual/pkg-config"
 
 SRC_URI="http://download.gimp.org/mirror/pub/gimp/v2.9/${P}.tar.bz2"
 

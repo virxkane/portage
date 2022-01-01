@@ -7,7 +7,7 @@ HOMEPAGE="http://curl.haxx.se/"
 
 LICENSE="MIT"
 
-DEPEND="dev-util/pkg-config"
+DEPEND="meta-virtual/pkg-config"
 RDEPEND="sys-libs/zlib
 		dev-libs/openssl"
 

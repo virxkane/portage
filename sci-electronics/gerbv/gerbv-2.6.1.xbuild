@@ -11,7 +11,7 @@ SRC_URI="http://downloads.sourceforge.net/${PN}/${P}.tar.gz"
 
 LICENSE="GPL-2"
 
-DEPEND="dev-util/pkg-config"
+DEPEND="meta-virtual/pkg-config"
 RDEPEND="sys-devel/gettext
 		gui-libs/gtk+
 		gui-libs/cairo"

@@ -11,7 +11,7 @@ SRC_URI="http://downloads.sourceforge.net/${PN}/${P}.tar.bz2"
 
 LICENSE="LGPL-2.1"
 
-DEPEND="dev-util/pkg-config"
+DEPEND="meta-virtual/pkg-config"
 RDEPEND="dev-libs/libusb
 		!dev-libs/libusb-win32"
 

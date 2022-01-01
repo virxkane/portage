@@ -11,7 +11,7 @@ SRC_URI="https://dist.libuv.org/dist/v${PV}/libuv-v${PV}.tar.gz"
 
 LICENSE="BSD BSD-2 ISC MIT"
 
-DEPEND="dev-util/pkg-config"
+DEPEND="meta-virtual/pkg-config"
 
 SOURCES_DIR="${PN}-v${PV}"
 

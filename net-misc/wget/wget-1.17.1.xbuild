@@ -12,7 +12,7 @@ LICENSE="GPL-3"
 #   external dependencies:
 # perl (msys)
 
-DEPEND="dev-util/pkg-config"
+DEPEND="meta-virtual/pkg-config"
 RDEPEND="sys-libs/zlib
 	dev-libs/openssl
 	dev-libs/libpcre"

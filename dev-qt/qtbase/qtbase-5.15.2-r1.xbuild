@@ -12,7 +12,7 @@ LICENSE="LGPL-2.1 GPL-3"
 RESTRICT="strip"
 
 DEPEND=">=dev-util/qt5-pathfix-0.1.2
-		dev-util/pkg-config"
+		meta-virtual/pkg-config"
 RDEPEND="sys-libs/zlib
 		dev-libs/icu
 		dev-libs/libpcre2

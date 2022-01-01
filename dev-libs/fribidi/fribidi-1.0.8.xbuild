@@ -11,7 +11,7 @@ SRC_URI="https://github.com/fribidi/fribidi/releases/download/v${PV}/${P}.tar.bz
 
 LICENSE="LGPL-2.1"
 
-DEPEND="dev-util/pkg-config"
+DEPEND="meta-virtual/pkg-config"
 
 src_prepare()
 {

@@ -6,7 +6,7 @@ HOMEPAGE="http://www.python.org/"
 
 LICENSE="PSF-2"
 
-DEPEND="dev-util/pkg-config"
+DEPEND="meta-virtual/pkg-config"
 RDEPEND="!<dev-lang/python2-2.7.17-r1
 		dev-libs/libffi
 		dev-libs/expat

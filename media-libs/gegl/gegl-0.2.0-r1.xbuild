@@ -16,7 +16,7 @@ DEPEND="dev-lang/python
 		dev-lang/perl
 		dev-perl/XML-Parser
 		dev-util/intltool
-		dev-util/pkg-config
+		meta-virtual/pkg-config
 		sys-devel/gettext"
 RDEPEND=">=media-libs/babl-0.1.10
 		>=dev-libs/glib-2.28.1

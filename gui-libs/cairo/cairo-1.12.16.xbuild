@@ -12,7 +12,7 @@ LICENSE="LGPL-2"
 # app-text/poppler
 
 # media-libs/opengl-ext
-DEPEND="dev-util/pkg-config"
+DEPEND="meta-virtual/pkg-config"
 RDEPEND="sys-libs/zlib
 		media-libs/libpng
 		media-libs/freetype

@@ -13,7 +13,7 @@ RESTRICT="strip"
 
 DEPEND=">=dev-util/qt5-pathfix-0.1.2
 		dev-lang/perl
-		dev-util/pkg-config
+		meta-virtual/pkg-config
 		dev-util/mingw32-make"
 RDEPEND="sys-libs/zlib
 		dev-libs/icu

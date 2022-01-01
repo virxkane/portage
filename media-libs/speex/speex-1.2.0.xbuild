@@ -9,7 +9,7 @@ HOMEPAGE="http://www.speex.org/ http://www.xiph.org/"
 
 LICENSE="BSD"
 
-DEPEND="dev-util/pkg-config"
+DEPEND="meta-virtual/pkg-config"
 RDEPEND=">=media-libs/libogg-1.1.3"
 
 SRC_URI="http://downloads.xiph.org/releases/speex/${P}.tar.gz"

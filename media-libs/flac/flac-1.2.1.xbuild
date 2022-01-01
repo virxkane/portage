@@ -7,7 +7,7 @@ HOMEPAGE="http://www.xiph.org/"
 
 LICENSE="GPL-2 LGPL-2"
 
-DEPEND="dev-util/pkg-config
+DEPEND="meta-virtual/pkg-config
 		dev-lang/nasm"
 RDEPEND=">=media-libs/libogg-1.1.3
 		sys-devel/libiconv"
