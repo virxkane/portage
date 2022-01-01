@@ -7,9 +7,11 @@ DESCRIPTION="Package config system that manages compile/link flags"
 
 HOMEPAGE="http://pkgconfig.freedesktop.org/wiki/"
 
+SRC_URI="http://pkgconfig.freedesktop.org/releases/${P}.tar.gz"
+
 LICENSE="GPL-2"
 
-SRC_URI="http://pkgconfig.freedesktop.org/releases/${P}.tar.gz"
+RDEPEND="!dev-util/pkgconf"
 
 src_configure()
 {
