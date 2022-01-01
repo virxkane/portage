@@ -1,0 +1,43 @@
+# Copyright 2010-2022 Chernov A.A.
+# This is a part of mingw-portage project: 
+# http://sourceforge.net/projects/mingwportage/
+# Distributed under the terms of the GNU General Public License v2
+
+DESCRIPTION="Qt Creator is a cross-platform IDE for development with the Qt framework"
+
+HOMEPAGE="https://wiki.qt.io/Category:Tools::QtCreator"
+
+LICENSE="LGPL-2.1 LGPL-3"
+
+MIN_QT_PV="5.15.2"
+
+# TODO: add ninja, clang
+
+RDEPEND=">=dev-qt/qtbase-${MIN_QT_PV}
+		>=dev-qt/qtsvg-${MIN_QT_PV}
+		>=dev-qt/qtscript-${MIN_QT_PV}
+		>=dev-qt/qttools-${MIN_QT_PV}
+		>=dev-qt/qtdeclarative-${MIN_QT_PV}
+		>=dev-qt/qttranslations-${MIN_QT_PV}
+		>=dev-qt/qtquickcontrols-${MIN_QT_PV}
+		dev-lang/python
+		sys-devel/gdb"
+
+MY_P=${PN}-opensource-src-${PV}
+
+SRC_URI="http://download.qt.io/official_releases/qtcreator/6.0/${PV}/${MY_P}.tar.xz"
+
+SOURCES_DIR="${MY_P}"
+
+USE_CMAKE=yes
+
+src_prepare()
+{
+	epatch "${P}-winrtdebughelper-mingw.patch"
+}
+
+src_configure()
+{
+	# with gcc-11 & pch build failed...
+	econf -DBUILD_WITH_PCH=OFF
+}
