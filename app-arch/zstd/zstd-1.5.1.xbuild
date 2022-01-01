@@ -1,0 +1,27 @@
+# Copyright 2022 Chernov A.A.
+# This is a part of mingw-portage project: 
+# http://sourceforge.net/projects/mingwportage/
+# Distributed under the terms of the GNU General Public License v2
+
+DESCRIPTION="zstd fast compression library"
+
+HOMEPAGE="https://facebook.github.io/zstd/"
+
+LICENSE="BSD GPL-2"
+
+DEPEND="dev-util/cmake"
+
+SRC_URI="https://github.com/facebook/zstd/releases/download/v${PV}/${P}.tar.gz"
+
+USE_CMAKE=yes
+
+src_configure()
+{
+	econf -DZSTD_BUILD_SHARED=ON \
+		-DZSTD_BUILD_STATIC=ON \
+		-DZSTD_LEGACY_SUPPORT=OFF \
+		-DZSTD_MULTITHREAD_SUPPORT=ON \
+		-DZSTD_BUILD_PROGRAMS=ON \
+		-DZSTD_BUILD_CONTRIB=OFF \
+		../${SOURCES_DIR}/build/cmake
+}
