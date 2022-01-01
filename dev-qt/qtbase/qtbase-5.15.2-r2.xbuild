@@ -1,0 +1,434 @@
+# Copyright 2013-2022 Chernov A.A.
+# This is a part of mingw-portage project: 
+# http://sourceforge.net/projects/mingwportage/
+# Distributed under the terms of the GNU General Public License v2
+
+DESCRIPTION="Qt toolkit (base module)"
+
+HOMEPAGE="http://www.qt.io/"
+
+LICENSE="LGPL-2.1 GPL-3"
+
+RESTRICT="strip"
+
+DEPEND=">=dev-util/qt5-pathfix-0.1.2
+		meta-virtual/pkg-config"
+RDEPEND="sys-libs/zlib
+		>=app-arch/zstd-1.3.0
+		dev-libs/icu
+		dev-libs/libpcre2
+		media-libs/libpng
+		meta-virtual/jpeg
+		media-libs/harfbuzz
+		media-libs/freetype
+		media-libs/fontconfig
+		dev-db/postgresql-libpq
+		dev-db/mysql-libmysql || dev-db/mysql-connector-c
+		>=dev-db/sqlite-3.23.1.0-r1
+		dev-libs/double-conversion
+		sys-apps/dbus"
+
+MY_P=${PN}-everywhere-src-${PV}
+
+SRC_URI="http://download.qt.io/official_releases/qt/5.15/${PV}/submodules/${MY_P}.tar.xz"
+
+# QTBUG-16443
+SOURCES_DIR="qb"
+
+PATH="${PERL_PATH}/bin":${PATH}
+
+src_unpack()
+{
+	# QTBUG-16443
+	unpack ${A}
+	mv "${MY_P}" "${SOURCES_DIR}"
+	cd "${SOURCES_DIR}" || eerror "Can't cd to sources directory!"
+}
+
+src_prepare()
+{
+	# patches from KDE
+	# https://community.kde.org/Qt5PatchCollection
+	epatch "qt5pc/0001-toolchain.prf-Use-vswhere-to-obtain-VS-installation-.patch"
+	epatch "qt5pc/0002-Fix-allocated-memory-of-QByteArray-returned-by-QIODe.patch"
+	#epatch "qt5pc/0003-Update-CLDR-to-v37-adding-Nigerian-Pidgin-as-a-new-l.patch"
+	epatch "qt5pc/0004-QLayout-docs-explain-better-what-the-QWidget-ctor-ar.patch"
+	epatch "qt5pc/0005-QMacStyle-fix-tab-rendering.patch"
+	epatch "qt5pc/0006-QMacStyle-more-pixel-refinements.patch"
+	#epatch "qt5pc/0007-Deprecate-ordering-on-QItemSelectionRange.patch"
+	#epatch "qt5pc/0008-Deprecate-QLocale-Language-entries-that-no-locale-da.patch"
+	#epatch "qt5pc/0009-Deprecate-old-aliases-for-two-countries-and-several-.patch"
+	epatch "qt5pc/0010-QAbstractItemModelTester-don-t-rely-on-hasChildren.patch"
+	epatch "qt5pc/0011-Doc-Remove-mentioning-of-old-macos-versions-from-QSe.patch"
+	epatch "qt5pc/0012-Pass-SameSite-through-QNetworkCookie.patch"
+	epatch "qt5pc/0013-doc-fix-typo-consise-concise.patch"
+	epatch "qt5pc/0014-Selftest-copy-XAUTHORITY-environment-variable.patch"
+	epatch "qt5pc/0015-Fix-delay-first-time-a-font-is-used.patch"
+	#epatch "qt5pc/0016-Fix-QScreen-orientation-not-being-updated-when-setti.patch"
+	epatch "qt5pc/0017-Android-Request-cursor-to-be-in-proper-position.patch"
+	epatch "qt5pc/0018-testlib-Let-logger-report-whether-it-is-logging-to-s.patch"
+	#epatch "qt5pc/0019-Android-disable-Gradle-caching-by-default.patch"
+	#epatch "qt5pc/0020-Android-replace-stacktrace-with-debug-message-in-sea.patch"
+	epatch "qt5pc/0021-Use-void-instead-of-Q_UNUSED.patch"
+	epatch "qt5pc/0022-Don-t-show-QPushButton-as-hovered-unless-the-mouse-i.patch"
+	epatch "qt5pc/0023-MinGW-Fix-assert-in-QCoreApplication-arguments-when-.patch"
+	epatch "qt5pc/0024-QCombobox-propagate-the-palette-to-the-embedded-line.patch"
+	epatch "qt5pc/0025-QMarginsF-document-that-isNull-operator-operator-are.patch"
+	epatch "qt5pc/0026-qmake-vcxproj-Fix-handling-of-extra-compiler-outputs.patch"
+	epatch "qt5pc/0027-Android-fix-documentation-about-ANDROID_EXTRA_LIBS.patch"
+	epatch "qt5pc/0028-Offscreen-QPA-implement-a-native-interface.patch"
+	epatch "qt5pc/0029-DropSite-example-support-markdown.patch"
+	epatch "qt5pc/0030-Do-not-define-dynamic_cast.patch"
+	epatch "qt5pc/0031-Android-fix-crash-by-passing-the-right-Handle-to-dls.patch"
+	epatch "qt5pc/0032-testlib-Add-private-API-to-add-test-logger.patch"
+	epatch "qt5pc/0033-Update-third-party-md4c-to-version-0.4.6.patch"
+	epatch "qt5pc/0034-moc-Handle-include-in-enum-take-2.patch"
+	epatch "qt5pc/0035-InputMethod-should-call-reset-function-when-proxywid.patch"
+	epatch "qt5pc/0036-Add-possibility-to-set-QNX-Screen-pipeline-value.patch"
+	epatch "qt5pc/0037-qglobal-Only-define-QT_ENSURE_STACK_ALIGNED_FOR_SSE-.patch"
+	epatch "qt5pc/0038-macOS-FreeType-fix-crash-with-non-printable-unicode.patch"
+	epatch "qt5pc/0039-Linux-fix-crash-in-AtSpi-adaptor-when-handling-windo.patch"
+	epatch "qt5pc/0040-Add-_MSC_VER-check-to-MSVC-ARM-compiler-workaround.patch"
+	epatch "qt5pc/0041-QMap-suppress-warning-about-strict-aliasing-violatio.patch"
+	#epatch "qt5pc/0042-Add-changes-file-for-Qt-5.15.2.patch"
+	#epatch "qt5pc/0043-Set-the-url-to-have-the-AtNx-filename-if-one-is-foun.patch"
+	epatch "qt5pc/0044-QMap-don-t-tell-everyone-QMapNode-has-no-friends.patch"
+	epatch "qt5pc/0045-QNAM-Work-around-QObject-finicky-orphan-cleanup-deta.patch"
+	epatch "qt5pc/0046-xcb-ensure-that-available-glx-version-is-greater-tha.patch"
+	epatch "qt5pc/0047-Protect-QImage-colorspace-transform-on-shutdown.patch"
+	epatch "qt5pc/0048-Fix-qstylesheetstyle-clip-border-error.patch"
+	epatch "qt5pc/0049-Correct-processEvents-documentation.patch"
+	epatch "qt5pc/0050-Update-CLDR-to-v38.patch"
+	#epatch "qt5pc/0051-Fix-compilation-when-using-no-mimetype-database.patch"
+	epatch "qt5pc/0052-Reduce-memory-reallocations-in-QTextTablePrivate-upd.patch"
+	epatch "qt5pc/0053-Fix-regular-expression-initialize-with-incorrect-fil.patch"
+	epatch "qt5pc/0054-Cocoa-Allow-CMD-H-to-hide-the-application-when-a-too.patch"
+	epatch "qt5pc/0055-Fix-pcre2-feature-conditions.patch"
+	epatch "qt5pc/0056-Q_PRIMITIVE_TYPE-improve-the-documentation.patch"
+	epatch "qt5pc/0057-QAsn1Element-Read-value-in-blocks-to-avoid-oom-at-wr.patch"
+	epatch "qt5pc/0058-Android-Don-t-use-putIfAbsent-as-that-is-not-availab.patch"
+	epatch "qt5pc/0059-QMutex-order-reads-from-QMutexPrivate-waiters-and-QB.patch"
+	epatch "qt5pc/0060-Android-Add-the-QtAndroidBearer.jar-to-the-jar-depen.patch"
+	epatch "qt5pc/0061-Android-Add-the-required-linker-flags-for-unwinding-.patch"
+	epatch "qt5pc/0062-Android-recommend-against-using-ANDROID_ABIS-inside-.patch"
+	epatch "qt5pc/0063-Android-fix-android-java-and-templates-targets-with-.patch"
+	epatch "qt5pc/0064-QCharRef-properly-disable-assignment-from-char.patch"
+	epatch "qt5pc/0065-Android-Treat-ACTION_CANCEL-as-TouchPointReleased.patch"
+	epatch "qt5pc/0066-Fix-misidentification-of-some-shearing-QTransforms-a.patch"
+	epatch "qt5pc/0067-Fix-QGraphicsItem-crash-if-click-right-button-of-mou.patch"
+	#epatch "qt5pc/0068-Bump-version.patch"
+	epatch "qt5pc/0069-Android-Ensure-windows-always-have-a-geometry-on-cre.patch"
+	epatch "qt5pc/0070-macOS-Account-for-Big-Sur-always-enabling-layer-back.patch"
+	epatch "qt5pc/0071-Fix-shaping-problems-on-iOS-14-macOS-11.patch"
+	epatch "qt5pc/0072-Link-to-qAlpha-in-qRgb-and-qRgba-docs.patch"
+	epatch "qt5pc/0073-HTTP2-fix-crash-from-assertion.patch"
+	epatch "qt5pc/0074-Fuzzing-Add-a-test-for-QDateTime-fromString.patch"
+	epatch "qt5pc/0075-QSocks5SocketEngine-Fix-out-of-bounds-access-of-QBA.patch"
+	epatch "qt5pc/0076-Use-QTRY_COMPARE-in-an-attempt-to-make-the-test-less.patch"
+	epatch "qt5pc/0077-Doc-Document-QGradient-Preset-enum-values.patch"
+	epatch "qt5pc/0078-Doc-Fix-documentation-warnings-for-Qt-XML.patch"
+	epatch "qt5pc/0079-Doc-Fix-documentation-warnings-in-Qt-Network.patch"
+	epatch "qt5pc/0080-Ensure-that-QMenu-is-polished-before-setting-the-scr.patch"
+	epatch "qt5pc/0081-widgets-Don-t-report-new-focus-object-during-clearFo.patch"
+	epatch "qt5pc/0082-QDtls-remove-redundant-RAII-struct.patch"
+	epatch "qt5pc/0083-macOS-Propagate-device-pixel-ratio-of-system-tray-ic.patch"
+	epatch "qt5pc/0084-tst_qocsp-improve-code-coverage.patch"
+	epatch "qt5pc/0085-Doc-explain-how-to-create-a-test-touch-device-for-us.patch"
+	epatch "qt5pc/0086-macOS-Upgrade-supported-SDK-to-11.0.patch"
+	epatch "qt5pc/0087-Fix-logic-error-in-QString-replace-ch-after-cs.patch"
+	epatch "qt5pc/0088-Be-more-consistent-when-converting-JSON-values-from-.patch"
+	epatch "qt5pc/0089-QCoreApplication-add-more-information-to-processEven.patch"
+	epatch "qt5pc/0090-Fix-QSFPM-not-emitting-dataChanged-when-source-model.patch"
+	epatch "qt5pc/0091-Android-Fix-android-accessibility-not-being-set-acti.patch"
+	epatch "qt5pc/0092-Fix-x-height-name-in-stylesheet-docs.patch"
+	epatch "qt5pc/0093-QMutex-Work-around-ICC-bug-in-dealing-with-constexpr.patch"
+	epatch "qt5pc/0094-wasm-fix-resizing-of-qwidget-windows.patch"
+	epatch "qt5pc/0095-Avoid-integer-overflow-and-division-by-zero.patch"
+	epatch "qt5pc/0096-QPasswordDigestor-improve-code-coverage.patch"
+	epatch "qt5pc/0097-QStackedLayout-fix-a-memory-leak.patch"
+	epatch "qt5pc/0098-Limit-value-in-setFontWeightFromValue.patch"
+	epatch "qt5pc/0099-Doc-Fix-documentation-of-qmake-s-exists-function.patch"
+	epatch "qt5pc/0100-QVLA-do-not-include-QtTest.patch"
+	epatch "qt5pc/0101-Clean-up-docs-of-QCalendar-related-QLocale-toString-.patch"
+	epatch "qt5pc/0102-Change-android-target-SDK-version-to-29.patch"
+	epatch "qt5pc/0103-QVLA-always-use-new-to-create-new-objects.patch"
+	epatch "qt5pc/0104-QPushButton-fix-support-of-style-sheet-rule-for-text.patch"
+	epatch "qt5pc/0105-Limit-pen-width-to-maximal-32767.patch"
+	epatch "qt5pc/0106-Doc-Consistently-use-book-style-capitalization-for-Q.patch"
+	epatch "qt5pc/0107-qstring.h-fix-warnings-about-shortening-qsizetype-to.patch"
+	epatch "qt5pc/0108-Fix-invalid-QSortFilterProxyModel-dataChanged-parame.patch"
+	epatch "qt5pc/0109-Minor-refactor-of-installMetaFile.patch"
+	epatch "qt5pc/0110-Return-a-more-useful-date-time-on-parser-failure-in-.patch"
+	epatch "qt5pc/0111-QCalendar-increase-coverage-by-tests.patch"
+	epatch "qt5pc/0112-Bounds-check-time-zone-offsets-when-parsing.patch"
+	epatch "qt5pc/0113-Network-self-test-make-it-work-with-docker-container.patch"
+	epatch "qt5pc/0114-QSslConfiguration-improve-code-coverage.patch"
+	epatch "qt5pc/0115-Add-new-way-to-mess-up-projects-with-QMAKE_INSTALL_R.patch"
+	epatch "qt5pc/0116-Install-3rd-party-headers-and-meta-for-static-builds.patch"
+	epatch "qt5pc/0117-Create-qtlibjpeg-for-jpeg-image-plugin.patch"
+	epatch "qt5pc/0118-QStandardPaths-Don-t-change-permissions-of-XDG_RUNTI.patch"
+	epatch "qt5pc/0119-tst_QSslCertificate-improve-code-coverage.patch"
+	epatch "qt5pc/0120-Let-QXcbConnection-getTimestamp-properly-exit-when-X.patch"
+	epatch "qt5pc/0121-QDtls-cookie-verifier-make-sure-a-server-can-re-use-.patch"
+	epatch "qt5pc/0122-QMacStyle-remove-vertical-adjustment-for-inactive-ta.patch"
+	epatch "qt5pc/0123-Revert-xcb-add-xcb-util-dependency-for-xcb-image.patch"
+	epatch "qt5pc/0124-Containers-call-constructors-even-for-primitive-type.patch"
+	epatch "qt5pc/0125-Android-print-tailored-warning-if-qml-dependency-pat.patch"
+	epatch "qt5pc/0126-Cosmetic-stroker-avoid-overflows-for-non-finite-coor.patch"
+	epatch "qt5pc/0127-QSslCipher-improve-its-code-coverage-and-auto-tests.patch"
+	epatch "qt5pc/0128-tst_qsslkey-handle-QT_NO_SSL-properly.patch"
+	epatch "qt5pc/0129-Add-the-Qt-6.0-deprecation-macros.patch"
+	epatch "qt5pc/0130-wasm-fix-mouse-double-click.patch"
+	epatch "qt5pc/0131-Android-avoid-reflection-with-ClipData-addItem.patch"
+	epatch "qt5pc/0132-QHeaderView-fix-spurious-sorting.patch"
+	epatch "qt5pc/0133-Fix-exception-with-Android-5.x.patch"
+	epatch "qt5pc/0134-Http2-Remove-errored-out-requests-from-queue.patch"
+	epatch "qt5pc/0135-Http2-don-t-call-ensureConnection-when-there-s-no-re.patch"
+	epatch "qt5pc/0136-Fix-QTranslator-load-search-order-not-following-uiLa.patch"
+	epatch "qt5pc/0137-Avoid-signed-overflow-in-moc.patch"
+	epatch "qt5pc/0138-Android-Kill-calls-to-deprecated-func-in-API-29.patch"
+	epatch "qt5pc/0139-Doc-Improve-_CAST_FROM_ASCII-documentation.patch"
+	epatch "qt5pc/0140-Improve-documented-function-argument-names.patch"
+	epatch "qt5pc/0141-Fix-QImage-setPixelColor-on-RGBA64_Premultiplied.patch"
+	epatch "qt5pc/0142-macOS-Make-sure-that-the-reserved-characters-are-not.patch"
+	epatch "qt5pc/0143-Enable-testing-for-whether-a-calendar-registered-its.patch"
+	epatch "qt5pc/0144-tests-add-a-shortcut-to-quit-app-in-allcursors.patch"
+	epatch "qt5pc/0145-QSslSocket-Don-t-call-transmit-in-unencrypted-mode.patch"
+	epatch "qt5pc/0146-QStringView-operator-operator-operator-currently-Qt6.patch"
+	epatch "qt5pc/0147-QCborStreamReader-move-the-readStringChunk-code-to-t.patch"
+	epatch "qt5pc/0148-Improve-the-documentation-for-QElapsedTimer-restart-.patch"
+	epatch "qt5pc/0149-QSslSocket-verify-do-not-alter-the-default-configura.patch"
+	epatch "qt5pc/0150-Fix-tst_QFontDatabase-aliases-failure-with-ambiguous.patch"
+	epatch "qt5pc/0151-QStyleAnimation-make-sure-the-last-frame-of-animatio.patch"
+	epatch "qt5pc/0152-PCRE-update-to-10.36.patch"
+	epatch "qt5pc/0153-tst_QCborValue-adjust-the-size-of-the-minimum-string.patch"
+	epatch "qt5pc/0154-macOS-Always-allow-interacting-with-popup-windows-du.patch"
+	epatch "qt5pc/0155-macOS-Add-missing-QT_MANGLE_NAMESPACE.patch"
+	epatch "qt5pc/0156-QSplashScreen-draw-pixmap-with-SmoothTransfrom.patch"
+	epatch "qt5pc/0157-Android-Qml-accessibility-fixes.patch"
+	epatch "qt5pc/0158-Http2-set-the-reply-s-error-code-and-string-on-error.patch"
+	epatch "qt5pc/0159-Try-again-to-fix-Clang-s-Wconstant-logical-operand-w.patch"
+	epatch "qt5pc/0160-Revert-Android-print-tailored-warning-if-qml-depende.patch"
+	epatch "qt5pc/0161-QUrl-fix-parsing-of-empty-IPv6-addresses.patch"
+	epatch "qt5pc/0162-tst_QSslError-improve-the-code-coverage-as-pointed-a.patch"
+	epatch "qt5pc/0163-macOS-Disable-WA_QuitOnClose-on-menu-item-widget-con.patch"
+	epatch "qt5pc/0164-QString-fix-count-QRegularExpression.patch"
+	epatch "qt5pc/0165-QString-lastIndexOf-fix-off-by-one-for-zero-length-m.patch"
+	epatch "qt5pc/0166-secureudpclient-a-speculative-fix-for-non-reproducib.patch"
+	epatch "qt5pc/0167-Android-don-t-use-avx-and-avx2-when-building-for-And.patch"
+	epatch "qt5pc/0168-Fuzzing-Provide-link-to-oss-fuzz.patch"
+	epatch "qt5pc/0169-Blacklist-tst_QMdiArea-updateScrollBars-on-macos.patch"
+	epatch "qt5pc/0170-Fix-build-with-GCC-11-include-limits.patch"
+	epatch "qt5pc/0171-Build-fixes-for-GCC-11.patch"
+	epatch "qt5pc/0172-Partially-revert-813a928c7c3cf98670b6043149880ed5c95.patch"
+	epatch "qt5pc/0173-Fix-removing-columns-when-QSortFilterProxyModel-has-.patch"
+	epatch "qt5pc/0174-Fix-get-out-of-bounds-index-in-QSortFilterProxyModel.patch"
+	epatch "qt5pc/0175-Fix-handling-of-surrogates-in-QBidiAlgorithm.patch"
+	epatch "qt5pc/0176-Avoid-undefined-color-values-in-corrupt-xpm-image.patch"
+	epatch "qt5pc/0177-Gracefully-reject-requests-for-absurd-font-sizes.patch"
+	epatch "qt5pc/0178-Don-t-own-unique-name-for-QDBusTrayIcon.patch"
+	epatch "qt5pc/0179-QAbstractItemModelTester-fix-false-positive-when-mod.patch"
+	epatch "qt5pc/0180-Fix-QAbstractItemModelTester-false-positive.patch"
+	epatch "qt5pc/0181-Deprecate-QMutex-in-recursive-mode.patch"
+	epatch "qt5pc/0182-Fix-QAbstractItemModelTester-false-positive.patch"
+	epatch "qt5pc/0183-Fix-crash-on-serializing-default-constructed-QTimeZo.patch"
+	epatch "qt5pc/0184-Fix-QTreeModel-calling-beginRemoveRows-twice.patch"
+	epatch "qt5pc/0185-QConcatenateTablesProxyModel-skip-dataChanged-in-hid.patch"
+	epatch "qt5pc/0186-QComboBox-fix-select-all-columns-in-the-view.patch"
+	epatch "qt5pc/0187-QTableView-honor-spans-when-calculating-height-width.patch"
+	epatch "qt5pc/0188-TableView-Trigger-the-resizing-of-editors-resizing-a.patch"
+	epatch "qt5pc/0189-Fix-no-mapping-for-SysReq-key.patch"
+	epatch "qt5pc/0190-qdbus-add-support-for-aay-QByteArrayList.patch"
+	epatch "qt5pc/0191-QRandom-drop-a-usage-of-std-is_literal_type.patch"
+	epatch "qt5pc/0192-fix-Optimize-the-performance-of-the-inotify-file-sys.patch"
+	epatch "qt5pc/0193-Remove-the-unnecessary-template-parameter-from-the-c.patch"
+	epatch "qt5pc/0194-Fix-memory-leak-when-using-small-caps-font.patch"
+	epatch "qt5pc/0195-Make-sure-_q_printerChanged-is-called-even-if-only-p.patch"
+	epatch "qt5pc/0196-fix-Alt-shortcut-on-non-US-layouts.patch"
+	epatch "qt5pc/0197-Fix-copy-and-paste-bug-in-QDTEP-getMaximum.patch"
+	epatch "qt5pc/0198-QSortFilterProxyModel-create-mappings-on-demand-agai.patch"
+	epatch "qt5pc/0199-xcb-fix-thread-synchronization-in-QXcbEventQueue-wai.patch"
+	epatch "qt5pc/0200-Optimize-quadratic-time-insertion-in-QSortFilterProx.patch"
+	epatch "qt5pc/0201-Update-shared-mime-info-to-the-2.1-release-adjust-im.patch"
+	epatch "qt5pc/0202-xcb-Remove-need-for-QXCBScreen-to-resolve-QXcbGlInte.patch"
+	epatch "qt5pc/0203-xcb-Avoid-use-after-free-in-QXcbConnection-initializ.patch"
+	epatch "qt5pc/0204-Add-missing-limits-include.patch"
+	epatch "qt5pc/0205-Fix-tst_moc-for-C-17.patch"
+	epatch "qt5pc/0206-Fix-memory-leak-of-QOffscreenScreen-in-QOffscreenInt.patch"
+	epatch "qt5pc/0207-QVarLengthArray-fix-aliasing-error-in-insert-it-n-v.patch"
+	epatch "qt5pc/0208-Fix-rvalue-overload-of-qobject_pointer_cast-for-GCC-.patch"
+	epatch "qt5pc/0209-opengl-fix-a-typo-in-QOpenGLPaintDevice-dotsPerMeter.patch"
+	epatch "qt5pc/0210-Restore-C-11-compatibility-of-QSharedPointer-code.patch"
+	epatch "qt5pc/0211-doCrypt-check-the-error-codes.patch"
+	epatch "qt5pc/0212-QLibraryInfo-Add-MSVC-2022.patch"
+	epatch "qt5pc/0213-MySQL-remove-the-version-number-checks-in-favor-of-a.patch"
+	epatch "qt5pc/0214-Remove-another-usage-of-mysql_get_client_version.patch"
+	epatch "qt5pc/0215-xcb-add-a-timeout-control-when-reading-INCR-property.patch"
+	epatch "qt5pc/0216-Avoid-processing-intensive-painting-of-high-number-o.patch"
+	epatch "qt5pc/0217-Improve-fix-for-avoiding-huge-number-of-tiny-dashes.patch"
+	epatch "qt5pc/0218-Refix-for-avoiding-huge-number-of-tiny-dashes.patch"
+	epatch "qt5pc/0219-linux-clang-qplatformdefs-fix-building-with-musl-lib.patch"
+	epatch "qt5pc/0220-Remove-checks-for-glibc-2-from-qplatformdefs.h-files.patch"
+	epatch "qt5pc/0221-MySQL-treat-the-MYSQL_FIELD-as-read-only.patch"
+	epatch "qt5pc/0222-Revert-QString-lastIndexOf-fix-off-by-one-for-zero-l.patch"
+	epatch "qt5pc/0223-Fix-access-to-content-URLs-with-transient-read-write.patch"
+	epatch "qt5pc/0224-QTextOdfWriter-fix-exporting-pixmaps-to-ODT.patch"
+	epatch "qt5pc/0225-Cater-for-upstream-changes-in-eglplatform.h.patch"
+	epatch "qt5pc/0226-QPlatformWindow-fix-isAncestorOf-not-breaking-recurs.patch"
+	epatch "qt5pc/0227-Fix-reading-gamma-from-PNGs-without-ICC-profile.patch"
+	epatch "qt5pc/0228-Fix-memory-leak.patch"
+	epatch "qt5pc/0229-Explicitly-set-output-files-for-qtpreprocess.patch"
+	epatch "qt5pc/0230-Only-embed-launch-screen-when-building-an-app.patch"
+	epatch "qt5pc/0231-Explicitly-set-input-files-for-qtpreprocess.patch"
+	epatch "qt5pc/0232-qmake-Switch-to-using-Xcode-s-new-build-system.patch"
+	epatch "qt5pc/0233-PDF-generation-disentangle-native-pen-from-transform.patch"
+	epatch "qt5pc/0234-Avoid-generating-large-pdf-files-when-using-dashed-c.patch"
+	epatch "qt5pc/0235-Fix-QPainterPath-with-QFont-SmallCaps.patch"
+	epatch "qt5pc/0236-Respect-font-stretch-if-set-together-with-font-style.patch"
+	epatch "qt5pc/0237-Support-transformations-in-pattern-texture-brushes-i.patch"
+	epatch "qt5pc/0238-Fix-highdpi-conversion-of-QTabletEvent-coordinates-o.patch"
+	epatch "qt5pc/0239-Revert-Fix-highdpi-conversion-of-QTabletEvent-coordi.patch"
+	epatch "qt5pc/0240-QSslCertificate-operator-cleanup-error-queue.patch"
+	epatch "qt5pc/0241-Fix-populating-selection-clipboard-with-keyboard.patch"
+	epatch "qt5pc/0242-Prefer-previously-used-channels-in-QHttpNetworkConne.patch"
+	epatch "qt5pc/0243-Make-QStyle-proxy-always-return-the-leaf-proxy.patch"
+	epatch "qt5pc/0244-QSslCertificate-Guard-against-accessing-empty-QByteA.patch"
+	epatch "qt5pc/0245-QSslCertificate-OpenSSL-harden-protection-against-nu.patch"
+	epatch "qt5pc/0246-QHttpSocketEngine-Fix-memory-leak.patch"
+	epatch "qt5pc/0247-Doc-bump-the-OpenSSL-minimum-supported-version-to-1..patch"
+	epatch "qt5pc/0248-tst_QSslCertificate-verify-skip-auto-test.patch"
+	epatch "qt5pc/0249-tst_QSslCertificate-verify-remove-QSKIP.patch"
+	epatch "qt5pc/0250-tst_QSslSocket-replace-an-old-certificate.patch"
+	epatch "qt5pc/0251-fix-potential-mem-leak-on-connection-lost.patch"
+	epatch "qt5pc/0252-Optimize-mime-type-matching.patch"
+	epatch "qt5pc/0253-Revert-Fix-invalid-text-layout-data-when-a-full-layo.patch"
+	epatch "qt5pc/0254-Revert-QPushButton-fix-support-of-style-sheet-rule-f.patch"
+
+	# Other patches
+	epatch "${PN}-5.13.1-dbus-autodetect.patch"
+	epatch "${PN}-5.13.1-harfbuzz-autodetect.patch"
+	epatch "${PN}-5.14.1-psql-autodetect-mingw.patch"
+	epatch "${P}-mingw-w64-compat.patch"
+}
+
+src_configure()
+{
+	# add arguments to configure
+	extra_cflags=`pkg-config --cflags freetype2 dbus-1`
+	qt_add_includes=
+	for flag in $extra_cflags
+	do
+		flag=`echo ${flag} | sed -e s'/^-I\(.*\)$/\1/'`
+		if [ "${flag}" ]
+		then
+			qt_add_includes="${qt_add_includes} -I ${flag}"
+		fi
+	done
+	unset -v extra_cflags
+	unset -v flag
+
+	local _prefix="${INSTDIR}${PREFIX}"
+	install -d "${_prefix}"
+	./configure \
+			-prefix "${_prefix}" \
+			-bindir "${_prefix}/bin/" \
+			-libdir "${_prefix}/lib/qt5/" \
+			-docdir "${_prefix}/share/doc/qt-${PV}/" \
+			-headerdir "${_prefix}/include/qt5/" \
+			-plugindir "${_prefix}/lib/qt5/plugins/" \
+			-importdir "${_prefix}/lib/qt5/imports/" \
+			-qmldir "${_prefix}/share/qt5/qml/" \
+			-archdatadir "${_prefix}/share/qt5/" \
+			-libexecdir "${_prefix}/bin/" \
+			-datadir "${_prefix}/share/qt5/" \
+			-translationdir "${_prefix}/share/qt5/translations/" \
+			-examplesdir "${_prefix}/share/qt5/examples/" \
+			-testsdir "${_prefix}/share/qt5/tests/" \
+			-release -opensource -confirm-license -shared \
+			-nomake examples -accessibility \
+			-plugin-sql-sqlite -plugin-sql-odbc -plugin-sql-psql  -plugin-sql-mysql \
+			-platform win32-g++ -opengl desktop \
+			-system-libpng -system-libjpeg -system-zlib -system-pcre \
+			-zstd \
+			-system-freetype -system-harfbuzz -system-sqlite -system-doubleconversion \
+			-fontconfig -icu -dbus -ssl -openssl \
+			-strip -no-pch \
+			${qt_add_includes}
+	if [ $? -eq 0 ]
+	then
+		einfo "configure successfull"
+	else
+		eerror "configure failed"
+	fi
+}
+
+patch_qt5_binary()
+{
+	local prefix_w=`posix_w32path "${PREFIX}"`
+	qt5-pathfix \
+			--prefix "${prefix_w}" \
+			--extprefix "${prefix_w}" \
+			--docdir "${prefix_w}/share/doc/qt-${PV}" \
+			--headerdir "${prefix_w}/include/qt5" \
+			--libdir "${prefix_w}/lib/qt5" \
+			--libexecdir "${prefix_w}/bin" \
+			--bindir "${prefix_w}/bin" \
+			--plugindir "${prefix_w}/lib/qt5/plugins" \
+			--importdir "${prefix_w}/lib/qt5/imports" \
+			--qmldir "${prefix_w}/share/qt5/qml" \
+			--archdatadir "${prefix_w}/share/qt5" \
+			--datadir "${prefix_w}/share/qt5" \
+			--translationdir "${prefix_w}/share/qt5/translations" \
+			--examplesdir "${prefix_w}/share/qt5/examples" \
+			--testsdir "${prefix_w}/share/qt5/tests" \
+			--fieldsize 288 \
+			"${1}"
+}
+
+src_install()
+{
+	make install
+	if [ $? -eq 0 ]
+	then
+		eend "make install successfull."
+	else
+		eerror "make install failed!"
+	fi
+
+	#Move cmake files...
+	mv "${INSTDIR}${PREFIX}/lib/qt5/cmake/" "${INSTDIR}${PREFIX}/lib/" || die "mv cmake files failed!"
+	local configFiles=`find "${INSTDIR}${PREFIX}/lib/cmake/" -name "*Config.cmake"`
+	for f in ${configFiles}
+	do
+		echo "Fixing file ${f}"
+		sed -i "${f}" -e "s|^get_filename_component(\(.*\)\ \"\${CMAKE_CURRENT_LIST_DIR}/\.\./\.\./\.\./\.\./\"\ ABSOLUTE)$|get_filename_component(\1 \"\${CMAKE_CURRENT_LIST_DIR}/\.\./\.\./\.\./\" ABSOLUTE)|"
+	done
+
+	#Move pkg-config files...
+	mv "${INSTDIR}${PREFIX}/lib/qt5/pkgconfig/" "${INSTDIR}${PREFIX}/lib/" || die "mv pkg-config files failed!"
+	local pkgconfigFiles=`find "${INSTDIR}${PREFIX}/lib/pkgconfig/" -name "*.pc"`
+	for f in ${pkgconfigFiles}
+	do
+		echo "Fixing file ${f}"
+		sed -i "${f}" -e "s|^prefix=.*$|prefix=${PREFIX}|"
+	done
+
+	local _prefix="${INSTDIR}${PREFIX}"
+	local patch_files="bin/qmake.exe bin/Qt5Core.dll"
+	local _file=
+	for _file in ${patch_files}
+	do
+		patch_qt5_binary "${_prefix}/${_file}"
+	done
+}
+
+pkg_postinst()
+{
+	# For instalation from binary.
+	local patch_files="bin/qmake.exe bin/Qt5Core.dll"
+	local _file=
+	for _file in ${patch_files}
+	do
+		patch_qt5_binary "${PREFIX}/${_file}"
+	done
+}
