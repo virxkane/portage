@@ -13,6 +13,7 @@ MIN_QT_PV="5.15.2"
 
 # TODO: add ninja, clang
 
+DEPEND="dev-util/cmake"
 RDEPEND=">=dev-qt/qtbase-${MIN_QT_PV}
 		>=dev-qt/qtsvg-${MIN_QT_PV}
 		>=dev-qt/qtscript-${MIN_QT_PV}
