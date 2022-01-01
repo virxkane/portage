@@ -9,10 +9,10 @@ HOMEPAGE="http://www.remotesensing.org/libtiff/"
 
 LICENSE="as-is"
 
+# media-libs/libwebp - circular dependecy
 # media-libs/freeglut
 RDEPEND="sys-libs/zlib
 		meta-virtual/jpeg
-		media-libs/libwebp
 		meta-virtual/pthreads
 		app-arch/xz-utils
 		app-arch/zstd"
