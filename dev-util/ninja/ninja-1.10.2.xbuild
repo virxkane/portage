@@ -1,0 +1,23 @@
+# Copyright 2020-2022 Chernov A.A.
+# This is a part of mingw-portage project: 
+# http://sourceforge.net/projects/mingwportage/
+# Distributed under the terms of the GNU General Public License v2
+
+DESCRIPTION="A small build system similar to make"
+
+HOMEPAGE="https://ninja-build.org/"
+
+SRC_URI="https://github.com/ninja-build/${PN}/archive/v${PV}.tar.gz -> ${P}.tar.gz"
+
+LICENSE="Apache-2.0"
+
+DEPEND="dev-util/cmake"
+RDEPEND="dev-lang/python
+		dev-util/re2c"
+
+USE_CMAKE=yes
+
+src_prepare()
+{
+	epatch "${P}-mingw.patch"
+}
