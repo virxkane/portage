@@ -1,0 +1,19 @@
+# Copyright 2016-2022 Chernov A.A.
+# This is a part of mingw-portage project: 
+# http://sourceforge.net/projects/mingwportage/
+# Distributed under the terms of the GNU General Public License v2
+
+DESCRIPTION="A free implementation of the unicode bidirectional algorithm"
+
+HOMEPAGE="http://fribidi.org/"
+
+SRC_URI="https://github.com/fribidi/fribidi/releases/download/v${PV}/${P}.tar.xz"
+
+LICENSE="LGPL-2.1"
+
+DEPEND="meta-virtual/pkg-config"
+
+src_configure()
+{
+	econf --enable-shared --enable-static
+}
