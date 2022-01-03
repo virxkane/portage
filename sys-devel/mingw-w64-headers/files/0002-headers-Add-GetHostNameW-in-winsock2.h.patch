@@ -1,0 +1,28 @@
+From 564d8771316bc1836c5e35dae16a5f87467eb310 Mon Sep 17 00:00:00 2001
+From: Biswapriyo Nath <nathbappai@gmail.com>
+Date: Sat, 18 Sep 2021 14:43:41 +0530
+Subject: [PATCH] headers: Add GetHostNameW in winsock2.h
+
+This fixes build failure of libuv in x86.
+
+Signed-off-by: Biswapriyo Nath <nathbappai@gmail.com>
+Signed-off-by: LIU Hao <lh_mouse@126.com>
+---
+ mingw-w64-headers/include/winsock2.h | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/mingw-w64-headers/include/winsock2.h b/mingw-w64-headers/include/winsock2.h
+index 99f4c249d..0697e8c2a 100644
+--- a/mingw-w64-headers/include/winsock2.h
++++ b/mingw-w64-headers/include/winsock2.h
+@@ -1032,6 +1032,7 @@ typedef unsigned int GROUP;
+   WINSOCK_API_LINKAGE struct hostent *WSAAPI gethostbyaddr(const char *addr,int len,int type);
+   WINSOCK_API_LINKAGE struct hostent *WSAAPI gethostbyname(const char *name);
+   WINSOCK_API_LINKAGE int WSAAPI gethostname(char *name,int namelen);
++  WINSOCK_API_LINKAGE int WSAAPI GetHostNameW(PWSTR name, int namelen);
+   WINSOCK_API_LINKAGE struct servent *WSAAPI getservbyport(int port,const char *proto);
+   WINSOCK_API_LINKAGE struct servent *WSAAPI getservbyname(const char *name,const char *proto);
+   WINSOCK_API_LINKAGE struct protoent *WSAAPI getprotobynumber(int number);
+-- 
+2.33.0.windows.2
+
