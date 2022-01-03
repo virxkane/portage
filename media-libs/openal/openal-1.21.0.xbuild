@@ -4,7 +4,7 @@
 
 DESCRIPTION="A software implementation of the OpenAL 3D audio API"
 
-HOMEPAGE="http://kcat.strangesoft.net/openal.html"
+HOMEPAGE="https://www.openal-soft.org/"
 
 LICENSE="LGPL-2"
 
@@ -18,7 +18,7 @@ esac
 
 MY_PN="${PN}-soft"
 MY_P="${MY_PN}-${PV}"
-SRC_URI=" http://kcat.strangesoft.net/openal-releases/${MY_P}.tar.bz2"
+SRC_URI="https://www.openal-soft.org/openal-releases/openal-soft-${PV}.tar.bz2"
 
 SOURCES_DIR="${MY_P}"
 
