@@ -1,0 +1,26 @@
+# Copyright 2017-2022 Chernov A.A.
+# This is a part of mingw-portage project: 
+# http://sourceforge.net/projects/mingwportage/
+# Distributed under the terms of the GNU General Public License v2
+
+DESCRIPTION="Library for SSA/ASS subtitles rendering"
+
+HOMEPAGE="https://github.com/libass/libass"
+
+SRC_URI="https://github.com/libass/libass/releases/download/${PV}/${P}.tar.xz"
+
+LICENSE="ISC"
+
+RDEPEND="sys-devel/libiconv
+		media-libs/freetype
+		dev-libs/fribidi
+		media-libs/fontconfig
+		media-libs/harfbuzz"
+
+DEPEND="dev-lang/nasm"
+
+src_configure()
+{
+	econf --enable-shared --enable-static \
+		--enable-fontconfig --enable-harfbuzz
+}
