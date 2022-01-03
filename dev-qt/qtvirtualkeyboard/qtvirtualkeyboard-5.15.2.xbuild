@@ -21,11 +21,3 @@ SRC_URI="http://download.qt.io/official_releases/qt/5.15/${PV}/submodules/${MY_P
 SOURCES_DIR="${MY_P}"
 
 load_module qt5_module
-
-src_compile()
-{
-	# fix strange error "qmlcachegen.exe: Bad address"
-	# see https://github.com/msys2/MINGW-packages/issues/7528#issuecomment-751473282
-	export MSYS2_ARG_CONV_EXCL='--resource-file-mapping='
-	emake
-}

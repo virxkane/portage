@@ -74,6 +74,15 @@ src_configure()
 	qt5_module_src_configure
 }
 
+src_compile()
+{
+	# fix strange errors
+	#   "qmlcachegen.exe: Bad address"
+	# see https://github.com/msys2/MINGW-packages/issues/7528#issuecomment-751473282
+	export MSYS2_ARG_CONV_EXCL='--resource-file-mapping='
+	emake
+}
+
 src_install()
 {
 	qt5_modules_src_install
