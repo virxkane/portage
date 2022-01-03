@@ -1,0 +1,33 @@
+# Copyright 2017-2022 Chernov A.A.
+# Distributed under the terms of the GNU General Public License v2
+
+DESCRIPTION="Simple Direct Media Layer"
+
+HOMEPAGE="http://www.libsdl.org/"
+
+LICENSE="zlib"
+
+SRC_URI="http://www.libsdl.org/release/SDL2-${PV}.tar.gz"
+
+SOURCES_DIR="SDL2-${PV}"
+
+src_configure()
+{
+	econf \
+		--enable-shared --enable-static \
+		--enable-audio --enable-video --enable-render --enable-events --enable-joystick --enable-haptic \
+		--enable-power --enable-filesystem --enable-threads --enable-timers --enable-file --enable-loadso \
+		--enable-cpuinfo --enable-assembly --enable-ssemath \
+		--enable-video-dummy --enable-video-opengl --enable-render-d3d \
+		--enable-pthreads --enable-pthread-sem --enable-directx \
+		--enable-sdl-dlopen --enable-clock_gettime
+}
+
+src_install()
+{
+	emake_install
+	sed -e '/#\ sdl2.*$/a\\nget_filename_component(_install_prefix "${CMAKE_CURRENT_LIST_DIR}/../../../" ABSOLUTE)' \
+		-i "${INSTDIR}${PREFIX}/lib/cmake/SDL2/sdl2-config.cmake"
+	sed -e 's/${prefix}/${_install_prefix}/' \
+		-i "${INSTDIR}${PREFIX}/lib/cmake/SDL2/sdl2-config.cmake"
+}
