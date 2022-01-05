@@ -1,0 +1,28 @@
+# Copyright 2022 Chernov A.A.
+# This is a part of mingw-portage project: 
+# http://sourceforge.net/projects/mingwportage/
+# Distributed under the terms of the GNU General Public License v2
+
+DESCRIPTION="A clean C Library for processing UTF-8 Unicode data"
+
+HOMEPAGE="https://github.com/JuliaStrings/utf8proc"
+
+MY_PN="utf8proc"
+MY_P="${MY_PN}-${PV}"
+
+SRC_URI="https://github.com/JuliaStrings/utf8proc/archive/refs/tags/v${PV}.tar.gz -> ${MY_P}.tar.gz"
+
+LICENSE="MIT"
+
+DEPEND="dev-util/cmake"
+
+SOURCES_DIR=${MY_P}
+
+USE_CMAKE=yes
+
+src_configure()
+{
+	econf -DBUILD_SHARED_LIBS=ON \
+		-DUTF8PROC_INSTALL=ON \
+		-DUTF8PROC_ENABLE_TESTING=OFF
+}
