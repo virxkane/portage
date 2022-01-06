@@ -1,0 +1,62 @@
+diff -urBb work-orig/Makefile work/Makefile
+--- work-orig/Makefile	2021-10-16 20:09:43.000000000 +0400
++++ work/Makefile	2022-01-05 15:40:04.827464800 +0400
+@@ -2,7 +2,9 @@
+ # Makefile
+ #
+ 
+-CERTSDIR = /usr/share/ca-certificates
++PREFIX?=/mingw
++
++CERTSDIR = $(PREFIX)/share/ca-certificates
+ SUBDIRS = mozilla
+ 
+ all:
+@@ -16,6 +18,7 @@
+ 	done
+ 
+ install:
++	mkdir -p $(DESTDIR)/$(CERTSDIR)
+ 	for dir in $(SUBDIRS); do \
+ 	  mkdir $(DESTDIR)/$(CERTSDIR)/$$dir; \
+ 	  $(MAKE) -C $$dir install CERTSDIR=$(DESTDIR)/$(CERTSDIR)/$$dir; \
+diff -urBb work-orig/sbin/Makefile work/sbin/Makefile
+--- work-orig/sbin/Makefile	2021-10-16 20:09:43.000000000 +0400
++++ work/sbin/Makefile	2022-01-05 15:42:38.712379400 +0400
+@@ -3,12 +3,12 @@
+ #
+ #
+ 
+-SBINDIR = /usr/sbin
++PREFIX ?= /mingw
+ 
+ all:
+ 
+ clean:
+ 
+ install:
+-	install -d $(DESTDIR)$(SBINDIR)
+-	install -m755 update-ca-certificates $(DESTDIR)$(SBINDIR)/
++	install -d $(DESTDIR)$(PREFIX)/bin
++	install -m755 update-ca-certificates $(DESTDIR)$(PREFIX)/bin/
+diff -urBb work-orig/sbin/update-ca-certificates work/sbin/update-ca-certificates
+--- work-orig/sbin/update-ca-certificates	2021-10-16 20:09:43.000000000 +0400
++++ work/sbin/update-ca-certificates	2022-01-05 15:40:04.839616700 +0400
+@@ -94,7 +94,7 @@
+                                                   -e 's/,/_/g').pem"
+   if ! test -e "$PEM" || [ "$(readlink "$PEM")" != "$CERT" ]
+   then
+-    ln -sf "$CERT" "$PEM"
++    cp -f "$CERT" "$PEM"
+     echo "+$PEM" >> "$ADDED"
+   fi
+   # Add trailing newline to certificate, if it is missing (#635570)
+@@ -104,7 +104,7 @@
+ remove() {
+   CERT="$1"
+   PEM="$ETCCERTSDIR/$(basename "$CERT" .crt).pem"
+-  if test -L "$PEM"
++  if test -f "$PEM"
+   then
+     rm -f "$PEM"
+     echo "-$PEM" >> "$REMOVED"
