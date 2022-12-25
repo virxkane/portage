@@ -1,0 +1,14 @@
+diff -urBb gcc-12.2.0-orig/gcc/config.gcc gcc-12.2.0/gcc/config.gcc
+--- gcc-12.2.0-orig/gcc/config.gcc	2022-08-19 12:09:52.552662100 +0400
++++ gcc-12.2.0/gcc/config.gcc	2022-12-25 14:42:28.277190200 +0400
+@@ -2209,7 +2209,10 @@
+ 			tmake_file="${tmake_file} i386/t-mingw-w32"
+ 			;;
+ 	esac
++	# Don't ignore values passed in to configure via --native-system-header-dir
++	if test x$native_system_header_dir = x ; then
+         native_system_header_dir=/mingw/include
++	fi
+ 	target_gtfiles="$target_gtfiles \$(srcdir)/config/i386/winnt.cc"
+ 	extra_options="${extra_options} i386/cygming.opt i386/mingw.opt"
+ 	case ${target} in
