@@ -1,0 +1,18 @@
+# Copyright 2012-2022 Chernov A.A.
+# This is a part of mingw-portage project: 
+# http://sourceforge.net/projects/mingwportage/
+# Distributed under the terms of the GNU General Public License v2
+
+DESCRIPTION="a portable, high level programming interface to various calling conventions."
+
+HOMEPAGE="http://sourceware.org/libffi/"
+
+LICENSE="MIT"
+
+SRC_URI="ftp://sourceware.org/pub/${PN}/${P}.tar.gz"
+
+src_configure()
+{
+	econf --enable-shared --enable-static \
+		--disable-dependency-tracking
+}
