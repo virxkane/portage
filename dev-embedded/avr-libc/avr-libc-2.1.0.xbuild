@@ -1,4 +1,4 @@
-# Copyright 2017-2019 Chernov A.A.
+# Copyright 2017-2023 Chernov A.A.
 # This is a part of mingw-portage project: 
 # http://sourceforge.net/projects/mingwportage/
 # Distributed under the terms of the GNU General Public License v2
@@ -17,15 +17,6 @@ DEPEND=">=dev-embedded/avr-binutils-2.27
 		dev-embedded/avr-gcc || dev-embedded/avr-gcc-stage1"
 
 BUILD_IN_SEPARATE_DIR=yes
-
-src_prepare()
-{
-	echo "patch to revision r2546..."
-	patch --binary -p1 -i "${FILESDIR}/${P}-r2546.patch"
-	echo "patch for avrxmega3 chips..."
-	epatch "${P}-avrxmega3-v7.patch.bz2"
-	eautoreconf
-}
 
 src_configure()
 {
