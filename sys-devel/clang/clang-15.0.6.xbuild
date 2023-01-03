@@ -1,4 +1,4 @@
-# Copyright 2022 Chernov A.A.
+# Copyright 2022-2023 Chernov A.A.
 # This is a part of mingw-portage project: 
 # http://sourceforge.net/projects/mingwportage/
 # Distributed under the terms of the GNU General Public License v2
@@ -16,6 +16,7 @@ RDEPEND="sys-libs/zlib
 		dev-libs/libxml2"
 
 SRC_URI="https://github.com/llvm/llvm-project/releases/download/llvmorg-${PV}/llvm-${PV}.src.tar.xz
+	https://github.com/llvm/llvm-project/releases/download/llvmorg-${PV}/cmake-${PV}.src.tar.xz
 	https://github.com/llvm/llvm-project/releases/download/llvmorg-${PV}/clang-${PV}.src.tar.xz
 	https://github.com/llvm/llvm-project/releases/download/llvmorg-${PV}/clang-tools-extra-${PV}.src.tar.xz
 	https://github.com/llvm/llvm-project/releases/download/llvmorg-${PV}/lld-${PV}.src.tar.xz
@@ -34,6 +35,7 @@ src_unpack()
 		f=`basename $f`
 		unpack_one $f ign
 	done
+	mv "cmake-${PV}.src" "cmake"
 	mv "clang-${PV}.src" "clang"
 	mv "clang-tools-extra-${PV}.src" "clang-tools-extra"
 	mv "lld-${PV}.src" "lld"
@@ -56,6 +58,8 @@ src_configure()
 		-DLLVM_BUILD_RUNTIME=ON \
 		-DLLVM_BUILD_TOOLS=ON \
 		-DLLVM_BUILD_UTILS=ON \
+		-DLLVM_BUILD_BENCHMARKS=OFF \
+		-DLLVM_INCLUDE_BENCHMARKS=OFF \
 		-DLLVM_ENABLE_LIBCXX=ON \
 		-DLLVM_ENABLE_LLD=OFF \
 		-DLLVM_ENABLE_LTO=OFF \
