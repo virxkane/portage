@@ -1,0 +1,33 @@
+# Copyright 2010-2023 Chernov A.A.
+# This is a part of mingw-portage project: 
+# http://sourceforge.net/projects/mingwportage/
+# Distributed under the terms of the GNU General Public License v2
+
+DESCRIPTION="An OpenType text shaping engine"
+
+HOMEPAGE="http://www.freedesktop.org/wiki/Software/HarfBuzz"
+
+LICENSE="Old-MIT ISC icu"
+
+# TODO: add graphite2
+
+DEPEND="meta-virtual/pkg-config
+		dev-lang/python"
+RDEPEND=">=media-libs/freetype-2.4.2
+		>=dev-libs/icu-51.2"
+
+SRC_URI="http://www.freedesktop.org/software/${PN}/release/${P}.tar.xz"
+
+src_prepare()
+{
+	epatch "${P}-am-1.patch"
+	eautoreconf
+}
+
+src_configure()
+{
+	econf --enable-shared --enable-static \
+		--with-glib=no --with-gobject=no --with-cairo=no \
+		--with-icu=yes --with-freetype=yes \
+		--with-graphite2=no --with-gdi=yes
+}
