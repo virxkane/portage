@@ -1,4 +1,4 @@
-# Copyright 2020-2022 Chernov A.A.
+# Copyright 2020-2023 Chernov A.A.
 # This is a part of mingw-portage project: 
 # http://sourceforge.net/projects/mingwportage/
 # Distributed under the terms of the GNU General Public License v2
@@ -16,8 +16,3 @@ RDEPEND="dev-lang/python
 		dev-util/re2c"
 
 USE_CMAKE=yes
-
-src_prepare()
-{
-	epatch "${P}-mingw.patch"
-}
