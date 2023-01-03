@@ -1,0 +1,19 @@
+# Copyright 2018 Chernov A.A.
+# Distributed under the terms of the GNU General Public License v2
+
+DESCRIPTION="A high-level decoding and seeking API for .opus files"
+
+HOMEPAGE="https://opus-codec.org/"
+
+LICENSE="BSD"
+
+SRC_URI="https://downloads.xiph.org/releases/${PN}/${P}.tar.gz"
+
+RDEPEND=">=media-libs/opus-1.0.1
+		>=media-libs/libogg-1.3
+		dev-libs/openssl"
+
+src_prepare()
+{
+	epatch "${PN}-0.11-dis-certs.patch"
+}
