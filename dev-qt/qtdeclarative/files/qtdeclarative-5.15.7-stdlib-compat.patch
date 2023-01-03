@@ -1,0 +1,11 @@
+diff -urBb qtdeclarative-everywhere-src-5.15.7-orig/src/qmldebug/qqmlprofilerevent_p.h qtdeclarative-everywhere-src-5.15.7/src/qmldebug/qqmlprofilerevent_p.h
+--- qtdeclarative-everywhere-src-5.15.7-orig/src/qmldebug/qqmlprofilerevent_p.h	2022-09-12 19:29:45.000000000 +0400
++++ qtdeclarative-everywhere-src-5.15.7/src/qmldebug/qqmlprofilerevent_p.h	2023-01-03 10:55:34.281963100 +0400
+@@ -50,6 +50,7 @@
+ #include <initializer_list>
+ #include <limits>
+ #include <type_traits>
++#include <limits>
+ 
+ //
+ //  W A R N I N G
