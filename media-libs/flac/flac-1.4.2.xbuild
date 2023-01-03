@@ -20,6 +20,5 @@ src_configure()
 {
 	export LDFLAGS="-lssp"
 	econf --enable-shared --enable-static \
-		--enable-asm-optimizations --enable-sse --enable-3dnow \
-		--disable-xmms-plugin
+		--enable-asm-optimizations
 }
