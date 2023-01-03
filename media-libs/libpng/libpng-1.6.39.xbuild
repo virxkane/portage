@@ -1,0 +1,21 @@
+# Copyright 2010-2023 Chernov A.A.
+# This is a part of mingw-portage project: 
+# http://sourceforge.net/projects/mingwportage/
+# Distributed under the terms of the GNU General Public License v2
+
+DESCRIPTION="Portable Network Graphics library"
+
+HOMEPAGE="http://www.libpng.org/"
+
+LICENSE="as-is"
+
+RDEPEND="sys-libs/zlib"
+
+SRC_URI="http://downloads.sourceforge.net/${PN}/${P}.tar.xz"
+
+src_prepare()
+{
+	epatch "${PN}-1.6.34-no-build-tests.patch"
+	epatch "${PN}-1.6.34-mingw.patch"
+	epatch "${P}-apng.patch.bz2"
+}
