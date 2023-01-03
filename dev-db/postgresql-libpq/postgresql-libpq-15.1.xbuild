@@ -1,0 +1,56 @@
+# Copyright 2010-2023 Chernov A.A.
+# This is a part of mingw-portage project: 
+# http://sourceforge.net/projects/mingwportage/
+# Distributed under the terms of the GNU General Public License v2
+
+DESCRIPTION="PostgreSQL client libraries"
+
+HOMEPAGE="http://www.postgresql.org/"
+
+LICENSE="POSTGRESQL"
+
+#   external dependencies:
+# bison (msys)
+# flex (msys)
+
+RDEPEND="sys-libs/zlib
+		dev-libs/openssl"
+
+MY_PN="postgresql"
+MY_P="${MY_PN}-${PV}"
+SRC_URI="http://ftp.postgresql.org/pub/source/v${PV}/${MY_P}.tar.bz2"
+
+SOURCES_DIR="${MY_P}"
+
+src_configure()
+{
+	econf --disable-nls --without-perl --without-python --without-tcl \
+		--enable-thread-safety --with-openssl --with-zlib
+}
+
+src_compile()
+{
+	emake -C "src/port"
+	emake -C "src/common"
+	emake -C "src/interfaces/libpq"
+	emake -C "src/bin/pg_config"
+}
+
+src_install()
+{
+	cd "src/interfaces/libpq" || die
+	emake_install
+	rm -v "${INSTDIR}${PREFIX}/lib/libpq.dll"
+	mv -v "${INSTDIR}${PREFIX}/lib/libpq.a" "${INSTDIR}${PREFIX}/lib/libpq.dll.a"
+	cd "../../.."
+
+	cd "src/include" || die
+	touch utils/fmgroids.h
+	touch utils/fmgrprotos.h
+	emake_install
+	cd "../.."
+
+	cd "src/bin/pg_config" || die
+	emake_install
+	cd "../../.."
+}
