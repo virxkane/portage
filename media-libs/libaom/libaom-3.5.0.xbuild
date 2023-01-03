@@ -1,4 +1,4 @@
-# Copyright 2022 Chernov A.A.
+# Copyright 2022-2023 Chernov A.A.
 # This is a part of mingw-portage project: 
 # http://sourceforge.net/projects/mingwportage/
 # Distributed under the terms of the GNU General Public License v2
@@ -16,7 +16,6 @@ DEPEND="
 	dev-lang/yasm"
 
 USE_CMAKE=yes
-SOURCES_DIR="."
 
 src_configure()
 {
