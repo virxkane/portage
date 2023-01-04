@@ -1,4 +1,4 @@
-# Copyright 2019-2021 Chernov A.A.
+# Copyright 2019-2023 Chernov A.A.
 # Distributed under the terms of the GNU General Public License v2
 
 DESCRIPTION="Tools necessary to build programs (arm-none-eabi toolchain's part)"
@@ -23,12 +23,6 @@ SRC_URI="http://ftp.gnu.org/gnu/${MY_PN}/${MY_P}.tar.xz"
 BUILD_IN_SEPARATE_DIR=yes
 
 SOURCES_DIR="${MY_P}"
-
-src_prepare()
-{
-	epatch "${MY_P}_p1_N.patch"
-	epatch "${MY_PN}-2.20-notexinfo.patch"
-}
 
 src_configure()
 {
