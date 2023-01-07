@@ -24,7 +24,7 @@ load_module qt5_module
 
 src_configure()
 {
-	qmake CONFIG+="directshow wasapi openal wmf"
+	qmake "CONFIG+=directshow wasapi openal wmf"
 	if [ $? -ne 0 ]
 	then
 		eerror "qmake failed!"
