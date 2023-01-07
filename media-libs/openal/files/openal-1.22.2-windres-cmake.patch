@@ -1,0 +1,21 @@
+diff -urBb openal-soft-1.22.2-orig/CMakeLists.txt openal-soft-1.22.2/CMakeLists.txt
+--- openal-soft-1.22.2-orig/CMakeLists.txt	2022-06-27 12:33:53.000000000 +0400
++++ openal-soft-1.22.2/CMakeLists.txt	2023-01-07 09:53:28.591725100 +0400
+@@ -1300,6 +1300,17 @@
+ unset(HAS_ROUTER)
+ set(IMPL_TARGET OpenAL) # Either OpenAL or soft_oal.
+ 
++if (WIN32)
++    set(CMAKE_RC_COMPILER windres)
++    # set rc syntax
++    # Omit <DEFINES> since it contains flags incompatible with windres
++    set(CMAKE_RC_COMPILE_OBJECT "<CMAKE_RC_COMPILER> <FLAGS> -O coff -o <OBJECT> -i <SOURCE>")
++    set(CMAKE_RC_SOURCE_FILE_EXTENSIONS rc)
++    set(CMAKE_RC_FLAGS "-I${CMAKE_BINARY_DIR}")
++    # enable resource language for this project
++    enable_language(RC)
++endif(WIN32)
++
+ # Build main library
+ if(LIBTYPE STREQUAL "STATIC")
+     add_library(${IMPL_TARGET} STATIC ${COMMON_OBJS} ${OPENAL_OBJS} ${ALC_OBJS} ${CORE_OBJS})

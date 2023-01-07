@@ -24,6 +24,11 @@ SOURCES_DIR="${MY_P}"
 
 USE_CMAKE=yes
 
+src_prepare()
+{
+	epatch "${P}-windres-cmake.patch"
+}
+
 src_configure()
 {
 	case ${CHOST} in
@@ -34,8 +39,11 @@ src_configure()
 		dxsdk_dir="${PREFIX}"
 		;;
 	esac
-	econf -DALSOFT_EXAMPLES=OFF -DALSOFT_REQUIRE_DSOUND=ON \
-		-DALSOFT_REQUIRE_WINMM=ON -DALSOFT_REQUIRE_MMDEVAPI=ON \
+	econf \
+		-DALSOFT_EXAMPLES=OFF \
+		-DALSOFT_BACKEND_DSOUND=ON -DALSOFT_REQUIRE_DSOUND=ON \
+		-DALSOFT_BACKEND_WINMM=ON -DALSOFT_REQUIRE_WINMM=ON \
+		-DALSOFT_BACKEND_WASAPI=ON -DALSOFT_REQUIRE_WASAPI=ON \
 		-DALSOFT_NO_CONFIG_UTIL=ON \
 		-DDXSDK_DIR="${dxsdk_dir}"
 
