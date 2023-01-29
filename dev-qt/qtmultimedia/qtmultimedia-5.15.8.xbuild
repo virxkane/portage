@@ -33,6 +33,6 @@ src_configure()
 
 src_prepare()
 {
-	epatch "${P}-mingw-w64.patch"
-	epatch "${P}-fix-wmf-plugin.patch"
+	epatch "${PN}-5.15.7-mingw-w64.patch"
+	epatch "${PN}-5.15.7-fix-wmf-plugin.patch"
 }

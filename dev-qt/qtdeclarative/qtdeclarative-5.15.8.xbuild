@@ -42,8 +42,8 @@ src_unpack()
 
 src_prepare()
 {
-	epatch "${P}-dis-dx12.patch"
-	epatch "${P}-stdlib-compat.patch"
+	epatch "${PN}-5.15.7-dis-dx12.patch"
+	epatch "${PN}-5.15.7-stdlib-compat.patch"
 }
 
 #src_prepare()
