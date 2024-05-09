@@ -1,0 +1,19 @@
+# Copyright 2022,2024 Chernov A.A.
+# This is a part of mingw-portage project: 
+# http://sourceforge.net/projects/mingwportage/
+# Distributed under the terms of the GNU General Public License v2
+
+DESCRIPTION="Line and word breaking library"
+
+HOMEPAGE="https://github.com/adah1972/libunibreak"
+
+XY_PV=${PV/./_}
+
+SRC_URI="https://github.com/adah1972/libunibreak/releases/download/libunibreak_${XY_PV}/${P}.tar.gz"
+
+LICENSE="ZLIB"
+
+src_configure()
+{
+	econf --enable-shared --enable-static
+}
