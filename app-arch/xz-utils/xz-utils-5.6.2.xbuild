@@ -1,11 +1,11 @@
-# Copyright 2015-2022 Chernov A.A.
+# Copyright 2015-2024 Chernov A.A.
 # This is a part of mingw-portage project: 
 # http://sourceforge.net/projects/mingwportage/
 # Distributed under the terms of the GNU General Public License v2
 
 DESCRIPTION="utils for managing LZMA compressed files"
 
-HOMEPAGE="http://tukaani.org/xz/"
+HOMEPAGE="https://tukaani.org/xz/"
 
 LICENSE="public-domain LGPL-2.1+ GPL-2+"
 
