@@ -1,11 +1,11 @@
-# Copyright 2017-2022 Chernov A.A.
+# Copyright 2017-2024 Chernov A.A.
 # This is a part of mingw-portage project: 
 # http://sourceforge.net/projects/mingwportage/
 # Distributed under the terms of the GNU General Public License v2
 
 DESCRIPTION="Perl-compatible regular expression library"
 
-HOMEPAGE="http://www.pcre.org/"
+HOMEPAGE="https://www.pcre.org/"
 
 LICENSE="BSD"
 
@@ -15,7 +15,7 @@ RDEPEND="sys-libs/zlib
 MY_PN="pcre2"
 MY_P="${MY_PN}-${PV}"
 SOURCES_DIR="${MY_P}"
-SRC_URI="http://downloads.sourceforge.net/pcre/${MY_P}.tar.bz2"
+SRC_URI="https://github.com/PCRE2Project/pcre2/releases/download/${MY_P}/${MY_P}.tar.bz2"
 
 src_prepare()
 {
