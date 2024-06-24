@@ -1,9 +1,9 @@
-# Copyright 2010-2022 Chernov A.A.
+# Copyright 2010-2024 Chernov A.A.
 # Distributed under the terms of the GNU General Public License v2
 
 DESCRIPTION="Standard (de)compression library"
 
-HOMEPAGE="http://www.zlib.net/"
+HOMEPAGE="https://www.zlib.net/"
 
 LICENSE="ZLIB"
 

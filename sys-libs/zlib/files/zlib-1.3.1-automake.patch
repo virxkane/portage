@@ -1,6 +1,6 @@
-diff -urBbN zlib-1.2.13-orig/COPYING zlib-1.2.13/COPYING
---- zlib-1.2.13-orig/COPYING	1970-01-01 04:00:00.000000000 +0400
-+++ zlib-1.2.13/COPYING	2022-12-25 13:13:43.971132100 +0400
+diff -urBbN zlib-1.3.1-orig/COPYING zlib-1.3.1/COPYING
+--- zlib-1.3.1-orig/COPYING	1970-01-01 04:00:00.000000000 +0400
++++ zlib-1.3.1/COPYING	2024-06-23 12:24:04.147358500 +0400
 @@ -0,0 +1,27 @@
 +  This software is provided 'as-is', without any express or implied
 +  warranty.  In no event will the authors be held liable for any damages
@@ -29,9 +29,9 @@ diff -urBbN zlib-1.2.13-orig/COPYING zlib-1.2.13/COPYING
 +If you redistribute modified sources, we would appreciate that you include in
 +the file ChangeLog history information documenting your changes.  Please read
 +the FAQ for more information on the distribution of modified source versions.
-diff -urBbN zlib-1.2.13-orig/Makefile.am zlib-1.2.13/Makefile.am
---- zlib-1.2.13-orig/Makefile.am	1970-01-01 04:00:00.000000000 +0400
-+++ zlib-1.2.13/Makefile.am	2022-12-25 13:13:43.973125700 +0400
+diff -urBbN zlib-1.3.1-orig/Makefile.am zlib-1.3.1/Makefile.am
+--- zlib-1.3.1-orig/Makefile.am	1970-01-01 04:00:00.000000000 +0400
++++ zlib-1.3.1/Makefile.am	2024-06-23 12:24:28.869555000 +0400
 @@ -0,0 +1,59 @@
 +
 +lib_LTLIBRARIES = libz.la
@@ -47,7 +47,7 @@ diff -urBbN zlib-1.2.13-orig/Makefile.am zlib-1.2.13/Makefile.am
 +libz_la_DEPENDENCIES = $(libz_win32_res)
 +
 +libz_la_LDFLAGS = -no-undefined -export-dynamic \
-+	-version-number 1:2:11 $(libz_win32_res_ldflag)
++	-version-number 1:3:1 $(libz_win32_res_ldflag)
 +
 +dist_man_MANS = zlib.3
 +
@@ -92,12 +92,12 @@ diff -urBbN zlib-1.2.13-orig/Makefile.am zlib-1.2.13/Makefile.am
 +
 +zlib1-win32-res.lo: win32/zlib1.rc
 +	$(LIBTOOL) $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --tag=RC --mode=compile $(RC) -DGCC_WINDRES $^ -o $@
-diff -urBbN zlib-1.2.13-orig/configure.ac zlib-1.2.13/configure.ac
---- zlib-1.2.13-orig/configure.ac	1970-01-01 04:00:00.000000000 +0400
-+++ zlib-1.2.13/configure.ac	2022-12-25 13:15:46.839414100 +0400
-@@ -0,0 +1,159 @@
+diff -urBbN zlib-1.3.1-orig/configure.ac zlib-1.3.1/configure.ac
+--- zlib-1.3.1-orig/configure.ac	1970-01-01 04:00:00.000000000 +0400
++++ zlib-1.3.1/configure.ac	2024-06-23 12:26:11.357809400 +0400
+@@ -0,0 +1,158 @@
 +
-+AC_INIT([zlib], [1.2.13])
++AC_INIT([zlib], [1.3.1])
 +
 +AC_PROG_INSTALL
 +AC_PROG_LN_S
@@ -106,8 +106,7 @@ diff -urBbN zlib-1.2.13-orig/configure.ac zlib-1.2.13/configure.ac
 +
 +AM_INIT_AUTOMAKE
 +
-+# Здесь мы не можем использовать autoheader
-+# так как формат файла zconf.in.h это не позволяет.
++# Here we cannot use autoheader since the zconf.in.h file format does not allow it.
 +
 +AC_SYS_LARGEFILE
 +
@@ -255,21 +254,27 @@ diff -urBbN zlib-1.2.13-orig/configure.ac zlib-1.2.13/configure.ac
 +
 +AC_OUTPUT(Makefile)
 +AC_OUTPUT(zlib.pc)
-diff -urBbN zlib-1.2.13-orig/win32/zlib1.rc zlib-1.2.13/win32/zlib1.rc
---- zlib-1.2.13-orig/win32/zlib1.rc	2022-10-06 06:46:40.000000000 +0400
-+++ zlib-1.2.13/win32/zlib1.rc	2022-12-25 13:14:26.902949700 +0400
-@@ -27,7 +27,7 @@
+diff -urBbN zlib-1.3.1-orig/win32/zlib1.rc zlib-1.3.1/win32/zlib1.rc
+--- zlib-1.3.1-orig/win32/zlib1.rc	2022-10-06 06:46:40.000000000 +0400
++++ zlib-1.3.1/win32/zlib1.rc	2024-06-23 12:27:26.029968300 +0400
+@@ -26,11 +26,11 @@
+       VALUE "FileDescription",	"zlib data compression library\0"
        VALUE "FileVersion",	ZLIB_VERSION "\0"
        VALUE "InternalName",	"zlib1.dll\0"
-       VALUE "LegalCopyright",	"(C) 1995-2022 Jean-loup Gailly & Mark Adler\0"
+-      VALUE "LegalCopyright",	"(C) 1995-2022 Jean-loup Gailly & Mark Adler\0"
 -      VALUE "OriginalFilename",	"zlib1.dll\0"
++      VALUE "LegalCopyright",	"(C) 1995-2024 Jean-loup Gailly & Mark Adler\0"
 +      VALUE "OriginalFilename",	"libz-1.dll\0"
        VALUE "ProductName",	"zlib\0"
        VALUE "ProductVersion",	ZLIB_VERSION "\0"
-       VALUE "Comments",		"For more information visit http://www.zlib.net/\0"
-diff -urBbN zlib-1.2.13-orig/zlib.pc.in zlib-1.2.13/zlib.pc.in
---- zlib-1.2.13-orig/zlib.pc.in	2010-04-18 10:48:15.000000000 +0400
-+++ zlib-1.2.13/zlib.pc.in	2022-12-25 13:13:43.977841500 +0400
+-      VALUE "Comments",		"For more information visit http://www.zlib.net/\0"
++      VALUE "Comments",		"For more information visit https://www.zlib.net/\0"
+     END
+   END
+   BLOCK "VarFileInfo"
+diff -urBbN zlib-1.3.1-orig/zlib.pc.in zlib-1.3.1/zlib.pc.in
+--- zlib-1.3.1-orig/zlib.pc.in	2010-04-18 10:48:15.000000000 +0400
++++ zlib-1.3.1/zlib.pc.in	2024-06-23 12:24:04.155066400 +0400
 @@ -1,7 +1,6 @@
  prefix=@prefix@
  exec_prefix=@exec_prefix@
