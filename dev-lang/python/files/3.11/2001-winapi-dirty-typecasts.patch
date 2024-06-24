@@ -1,0 +1,84 @@
+diff -urBb Python-3.11.9-orig/Modules/_multiprocessing/semaphore.c Python-3.11.9/Modules/_multiprocessing/semaphore.c
+--- Python-3.11.9-orig/Modules/_multiprocessing/semaphore.c	2024-04-02 12:25:04.000000000 +0400
++++ Python-3.11.9/Modules/_multiprocessing/semaphore.c	2024-06-23 20:58:45.325050100 +0400
+@@ -616,7 +616,7 @@
+     PyErr_SetNone(PyExc_NotImplementedError);
+     return NULL;
+ #else
+-    int sval;
++    long sval;
+     if (SEM_GETVALUE(self->handle, &sval) < 0)
+         return _PyMp_SetError(NULL, MP_STANDARD_ERROR);
+     /* some posix implementations use negative numbers to indicate
+diff -urBb Python-3.11.9-orig/Modules/_winapi.c Python-3.11.9/Modules/_winapi.c
+--- Python-3.11.9-orig/Modules/_winapi.c	2024-06-23 19:23:59.623942900 +0400
++++ Python-3.11.9/Modules/_winapi.c	2024-06-23 20:42:39.871223900 +0400
+@@ -550,7 +550,7 @@
+         /* overallocate by a few array elements */
+         LUID_AND_ATTRIBUTES privs[4];
+     } tp, previousTp;
+-    int previousTpSize = 0;
++    DWORD previousTpSize = 0;
+ 
+     /* Reparse data buffer */
+     const USHORT prefix_len = 4;
+diff -urBb Python-3.11.9-orig/Modules/posixmodule.c Python-3.11.9/Modules/posixmodule.c
+--- Python-3.11.9-orig/Modules/posixmodule.c	2024-06-23 19:24:04.395257900 +0400
++++ Python-3.11.9/Modules/posixmodule.c	2024-06-23 20:42:39.874869400 +0400
+@@ -4546,7 +4546,7 @@
+ /*[clinic end generated code: output=ab7f1a88b654581c input=dc93b1d3984cffb6]*/
+ {
+     wchar_t *buffer;
+-    wchar_t *end;
++    const wchar_t *end;
+     PyObject *result = NULL;
+     HRESULT ret;
+ 
+@@ -5923,7 +5923,7 @@
+ 
+     _Py_BEGIN_SUPPRESS_IPH
+ #ifdef HAVE_WEXECV
+-    _wexecv(path->wide, argvlist);
++    _wexecv(path->wide, (const EXECV_CHAR* const*)argvlist);
+ #else
+     execv(path->narrow, argvlist);
+ #endif
+@@ -6004,7 +6004,7 @@
+     else
+ #endif
+ #ifdef HAVE_WEXECV
+-        _wexecve(path->wide, argvlist, envlist);
++        _wexecve(path->wide, (const EXECV_CHAR* const*)argvlist, (const EXECV_CHAR* const*)envlist);
+ #else
+         execve(path->narrow, argvlist, envlist);
+ #endif
+@@ -6623,7 +6623,7 @@
+     Py_BEGIN_ALLOW_THREADS
+     _Py_BEGIN_SUPPRESS_IPH
+ #ifdef HAVE_WSPAWNV
+-    spawnval = _wspawnv(mode, path->wide, argvlist);
++    spawnval = _wspawnv(mode, path->wide, (const EXECV_CHAR* const*)argvlist);
+ #elif defined(HAVE_RTPSPAWN)
+     spawnval = _rtp_spawn(mode, path->narrow, (const char **)argvlist, NULL);
+ #else
+@@ -6739,7 +6739,7 @@
+     Py_BEGIN_ALLOW_THREADS
+     _Py_BEGIN_SUPPRESS_IPH
+ #ifdef HAVE_WSPAWNV
+-    spawnval = _wspawnve(mode, path->wide, argvlist, envlist);
++    spawnval = _wspawnve(mode, path->wide, (const EXECV_CHAR* const*)argvlist, (const EXECV_CHAR* const*)envlist);
+ #elif defined(HAVE_RTPSPAWN)
+     spawnval = _rtp_spawn(mode, path->narrow, (const char **)argvlist,
+                            (const char **)envlist);
+diff -urBb Python-3.11.9-orig/PC/launcher.c Python-3.11.9/PC/launcher.c
+--- Python-3.11.9-orig/PC/launcher.c	2024-06-23 19:24:04.774331700 +0400
++++ Python-3.11.9/PC/launcher.c	2024-06-23 21:01:34.516287600 +0400
+@@ -1912,7 +1912,7 @@
+     {
+         FILE *f;
+         char buffer[4096]; /* 4KB should be enough for anybody */
+-        char *start;
++        const char *start;
+         DWORD len, cch, cch_actual;
+         size_t cb;
+         if (_wfopen_s(&f, venv_cfg_path, L"r")) {
