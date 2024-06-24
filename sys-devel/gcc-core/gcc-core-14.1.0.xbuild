@@ -1,11 +1,11 @@
-# Copyright 2010-2022 Chernov A.A.
+# Copyright 2010-2024 Chernov A.A.
 # This is a part of mingw-portage project: 
 # http://sourceforge.net/projects/mingwportage/
 # Distributed under the terms of the GNU General Public License v2
 
 DESCRIPTION="The GNU Compiler Collection. Only C/C++"
 
-HOMEPAGE="http://gcc.gnu.org/"
+HOMEPAGE="https://gcc.gnu.org/"
 
 LICENSE="GPL-3 LGPL-3 || ( GPL-3 libgcc libstdc++ ) FDL-1.2"
 
@@ -85,7 +85,7 @@ src_prepare()
 	epatch "${MY_P}-skip-texinfo.patch"
 	epatch "${MY_P}-skip-testsuite.patch"
 	epatch "${MY_P}-libstdc++-export.patch"
-	epatch "${MY_P}-mingw-w64-native-dir.patch"
+	epatch "${MY_P}-mingw-w64-target-path.patch"
 	epatch "${MY_P}-mingw-w64-bootstrap-target-flags.patch"
 }
 
