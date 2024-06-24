@@ -1,11 +1,11 @@
-# Copyright 2010-2022 Chernov A.A.
+# Copyright 2010-2024 Chernov A.A.
 # This is a part of mingw-portage project: 
 # http://sourceforge.net/projects/mingwportage/
 # Distributed under the terms of the GNU General Public License v2
 
 DESCRIPTION="Network utility to retrieve files from the WWW"
 
-HOMEPAGE="http://www.gnu.org/software/wget/"
+HOMEPAGE="https://www.gnu.org/software/wget/"
 
 LICENSE="GPL-3"
 
