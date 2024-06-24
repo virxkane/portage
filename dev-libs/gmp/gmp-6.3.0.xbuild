@@ -1,11 +1,11 @@
-# Copyright 2010-2021 Chernov A.A.
+# Copyright 2010-2024 Chernov A.A.
 # This is a part of mingw-portage project: 
 # http://sourceforge.net/projects/mingwportage/
 # Distributed under the terms of the GNU General Public License v2
 
 DESCRIPTION="Library for arithmetic on arbitrary precision integers, rational numbers, and floating-point numbers"
 
-HOMEPAGE="http://gmplib.org/"
+HOMEPAGE="https://gmplib.org/"
 
 LICENSE="LGPL-3"
 
