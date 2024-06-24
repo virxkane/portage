@@ -1,6 +1,6 @@
-diff -urBb work-orig/mozilla/certdata2pem.py work/mozilla/certdata2pem.py
---- work-orig/mozilla/certdata2pem.py	2021-10-16 20:09:43.000000000 +0400
-+++ work/mozilla/certdata2pem.py	2022-01-05 15:52:52.687412900 +0400
+diff -urBb ca-certificates-orig/mozilla/certdata2pem.py ca-certificates/mozilla/certdata2pem.py
+--- ca-certificates-orig/mozilla/certdata2pem.py	2022-12-06 13:23:25.000000000 +0400
++++ ca-certificates/mozilla/certdata2pem.py	2024-06-23 19:36:54.758068400 +0400
 @@ -28,8 +28,6 @@
  import textwrap
  import io
@@ -14,8 +14,8 @@ diff -urBb work-orig/mozilla/certdata2pem.py work/mozilla/certdata2pem.py
          if not obj['CKA_LABEL'] in trust or not trust[obj['CKA_LABEL']]:
              continue
  
--        cert = x509.load_der_x509_certificate(obj['CKA_VALUE'])
--        if cert.not_valid_after < datetime.datetime.now():
+-        cert = x509.load_der_x509_certificate(bytes(obj['CKA_VALUE']))
+-        if cert.not_valid_after < datetime.datetime.utcnow():
 -            print('!'*74)
 -            print('Trusted but expired certificate found: %s' % obj['CKA_LABEL'])
 -            print('!'*74)

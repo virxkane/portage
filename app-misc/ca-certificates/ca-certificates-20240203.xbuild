@@ -1,11 +1,11 @@
-# Copyright 2016-2022 Chernov A.A.
+# Copyright 2016-2024 Chernov A.A.
 # This is a part of mingw-portage project: 
 # http://sourceforge.net/projects/mingwportage/
 # Distributed under the terms of the GNU General Public License v2
 
 DESCRIPTION="Common CA Certificates PEM files"
 
-HOMEPAGE="http://packages.debian.org/sid/ca-certificates"
+HOMEPAGE="https://packages.debian.org/sid/ca-certificates"
 
 LICENSE="MPL-1.1"
 
@@ -14,13 +14,13 @@ RDEPEND="dev-libs/openssl"
 
 SRC_URI="http://ftp.debian.org/debian/pool/main/c/${PN}/${PN}_${PV}.tar.xz"
 
-SOURCES_DIR="work"
+SOURCES_DIR="${PN}"
 
 RESTRICT="strip"
 
 src_prepare()
 {
-	epatch "${P}-mingw-r1.patch"
+	epatch "${PN}-20211016-mingw-r1.patch"
 	epatch "${P}-dont-check.patch"
 	rm -r "examples"
 
