@@ -1,11 +1,11 @@
-# Copyright 2010-2022 Chernov A.A.
+# Copyright 2010-2024 Chernov A.A.
 # This is a part of mingw-portage project: 
 # http://sourceforge.net/projects/mingwportage/
 # Distributed under the terms of the GNU General Public License v2
 
 DESCRIPTION="Toolkit for SSL v2/v3 and TLS v1"
 
-HOMEPAGE="http://www.openssl.org/"
+HOMEPAGE="https://www.openssl.org/"
 
 LICENSE="openssl"
 
@@ -19,7 +19,7 @@ SRC_URI="http://www.openssl.org/source/${P}.tar.gz"
 
 src_prepare()
 {
-	epatch "${P}-c_rehash-mingw.patch"
+	epatch "${PN}-1.1.1s-c_rehash-mingw.patch"
 }
 
 src_configure()
