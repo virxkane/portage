@@ -1,17 +1,17 @@
-# Copyright 2013-2022 Chernov A.A.
+# Copyright 2013-2024 Chernov A.A.
 # This is a part of mingw-portage project: 
 # http://sourceforge.net/projects/mingwportage/
 # Distributed under the terms of the GNU General Public License v2
 
 DESCRIPTION="A library for manipulating integer points bounded by affine constraints."
 
-HOMEPAGE="http://freecode.com/projects/isl"
+HOMEPAGE="https://libisl.sourceforge.io/"
 
 LICENSE="MIT"
 
 RDEPEND="dev-libs/gmp"
 
-SRC_URI="http://isl.gforge.inria.fr/${P}.tar.xz"
+SRC_URI="https://libisl.sourceforge.io/${P}.tar.xz"
 
 src_prepare()
 {
