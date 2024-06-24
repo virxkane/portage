@@ -1,19 +1,19 @@
-# Copyright 2010-2022 Chernov A.A.
+# Copyright 2010-2024 Chernov A.A.
 # This is a part of mingw-portage project: 
 # http://sourceforge.net/projects/mingwportage/
 # Distributed under the terms of the GNU General Public License v2
 
 DESCRIPTION="an SQL Database Engine in a C Library"
 
-HOMEPAGE="http://www.sqlite.org/"
+HOMEPAGE="https://www.sqlite.org/"
 
 LICENSE="as-is"
 
 RDEPEND="meta-virtual/pthreads"
 
-SVER="3400000"
+SVER="3460000"
 
-SRC_URI="http://www.sqlite.org/2022/${PN}-autoconf-${SVER}.tar.gz"
+SRC_URI="http://www.sqlite.org/2024/${PN}-autoconf-${SVER}.tar.gz"
 
 SOURCES_DIR="${PN}-autoconf-${SVER}"
 
