@@ -1,11 +1,11 @@
-# Copyright 2017-2022 Chernov A.A.
+# Copyright 2017-2024 Chernov A.A.
 # This is a part of mingw-portage project: 
 # http://sourceforge.net/projects/mingwportage/
 # Distributed under the terms of the GNU General Public License v2
 
 DESCRIPTION="Cross-platform asychronous I/O"
 
-HOMEPAGE="http://libuv.org/"
+HOMEPAGE="https://libuv.org/"
 
 SRC_URI="https://dist.libuv.org/dist/v${PV}/libuv-v${PV}.tar.gz"
 
