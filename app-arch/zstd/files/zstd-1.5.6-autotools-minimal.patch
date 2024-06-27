@@ -1,6 +1,6 @@
-diff -urBbN zstd-1.5.2-orig/Makefile.am zstd-1.5.2/Makefile.am
---- zstd-1.5.2-orig/Makefile.am	1970-01-01 04:00:00.000000000 +0400
-+++ zstd-1.5.2/Makefile.am	2022-12-26 21:09:23.284247900 +0400
+diff -urBbN zstd-1.5.6-orig/Makefile.am zstd-1.5.6/Makefile.am
+--- zstd-1.5.6-orig/Makefile.am	1970-01-01 04:00:00.000000000 +0400
++++ zstd-1.5.6/Makefile.am	2024-06-26 23:35:21.004489600 +0400
 @@ -0,0 +1,6 @@
 +ACLOCAL_AMFLAGS = -I m4
 +#SUBDIRS = examples lib programs tests
@@ -8,12 +8,12 @@ diff -urBbN zstd-1.5.2-orig/Makefile.am zstd-1.5.2/Makefile.am
 +
 +pkgconfig_DATA  = lib/libzstd.pc
 +pkgconfigdir    = ${libdir}/pkgconfig
-diff -urBbN zstd-1.5.2-orig/configure.ac zstd-1.5.2/configure.ac
---- zstd-1.5.2-orig/configure.ac	1970-01-01 04:00:00.000000000 +0400
-+++ zstd-1.5.2/configure.ac	2022-12-26 21:11:12.442514600 +0400
+diff -urBbN zstd-1.5.6-orig/configure.ac zstd-1.5.6/configure.ac
+--- zstd-1.5.6-orig/configure.ac	1970-01-01 04:00:00.000000000 +0400
++++ zstd-1.5.6/configure.ac	2024-06-26 23:36:05.755985600 +0400
 @@ -0,0 +1,126 @@
 +AC_PREREQ([2.57])
-+AC_INIT([zstd],[1.5.2])
++AC_INIT([zstd],[1.5.6])
 +AC_CONFIG_MACRO_DIR([m4])
 +AC_CONFIG_SRCDIR([lib/common/zstd_common.c])
 +AM_INIT_AUTOMAKE([no-define foreign])
@@ -138,9 +138,9 @@ diff -urBbN zstd-1.5.2-orig/configure.ac zstd-1.5.2/configure.ac
 +AC_CONFIG_FILES([Makefile lib/Makefile programs/Makefile])
 +AC_CONFIG_FILES([lib/libzstd.pc])
 +AC_OUTPUT
-diff -urBbN zstd-1.5.2-orig/lib/Makefile.am zstd-1.5.2/lib/Makefile.am
---- zstd-1.5.2-orig/lib/Makefile.am	1970-01-01 04:00:00.000000000 +0400
-+++ zstd-1.5.2/lib/Makefile.am	2022-12-26 21:09:23.286242200 +0400
+diff -urBbN zstd-1.5.6-orig/lib/Makefile.am zstd-1.5.6/lib/Makefile.am
+--- zstd-1.5.6-orig/lib/Makefile.am	1970-01-01 04:00:00.000000000 +0400
++++ zstd-1.5.6/lib/Makefile.am	2024-06-26 23:35:21.007481600 +0400
 @@ -0,0 +1,86 @@
 +include_HEADERS = \
 +	zstd.h \
@@ -228,12 +228,12 @@ diff -urBbN zstd-1.5.2-orig/lib/Makefile.am zstd-1.5.2/lib/Makefile.am
 +EXTRA_DIST = \
 +	BUCK \
 +	README.md
-diff -urBbN zstd-1.5.2-orig/lib/libzstd.pc.in zstd-1.5.2/lib/libzstd.pc.in
---- zstd-1.5.2-orig/lib/libzstd.pc.in	2022-01-21 01:17:18.000000000 +0400
-+++ zstd-1.5.2/lib/libzstd.pc.in	2022-12-26 21:09:23.288236800 +0400
+diff -urBbN zstd-1.5.6-orig/lib/libzstd.pc.in zstd-1.5.6/lib/libzstd.pc.in
+--- zstd-1.5.6-orig/lib/libzstd.pc.in	2024-03-22 02:05:51.000000000 +0400
++++ zstd-1.5.6/lib/libzstd.pc.in	2024-06-26 23:35:21.008478900 +0400
 @@ -2,10 +2,10 @@
- #   Copyright (C) 2014-2016, Yann Collet, Facebook
- #   BSD 2-Clause License (http://www.opensource.org/licenses/bsd-license.php)
+ #   Copyright (c) Meta Platforms, Inc. and affiliates.
+ #   BSD 2-Clause License (https://opensource.org/licenses/bsd-license.php)
  
 -prefix=@PREFIX@
 -exec_prefix=@EXEC_PREFIX@
@@ -246,10 +246,10 @@ diff -urBbN zstd-1.5.2-orig/lib/libzstd.pc.in zstd-1.5.2/lib/libzstd.pc.in
  
  Name: zstd
  Description: fast lossless compression algorithm library
-diff -urBbN zstd-1.5.2-orig/programs/Makefile.am zstd-1.5.2/programs/Makefile.am
---- zstd-1.5.2-orig/programs/Makefile.am	1970-01-01 04:00:00.000000000 +0400
-+++ zstd-1.5.2/programs/Makefile.am	2022-12-26 21:09:23.289234200 +0400
-@@ -0,0 +1,59 @@
+diff -urBbN zstd-1.5.6-orig/programs/Makefile.am zstd-1.5.6/programs/Makefile.am
+--- zstd-1.5.6-orig/programs/Makefile.am	1970-01-01 04:00:00.000000000 +0400
++++ zstd-1.5.6/programs/Makefile.am	2024-06-26 23:52:50.970691500 +0400
+@@ -0,0 +1,61 @@
 +
 +bin_PROGRAMS = zstd
 +
@@ -282,6 +282,8 @@ diff -urBbN zstd-1.5.2-orig/programs/Makefile.am zstd-1.5.2/programs/Makefile.am
 +	datagen.c \
 +	dibio.c \
 +	fileio.c \
++	fileio_asyncio.c \
++	lorem.c \
 +	timefn.c \
 +	util.c \
 +	zstdcli.c \

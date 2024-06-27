@@ -1,4 +1,4 @@
-# Copyright 2022 Chernov A.A.
+# Copyright 2022-2024 Chernov A.A.
 # This is a part of mingw-portage project: 
 # http://sourceforge.net/projects/mingwportage/
 # Distributed under the terms of the GNU General Public License v2
@@ -18,6 +18,12 @@ RDEPEND="meta-virtual/pthreads"
 
 # We not use cmake to resolve circular dependencies.
 #USE_CMAKE=yes
+
+src_unpack()
+{
+	unpack_one ${A} ign
+	cd "${SOURCES_DIR}" || eerror "Can't cd to sources directory!"
+}
 
 src_prepare()
 {
