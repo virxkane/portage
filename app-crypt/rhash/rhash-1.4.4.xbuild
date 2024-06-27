@@ -1,4 +1,4 @@
-# Copyright 2017-2022 Chernov A.A.
+# Copyright 2017-2024 Chernov A.A.
 # This is a part of mingw-portage project: 
 # http://sourceforge.net/projects/mingwportage/
 # Distributed under the terms of the GNU General Public License v2
@@ -12,6 +12,11 @@ SRC_URI="http://downloads.sourceforge.net/${PN}/${P}-src.tar.gz"
 LICENSE="RHash"
 
 RDEPEND="dev-libs/openssl"
+
+src_prepare()
+{
+	epatch "${P}-no-so-link.patch"
+}
 
 src_configure()
 {

@@ -1,0 +1,13 @@
+diff -urBb RHash-1.4.4-orig/librhash/Makefile RHash-1.4.4/librhash/Makefile
+--- RHash-1.4.4-orig/librhash/Makefile	2023-07-14 17:06:29.000000000 +0400
++++ RHash-1.4.4/librhash/Makefile	2024-06-26 23:08:54.237756200 +0400
+@@ -27,9 +27,6 @@
+ install-lib-shared: $(LIBRHASH_SHARED) $(EXTRA_INSTALL_LIBSHARED)
+ 	$(INSTALL) -d $(SO_DIR)
+ 	$(INSTALL_SHARED) $(LIBRHASH_SHARED) $(SO_DIR)/
+-	test "x$(LIBRHASH_SO_MAJ)" != "x$(LIBRHASH_SHARED)" && \
+-	  rm -f $(LIBDIR)/$(LIBRHASH_SO_MAJ) && \
+-	  ln -s $(LIBRHASH_SHARED) $(LIBDIR)/$(LIBRHASH_SO_MAJ)
+ 
+ install-implib:
+ 	$(INSTALL) -d $(LIBDIR)
