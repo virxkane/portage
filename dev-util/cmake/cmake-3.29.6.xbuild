@@ -1,11 +1,11 @@
-# Copyright 2010-2022 Chernov A.A.
+# Copyright 2010-2024 Chernov A.A.
 # This is a part of mingw-portage project: 
 # http://sourceforge.net/projects/mingwportage/
 # Distributed under the terms of the GNU General Public License v2
 
 DESCRIPTION="Cross platform Make"
 
-HOMEPAGE="http://www.cmake.org/"
+HOMEPAGE="https://cmake.org/"
 
 LICENSE="CMake"
 
@@ -20,7 +20,7 @@ RDEPEND="net-misc/curl
 		app-crypt/rhash
 		dev-libs/libuv"
 
-SRC_URI="http://www.cmake.org/files/v3.25/${P}.tar.gz"
+SRC_URI="http://www.cmake.org/files/v3.29/${P}.tar.gz"
 
 src_configure()
 {
@@ -30,7 +30,18 @@ src_configure()
 	then
 		opts="--parallel=${nodes}"
 	fi
-	./bootstrap ${opts} --prefix="${PREFIX}" --system-libs --no-system-jsoncpp --no-qt-gui
+	./bootstrap ${opts} \
+		--prefix="${PREFIX}" \
+		--system-bzip2 \
+		--system-curl \
+		--system-expat \
+		--system-libarchive \
+		--system-librhash \
+		--system-zlib \
+		--system-liblzma \
+		--system-zstd \
+		--system-libuv \
+		--no-qt-gui
 	checkexitcode $? "bootstrap failed"
 
 	# fix native path of install prefix back to MSYS path
