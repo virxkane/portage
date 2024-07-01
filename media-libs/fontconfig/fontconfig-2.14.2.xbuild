@@ -1,9 +1,9 @@
-# Copyright 2010-2023 Chernov A.A.
+# Copyright 2010-2024 Chernov A.A.
 # Distributed under the terms of the GNU General Public License v2
 
 DESCRIPTION="A library for configuring and customizing font access"
 
-HOMEPAGE="http://www.fontconfig.org/"
+HOMEPAGE="https://www.freedesktop.org/wiki/Software/fontconfig/"
 
 LICENSE="MIT"
 
@@ -17,8 +17,8 @@ SRC_URI="http://www.fontconfig.org/release/${P}.tar.xz"
 
 src_prepare()
 {
-	epatch "${P}-mingw32.patch"
-	epatch "${P}-disable-tests.patch"
+	epatch "${PN}-2.14.1-mingw32.patch"
+	epatch "${PN}-2.14.1-disable-tests.patch"
 	AT_M4DIR="m4" eautoreconf
 }
 
