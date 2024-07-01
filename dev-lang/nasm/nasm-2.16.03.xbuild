@@ -1,13 +1,13 @@
-# Copyright 2010-2023 Chernov A.A.
+# Copyright 2010-2024 Chernov A.A.
 # This is a part of mingw-portage project: 
 # http://sourceforge.net/projects/mingwportage/
 # Distributed under the terms of the GNU General Public License v2
 
 DESCRIPTION="groovy little assembler"
 
-HOMEPAGE="http://www.nasm.us/ http://nasm.sourceforge.net/"
+HOMEPAGE="http://www.nasm.us/ https://github.com/netwide-assembler/nasm"
 
-LICENSE="LGPL-2.1"
+LICENSE="BSD-2"
 
 #   external dependencies:
 # perl (msys)
