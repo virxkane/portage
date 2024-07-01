@@ -1,4 +1,4 @@
-# Copyright 2010-2022 Chernov A.A.
+# Copyright 2010-2024 Chernov A.A.
 # This is a part of mingw-portage project: 
 # http://sourceforge.net/projects/mingwportage/
 # Distributed under the terms of the GNU General Public License v2
@@ -14,6 +14,7 @@ LICENSE="POSTGRESQL"
 # flex (msys)
 # perl (msys)
 
+DEPEND="dev-libs/icu"
 RDEPEND="sys-libs/zlib
 		dev-libs/openssl"
 
