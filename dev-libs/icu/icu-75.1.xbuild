@@ -1,11 +1,11 @@
-# Copyright 2014-2023 Chernov A.A.
+# Copyright 2014-2024 Chernov A.A.
 # This is a part of mingw-portage project: 
 # http://sourceforge.net/projects/mingwportage/
 # Distributed under the terms of the GNU General Public License v2
 
 DESCRIPTION="International Components for Unicode"
 
-HOMEPAGE="http://www.icu-project.org/"
+HOMEPAGE="https://icu.unicode.org/"
 
 LICENSE="BSD"
 
@@ -13,11 +13,16 @@ DEPEND="dev-lang/python"
 
 RDEPEND=">=meta-virtual/pthreads-2"
 
-MJ_PV="72"
+MJ_PV="75"
 
-SRC_URI="http://download.icu-project.org/files/icu4c/${PV/_/}/icu4c-${PV//./_}-src.tgz"
+SRC_URI="https://github.com/unicode-org/icu/releases/download/release-${PV//./-}/icu4c-${PV//./_}-src.tgz"
 
 SOURCES_DIR="${PN}/source"
+
+src_prepare()
+{
+	epatch "${P}-mingw.patch"
+}
 
 src_configure()
 {

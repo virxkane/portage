@@ -1,0 +1,11 @@
+diff -urBb ../icu-orig/source/common/putil.cpp source/common/putil.cpp
+--- ../icu-orig/source/common/putil.cpp	2024-04-17 01:08:53.000000000 +0400
++++ source/common/putil.cpp	2024-06-29 07:54:07.275557700 +0400
+@@ -64,6 +64,7 @@
+ #include "unicode/putil.h"
+ #include "unicode/ustring.h"
+ #include "putilimp.h"
++#define __STRICT_ANSI__
+ #include "uassert.h"
+ #include "umutex.h"
+ #include "cmemory.h"
