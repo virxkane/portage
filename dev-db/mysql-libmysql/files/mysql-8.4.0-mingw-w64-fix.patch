@@ -1,0 +1,203 @@
+diff -urBb mysql-8.4.0-orig/client/CMakeLists.txt mysql-8.4.0/client/CMakeLists.txt
+--- mysql-8.4.0-orig/client/CMakeLists.txt	2024-04-10 10:26:28.000000000 +0400
++++ mysql-8.4.0/client/CMakeLists.txt	2024-07-01 23:47:07.236041000 +0400
+@@ -59,6 +59,9 @@
+   ENABLE_EXPORTS
+   LINK_LIBRARIES mysqlclient
+   )
++IF(MINGW)
++  target_link_libraries(mysqltest -lrpcrt4 -ldbghelp)
++ENDIF(MINGW)
+ MYSQL_ADD_EXECUTABLE(mysqlcheck
+   check/mysqlcheck.cc
+   check/mysqlcheck_core.cc
+@@ -244,6 +247,10 @@
+ ELSE()
+   LIST(APPEND MYSQLBINLOG_LIBRARIES json_binlog_static)
+ ENDIF()
++IF(MINGW)
++  LIST(APPEND MYSQLBINLOG_LIBRARIES -lrpcrt4)
++  LIST(APPEND MYSQLBINLOG_LIBRARIES -ldbghelp)
++ENDIF(MINGW)
+ 
+ MYSQL_ADD_EXECUTABLE(mysqlbinlog
+   ${MYSQLBINLOG_SOURCES}
+diff -urBb mysql-8.4.0-orig/client/mysqltest.cc mysql-8.4.0/client/mysqltest.cc
+--- mysql-8.4.0-orig/client/mysqltest.cc	2024-04-10 10:26:28.000000000 +0400
++++ mysql-8.4.0/client/mysqltest.cc	2024-07-01 23:31:19.037671500 +0400
+@@ -9355,12 +9355,17 @@
+ #ifdef _WIN32
+ 
+ LONG WINAPI exception_filter(EXCEPTION_POINTERS *exp) {
++#ifdef _MSC_VER
+   __try {
+     my_set_exception_pointers(exp);
+     signal_handler(exp->ExceptionRecord->ExceptionCode);
+   } __except (EXCEPTION_EXECUTE_HANDLER) {
+     fputs("Got exception in exception handler!\n", stderr);
+   }
++#else
++  my_set_exception_pointers(exp);
++  signal_handler(exp->ExceptionRecord->ExceptionCode);
++#endif
+ 
+   return EXCEPTION_CONTINUE_SEARCH;
+ }
+diff -urBb mysql-8.4.0-orig/cmake/build_configurations/compiler_options.cmake mysql-8.4.0/cmake/build_configurations/compiler_options.cmake
+--- mysql-8.4.0-orig/cmake/build_configurations/compiler_options.cmake	2024-04-10 10:26:28.000000000 +0400
++++ mysql-8.4.0/cmake/build_configurations/compiler_options.cmake	2024-07-01 22:24:45.028417400 +0400
+@@ -73,16 +73,27 @@
+     STRING_APPEND(COMMON_C_FLAGS     " -ftls-model=initial-exec")
+     STRING_APPEND(COMMON_CXX_FLAGS   " -ftls-model=initial-exec")
+   ENDIF()
++ELSE()
++  # Default GCC flags
++  # "-fno-omit-frame-pointer" can't be used with gcc-14.1
++  # See https://inbox.sourceware.org/gcc-bugs/bug-115038-4-IdspRZH4Nv@http.gcc.gnu.org%2Fbugzilla%2F/T/#u
++  IF(MY_COMPILER_IS_GNU)
++    SET(COMMON_CXX_FLAGS             "-std=c++20")
++  ENDIF()
++  # Default Clang flags
++  IF(MY_COMPILER_IS_CLANG)
++    SET(COMMON_C_FLAGS               "-fno-omit-frame-pointer")
++    SET(COMMON_CXX_FLAGS             "-std=c++20 -fno-omit-frame-pointer")
++  ENDIF()
++ENDIF()
+ 
+-  # Use STRING_PREPEND here, so command-line input can override our defaults.
+-  STRING_PREPEND(CMAKE_C_FLAGS                  "${COMMON_C_FLAGS} ")
+-  STRING_PREPEND(CMAKE_C_FLAGS_RELWITHDEBINFO   "${SECTIONS_FLAG} ")
+-  STRING_PREPEND(CMAKE_C_FLAGS_RELEASE          "${SECTIONS_FLAG} ")
+-  STRING_PREPEND(CMAKE_C_FLAGS_MINSIZEREL       "${SECTIONS_FLAG} ")
+-
+-  STRING_PREPEND(CMAKE_CXX_FLAGS                "${COMMON_CXX_FLAGS} ")
+-  STRING_PREPEND(CMAKE_CXX_FLAGS_RELWITHDEBINFO "${SECTIONS_FLAG} ")
+-  STRING_PREPEND(CMAKE_CXX_FLAGS_RELEASE        "${SECTIONS_FLAG} ")
+-  STRING_PREPEND(CMAKE_CXX_FLAGS_MINSIZEREL     "${SECTIONS_FLAG} ")
++# Use STRING_PREPEND here, so command-line input can override our defaults.
++STRING_PREPEND(CMAKE_C_FLAGS                  "${COMMON_C_FLAGS} ")
++STRING_PREPEND(CMAKE_C_FLAGS_RELWITHDEBINFO   "${SECTIONS_FLAG} ")
++STRING_PREPEND(CMAKE_C_FLAGS_RELEASE          "${SECTIONS_FLAG} ")
++STRING_PREPEND(CMAKE_C_FLAGS_MINSIZEREL       "${SECTIONS_FLAG} ")
+ 
+-ENDIF()
++STRING_PREPEND(CMAKE_CXX_FLAGS                "${COMMON_CXX_FLAGS} ")
++STRING_PREPEND(CMAKE_CXX_FLAGS_RELWITHDEBINFO "${SECTIONS_FLAG} ")
++STRING_PREPEND(CMAKE_CXX_FLAGS_RELEASE        "${SECTIONS_FLAG} ")
++STRING_PREPEND(CMAKE_CXX_FLAGS_MINSIZEREL     "${SECTIONS_FLAG} ")
+diff -urBb mysql-8.4.0-orig/cmake/curl.cmake mysql-8.4.0/cmake/curl.cmake
+--- mysql-8.4.0-orig/cmake/curl.cmake	2024-04-10 10:26:28.000000000 +0400
++++ mysql-8.4.0/cmake/curl.cmake	2024-07-01 20:27:31.623393500 +0400
+@@ -185,7 +185,7 @@
+   FIND_CUSTOM_CURL_INCLUDE(${WITH_CURL} CURL_INCLUDE_DIR)
+   SET(CURL_INCLUDE_DIR ${CURL_INCLUDE_DIR} PARENT_SCOPE)
+ 
+-  IF(WIN32)
++  IF(WIN32 AND NOT MINGW)
+     FIND_CUSTOM_WIN_CURL_LIBRARY(${WITH_CURL} CURL_LIBRARY)
+   ELSE()
+     FIND_CUSTOM_UNIX_CURL_LIBRARY(${WITH_CURL} CURL_LIBRARY)
+diff -urBb mysql-8.4.0-orig/cmake/ssl.cmake mysql-8.4.0/cmake/ssl.cmake
+--- mysql-8.4.0-orig/cmake/ssl.cmake	2024-04-10 10:26:28.000000000 +0400
++++ mysql-8.4.0/cmake/ssl.cmake	2024-07-01 20:15:40.312124000 +0400
+@@ -440,11 +440,6 @@
+       HINTS ${OPENSSL_ROOT_DIR}/include
+       )
+     MESSAGE(STATUS "OPENSSL_APPLINK_C ${OPENSSL_APPLINK_C}")
+-    IF(NOT OPENSSL_APPLINK_C)
+-      RESET_SSL_VARIABLES()
+-      FATAL_SSL_NOT_FOUND_ERROR(
+-        "Cannot find applink.c for WITH_SSL=${WITH_SSL}.")
+-    ENDIF()
+     GET_FILENAME_COMPONENT(OPENSSL_ROOT_DIR ${OPENSSL_INCLUDE_DIR} PATH)
+     SET(WITH_SSL_PATH "${OPENSSL_ROOT_DIR}" CACHE PATH "Path to system SSL")
+   ENDIF()
+diff -urBb mysql-8.4.0-orig/include/mysql/components/services/bits/my_io_bits.h mysql-8.4.0/include/mysql/components/services/bits/my_io_bits.h
+--- mysql-8.4.0-orig/include/mysql/components/services/bits/my_io_bits.h	2024-04-10 10:26:28.000000000 +0400
++++ mysql-8.4.0/include/mysql/components/services/bits/my_io_bits.h	2024-07-01 22:54:56.858269800 +0400
+@@ -51,7 +51,9 @@
+ typedef int File; /* File descriptor */
+ #if defined(_WIN32) && !defined(MYSQL_ABI_CHECK)
+ typedef int MY_MODE;
++#if !defined(__MINGW32__)
+ typedef int mode_t;
++#endif
+ typedef int socket_len_t;
+ typedef SOCKET my_socket;
+ #define MY_SOCKET_FMT "%llu"
+diff -urBb mysql-8.4.0-orig/mysys/CMakeLists.txt mysql-8.4.0/mysys/CMakeLists.txt
+--- mysql-8.4.0-orig/mysys/CMakeLists.txt	2024-04-10 10:26:28.000000000 +0400
++++ mysql-8.4.0/mysys/CMakeLists.txt	2024-07-01 23:04:14.616396500 +0400
+@@ -248,6 +248,9 @@
+   SKIP_INSTALL
+   )
+ SET_TARGET_PROPERTIES(mf_iocache_test PROPERTIES COMPILE_FLAGS "-DMAIN")
++IF(MINGW)
++  target_link_libraries(mf_iocache_test -lrpcrt4)
++ENDIF(MINGW)
+ 
+ IF(HAVE_BUILD_ID_SUPPORT)
+   MYSQL_ADD_EXECUTABLE(build_id_test
+diff -urBb mysql-8.4.0-orig/mysys/my_thr_init.cc mysql-8.4.0/mysys/my_thr_init.cc
+--- mysql-8.4.0-orig/mysys/my_thr_init.cc	2024-04-10 10:26:28.000000000 +0400
++++ mysql-8.4.0/mysys/my_thr_init.cc	2024-07-01 22:50:37.170674200 +0400
+@@ -368,7 +368,9 @@
+ 
+ static void install_sigabrt_handler() {
+   /*abort() should not override our exception filter*/
++#if defined(_MSC_VER) && (_MSC_VER > 1310)
+   _set_abort_behavior(0, _CALL_REPORTFAULT);
++#endif
+   signal(SIGABRT, my_sigabrt_handler);
+ }
+ #endif
+diff -urBb mysql-8.4.0-orig/mysys/my_thread.cc mysql-8.4.0/mysys/my_thread.cc
+--- mysql-8.4.0-orig/mysys/my_thread.cc	2024-04-10 10:26:28.000000000 +0400
++++ mysql-8.4.0/mysys/my_thread.cc	2024-07-01 22:35:01.508531000 +0400
+@@ -206,8 +206,10 @@
+   TMethod *m_func;
+ };
+ 
++/* I have no idea what this is and why it doesn't compile...
+ static Win32_library_procedure<decltype(SetThreadDescription)>
+     set_thread_name_proc("kernel32.dll", "SetThreadDescription");
++ */
+ #endif
+ 
+ void my_thread_self_setname(const char *name [[maybe_unused]]) {
+diff -urBb mysql-8.4.0-orig/mysys/stacktrace.cc mysql-8.4.0/mysys/stacktrace.cc
+--- mysql-8.4.0-orig/mysys/stacktrace.cc	2024-04-10 10:26:28.000000000 +0400
++++ mysql-8.4.0/mysys/stacktrace.cc	2024-07-01 23:28:40.749330300 +0400
+@@ -618,12 +618,17 @@
+ }
+ 
+ void my_safe_puts_stderr(const char *val, size_t len) {
++#ifdef _MSC_VER
+   __try {
+     my_write_stderr(val, len);
+     my_safe_printf_stderr("%s", "\n");
+   } __except (EXCEPTION_EXECUTE_HANDLER) {
+     my_safe_printf_stderr("%s", "is an invalid string pointer\n");
+   }
++#else
++  if (!my_write_stderr(val, len)) 
++    my_safe_printf_stderr("%s", "is an invalid string pointer\n");
++#endif
+ }
+ #endif /* _WIN32 */
+ 
+diff -urBb mysql-8.4.0-orig/sql/log_event.cc mysql-8.4.0/sql/log_event.cc
+--- mysql-8.4.0-orig/sql/log_event.cc	2024-04-10 10:26:28.000000000 +0400
++++ mysql-8.4.0/sql/log_event.cc	2024-07-01 23:41:54.884397400 +0400
+@@ -789,9 +789,11 @@
+ }
+ template bool net_field_length_checked<size_t>(const uchar **packet,
+                                                size_t *max_length, size_t *out);
++/*
+ template bool net_field_length_checked<ulonglong>(const uchar **packet,
+                                                   size_t *max_length,
+                                                   ulonglong *out);
++*/
+ 
+ /**
+   Transforms a string into "" or its expression in 0x... form.

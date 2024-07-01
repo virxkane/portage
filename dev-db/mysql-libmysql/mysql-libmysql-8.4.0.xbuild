@@ -1,0 +1,63 @@
+# Copyright 2018,2024 Chernov A.A.
+# This is a part of mingw-portage project: 
+# http://sourceforge.net/projects/mingwportage/
+# Distributed under the terms of the GNU General Public License v2
+
+DESCRIPTION="MySQL client library for C language"
+
+HOMEPAGE="https://www.mysql.com/"
+
+MY_PN="mysql"
+MY_P="mysql-${PV}"
+
+SRC_URI="https://cdn.mysql.com/Downloads/MySQL-8.4/${MY_P}.tar.gz"
+
+LICENSE="GPL-2"
+
+DEPEND="dev-util/cmake"
+RDEPEND="!dev-db/mysql-connector-c
+		dev-libs/openssl
+		sys-libs/zlib
+		app-arch/zstd"
+
+SOURCES_DIR="${MY_PN}-${PV}"
+USE_CMAKE=yes
+
+src_prepare()
+{
+	epatch ${MY_P}-mingw-w64-fix.patch
+}
+
+src_configure()
+{
+	econf -DWITH_DEBUG=OFF \
+	-DENABLED_PROFILING=OFF \
+	-DWITHOUT_SERVER=ON \
+	-DWITH_UNIT_TESTS=OFF \
+	-DWITH_ROUTER=OFF \
+	-DWITH_ZLIB=system \
+	-DWITH_ZSTD=system \
+	-DWITH_LZ4=bundled \
+	-DWITH_SSL=${PREFIX} \
+	-DWITH_CURL=bundled
+}
+
+src_compile()
+{
+	cd include || die "Can't chdir"
+	emake
+	cd ../libmysql || die "Can't chdir"
+	emake
+	cd ..
+}
+
+src_install()
+{
+	cd include || die "Can't chdir"
+	emake_install
+	cd ../libmysql || die "Can't chdir"
+	emake_install
+	cd ..
+	install -d "${INSTDIR}/${PREFIX}/bin/"
+	mv "${INSTDIR}/${PREFIX}/lib/liblibmysql.dll" "${INSTDIR}/${PREFIX}/bin/"
+}
