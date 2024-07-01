@@ -1,18 +1,18 @@
-# Copyright 2011-2023 Chernov A.A.
+# Copyright 2011-2024 Chernov A.A.
 # This is a part of mingw-portage project: 
 # http://sourceforge.net/projects/mingwportage/
 # Distributed under the terms of the GNU General Public License v2
 
 DESCRIPTION="A message bus system, a simple way for applications to talk to each other"
 
-HOMEPAGE="http://dbus.freedesktop.org/"
+HOMEPAGE="https://dbus.freedesktop.org/"
 
 LICENSE="GPL-2"
 
 RDEPEND="sys-devel/libiconv
 		dev-libs/expat"
 
-SRC_URI="http://dbus.freedesktop.org/releases/dbus/${P}.tar.xz"
+SRC_URI="http://dbus.freedesktop.org/releases/${PN}/${P}.tar.xz"
 
 # when building with cmake we lost pkg-config file.
 src_configure()
