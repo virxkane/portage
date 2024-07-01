@@ -1,0 +1,48 @@
+# Copyright 2010-2024 Chernov A.A.
+# This is a part of mingw-portage project: 
+# http://sourceforge.net/projects/mingwportage/
+# Distributed under the terms of the GNU General Public License v2
+
+DESCRIPTION="An OpenType text shaping engine"
+
+HOMEPAGE="https://harfbuzz.github.io/"
+
+LICENSE="Old-MIT ISC icu"
+
+# TODO: add graphite2
+
+DEPEND="meta-virtual/pkg-config
+		dev-lang/python
+		dev-util/cmake"
+RDEPEND=">=media-libs/freetype-2.4.2
+		>=dev-libs/icu-51.2"
+
+SRC_URI="https://github.com/harfbuzz/${PN}/releases/download/${PV}/${P}.tar.xz"
+
+USE_CMAKE=yes
+
+src_unpack()
+{
+	unpack_one ${A} ign
+	cd "${SOURCES_DIR}" || eerror "Can't cd to sources directory!"
+}
+
+src_prepare()
+{
+	epatch "${P}-cmake-fix.patch"
+}
+
+src_configure()
+{
+	econf -DBUILD_SHARED_LIBS=ON \
+		-DHB_HAVE_FREETYPE=ON \
+		-DHB_HAVE_CAIRO=OFF \
+		-DHB_HAVE_GRAPHITE2=OFF \
+		-DHB_HAVE_GLIB=OFF \
+		-DHB_HAVE_GOBJECT=OFF \
+		-DHB_HAVE_ICU=ON \
+		-DHB_HAVE_UNISCRIBE=ON \
+		-DHB_HAVE_GDI=ON \
+		-DHB_HAVE_DIRECTWRITE=ON \
+		-DHB_BUILD_UTILS=OFF
+}

@@ -1,0 +1,18 @@
+diff -urBb harfbuzz-9.0.0-orig/CMakeLists.txt harfbuzz-9.0.0/CMakeLists.txt
+--- harfbuzz-9.0.0-orig/CMakeLists.txt	2024-06-27 19:38:31.000000000 +0400
++++ harfbuzz-9.0.0/CMakeLists.txt	2024-06-30 10:28:15.735848700 +0400
+@@ -533,14 +532,9 @@
+   # As of CMake 3.0.0, the compiler id for Apple-provided Clang is now "AppleClang";
+   # thus we use MATCHES instead of STREQUAL to include either regular Clang or AppleClang
+   if (CMAKE_CXX_COMPILER_ID MATCHES "Clang" OR CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
+-    # Make sure we don't link to libstdc++
+     set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fno-rtti -fno-exceptions")
+     set (CMAKE_CXX_IMPLICIT_LINK_LIBRARIES "m") # libm
+     set (CMAKE_CXX_IMPLICIT_LINK_DIRECTORIES "")
+-    set_target_properties(harfbuzz PROPERTIES LINKER_LANGUAGE C)
+-    if (HB_BUILD_SUBSET)
+-      set_target_properties(harfbuzz-subset PROPERTIES LINKER_LANGUAGE C)
+-    endif ()
+ 
+     # No threadsafe statics as we do it ourselves
+     set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fno-threadsafe-statics")
