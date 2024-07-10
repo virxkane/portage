@@ -15,8 +15,7 @@ SRC_URI="https://cdn.mysql.com/Downloads/MySQL-8.4/${MY_P}.tar.gz"
 LICENSE="GPL-2"
 
 DEPEND="dev-util/cmake"
-RDEPEND="!dev-db/mysql-connector-c
-		dev-libs/openssl
+RDEPEND="dev-libs/openssl
 		sys-libs/zlib
 		app-arch/zstd"
 
