@@ -1,0 +1,14 @@
+diff -urBb qtbase-everywhere-src-5.15.14-orig/src/plugins/sqldrivers/configure.json qtbase-everywhere-src-5.15.14/src/plugins/sqldrivers/configure.json
+--- qtbase-everywhere-src-5.15.14-orig/src/plugins/sqldrivers/configure.json	2024-07-07 20:16:24.787790100 +0400
++++ qtbase-everywhere-src-5.15.14/src/plugins/sqldrivers/configure.json	2024-07-10 21:09:09.648584000 +0400
+@@ -72,9 +72,8 @@
+                 { "type": "mysqlConfig", "query": "--libs_r", "cleanlibs": false },
+                 { "type": "mysqlConfig", "query": "--libs", "cleanlibs": false },
+                 { "libs": "-lmysqlclient_r", "condition": "!config.win32" },
+-                { "libs": "-llibmariadb", "condition": "config.win32" },
+                 { "libs": "-llibmysql", "condition": "config.win32" },
+-                { "libs": "-lmariadb", "condition": "!config.win32" },
++                { "libs": "-lmariadb" },
+                 { "libs": "-lmysqlclient", "condition": "!config.win32" }
+             ]
+         },

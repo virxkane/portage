@@ -1,0 +1,31 @@
+# Copyright 2013-2024 Chernov A.A.
+# This is a part of mingw-portage project: 
+# http://sourceforge.net/projects/mingwportage/
+# Distributed under the terms of the GNU General Public License v2
+
+DESCRIPTION="Qt toolkit (Quick3D module)"
+
+HOMEPAGE="http://www.qt.io/"
+
+LICENSE="LGPL-2.1 GPL-3"
+
+RESTRICT="strip"
+
+RDEPEND=">=dev-qt/qtdeclarative-${PV}
+		>=dev-qt/qtquicktimeline-${PV}"
+
+#SRC_URI="http://download.qt.io/official_releases/qt/5.15/${PV}/submodules/${PN}-everywhere-opensource-src-${PV}.tar.xz"
+SRC_URI="https://qtproject.mirror.liquidtelecom.com/official_releases/qt/5.15/${PV}/submodules/${PN}-everywhere-opensource-src-${PV}.tar.xz"
+
+# QTBUG-16443
+SOURCES_DIR="qd"
+
+load_module qt5_module
+
+src_unpack()
+{
+	# QTBUG-16443
+	unpack ${A}
+	mv "${PN}-everywhere-src-${PV}" "${SOURCES_DIR}"
+	cd "${SOURCES_DIR}" || eerror "Can't cd to sources directory!"
+}
