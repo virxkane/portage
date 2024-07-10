@@ -1,0 +1,21 @@
+diff -urBb mariadb-connector-c-3.3.8-src-orig/plugins/io/CMakeLists.txt mariadb-connector-c-3.3.8-src/plugins/io/CMakeLists.txt
+--- mariadb-connector-c-3.3.8-src-orig/plugins/io/CMakeLists.txt	2023-11-01 14:28:04.000000000 +0400
++++ mariadb-connector-c-3.3.8-src/plugins/io/CMakeLists.txt	2024-07-07 12:04:42.593465600 +0400
+@@ -4,12 +4,16 @@
+ 
+     ADD_DEFINITIONS(-DHAVE_REMOTEIO=1)
+     #remote io plugin
++    SET(REMOTE_IO_LIBS ${CURL_LIBRARIES})
++    IF (MINGW)
++      LIST(APPEND REMOTE_IO_LIBS -lws2_32)
++    ENDIF(MINGW)
+     REGISTER_PLUGIN(TARGET remote_io
+                   TYPE MARIADB_CLIENT_PLUGIN_IO
+                   CONFIGURATIONS DYNAMIC STATIC OFF
+                   DEFAULT DYNAMIC
+                   SOURCES ${CC_SOURCE_DIR}/plugins/io/remote_io.c
+                   INCLUDES ${CURL_INCLUDE_DIR}
+-                  LIBRARIES ${CURL_LIBRARIES})
++                  LIBRARIES ${REMOTE_IO_LIBS})
+   ENDIF()
+ ENDIF()

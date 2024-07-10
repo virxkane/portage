@@ -1,0 +1,24 @@
+diff -urBb mariadb-connector-c-3.3.8-src-orig/include/ma_global.h mariadb-connector-c-3.3.8-src/include/ma_global.h
+--- mariadb-connector-c-3.3.8-src-orig/include/ma_global.h	2023-11-01 14:28:04.000000000 +0400
++++ mariadb-connector-c-3.3.8-src/include/ma_global.h	2024-07-07 19:43:54.676261300 +0400
+@@ -30,7 +30,7 @@
+ #define strdup _strdup
+ #define sleep(x) Sleep(1000*(x))
+ #define strerror_r(errno,buf,len) strerror_s(buf,len,errno)
+-#define STDCALL __stdcall 
++#define STDCALL
+ #endif
+ 
+ #include <ma_config.h>
+diff -urBb mariadb-connector-c-3.3.8-src-orig/include/mysql.h mariadb-connector-c-3.3.8-src/include/mysql.h
+--- mariadb-connector-c-3.3.8-src-orig/include/mysql.h	2023-11-01 14:28:04.000000000 +0400
++++ mariadb-connector-c-3.3.8-src/include/mysql.h	2024-07-07 19:44:41.683942400 +0400
+@@ -42,7 +42,7 @@
+ #if !defined(_WIN32)
+ #define STDCALL
+ #else
+-#define STDCALL __stdcall
++#define STDCALL
+ #endif
+ 
+ #ifndef my_socket_defined

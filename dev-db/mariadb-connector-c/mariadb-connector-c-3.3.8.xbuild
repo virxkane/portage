@@ -1,0 +1,49 @@
+# Copyright 2015,2024 Chernov A.A.
+# This is a part of mingw-portage project: 
+# http://sourceforge.net/projects/mingwportage/
+# Distributed under the terms of the GNU General Public License v2
+
+DESCRIPTION="MariaDB client library that can be used to connect to MySQL or MariaDB."
+
+HOMEPAGE="http://www.mariadb.org/"
+
+SRC_URI="https://archive.mariadb.org//connector-c-${PV}/${P}-src.tar.gz"
+
+LICENSE="LGPL-2.1"
+
+RESTRICT="mirror"
+
+DEPEND="dev-util/cmake"
+RDEPEND="sys-libs/zlib
+		app-arch/zstd
+		net-misc/curl"
+
+SOURCES_DIR="${P}-src"
+USE_CMAKE=yes
+
+src_prepare()
+{
+	epatch "${P}-mingw-w64.patch"
+	epatch "${P}-no-stdcall.patch"
+}
+
+src_configure()
+{
+	econf \
+		-DWITH_UNIT_TESTS=OFF \
+		-DWITH_SSL=SCHANNEL \
+		-DWITH_EXTERNAL_ZLIB=ON \
+		-DWITH_CURL=ON
+}
+
+src_install()
+{
+	emake_install
+	install -d ${INSTDIR}/${PREFIX}/bin/
+	mv ${INSTDIR}/${PREFIX}/lib/mariadb/liblibmariadb.dll.a \
+		${INSTDIR}/${PREFIX}/lib/libmariadb.dll.a
+	mv ${INSTDIR}/${PREFIX}/lib/mariadb/libmariadbclient.a \
+		${INSTDIR}/${PREFIX}/lib/libmariadbclient.a
+	mv ${INSTDIR}/${PREFIX}/lib/mariadb/libmariadb.dll \
+		${INSTDIR}/${PREFIX}/bin/libmariadb.dll
+}
