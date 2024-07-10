@@ -1,5 +1,5 @@
 # Copyright 1999-2013 Gentoo Foundation
-# Copyright 2014-2023 Chernov A.A.
+# Copyright 2014-2024 Chernov A.A.
 # Distributed under the terms of the GNU General Public License v2
 
 DESCRIPTION="A software implementation of the OpenAL 3D audio API"
@@ -9,12 +9,6 @@ HOMEPAGE="https://www.openal-soft.org/"
 LICENSE="LGPL-2"
 
 DEPEND="dev-util/cmake"
-case ${CHOST} in
-i[4-6]86-pc-mingw32)
-	DEPEND="${DEPEND} dev-libs/directx7-headers"
-	;;
-esac
-
 
 MY_PN="${PN}-soft"
 MY_P="${MY_PN}-${PV}"
@@ -26,7 +20,7 @@ USE_CMAKE=yes
 
 src_prepare()
 {
-	epatch "${P}-windres-cmake.patch"
+	epatch "${PN}-1.22.2-windres-cmake.patch"
 }
 
 src_configure()
@@ -34,9 +28,6 @@ src_configure()
 	case ${CHOST} in
 	*-w64-mingw32)
 		dxsdk_dir="${PREFIX}/${CHOST}"
-		;;
-	*-pc-mingw32)
-		dxsdk_dir="${PREFIX}"
 		;;
 	esac
 	econf \
