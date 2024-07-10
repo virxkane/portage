@@ -1,4 +1,4 @@
-# Copyright 2014-2023 Chernov A.A.
+# Copyright 2014-2024 Chernov A.A.
 # This is a part of mingw-portage project: 
 # http://sourceforge.net/projects/mingwportage/
 # Distributed under the terms of the GNU General Public License v2
@@ -14,18 +14,14 @@ LICENSE="BSD"
 RDEPEND="meta-virtual/jpeg
 		media-libs/libpng
 		media-libs/tiff
-		media-libs/giflib
-		meta-virtual/glut"
-
-src_prepare()
-{
-	epatch "${PN}-1.0.0-mingw32-opengl.patch"
-	AT_M4DIR="m4" eautoreconf
-}
+		media-libs/giflib"
 
 src_configure()
 {
 	econf --enable-shared --enable-static \
 		--enable-libwebpmux --enable-libwebpdemux \
-		--enable-libwebpdecoder --enable-libwebpextras
+		--enable-libwebpdecoder --enable-libwebpextras \
+		--enable-threading \
+		--enable-jpeg --enable-tiff --enable-gif --enable-wic \
+		--disable-gl --disable-sdl
 }
