@@ -1,6 +1,6 @@
-diff -urBbN giflib-5.2.1-orig/AUTHORS giflib-5.2.1/AUTHORS
---- giflib-5.2.1-orig/AUTHORS	1970-01-01 04:00:00.000000000 +0400
-+++ giflib-5.2.1/AUTHORS	2014-05-16 14:46:53.000000000 +0400
+diff -urBbN giflib-5.2.2-orig/AUTHORS giflib-5.2.2/AUTHORS
+--- giflib-5.2.2-orig/AUTHORS	1970-01-01 04:00:00.000000000 +0400
++++ giflib-5.2.2/AUTHORS	2024-07-06 10:15:48.315224700 +0400
 @@ -0,0 +1,36 @@
 +Michael Brown <michael_brown_uk[AT]hotmail.com>
 +        callbacks to write data via user defined function
@@ -38,203 +38,9 @@ diff -urBbN giflib-5.2.1-orig/AUTHORS giflib-5.2.1/AUTHORS
 +	
 +Georg Schwarz <geos[AT]epost.de>
 +	IRIX fixes
-diff -urBbN giflib-5.2.1-orig/config.h.in giflib-5.2.1/config.h.in
---- giflib-5.2.1-orig/config.h.in	1970-01-01 04:00:00.000000000 +0400
-+++ giflib-5.2.1/config.h.in	2020-02-02 09:42:22.316815300 +0400
-@@ -0,0 +1,70 @@
-+/* config.h.in.  Generated from configure.ac by autoheader.  */
-+
-+/* Define to 1 if you have the <dlfcn.h> header file. */
-+#undef HAVE_DLFCN_H
-+
-+/* Define to 1 if you have the <fcntl.h> header file. */
-+#undef HAVE_FCNTL_H
-+
-+/* Define to 1 if you have the <inttypes.h> header file. */
-+#undef HAVE_INTTYPES_H
-+
-+/* Define to 1 if you have the <limits.h> header file. */
-+#undef HAVE_LIMITS_H
-+
-+/* Define to 1 if you have the <memory.h> header file. */
-+#undef HAVE_MEMORY_H
-+
-+/* Define to 1 if you have the <stdarg.h> header file. */
-+#undef HAVE_STDARG_H
-+
-+/* Define to 1 if you have the <stdint.h> header file. */
-+#undef HAVE_STDINT_H
-+
-+/* Define to 1 if you have the <stdlib.h> header file. */
-+#undef HAVE_STDLIB_H
-+
-+/* Define to 1 if you have the <strings.h> header file. */
-+#undef HAVE_STRINGS_H
-+
-+/* Define to 1 if you have the <string.h> header file. */
-+#undef HAVE_STRING_H
-+
-+/* Define to 1 if you have the <sys/stat.h> header file. */
-+#undef HAVE_SYS_STAT_H
-+
-+/* Define to 1 if you have the <sys/types.h> header file. */
-+#undef HAVE_SYS_TYPES_H
-+
-+/* Define to 1 if you have the <unistd.h> header file. */
-+#undef HAVE_UNISTD_H
-+
-+/* Define to the sub-directory where libtool stores uninstalled libraries. */
-+#undef LT_OBJDIR
-+
-+/* Name of package */
-+#undef PACKAGE
-+
-+/* Define to the address where bug reports for this package should be sent. */
-+#undef PACKAGE_BUGREPORT
-+
-+/* Define to the full name of this package. */
-+#undef PACKAGE_NAME
-+
-+/* Define to the full name and version of this package. */
-+#undef PACKAGE_STRING
-+
-+/* Define to the one symbol short name of this package. */
-+#undef PACKAGE_TARNAME
-+
-+/* Define to the home page for this package. */
-+#undef PACKAGE_URL
-+
-+/* Define to the version of this package. */
-+#undef PACKAGE_VERSION
-+
-+/* Define to 1 if you have the ANSI C header files. */
-+#undef STDC_HEADERS
-+
-+/* Version number of package */
-+#undef VERSION
-diff -urBbN giflib-5.2.1-orig/configure.ac giflib-5.2.1/configure.ac
---- giflib-5.2.1-orig/configure.ac	1970-01-01 04:00:00.000000000 +0400
-+++ giflib-5.2.1/configure.ac	2020-02-02 09:12:10.040506800 +0400
-@@ -0,0 +1,51 @@
-+dnl Process this file with autoconf to produce a configure script.
-+AC_INIT(giflib, [5.2.1], [esr@thyrsus.com], giflib)
-+AC_CONFIG_MACRO_DIR([m4])
-+AC_CONFIG_SRCDIR([dgif_lib.c])
-+AM_INIT_AUTOMAKE([gnu dist-bzip2 -Wall])
-+dnl Make builds less verbose.  Shuts off Makefile portability checks.
-+m4_ifdef([AM_SILENT_RULES], [AM_SILENT_RULES([yes])])
-+
-+dnl Note: config.h is not used in the current build
-+dnl We leave this in place only to suppress an error message at autogen time
-+AM_CONFIG_HEADER(config.h)
-+
-+dnl Checks for programs.
-+AM_PROG_AR
-+AC_PROG_LIBTOOL
-+AC_PROG_CC
-+AC_PROG_CPP
-+AC_PROG_INSTALL
-+AC_PROG_LN_S
-+AC_PROG_MAKE_SET
-+AM_PROG_CC_C_O
-+
-+dnl Allow partial building on systems without xmlto
-+AC_CHECK_PROG([have_xmlto], [xmlto], ["yes"],["no"])
-+AM_CONDITIONAL([BUILD_DOC], [test "x${have_xmlto}" = "xyes"])
-+
-+dnl Shared-library version
-+SHLIBVERSION=7:2:0
-+AC_SUBST(SHLIBVERSION)
-+
-+dnl Define warnings if we're compiling with gcc.
-+dnl Set it in CFLAGS so the end-user can disable it if they wish.
-+if test "x$GCC" = "xyes" ; then
-+  CFLAGS="$CFLAGS -Wall"
-+fi
-+
-+AC_CHECK_HEADERS(limits.h, ,
-+                 AC_MSG_ERROR([giflib needs limits.h to compile]))
-+AC_CHECK_HEADERS(fcntl.h, ,
-+		 AC_MSG_ERROR([giflib needs fcntl.h to compile]))
-+AC_CHECK_HEADERS(stdint.h, ,
-+		 AC_MSG_ERROR([giflib needs stdint.h to compile]))
-+AC_CHECK_HEADERS(stdarg.h, ,
-+		 AC_MSG_ERROR([giflib needs stdarg.h to compile]))
-+
-+AC_CONFIG_FILES([
-+Makefile
-+doc/Makefile
-+pic/Makefile
-+])
-+AC_OUTPUT
-diff -urBbN giflib-5.2.1-orig/doc/Makefile.am giflib-5.2.1/doc/Makefile.am
---- giflib-5.2.1-orig/doc/Makefile.am	1970-01-01 04:00:00.000000000 +0400
-+++ giflib-5.2.1/doc/Makefile.am	2020-02-02 09:10:25.730876200 +0400
-@@ -0,0 +1,61 @@
-+SUFFIXES = .xml .html .txt .asc .1
-+
-+.xml.html:
-+	xmlto xhtml-nochunks $<
-+
-+.xml.1:
-+	xmlto man $<
-+
-+.xml.txt:
-+	xmlto txt $<
-+
-+.asc.html:
-+	asciidoc $<
-+
-+all: allhtml manpages
-+
-+# The distinction between XMLMAN and XMLINTERNAL is because
-+# some pages shouldn't be installed as part of a binary package;
-+# they're just for test-pattern generators.
-+XMLMAN = \
-+	gif2rgb.xml \
-+	gifbuild.xml \
-+	gifclrmp.xml \
-+	gifecho.xml \
-+	giffix.xml \
-+	gifinto.xml \
-+	giflib.xml \
-+	giftext.xml \
-+	giftool.xml
-+XMLINTERNAL = \
-+	gifbg.xml \
-+	gifcolor.xml \
-+	gifhisto.xml \
-+	gifwedge.xml
-+XMLDOC = intro.xml gif_lib.xml
-+XMLALL = $(XMLMAN) $(XMLINTERNAL) $(XMLDOC)
-+TXTDOC = 00README
-+SOURCES = $(XMLALL) $(TXTDOC)
-+SITEHTML = index.html
-+
-+# Philosophical choice: the website gets the internal manual pages
-+allhtml: $(XMLALL:.xml=.html) $(XMLINTERNAL:.xml=.html)
-+
-+manpages: $(XMLMAN:.xml=.1) $(XMLINTERNAL:.xml=.1)
-+man_MANS = $(XMLMAN:.xml=.1)
-+
-+# Control what goes in the distribution tarball.
-+# We include all of the XML, and also generated manual pages 
-+# so people working from the distribution tarball won't need xmlto. 
-+EXTRA_DIST = $(SOURCES) $(XMLMAN:.xml=.1) $(XMLINTERNAL:.xml=.1)
-+
-+# Prepare the website directory to deliver an update.
-+# ImageMagick and asciidoc are required.
-+website: allhtml
-+	rm -fr staging; mkdir staging; 
-+	cp -r $(XMLALL:.xml=.html) $(SITEHTML) *.txt whatsinagif staging
-+	convert ../pic/gifgrid.gif -resize 50x50 staging/giflib-logo.gif
-+	asciidoc - <../history.asc >staging/history.html
-+
-+clean-local:
-+	rm -fr staging $(XMLALL:.xml=.html) $(XMLMAN:.xml=.1)
-diff -urBbN giflib-5.2.1-orig/Makefile.am giflib-5.2.1/Makefile.am
---- giflib-5.2.1-orig/Makefile.am	1970-01-01 04:00:00.000000000 +0400
-+++ giflib-5.2.1/Makefile.am	2020-02-02 09:54:15.340774600 +0400
+diff -urBbN giflib-5.2.2-orig/Makefile.am giflib-5.2.2/Makefile.am
+--- giflib-5.2.2-orig/Makefile.am	1970-01-01 04:00:00.000000000 +0400
++++ giflib-5.2.2/Makefile.am	2024-07-06 10:15:48.320211500 +0400
 @@ -0,0 +1,110 @@
 +SUBDIRS = pic
 +
@@ -346,9 +152,203 @@ diff -urBbN giflib-5.2.1-orig/Makefile.am giflib-5.2.1/Makefile.am
 +	cd doc; make website
 +	shipper -w version=@VERSION@ | sh -e -x
 +	rm -fr doc/staging
-diff -urBbN giflib-5.2.1-orig/pic/Makefile.am giflib-5.2.1/pic/Makefile.am
---- giflib-5.2.1-orig/pic/Makefile.am	1970-01-01 04:00:00.000000000 +0400
-+++ giflib-5.2.1/pic/Makefile.am	2014-05-16 14:46:53.000000000 +0400
+diff -urBbN giflib-5.2.2-orig/config.h.in giflib-5.2.2/config.h.in
+--- giflib-5.2.2-orig/config.h.in	1970-01-01 04:00:00.000000000 +0400
++++ giflib-5.2.2/config.h.in	2024-07-06 10:15:48.317219700 +0400
+@@ -0,0 +1,70 @@
++/* config.h.in.  Generated from configure.ac by autoheader.  */
++
++/* Define to 1 if you have the <dlfcn.h> header file. */
++#undef HAVE_DLFCN_H
++
++/* Define to 1 if you have the <fcntl.h> header file. */
++#undef HAVE_FCNTL_H
++
++/* Define to 1 if you have the <inttypes.h> header file. */
++#undef HAVE_INTTYPES_H
++
++/* Define to 1 if you have the <limits.h> header file. */
++#undef HAVE_LIMITS_H
++
++/* Define to 1 if you have the <memory.h> header file. */
++#undef HAVE_MEMORY_H
++
++/* Define to 1 if you have the <stdarg.h> header file. */
++#undef HAVE_STDARG_H
++
++/* Define to 1 if you have the <stdint.h> header file. */
++#undef HAVE_STDINT_H
++
++/* Define to 1 if you have the <stdlib.h> header file. */
++#undef HAVE_STDLIB_H
++
++/* Define to 1 if you have the <strings.h> header file. */
++#undef HAVE_STRINGS_H
++
++/* Define to 1 if you have the <string.h> header file. */
++#undef HAVE_STRING_H
++
++/* Define to 1 if you have the <sys/stat.h> header file. */
++#undef HAVE_SYS_STAT_H
++
++/* Define to 1 if you have the <sys/types.h> header file. */
++#undef HAVE_SYS_TYPES_H
++
++/* Define to 1 if you have the <unistd.h> header file. */
++#undef HAVE_UNISTD_H
++
++/* Define to the sub-directory where libtool stores uninstalled libraries. */
++#undef LT_OBJDIR
++
++/* Name of package */
++#undef PACKAGE
++
++/* Define to the address where bug reports for this package should be sent. */
++#undef PACKAGE_BUGREPORT
++
++/* Define to the full name of this package. */
++#undef PACKAGE_NAME
++
++/* Define to the full name and version of this package. */
++#undef PACKAGE_STRING
++
++/* Define to the one symbol short name of this package. */
++#undef PACKAGE_TARNAME
++
++/* Define to the home page for this package. */
++#undef PACKAGE_URL
++
++/* Define to the version of this package. */
++#undef PACKAGE_VERSION
++
++/* Define to 1 if you have the ANSI C header files. */
++#undef STDC_HEADERS
++
++/* Version number of package */
++#undef VERSION
+diff -urBbN giflib-5.2.2-orig/configure.ac giflib-5.2.2/configure.ac
+--- giflib-5.2.2-orig/configure.ac	1970-01-01 04:00:00.000000000 +0400
++++ giflib-5.2.2/configure.ac	2024-07-06 10:16:05.904781800 +0400
+@@ -0,0 +1,51 @@
++dnl Process this file with autoconf to produce a configure script.
++AC_INIT(giflib, [5.2.2], [esr@thyrsus.com], giflib)
++AC_CONFIG_MACRO_DIR([m4])
++AC_CONFIG_SRCDIR([dgif_lib.c])
++AM_INIT_AUTOMAKE([gnu dist-bzip2 -Wall])
++dnl Make builds less verbose.  Shuts off Makefile portability checks.
++m4_ifdef([AM_SILENT_RULES], [AM_SILENT_RULES([yes])])
++
++dnl Note: config.h is not used in the current build
++dnl We leave this in place only to suppress an error message at autogen time
++AM_CONFIG_HEADER(config.h)
++
++dnl Checks for programs.
++AM_PROG_AR
++AC_PROG_LIBTOOL
++AC_PROG_CC
++AC_PROG_CPP
++AC_PROG_INSTALL
++AC_PROG_LN_S
++AC_PROG_MAKE_SET
++AM_PROG_CC_C_O
++
++dnl Allow partial building on systems without xmlto
++AC_CHECK_PROG([have_xmlto], [xmlto], ["yes"],["no"])
++AM_CONDITIONAL([BUILD_DOC], [test "x${have_xmlto}" = "xyes"])
++
++dnl Shared-library version
++SHLIBVERSION=7:2:0
++AC_SUBST(SHLIBVERSION)
++
++dnl Define warnings if we're compiling with gcc.
++dnl Set it in CFLAGS so the end-user can disable it if they wish.
++if test "x$GCC" = "xyes" ; then
++  CFLAGS="$CFLAGS -Wall"
++fi
++
++AC_CHECK_HEADERS(limits.h, ,
++                 AC_MSG_ERROR([giflib needs limits.h to compile]))
++AC_CHECK_HEADERS(fcntl.h, ,
++		 AC_MSG_ERROR([giflib needs fcntl.h to compile]))
++AC_CHECK_HEADERS(stdint.h, ,
++		 AC_MSG_ERROR([giflib needs stdint.h to compile]))
++AC_CHECK_HEADERS(stdarg.h, ,
++		 AC_MSG_ERROR([giflib needs stdarg.h to compile]))
++
++AC_CONFIG_FILES([
++Makefile
++doc/Makefile
++pic/Makefile
++])
++AC_OUTPUT
+diff -urBbN giflib-5.2.2-orig/doc/Makefile.am giflib-5.2.2/doc/Makefile.am
+--- giflib-5.2.2-orig/doc/Makefile.am	1970-01-01 04:00:00.000000000 +0400
++++ giflib-5.2.2/doc/Makefile.am	2024-07-06 10:15:48.319214200 +0400
+@@ -0,0 +1,61 @@
++SUFFIXES = .xml .html .txt .asc .1
++
++.xml.html:
++	xmlto xhtml-nochunks $<
++
++.xml.1:
++	xmlto man $<
++
++.xml.txt:
++	xmlto txt $<
++
++.asc.html:
++	asciidoc $<
++
++all: allhtml manpages
++
++# The distinction between XMLMAN and XMLINTERNAL is because
++# some pages shouldn't be installed as part of a binary package;
++# they're just for test-pattern generators.
++XMLMAN = \
++	gif2rgb.xml \
++	gifbuild.xml \
++	gifclrmp.xml \
++	gifecho.xml \
++	giffix.xml \
++	gifinto.xml \
++	giflib.xml \
++	giftext.xml \
++	giftool.xml
++XMLINTERNAL = \
++	gifbg.xml \
++	gifcolor.xml \
++	gifhisto.xml \
++	gifwedge.xml
++XMLDOC = intro.xml gif_lib.xml
++XMLALL = $(XMLMAN) $(XMLINTERNAL) $(XMLDOC)
++TXTDOC = 00README
++SOURCES = $(XMLALL) $(TXTDOC)
++SITEHTML = index.html
++
++# Philosophical choice: the website gets the internal manual pages
++allhtml: $(XMLALL:.xml=.html) $(XMLINTERNAL:.xml=.html)
++
++manpages: $(XMLMAN:.xml=.1) $(XMLINTERNAL:.xml=.1)
++man_MANS = $(XMLMAN:.xml=.1)
++
++# Control what goes in the distribution tarball.
++# We include all of the XML, and also generated manual pages 
++# so people working from the distribution tarball won't need xmlto. 
++EXTRA_DIST = $(SOURCES) $(XMLMAN:.xml=.1) $(XMLINTERNAL:.xml=.1)
++
++# Prepare the website directory to deliver an update.
++# ImageMagick and asciidoc are required.
++website: allhtml
++	rm -fr staging; mkdir staging; 
++	cp -r $(XMLALL:.xml=.html) $(SITEHTML) *.txt whatsinagif staging
++	convert ../pic/gifgrid.gif -resize 50x50 staging/giflib-logo.gif
++	asciidoc - <../history.asc >staging/history.html
++
++clean-local:
++	rm -fr staging $(XMLALL:.xml=.html) $(XMLMAN:.xml=.1)
+diff -urBbN giflib-5.2.2-orig/pic/Makefile.am giflib-5.2.2/pic/Makefile.am
+--- giflib-5.2.2-orig/pic/Makefile.am	1970-01-01 04:00:00.000000000 +0400
++++ giflib-5.2.2/pic/Makefile.am	2024-07-06 10:15:48.321208800 +0400
 @@ -0,0 +1,11 @@
 +EXTRA_DIST = NOTES \
 +	     fire.gif \
