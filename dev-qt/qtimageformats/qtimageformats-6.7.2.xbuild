@@ -9,17 +9,19 @@ HOMEPAGE="http://www.qt.io/"
 
 LICENSE="LGPL-2.1 GPL-3"
 
-RESTRICT="strip"
-
 # TODO: add jasper
 RDEPEND=">=dev-qt/qtbase-${PV}
 		media-libs/libwebp
 		media-libs/tiff
 		media-libs/libmng"
 
-#SRC_URI="http://download.qt.io/official_releases/qt/5.15/${PV}/submodules/${PN}-everywhere-opensource-src-${PV}.tar.xz"
-SRC_URI="https://qtproject.mirror.liquidtelecom.com/official_releases/qt/5.15/${PV}/submodules/${PN}-everywhere-opensource-src-${PV}.tar.xz"
+MY_P=${PN}-everywhere-src-${PV}
+
+#SRC_URI="http://download.qt.io/official_releases/qt/6.7/${PV}/submodules/${MY_P}.tar.xz"
+SRC_URI="https://qtproject.mirror.liquidtelecom.com/official_releases/qt/6.7/${PV}/submodules/${MY_P}.tar.xz"
 
 SOURCES_DIR="${PN}-everywhere-src-${PV}"
 
-load_module qt5_module
+USE_CMAKE=yes
+CMAKE_GENERATOR=Ninja
+BUILD_IN_SEPARATE_DIR=yes

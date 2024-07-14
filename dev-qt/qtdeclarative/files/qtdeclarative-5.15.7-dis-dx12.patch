@@ -1,9 +1,0 @@
-diff -urBb qtdeclarative-everywhere-src-5.15.7-orig/src/plugins/scenegraph/scenegraph.pro qtdeclarative-everywhere-src-5.15.7/src/plugins/scenegraph/scenegraph.pro
---- qtdeclarative-everywhere-src-5.15.7-orig/src/plugins/scenegraph/scenegraph.pro	2022-09-12 19:29:45.000000000 +0400
-+++ qtdeclarative-everywhere-src-5.15.7/src/plugins/scenegraph/scenegraph.pro	2023-01-03 10:54:03.187786000 +0400
-@@ -1,5 +1,4 @@
- TEMPLATE = subdirs
- QT_FOR_CONFIG += quick
--qtConfig(d3d12): SUBDIRS += d3d12
- qtConfig(openvg): SUBDIRS += openvg
- 
