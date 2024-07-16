@@ -1,27 +1,31 @@
-# Copyright 2022-2023 Chernov A.A.
+# Copyright 2022-2024 Chernov A.A.
 # This is a part of mingw-portage project: 
 # http://sourceforge.net/projects/mingwportage/
 # Distributed under the terms of the GNU General Public License v2
 
 DESCRIPTION="Alliance for Open Media AV1 Codec SDK"
 
-HOMEPAGE="https://aomedia.org"
+HOMEPAGE="https://aomedia.org https://aomedia.googlesource.com/aom/"
 
-SRC_URI="https://aomedia.googlesource.com/aom/+archive/v${PV}.tar.gz -> ${P}.tar.gz"
+SRC_URI="https://storage.googleapis.com/aom-releases/${P}.tar.gz"
 
 LICENSE="BSD-2"
 
-DEPEND="
-	dev-util/cmake
-	dev-lang/yasm"
+DEPEND="dev-lang/nasm"
 
 USE_CMAKE=yes
+BUILD_IN_SEPARATE_DIR=yes
 
 src_configure()
 {
-	econf -DBUILD_SHARED_LIBS=OFF \
-		-DENABLE_NASM=OFF -DENABLE_TOOLS=ON -DENABLE_WERROR=OFF -DENABLE_TESTS=OFF \
-		-DENABLE_DOCS=OFF		# no doxygen yet...
+	# Use nasm instead of yasm
+	# no doxygen yet...
+	econf -DBUILD_SHARED_LIBS=ON \
+		-DENABLE_NASM=ON \
+		-DENABLE_TOOLS=ON \
+		-DENABLE_WERROR=OFF \
+		-DENABLE_TESTS=OFF \
+		-DENABLE_DOCS=OFF
 	sed -e "s|^INCLUDE_INSTALL_DIR:PATH=.*$|INCLUDE_INSTALL_DIR:PATH=\\${PREFIX}/include|" -i CMakeCache.txt
 	sed -e "s|^LIB_INSTALL_DIR:PATH=.*$|LIB_INSTALL_DIR:PATH=\\${PREFIX}/lib|" -i CMakeCache.txt
 }
