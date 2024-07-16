@@ -1,14 +1,13 @@
-# Copyright 2020-2022 Chernov A.A.
+# Copyright 2020-2024 Chernov A.A.
 # Distributed under the terms of the GNU General Public License v2
 
 DESCRIPTION="Library for encoding video streams into the H.265/HEVC format"
 
-HOMEPAGE="http://x265.org/"
+HOMEPAGE="https://bitbucket.org/multicoreware/x265_git"
 
 LICENSE="GPL-2"
 
-DEPEND=">=dev-lang/nasm-2.13.0
-		dev-util/cmake"
+DEPEND=">=dev-lang/nasm-2.13.0"
 
 MY_P="${PN}_${PV}"
 SRC_URI="https://bitbucket.org/multicoreware/x265_git/downloads/${MY_P}.tar.gz"
