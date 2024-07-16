@@ -1,0 +1,24 @@
+# Copyright 2024 Chernov A.A.
+# This is a part of mingw-portage project: 
+# http://sourceforge.net/projects/mingwportage/
+# Distributed under the terms of the GNU General Public License v2
+
+DESCRIPTION="Qt toolkit (Qt WebSockets Libraries)"
+
+HOMEPAGE="http://www.qt.io/"
+
+LICENSE="LGPL-2.1 GPL-3"
+
+RDEPEND=">=dev-qt/qtbase-${PV}
+		>=dev-qt/qtdeclarative-${PV}"
+
+MY_P=${PN}-everywhere-src-${PV}
+
+#SRC_URI="http://download.qt.io/official_releases/qt/6.7/${PV}/submodules/${MY_P}.tar.xz"
+SRC_URI="https://qtproject.mirror.liquidtelecom.com/official_releases/qt/6.7/${PV}/submodules/${MY_P}.tar.xz"
+
+SOURCES_DIR="${PN}-everywhere-src-${PV}"
+
+USE_CMAKE=yes
+CMAKE_GENERATOR=Ninja
+BUILD_IN_SEPARATE_DIR=yes
