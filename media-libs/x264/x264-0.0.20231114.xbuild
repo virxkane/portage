@@ -1,7 +1,7 @@
-# Copyright 2010-2023 Chernov A.A.
+# Copyright 2010-2024 Chernov A.A.
 # Distributed under the terms of the GNU General Public License v2
 
-DESCRIPTION="A free library for encoding X264/AVC streams"
+DESCRIPTION="Free library for encoding X264/AVC streams"
 
 HOMEPAGE="http://www.videolan.org/developers/x264.html"
 
@@ -9,9 +9,10 @@ LICENSE="GPL-2"
 
 DEPEND=">=dev-lang/nasm-2.13"
 
-SRC_URI="https://dev.gentoo.org/~aballier/distfiles/${P}.tar.bz2"
+X264_COMMIT="c196240409e4d7c01b47448d93b1f9683aaa7cf7"
+SRC_URI="https://code.videolan.org/videolan/x264/-/archive/${X264_COMMIT}/x264-${X264_COMMIT}.tar.bz2 -> ${P}.tar.bz2"
 
-SOURCES_DIR="${PN}-master"
+SOURCES_DIR="${PN}-${X264_COMMIT}"
 
 src_configure()
 {
