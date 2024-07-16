@@ -1,4 +1,4 @@
-# Copyright 2018-2020 Chernov A.A.
+# Copyright 2018-2020,2024 Chernov A.A.
 # Distributed under the terms of the GNU General Public License v2
 
 DESCRIPTION="Open codec designed for internet transmission of interactive speech and audio"
@@ -7,7 +7,7 @@ HOMEPAGE="https://opus-codec.org/"
 
 LICENSE="BSD"
 
-SRC_URI="https://archive.mozilla.org/pub/${PN}/${P}.tar.gz"
+SRC_URI="http://downloads.xiph.org/releases/opus/${P}.tar.gz"
 
 src_configure()
 {
