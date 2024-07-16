@@ -1,11 +1,14 @@
-# Copyright 2010-2023 Chernov A.A.
+# Copyright 2010-2024 Chernov A.A.
 # Distributed under the terms of the GNU General Public License v2
 
 DESCRIPTION="Complete solution to record, convert and stream audio and video. Includes libavcodec."
 
-HOMEPAGE="http://ffmpeg.org/"
+HOMEPAGE="https://ffmpeg.org/"
 
 LICENSE="GPL-2"
+
+#   external dependencies:
+# perl (msys)
 
 DEPEND="dev-lang/yasm
 		meta-virtual/pkg-config"
@@ -28,7 +31,7 @@ RDEPEND="sys-devel/libiconv
 		media-libs/libaom
 		media-libs/libass"
 
-SRC_URI="http://ffmpeg.org/releases/${P}.tar.bz2"
+SRC_URI="https://ffmpeg.org/releases/${P}.tar.bz2"
 
 src_configure()
 {
