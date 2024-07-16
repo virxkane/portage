@@ -23,6 +23,7 @@ src_prepare()
 src_configure()
 {
 	${WORKDIR}/${SOURCES_DIR}/configure --prefix=${PREFIX} \
+		--as=yasm \
 		--enable-vp8 \
 		--enable-vp9 \
 		--enable-vp9-highbitdepth \
