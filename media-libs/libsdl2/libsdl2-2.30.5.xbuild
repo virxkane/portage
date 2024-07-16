@@ -1,9 +1,9 @@
-# Copyright 2017-2023 Chernov A.A.
+# Copyright 2017-2024 Chernov A.A.
 # Distributed under the terms of the GNU General Public License v2
 
 DESCRIPTION="Simple Direct Media Layer"
 
-HOMEPAGE="http://www.libsdl.org/"
+HOMEPAGE="https://www.libsdl.org/"
 
 LICENSE="zlib"
 
