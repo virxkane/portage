@@ -1,0 +1,55 @@
+# Copyright 2013-2024 Chernov A.A.
+# This is a part of mingw-portage project: 
+# http://sourceforge.net/projects/mingwportage/
+# Distributed under the terms of the GNU General Public License v2
+
+DESCRIPTION="Meta package for Qt 6"
+
+HOMEPAGE="https://www.qt.io/"
+
+LICENSE="LGPL-2.1 GPL-3"
+
+# TODO: dev-qt/qtwebengine
+
+# Minimal package set
+RDEPEND="
+	>=dev-qt/qtbase-${PV}
+	>=dev-qt/qtlanguageserver-${PV}
+	>=dev-qt/qtshadertools-${PV}
+	>=dev-qt/qtdeclarative-${PV}
+	>=dev-qt/qtactiveqt-${PV}
+	>=dev-qt/qtquick3d-${PV}
+	>=dev-qt/qtsvg-${PV}
+	>=dev-qt/qttools-${PV}
+	>=dev-qt/qttranslations-${PV}"
+
+RDEPEND="${RDEPEND}
+	>=dev-qt/qt3d-${PV}
+	>=dev-qt/qt5compat-${PV}
+	>=dev-qt/qtcharts-${PV}
+	>=dev-qt/qtconnectivity-${PV}
+	>=dev-qt/qtdatavis3d-${PV}
+	>=dev-qt/qtgraphs-${PV}
+	>=dev-qt/qtgrpc-${PV}
+	>=dev-qt/qthttpserver-${PV}
+	>=dev-qt/qtimageformats-${PV}
+	>=dev-qt/qtlocation-${PV}
+	>=dev-qt/qtlottie-${PV}
+	>=dev-qt/qtmultimedia-${PV}
+	>=dev-qt/qtnetworkauth-${PV}
+	>=dev-qt/qtpositioning-${PV}
+	>=dev-qt/qtquick3dphysics-${PV}
+	>=dev-qt/qtquickeffectmaker-${PV}
+	>=dev-qt/qtquicktimeline-${PV}
+	>=dev-qt/qtremoteobjects-${PV}
+	>=dev-qt/qtscxml-${PV}
+	>=dev-qt/qtsensors-${PV}
+	>=dev-qt/qtserialport-${PV}
+	>=dev-qt/qtserialbus-${PV}
+	>=dev-qt/qtshadertools-${PV}
+	>=dev-qt/qtspeech-${PV}
+	>=dev-qt/qtvirtualkeyboard-${PV}
+	>=dev-qt/qtwebsockets-${PV}
+	>=dev-qt/qtwebchannel-${PV}
+	>=dev-qt/qtwebview-${PV}
+"
