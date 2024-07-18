@@ -1,4 +1,4 @@
-# Copyright 2010-2023 Chernov A.A.
+# Copyright 2010-2024 Chernov A.A.
 # This is a part of mingw-portage project: 
 # http://sourceforge.net/projects/mingwportage/
 # Distributed under the terms of the GNU General Public License v2
@@ -9,17 +9,17 @@ HOMEPAGE="https://wiki.qt.io/Category:Tools::QtCreator"
 
 LICENSE="LGPL-2.1 LGPL-3"
 
-MIN_QT_PV="5.15.2"
+MIN_QT_PV="6.7.0"
 
 RDEPEND="sys-libs/zlib
+		app-arch/zstd
 		dev-libs/libxml2
 		>=dev-qt/qtbase-${MIN_QT_PV}
 		>=dev-qt/qtsvg-${MIN_QT_PV}
-		>=dev-qt/qtscript-${MIN_QT_PV}
 		>=dev-qt/qttools-${MIN_QT_PV}
 		>=dev-qt/qtdeclarative-${MIN_QT_PV}
+		>=dev-qt/qt5compat-${MIN_QT_PV}
 		>=dev-qt/qttranslations-${MIN_QT_PV}
-		>=dev-qt/qtquickcontrols-${MIN_QT_PV}
 		>=dev-qt/qtserialport-${MIN_QT_PV}
 		>=dev-qt/qtquick3d-${MIN_QT_PV}
 		dev-lang/python
@@ -32,32 +32,18 @@ MY_P=${PN}-opensource-src-${PV}
 
 SRC_URI="http://download.qt.io/official_releases/qtcreator/8.0/${PV}/${MY_P}.tar.xz"
 
+#SRC_URI="https://download.qt.io/official_releases/qtcreator/13.0/${PV}/${MY_P}.tar.xz"
+SRC_URI="https://qtproject.mirror.liquidtelecom.com/official_releases/qtcreator/13.0/${PV}/${MY_P}.tar.xz"
+
 SOURCES_DIR="${MY_P}"
 
-BUILD_IN_SEPARATE_DIR=yes
-
-src_prepare()
-{
-	epatch "${P}-clang15.patch"
-}
+USE_CMAKE=yes
+CMAKE_GENERATOR=Ninja
 
 src_configure()
 {
 	# with gcc-11 & pch build failed...
-	cmake -G "Ninja" \
-		-DCMAKE_BUILD_TYPE=Release \
-		-DCMAKE_INSTALL_PREFIX="${PREFIX}" \
+	econf \
 		-DBUILD_WITH_PCH=OFF \
-		-DWITH_TESTS=OFF \
-		${WORKDIR}/${SOURCES_DIR}
-}
-
-src_compile()
-{
-	cmake --build . ${MAKEOPTS}
-}
-
-src_install()
-{
-	cmake --install . --prefix="${INSTDIR}/${PREFIX}"
+		-DWITH_TESTS=OFF
 }
