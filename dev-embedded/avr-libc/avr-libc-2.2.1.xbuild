@@ -1,19 +1,19 @@
-# Copyright 2017-2023 Chernov A.A.
+# Copyright 2017-2024 Chernov A.A.
 # This is a part of mingw-portage project: 
 # http://sourceforge.net/projects/mingwportage/
 # Distributed under the terms of the GNU General Public License v2
 
-DESCRIPTION="C library for Atmel AVR microcontrollers"
+DESCRIPTION="C library for Microchip (formerly Atmel) AVR microcontrollers"
 
-HOMEPAGE="http://www.nongnu.org/avr-libc/"
+HOMEPAGE="https://github.com/avrdudes/avr-libc/"
 
 RESTRICT="strip"
 
-SRC_URI="https://savannah.nongnu.org/download/avr-libc/${P}.tar.bz2"
+SRC_URI="https://github.com/avrdudes/avr-libc/releases/download/${PN}-${PV//./_}-release/${P}.tar.bz2"
 
 LICENSE="BSD"
 
-DEPEND=">=dev-embedded/avr-binutils-2.27
+DEPEND=">=dev-embedded/avr-binutils-2.40
 		dev-embedded/avr-gcc || dev-embedded/avr-gcc-stage1"
 
 BUILD_IN_SEPARATE_DIR=yes
