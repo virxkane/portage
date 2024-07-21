@@ -1,0 +1,54 @@
+diff -urBb unzip610b-orig/globals.h unzip610b/globals.h
+--- unzip610b-orig/globals.h	2010-09-05 15:25:00.000000000 +0400
++++ unzip610b/globals.h	2024-07-19 11:20:31.292679100 +0400
+@@ -241,7 +241,7 @@
+ #if (!defined(USE_ZLIB) || defined(USE_OWN_CRCTAB))
+     ZCONST ulg near *crc_32_tab;
+ #else
+-    ZCONST ulg Far *crc_32_tab;
++    ZCONST z_crc_t Far *crc_32_tab;
+ #endif
+     ulg       crc32val;             /* CRC shift reg. (was static in funzip) */
+ 
+diff -urBb unzip610b-orig/win32/Makefile.gcc unzip610b/win32/Makefile.gcc
+--- unzip610b-orig/win32/Makefile.gcc	2008-08-09 18:03:00.000000000 +0400
++++ unzip610b/win32/Makefile.gcc	2024-07-19 14:06:58.983724400 +0400
+@@ -128,7 +128,7 @@
+ 
+ # Prefered target CPU (instruction scheduling optimized for...)
+ ifndef CC_CPU_OPT
+-CC_CPU_OPT = -mcpu=pentiumpro
++CC_CPU_OPT = -mtune=generic
+ endif
+ 
+ # Smallest code  (-Os is new since EGC 1.1, use -O1 for 2.8.1 and earlier)
+diff -urBb unzip610b-orig/win32/nt.c unzip610b/win32/nt.c
+--- unzip610b-orig/win32/nt.c	2010-09-05 16:32:00.000000000 +0400
++++ unzip610b/win32/nt.c	2024-07-19 14:28:12.287092100 +0400
+@@ -36,9 +36,9 @@
+  */
+ 
+ #define WIN32_LEAN_AND_MEAN
++#include <windows.h>
+ #define UNZIP_INTERNAL
+ #include "../unzip.h"
+-#include <windows.h>
+ #ifdef __RSXNT__
+ #  include "../win32/rsxntwin.h"
+ #endif
+diff -urBb unzip610b-orig/win32/win32.c unzip610b/win32/win32.c
+--- unzip610b-orig/win32/win32.c	2010-11-04 20:52:04.000000000 +0300
++++ unzip610b/win32/win32.c	2024-07-19 14:27:35.595294300 +0400
+@@ -53,9 +53,11 @@
+   ---------------------------------------------------------------------------*/
+ 
+ 
++#define WIN32_LEAN_AND_MEAN
++#include <windows.h>
++
+ #define UNZIP_INTERNAL
+ #include "../unzip.h"
+-#include <windows.h>    /* must be AFTER unzip.h to avoid struct G problems */
+ #ifdef __RSXNT__
+ #  include "../win32/rsxntwin.h"
+ #endif

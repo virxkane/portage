@@ -1,0 +1,308 @@
+diff -urBb unzip610b-orig/acorn/riscos.h unzip610b/acorn/riscos.h
+--- unzip610b-orig/acorn/riscos.h	2010-11-24 15:34:00.000000000 +0300
++++ unzip610b/acorn/riscos.h	2024-07-19 13:49:31.460003300 +0400
+@@ -85,7 +85,7 @@
+ #    define DATE_FORMAT DF_DMY
+ #  endif
+ #  define lenEOL 1
+-#  define PutNativeEOL  *q++ = native(LF);
++#  define PutNativeEOL  *q++ = native(LF_CODE);
+ #  define USE_STRM_INPUT
+ #  define USE_FWRITE
+ #  define PIPE_ERROR (errno == 9999)    /* always false */
+diff -urBb unzip610b-orig/amiga/amiga.h unzip610b/amiga/amiga.h
+--- unzip610b-orig/amiga/amiga.h	2005-04-21 03:03:00.000000000 +0400
++++ unzip610b/amiga/amiga.h	2024-07-19 13:49:50.909015100 +0400
+@@ -146,7 +146,7 @@
+ #  define DATE_FORMAT     DF_MDY
+ #endif
+ #define lenEOL            1
+-#define PutNativeEOL      *q++ = native(LF);
++#define PutNativeEOL      *q++ = native(LF_CODE);
+ #define PIPE_ERROR        0
+ 
+ #ifdef GLOBAL         /* crypt.c usage conflicts with AmigaDOS headers */
+diff -urBb unzip610b-orig/atheos/athcfg.h unzip610b/atheos/athcfg.h
+--- unzip610b-orig/atheos/athcfg.h	2004-09-09 03:15:00.000000000 +0400
++++ unzip610b/atheos/athcfg.h	2024-07-19 13:50:19.969570300 +0400
+@@ -38,7 +38,7 @@
+ #  define DATE_FORMAT DF_MDY    /* GRR:  customize with locale.h somehow? */
+ #endif
+ #define lenEOL          1
+-#define PutNativeEOL    *q++ = native(LF);
++#define PutNativeEOL    *q++ = native(LF_CODE);
+ #define SCREENSIZE(ttrows, ttcols)  screensize(ttrows, ttcols)
+ #define SCREENWIDTH     80
+ #define SCREENLWRAP     1
+diff -urBb unzip610b-orig/beos/beocfg.h unzip610b/beos/beocfg.h
+--- unzip610b-orig/beos/beocfg.h	2009-01-11 06:09:00.000000000 +0300
++++ unzip610b/beos/beocfg.h	2024-07-19 13:51:08.200452600 +0400
+@@ -26,7 +26,7 @@
+ #  define DATE_FORMAT DF_MDY    /* GRR:  customize with locale.h somehow? */
+ #endif
+ #define lenEOL          1
+-#define PutNativeEOL    *q++ = native(LF);
++#define PutNativeEOL    *q++ = native(LF_CODE);
+ #define SCREENSIZE(ttrows, ttcols)  screensize(ttrows, ttcols)
+ #define SCREENWIDTH     80
+ #if (!defined(NO_EF_UT_TIME) && !defined(USE_EF_UT_TIME))
+diff -urBb unzip610b-orig/cmsmvs/vmmvs.h unzip610b/cmsmvs/vmmvs.h
+--- unzip610b-orig/cmsmvs/vmmvs.h	2008-10-26 18:17:00.000000000 +0300
++++ unzip610b/cmsmvs/vmmvs.h	2024-07-19 13:51:29.672452000 +0400
+@@ -86,7 +86,7 @@
+  * '\n' line terminator.
+  */
+ #if 0
+-#define PutNativeEOL  *q++ = native(LF);
++#define PutNativeEOL  *q++ = native(LF_CODE);
+ #else
+ #define PutNativeEOL  *q++ = '\n';
+ #endif
+diff -urBb unzip610b-orig/fileio.c unzip610b/fileio.c
+--- unzip610b-orig/fileio.c	2010-11-04 20:33:56.000000000 +0300
++++ unzip610b/fileio.c	2024-07-19 13:43:38.149090100 +0400
+@@ -1141,18 +1141,18 @@
+ 
+         /* else not VMS text */ {
+             p = rawbuf;
+-            if (*p == LF && G.didCRlast)
++            if (*p == LF_CODE && G.didCRlast)
+                 ++p;
+             G.didCRlast = FALSE;
+             for (q = transbuf;  (extent)(p-rawbuf) < (extent)size;  ++p) {
+-                if (*p == CR) {           /* lone CR or CR/LF: treat as EOL  */
++                if (*p == CR_CODE) {           /* lone CR or CR/LF: treat as EOL  */
+                     PutNativeEOL
+                     if ((extent)(p-rawbuf) == (extent)size-1)
+                         /* last char in buffer */
+                         G.didCRlast = TRUE;
+-                    else if (p[1] == LF)  /* get rid of accompanying LF */
++                    else if (p[1] == LF_CODE)  /* get rid of accompanying LF */
+                         ++p;
+-                } else if (*p == LF)      /* lone LF */
++                } else if (*p == LF_CODE)      /* lone LF */
+                     PutNativeEOL
+                 else
+ #ifndef DOS_FLX_OS2_W32
+@@ -2360,7 +2360,7 @@
+              * (since used before A_TO_N(), check for CR instead of '\r')
+              */
+             while (*p) {
+-                while (*p == CR)
++                while (*p == CR_CODE)
+                     ++p;
+                 *q++ = *p++;
+             }
+@@ -2407,9 +2407,9 @@
+                     *q++ = '[';
+                 } else if (*p == 0x13) {   /* ASCII ^S (pause) */
+                     pause = TRUE;
+-                    if (p[1] == LF)        /* ASCII LF */
++                    if (p[1] == LF_CODE)        /* ASCII LF */
+                         *q++ = *++p;
+-                    else if (p[1] == CR && p[2] == LF) {  /* ASCII CR LF */
++                    else if (p[1] == CR_CODE && p[2] == LF_CODE) {  /* ASCII CR LF */
+                         *q++ = *++p;
+                         *q++ = *++p;
+                     }
+diff -urBb unzip610b-orig/macos/source/maccfg.h unzip610b/macos/source/maccfg.h
+--- unzip610b-orig/macos/source/maccfg.h	2000-07-20 00:28:00.000000000 +0400
++++ unzip610b/macos/source/maccfg.h	2024-07-19 13:55:10.310573200 +0400
+@@ -86,7 +86,7 @@
+ #  define DATE_FORMAT DF_MDY
+ #endif
+ #define lenEOL        1
+-#define PutNativeEOL  *q++ = native(CR);
++#define PutNativeEOL  *q++ = native(CR_CODE);
+ #define NOANSIFILT  /* MWRKS C creates broken code for the ANSI-ESC filter */
+ #define MALLOC_WORK
+ #define INT_SPRINTF
+diff -urBb unzip610b-orig/netware/nlmcfg.h unzip610b/netware/nlmcfg.h
+--- unzip610b-orig/netware/nlmcfg.h	2000-05-06 22:55:00.000000000 +0400
++++ unzip610b/netware/nlmcfg.h	2024-07-19 13:52:07.394374000 +0400
+@@ -19,7 +19,7 @@
+ #    define DATE_FORMAT DF_MDY
+ #  endif
+ #  define lenEOL          2
+-#  define PutNativeEOL  {*q++ = native(CR); *q++ = native(LF);}
++#  define PutNativeEOL  {*q++ = native(CR_CODE); *q++ = native(LF_CODE);}
+ #  define USE_FWRITE    /* write() fails to support textmode output */
+ #  if (!defined(NOTIMESTAMP) && !defined(TIMESTAMP))
+ #    define TIMESTAMP
+diff -urBb unzip610b-orig/theos/thscfg.h unzip610b/theos/thscfg.h
+--- unzip610b-orig/theos/thscfg.h	2000-04-15 02:19:00.000000000 +0400
++++ unzip610b/theos/thscfg.h	2024-07-19 13:44:13.948787600 +0400
+@@ -24,7 +24,7 @@
+ #define DIR_END '/'
+ #define INT_SPRINTF
+ #define lenEOL        1
+-#define PutNativeEOL  *q++ = native(CR);
++#define PutNativeEOL  *q++ = native(CR_CODE);
+ #define PIPE_ERROR (errno = 9999)
+ #define isatty(a) _isatty(a)
+ #undef match
+diff -urBb unzip610b-orig/unix/unxcfg.h unzip610b/unix/unxcfg.h
+--- unzip610b-orig/unix/unxcfg.h	2010-09-16 01:48:00.000000000 +0400
++++ unzip610b/unix/unxcfg.h	2024-07-19 13:52:49.383167600 +0400
+@@ -191,7 +191,7 @@
+ #ifdef EBCDIC
+ #  define PutNativeEOL  *q++ = '\n';
+ #else
+-#  define PutNativeEOL  *q++ = native(LF);
++#  define PutNativeEOL  *q++ = native(LF_CODE);
+ #endif
+ #define SCREENSIZE(ttrows, ttcols)  screensize(ttrows, ttcols)
+ #define SCREENWIDTH     80
+diff -urBb unzip610b-orig/unzpriv.h unzip610b/unzpriv.h
+--- unzip610b-orig/unzpriv.h	2010-09-16 01:29:00.000000000 +0400
++++ unzip610b/unzpriv.h	2024-07-19 13:45:39.248536700 +0400
+@@ -282,7 +282,7 @@
+ #  define INT_SPRINTF
+ #  define timezone      _timezone
+ #  define lenEOL        2
+-#  define PutNativeEOL  {*q++ = native(CR); *q++ = native(LF);}
++#  define PutNativeEOL  {*q++ = native(CR_CODE); *q++ = native(LF_CODE);}
+ #  undef SHORT_NAMES
+ #  if (!defined(NOTIMESTAMP) && !defined(TIMESTAMP))
+ #    define TIMESTAMP
+@@ -339,7 +339,7 @@
+ #    define DATE_FORMAT DF_YMD   /* Japanese standard */
+ #  endif
+ #  define lenEOL        1
+-#  define PutNativeEOL  *q++ = native(LF);
++#  define PutNativeEOL  *q++ = native(LF_CODE);
+ #  define INT_SPRINTF
+ #  define SYMLINKS
+ #  ifdef SFX
+@@ -417,7 +417,7 @@
+ #  endif
+ #  define DATE_FORMAT     dateformat()
+ #  define lenEOL          2
+-#  define PutNativeEOL    {*q++ = native(CR); *q++ = native(LF);}
++#  define PutNativeEOL    {*q++ = native(CR_CODE); *q++ = native(LF_CODE);}
+ #  if (!defined(NO_EF_UT_TIME) && !defined(USE_EF_UT_TIME))
+ #    define USE_EF_UT_TIME
+ #  endif
+@@ -445,7 +445,7 @@
+ #    define DATE_FORMAT DF_MDY
+ #  endif
+ #  define lenEOL        1
+-#  define PutNativeEOL  *q++ = native(LF);
++#  define PutNativeEOL  *q++ = native(LF_CODE);
+ #endif /* MTS */
+ 
+  /*---------------------------------------------------------------------------
+@@ -471,7 +471,7 @@
+ #    define DATE_FORMAT DF_MDY
+ #  endif
+ #  define lenEOL        1
+-#  define PutNativeEOL  *q++ = native(LF);
++#  define PutNativeEOL  *q++ = native(LF_CODE);
+ #  define DIR_END       '_'
+ #  define RETURN        QReturn
+ #  undef PATH_MAX
+@@ -502,7 +502,7 @@
+ #    endif
+ #  endif
+    /* use a single LF delimiter so that writes to 101 text files work */
+-#  define PutNativeEOL  *q++ = native(LF);
++#  define PutNativeEOL  *q++ = native(LF_CODE);
+ #  define lenEOL        1
+ #  ifndef DATE_FORMAT
+ #    define DATE_FORMAT  DF_DMY
+@@ -1939,8 +1939,8 @@
+ #define MAX_BITS    13                 /* used in unshrink() */
+ #define HSIZE       (1 << MAX_BITS)    /* size of global work area */
+ 
+-#define LF     10        /* '\n' on ASCII machines; must be 10 due to EBCDIC */
+-#define CR     13        /* '\r' on ASCII machines; must be 13 due to EBCDIC */
++#define LF_CODE 10        /* '\n' on ASCII machines; must be 10 due to EBCDIC */
++#define CR_CODE 13        /* '\r' on ASCII machines; must be 13 due to EBCDIC */
+ #define CTRLZ  26        /* DOS & OS/2 EOF marker (used in fileio.c, vms.c) */
+ 
+ #ifdef EBCDIC
+diff -urBb unzip610b-orig/vms/vms.c unzip610b/vms/vms.c
+--- unzip610b-orig/vms/vms.c	2010-11-29 21:43:50.000000000 +0300
++++ unzip610b/vms/vms.c	2024-07-19 13:53:49.501950100 +0400
+@@ -2295,12 +2295,12 @@
+ #ifdef undef
+ #define RECORD_END(c, f)                                                \
+ (    ( ORG_DOS || G.pInfo->textmode ) && c==CTRLZ                       \
+-  || ( f == FAB$C_STMLF && c==LF )                                      \
+-  || ( f == FAB$C_STMCR || ORG_DOS || G.pInfo->textmode ) && c==CR      \
+-  || ( f == FAB$C_STM && (c==CR || c==LF || c==FF || c==VT) )           \
++  || ( f == FAB$C_STMLF && c==LF_CODE )                                 \
++  || ( f == FAB$C_STMCR || ORG_DOS || G.pInfo->textmode ) && c==CR_CODE \
++  || ( f == FAB$C_STM && (c==CR_CODE || c==LF_CODE || c==FF || c==VT) ) \
+ )
+ #else
+-#   define  RECORD_END(c, f)   ((c) == LF || (c) == (CR))
++#   define  RECORD_END(c, f)   ((c) == LF_CODE || (c) == (CR_CODE))
+ #endif
+ 
+ static unsigned find_eol(p, n, l)
+@@ -2330,7 +2330,7 @@
+     if ( n > 1 )
+     {
+         *l = 1;
+-        if ( ( q[0] == CR && q[1] == LF ) || ( q[0] == LF && q[1] == CR ) )
++        if ( ( q[0] == CR_CODE && q[1] == LF_CODE ) || ( q[0] == LF_CODE && q[1] == CR_CODE ) )
+             *l = 2;
+     }
+ 
+@@ -2386,8 +2386,8 @@
+             recsize = loccnt - 1;
+             complete = 1;
+ 
+-            if ( (got_eol == CR && rawbuf[0] == LF) ||
+-                 (got_eol == LF && rawbuf[0] == CR) )
++            if ( (got_eol == CR_CODE && rawbuf[0] == LF_CODE) ||
++                 (got_eol == LF_CODE && rawbuf[0] == CR_CODE) )
+                 end = 1;
+ 
+             got_eol = 0;
+@@ -2456,7 +2456,7 @@
+ #ifdef undef
+         if (uO.cflag)
+             /* skip CR's at the beginning of record */
+-            while (start < size && rawbuf[start] == CR)
++            while (start < size && rawbuf[start] == CR_CODE)
+                 ++start;
+ #endif
+ 
+diff -urBb unzip610b-orig/vms/vmscfg.h unzip610b/vms/vmscfg.h
+--- unzip610b-orig/vms/vmscfg.h	2009-02-28 16:23:00.000000000 +0300
++++ unzip610b/vms/vmscfg.h	2024-07-19 13:54:05.703076600 +0400
+@@ -102,7 +102,7 @@
+ #    define DATE_FORMAT DF_MDY
+ #  endif
+ #  define lenEOL        1
+-#  define PutNativeEOL  *q++ = native(LF);
++#  define PutNativeEOL  *q++ = native(LF_CODE);
+ #  define SCREENSIZE(ttrows, ttcols)  screensize(ttrows, ttcols)
+ #  define SCREENWIDTH   80
+ #  define SCREENLWRAP   screenlinewrap()
+diff -urBb unzip610b-orig/win32/w32cfg.h unzip610b/win32/w32cfg.h
+--- unzip610b-orig/win32/w32cfg.h	2010-11-03 22:58:30.000000000 +0300
++++ unzip610b/win32/w32cfg.h	2024-07-19 13:47:58.965057400 +0400
+@@ -184,7 +184,7 @@
+ #endif
+ #define DATE_SEPCHAR  dateseparator()
+ #define lenEOL        2
+-#define PutNativeEOL  {*q++ = native(CR); *q++ = native(LF);}
++#define PutNativeEOL  {*q++ = native(CR_CODE); *q++ = native(LF_CODE);}
+ 
+ #if (defined(__RSXNT__) && !defined(HAVE_MKTIME))
+ #  define HAVE_MKTIME           /* use mktime() in time conversion routines */
+diff -urBb unzip610b-orig/wince/wcecfg.h unzip610b/wince/wcecfg.h
+--- unzip610b-orig/wince/wcecfg.h	2009-01-29 15:02:00.000000000 +0300
++++ unzip610b/wince/wcecfg.h	2024-07-19 13:48:43.027265200 +0400
+@@ -196,7 +196,7 @@
+ # endif
+ #endif
+ #define lenEOL        2
+-#define PutNativeEOL  {*q++ = native(CR); *q++ = native(LF);}
++#define PutNativeEOL  {*q++ = native(CR_CODE); *q++ = native(LF_CODE);}
+ 
+ #define countof(a) (sizeof(a)/sizeof(*(a)))
+ 
