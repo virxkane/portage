@@ -1,11 +1,11 @@
-# Copyright 2023 Chernov A.A.
+# Copyright 2023-2024 Chernov A.A.
 # This is a part of mingw-portage project: 
 # http://sourceforge.net/projects/mingwportage/
 # Distributed under the terms of the GNU General Public License v2
 
 DESCRIPTION="minizip from zlib"
 
-HOMEPAGE="http://www.zlib.net/"
+HOMEPAGE="https://www.zlib.net/"
 
 MY_P="zlib-${PV}"
 
