@@ -1,16 +1,16 @@
-# Copyright 2017-2023 Chernov A.A.
+# Copyright 2017-2024 Chernov A.A.
 # Distributed under the terms of the GNU General Public License v2
 
 DESCRIPTION="GNU debugger (avr8-toolchain's part)"
 
-HOMEPAGE="http://sources.redhat.com/gdb/"
+HOMEPAGE="https://sourceware.org/gdb/"
 
 LICENSE="GPL-2 LGPL-2"
 
 RDEPEND="dev-libs/expat
-	dev-util/mpfr
-	sys-libs/zlib
-	>=dev-libs/isl-0.15"
+		dev-util/mpfr
+		sys-libs/zlib
+		>=dev-libs/isl-0.15"
 
 MY_PN="gdb"
 MY_P="${MY_PN}-${PV}"
@@ -23,7 +23,7 @@ SOURCES_DIR="${MY_P}"
 
 src_prepare()
 {
-	epatch "${MY_PN}-11.1-no_install_libs.patch"
+	epatch "${MY_PN}-14.2-no_install_libs.patch"
 }
 
 src_configure()
