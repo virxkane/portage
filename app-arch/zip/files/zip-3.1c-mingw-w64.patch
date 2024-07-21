@@ -1,0 +1,76 @@
+diff -urBb zip31c-orig/win32/makefile.gcc zip31c/win32/makefile.gcc
+--- zip31c-orig/win32/makefile.gcc	2009-08-12 21:48:00.000000000 +0400
++++ zip31c/win32/makefile.gcc	2024-07-19 09:59:51.386958100 +0400
+@@ -79,8 +79,10 @@
+ LDFLAGS=-o$@ -s
+ ifndef USEZLIB
+ LIBS=-luser32 -ladvapi32
++NOTELIBS=
+ else
+-LIBS=-L. -lz -luser32 -ladvapi32
++LIBS=-L. -lz -luser32 -ladvapi32 -lmingwex
++NOTELIBS=-lz
+ endif
+ 
+ OSDEP_H = win32/osdep.h
+@@ -316,10 +318,10 @@
+ 	$(LD) $(LDFLAGS) $(OBJC) $(LIBS)
+ 
+ zipnote.exe: $(OBJN)
+-	$(LD) $(LDFLAGS) $(OBJN)
++	$(LD) $(LDFLAGS) $(OBJN) $(NOTELIBS)
+ 
+ zipsplit.exe: $(OBJS)
+-	$(LD) $(LDFLAGS) $(OBJS)
++	$(LD) $(LDFLAGS) $(OBJS) $(NOTELIBS)
+ 
+ zip32z64.dll: $(DLLDEF) $(OBJD) $(LIBBZIP2)
+ 	dllwrap --driver-name $(CC) -Wl,--enable-stdcall-fixup \
+diff -urBb zip31c-orig/win32/osdep.h zip31c/win32/osdep.h
+--- zip31c-orig/win32/osdep.h	2010-06-10 01:20:10.000000000 +0400
++++ zip31c/win32/osdep.h	2024-07-19 09:51:31.042409000 +0400
+@@ -456,7 +456,7 @@
+ #endif
+ 
+ #ifdef _MBCS
+-#  if (!defined(__EMX__) && !defined(__MINGW32__) && !defined(__CYGWIN__))
++#  if (!defined(__EMX__) && (!defined(__MINGW32__) || defined(__MINGW64_VERSION_MAJOR)) && !defined(__CYGWIN__))
+ #    include <stdlib.h>
+ #    include <mbstring.h>
+ #  endif
+diff -urBb zip31c-orig/zip.c zip31c/zip.c
+--- zip31c-orig/zip.c	2010-06-18 01:27:04.000000000 +0400
++++ zip31c/zip.c	2024-07-19 09:02:26.817485200 +0400
+@@ -114,7 +114,7 @@
+ # if (!defined(USE_ZLIB) || defined(USE_OWN_CRCTAB))
+ ZCONST ulg near *crc_32_tab;
+ # else
+-ZCONST uLongf *crc_32_tab;
++ZCONST z_crc_t *crc_32_tab;
+ # endif
+ #endif /* CRYPT */
+ 
+diff -urBb zip31c-orig/zip.h zip31c/zip.h
+--- zip31c-orig/zip.h	2024-07-19 10:05:35.814581700 +0400
++++ zip31c/zip.h	2024-07-19 09:07:58.776671100 +0400
+@@ -319,7 +319,7 @@
+ #if (!defined(USE_ZLIB) || defined(USE_OWN_CRCTAB))
+   extern ZCONST ulg near *crc_32_tab;
+ #else
+-  extern ZCONST ulg Far *crc_32_tab;
++  extern ZCONST z_crc_t Far *crc_32_tab;
+ #endif
+ 
+ /* Are these ever used?  6/12/05 EG */
+diff -urBb zip31c-orig/zipcloak.c zip31c/zipcloak.c
+--- zip31c-orig/zipcloak.c	2009-08-12 21:48:00.000000000 +0400
++++ zip31c/zipcloak.c	2024-07-19 10:01:40.436630400 +0400
+@@ -48,7 +48,7 @@
+ #if (!defined(USE_ZLIB) || defined(USE_OWN_CRCTAB))
+ ZCONST ulg near *crc_32_tab;
+ #else
+-ZCONST uLongf *crc_32_tab;
++ZCONST z_crc_t * FAR crc_32_tab;
+ #endif
+ 
+ int set_filetype(out_path)
