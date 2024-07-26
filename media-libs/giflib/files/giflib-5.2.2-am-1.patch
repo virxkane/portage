@@ -1,6 +1,6 @@
 diff -urBbN giflib-5.2.2-orig/AUTHORS giflib-5.2.2/AUTHORS
 --- giflib-5.2.2-orig/AUTHORS	1970-01-01 04:00:00.000000000 +0400
-+++ giflib-5.2.2/AUTHORS	2024-07-06 10:15:48.315224700 +0400
++++ giflib-5.2.2/AUTHORS	2024-07-25 15:02:21.591875000 +0400
 @@ -0,0 +1,36 @@
 +Michael Brown <michael_brown_uk[AT]hotmail.com>
 +        callbacks to write data via user defined function
@@ -40,7 +40,7 @@ diff -urBbN giflib-5.2.2-orig/AUTHORS giflib-5.2.2/AUTHORS
 +	IRIX fixes
 diff -urBbN giflib-5.2.2-orig/Makefile.am giflib-5.2.2/Makefile.am
 --- giflib-5.2.2-orig/Makefile.am	1970-01-01 04:00:00.000000000 +0400
-+++ giflib-5.2.2/Makefile.am	2024-07-06 10:15:48.320211500 +0400
++++ giflib-5.2.2/Makefile.am	2024-07-25 15:02:21.591875000 +0400
 @@ -0,0 +1,110 @@
 +SUBDIRS = pic
 +
@@ -154,8 +154,8 @@ diff -urBbN giflib-5.2.2-orig/Makefile.am giflib-5.2.2/Makefile.am
 +	rm -fr doc/staging
 diff -urBbN giflib-5.2.2-orig/config.h.in giflib-5.2.2/config.h.in
 --- giflib-5.2.2-orig/config.h.in	1970-01-01 04:00:00.000000000 +0400
-+++ giflib-5.2.2/config.h.in	2024-07-06 10:15:48.317219700 +0400
-@@ -0,0 +1,70 @@
++++ giflib-5.2.2/config.h.in	2024-07-25 15:02:46.201250000 +0400
+@@ -0,0 +1,72 @@
 +/* config.h.in.  Generated from configure.ac by autoheader.  */
 +
 +/* Define to 1 if you have the <dlfcn.h> header file. */
@@ -170,14 +170,14 @@ diff -urBbN giflib-5.2.2-orig/config.h.in giflib-5.2.2/config.h.in
 +/* Define to 1 if you have the <limits.h> header file. */
 +#undef HAVE_LIMITS_H
 +
-+/* Define to 1 if you have the <memory.h> header file. */
-+#undef HAVE_MEMORY_H
-+
 +/* Define to 1 if you have the <stdarg.h> header file. */
 +#undef HAVE_STDARG_H
 +
 +/* Define to 1 if you have the <stdint.h> header file. */
 +#undef HAVE_STDINT_H
++
++/* Define to 1 if you have the <stdio.h> header file. */
++#undef HAVE_STDIO_H
 +
 +/* Define to 1 if you have the <stdlib.h> header file. */
 +#undef HAVE_STDLIB_H
@@ -221,14 +221,16 @@ diff -urBbN giflib-5.2.2-orig/config.h.in giflib-5.2.2/config.h.in
 +/* Define to the version of this package. */
 +#undef PACKAGE_VERSION
 +
-+/* Define to 1 if you have the ANSI C header files. */
++/* Define to 1 if all of the C89 standard headers exist (not just the ones
++   required in a freestanding environment). This macro is provided for
++   backward compatibility; new code need not use it. */
 +#undef STDC_HEADERS
 +
 +/* Version number of package */
 +#undef VERSION
 diff -urBbN giflib-5.2.2-orig/configure.ac giflib-5.2.2/configure.ac
 --- giflib-5.2.2-orig/configure.ac	1970-01-01 04:00:00.000000000 +0400
-+++ giflib-5.2.2/configure.ac	2024-07-06 10:16:05.904781800 +0400
++++ giflib-5.2.2/configure.ac	2024-07-25 15:02:21.591875000 +0400
 @@ -0,0 +1,51 @@
 +dnl Process this file with autoconf to produce a configure script.
 +AC_INIT(giflib, [5.2.2], [esr@thyrsus.com], giflib)
@@ -283,14 +285,17 @@ diff -urBbN giflib-5.2.2-orig/configure.ac giflib-5.2.2/configure.ac
 +AC_OUTPUT
 diff -urBbN giflib-5.2.2-orig/doc/Makefile.am giflib-5.2.2/doc/Makefile.am
 --- giflib-5.2.2-orig/doc/Makefile.am	1970-01-01 04:00:00.000000000 +0400
-+++ giflib-5.2.2/doc/Makefile.am	2024-07-06 10:15:48.319214200 +0400
-@@ -0,0 +1,61 @@
-+SUFFIXES = .xml .html .txt .asc .1
++++ giflib-5.2.2/doc/Makefile.am	2024-07-25 15:35:56.285234300 +0400
+@@ -0,0 +1,66 @@
++SUFFIXES = .xml .html .txt .asc .1 .7
 +
 +.xml.html:
 +	xmlto xhtml-nochunks $<
 +
 +.xml.1:
++	xmlto man $<
++
++.xml.7:
 +	xmlto man $<
 +
 +.xml.txt:
@@ -304,23 +309,24 @@ diff -urBbN giflib-5.2.2-orig/doc/Makefile.am giflib-5.2.2/doc/Makefile.am
 +# The distinction between XMLMAN and XMLINTERNAL is because
 +# some pages shouldn't be installed as part of a binary package;
 +# they're just for test-pattern generators.
-+XMLMAN = \
++XMLMAN1 = \
 +	gif2rgb.xml \
 +	gifbuild.xml \
 +	gifclrmp.xml \
 +	gifecho.xml \
 +	giffix.xml \
 +	gifinto.xml \
-+	giflib.xml \
 +	giftext.xml \
 +	giftool.xml
++XMLMAN7 = \
++	giflib.xml
 +XMLINTERNAL = \
 +	gifbg.xml \
 +	gifcolor.xml \
 +	gifhisto.xml \
 +	gifwedge.xml
 +XMLDOC = intro.xml gif_lib.xml
-+XMLALL = $(XMLMAN) $(XMLINTERNAL) $(XMLDOC)
++XMLALL = $(XMLMAN1) $(XMLMAN7) $(XMLINTERNAL) $(XMLDOC)
 +TXTDOC = 00README
 +SOURCES = $(XMLALL) $(TXTDOC)
 +SITEHTML = index.html
@@ -329,12 +335,13 @@ diff -urBbN giflib-5.2.2-orig/doc/Makefile.am giflib-5.2.2/doc/Makefile.am
 +allhtml: $(XMLALL:.xml=.html) $(XMLINTERNAL:.xml=.html)
 +
 +manpages: $(XMLMAN:.xml=.1) $(XMLINTERNAL:.xml=.1)
-+man_MANS = $(XMLMAN:.xml=.1)
++manpages: $(XMLMAN1:.xml=.1) $(XMLMAN7:.xml=.7) $(XMLINTERNAL:.xml=.1)
++man_MANS = $(XMLMAN1:.xml=.1) $(XMLMAN7:.xml=.7)
 +
 +# Control what goes in the distribution tarball.
 +# We include all of the XML, and also generated manual pages 
 +# so people working from the distribution tarball won't need xmlto. 
-+EXTRA_DIST = $(SOURCES) $(XMLMAN:.xml=.1) $(XMLINTERNAL:.xml=.1)
++EXTRA_DIST = $(SOURCES) $(XMLMAN1:.xml=.1) $(XMLMAN7:.xml=.7) $(XMLINTERNAL:.xml=.1)
 +
 +# Prepare the website directory to deliver an update.
 +# ImageMagick and asciidoc are required.
@@ -345,10 +352,10 @@ diff -urBbN giflib-5.2.2-orig/doc/Makefile.am giflib-5.2.2/doc/Makefile.am
 +	asciidoc - <../history.asc >staging/history.html
 +
 +clean-local:
-+	rm -fr staging $(XMLALL:.xml=.html) $(XMLMAN:.xml=.1)
++	rm -fr staging $(XMLALL:.xml=.html) $(XMLMAN1:.xml=.1) $(XMLMAN7:.xml=.7)
 diff -urBbN giflib-5.2.2-orig/pic/Makefile.am giflib-5.2.2/pic/Makefile.am
 --- giflib-5.2.2-orig/pic/Makefile.am	1970-01-01 04:00:00.000000000 +0400
-+++ giflib-5.2.2/pic/Makefile.am	2024-07-06 10:15:48.321208800 +0400
++++ giflib-5.2.2/pic/Makefile.am	2024-07-25 15:02:21.591875000 +0400
 @@ -0,0 +1,11 @@
 +EXTRA_DIST = NOTES \
 +	     fire.gif \

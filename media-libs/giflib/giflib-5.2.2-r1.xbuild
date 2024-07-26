@@ -13,7 +13,7 @@ SRC_URI="https://downloads.sourceforge.net/${PN}/${P}.tar.gz"
 
 src_prepare()
 {
-	epatch "${P}-am.patch"
+	epatch "${P}-am-1.patch"
 	mkdir m4
 	eautoreconf
 }
