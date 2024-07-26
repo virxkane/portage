@@ -16,3 +16,8 @@ RDEPEND="dev-lang/python
 		dev-util/re2c"
 
 USE_CMAKE=yes
+
+src_configure()
+{
+	econf -DBUILD_TESTING=OFF
+}
