@@ -1,0 +1,89 @@
+diff -urBb vorbis-tools-1.4.2-orig/oggdec/oggdec.c vorbis-tools-1.4.2/oggdec/oggdec.c
+--- vorbis-tools-1.4.2-orig/oggdec/oggdec.c	2020-12-18 18:49:34.000000000 +0400
++++ vorbis-tools-1.4.2/oggdec/oggdec.c	2024-07-29 15:01:27.178789000 +0400
+@@ -11,9 +11,9 @@
+ #include <config.h>
+ #endif
+ 
++#include <getopt.h>
+ #include <stdlib.h>
+ #include <stdio.h>
+-#include <getopt.h>
+ #include <errno.h>
+ #include <string.h>
+ #include <locale.h>
+diff -urBb vorbis-tools-1.4.2-orig/oggenc/oggenc.c vorbis-tools-1.4.2/oggenc/oggenc.c
+--- vorbis-tools-1.4.2-orig/oggenc/oggenc.c	2020-12-21 01:56:43.000000000 +0400
++++ vorbis-tools-1.4.2/oggenc/oggenc.c	2024-07-29 15:01:34.835039000 +0400
+@@ -13,10 +13,10 @@
+ #include <config.h>
+ #endif
+ 
++#include <getopt.h>
+ #include <stdlib.h>
+ #include <stdio.h>
+ #include <math.h>
+-#include <getopt.h>
+ #include <string.h>
+ #include <time.h>
+ #include <locale.h>
+diff -urBb vorbis-tools-1.4.2-orig/oggenc/platform.c vorbis-tools-1.4.2/oggenc/platform.c
+--- vorbis-tools-1.4.2-orig/oggenc/platform.c	2020-12-18 18:49:34.000000000 +0400
++++ vorbis-tools-1.4.2/oggenc/platform.c	2024-07-29 15:00:03.366289000 +0400
+@@ -15,11 +15,6 @@
+ #include <config.h>
+ #endif
+ 
+-#include "platform.h"
+-#include "encode.h"
+-#include "i18n.h"
+-#include <stdlib.h>
+-#include <ctype.h>
+ #if defined(_WIN32) || defined(__EMX__) || defined(__WATCOMC__)
+ #include <getopt.h>
+ #include <fcntl.h>
+@@ -27,6 +22,12 @@
+ #include <time.h>
+ #endif
+ 
++#include "platform.h"
++#include "encode.h"
++#include "i18n.h"
++#include <stdlib.h>
++#include <ctype.h>
++
+ #ifdef _WIN32
+ #include <windows.h>
+ #endif
+diff -urBb vorbis-tools-1.4.2-orig/ogginfo/codec_skeleton.c vorbis-tools-1.4.2/ogginfo/codec_skeleton.c
+--- vorbis-tools-1.4.2-orig/ogginfo/codec_skeleton.c	2021-01-09 03:13:55.000000000 +0400
++++ vorbis-tools-1.4.2/ogginfo/codec_skeleton.c	2024-07-29 15:08:21.163164000 +0400
+@@ -24,6 +24,8 @@
+ 
+ #include <ogg/ogg.h>
+ 
++#include <utf8.h>
++
+ #include "i18n.h"
+ 
+ #include "private.h"
+diff -urBb vorbis-tools-1.4.2-orig/vorbiscomment/vcomment.c vorbis-tools-1.4.2/vorbiscomment/vcomment.c
+--- vorbis-tools-1.4.2-orig/vorbiscomment/vcomment.c	2020-12-19 22:50:59.000000000 +0400
++++ vorbis-tools-1.4.2/vorbiscomment/vcomment.c	2024-07-29 15:09:12.319414000 +0400
+@@ -13,6 +13,8 @@
+ #include <config.h>
+ #endif
+ 
++#include "getopt.h"
++
+ #include <stdio.h>
+ #include <string.h>
+ #include <stdlib.h>
+@@ -24,7 +26,6 @@
+ #include <unistd.h>
+ #endif
+ 
+-#include "getopt.h"
+ #include "utf8.h"
+ #include "i18n.h"
+ 

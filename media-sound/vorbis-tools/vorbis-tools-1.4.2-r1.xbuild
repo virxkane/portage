@@ -1,4 +1,4 @@
-# Copyright 2010-2022 Chernov A.A.
+# Copyright 2010-2024 Chernov A.A.
 # Distributed under the terms of the GNU General Public License v2
 
 DESCRIPTION="tools for using the Ogg Vorbis sound file format"
@@ -15,6 +15,11 @@ RDEPEND="sys-devel/libiconv
 		media-libs/speex"
 
 SRC_URI="http://downloads.xiph.org/releases/vorbis/${P}.tar.gz"
+
+src_prepare()
+{
+	epatch "${P}-mingw-w64.patch"
+}
 
 src_configure()
 {
