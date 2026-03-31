@@ -1,11 +1,11 @@
-# Copyright 2010-2020 Chernov A.A.
+# Copyright 2010-2020,2026 Chernov A.A.
 # This is a part of mingw-portage project: 
 # http://sourceforge.net/projects/mingwportage/
 # Distributed under the terms of the GNU General Public License v2
 
 DESCRIPTION="Library for lossless, block-sorting data compression"
 
-HOMEPAGE="http://www.bzip.org/"
+HOMEPAGE="https://sourceware.org/bzip2/"
 
 LICENSE="BZIP2"
 
@@ -13,7 +13,7 @@ DEPEND="meta-virtual/pkg-config"
 
 MY_PN="bzip2"
 MY_P=${MY_PN}-${PV}
-SRC_URI="http://www.bzip.org/${PV}/${MY_P}.tar.gz"
+SRC_URI="https://sourceware.org/pub/bzip2/${MY_P}.tar.gz"
 
 SOURCES_DIR="${MY_P}"
 
