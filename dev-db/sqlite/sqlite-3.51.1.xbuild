@@ -1,19 +1,22 @@
-# Copyright 2010-2024 Chernov A.A.
+# Copyright 2010-2026 Chernov A.A.
 # This is a part of mingw-portage project: 
 # http://sourceforge.net/projects/mingwportage/
 # Distributed under the terms of the GNU General Public License v2
 
 DESCRIPTION="an SQL Database Engine in a C Library"
 
-HOMEPAGE="https://www.sqlite.org/"
+HOMEPAGE="http://www.sqlite.org/"
 
 LICENSE="as-is"
 
+#  external dependencies:
+# zlib (Xcode)
+
 RDEPEND="meta-virtual/pthreads"
 
-SVER="3460000"
+SVER="3510100"
 
-SRC_URI="http://www.sqlite.org/2024/${PN}-autoconf-${SVER}.tar.gz"
+SRC_URI="http://www.sqlite.org/2025/${PN}-autoconf-${SVER}.tar.gz"
 
 SOURCES_DIR="${PN}-autoconf-${SVER}"
 
@@ -23,7 +26,7 @@ src_configure()
 	export CFLAGS="${CFLAGS} -DSQLITE_ENABLE_COLUMN_METADATA=1"
 	econf --enable-shared --enable-static \
 		--disable-readline --enable-threadsafe \
-		--enable-dynamic-extensions --enable-session
+		--enable-session
 }
 
 src_compile()
