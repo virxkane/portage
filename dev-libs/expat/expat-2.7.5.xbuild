@@ -1,12 +1,12 @@
-# Copyright 2010-2024 Chernov A.A.
+# Copyright 2010-2026 Chernov A.A.
 # This is a part of mingw-portage project: 
 # http://sourceforge.net/projects/mingwportage/
 # Distributed under the terms of the GNU General Public License v2
 
-DESCRIPTION="XML parsing libraries"
+DESCRIPTION="Stream-oriented XML parser library"
 
 HOMEPAGE="https://libexpat.github.io/"
 
 LICENSE="MIT"
 
-SRC_URI="http://downloads.sourceforge.net/${PN}/${P}.tar.xz"
+SRC_URI="https://github.com/libexpat/libexpat/releases/download/R_${PV//\./_}/expat-${PV}.tar.xz"
