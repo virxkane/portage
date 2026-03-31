@@ -1,0 +1,204 @@
+# Based on MINGW-packages project (https://github.com/msys2/MINGW-packages)
+
+DESCRIPTION="An interpreted, interactive, object-oriented programming language"
+
+HOMEPAGE="https://www.python.org/"
+
+LICENSE="PSF-2"
+
+DEPEND="meta-virtual/pkg-config"
+RDEPEND="!<dev-lang/python2-2.7.17-r1
+		dev-libs/libffi
+		dev-libs/expat
+		dev-db/sqlite
+		dev-libs/openssl
+		app-arch/libbz2
+		app-arch/xz-utils
+		>=app-arch/zstd-1.4.5
+		sys-libs/zlib
+		dev-lang/tk"
+
+MY_P="Python-${PV}"
+_pybasever=3.14
+
+SRC_URI="http://www.python.org/ftp/python/${PV}/${MY_P}.tar.xz"
+
+SOURCES_DIR="${MY_P}"
+BUILD_IN_SEPARATE_DIR=yes
+
+
+src_prepare()
+{
+	einfo "Apply patches"
+
+	epatch "3.14/0001-build-add-with-nt-threads-and-make-it-default-on-min.patch"
+	epatch "3.14/0002-build-Define-MS_WINDOWS-and-others-when-compiling-wi.patch"
+	epatch "3.14/0003-sysmodule-Implement-flags-_is_mingw-is_mingw_ucrt-an.patch"
+	epatch "3.14/0004-configure-add-MACHDEP-and-platform-on-MINGW.patch"
+	epatch "3.14/0005-build-Add-default-cross-configuration-for-MINGW.patch"
+	epatch "3.14/0006-configure-enable-largefile-support-by-default-for-Mi.patch"
+	epatch "3.14/0007-build-Add-PC-to-CPPFLAGS-and-to-SRCDIRS-on-Mingw.patch"
+	epatch "3.14/0008-build-add-MINGW-support-for-posixmodule.patch"
+	epatch "3.14/0009-exports.h-Add-support-for-MINGW.patch"
+	epatch "3.14/0010-configure-add-options-so-that-shared-build-is-possib.patch"
+	epatch "3.14/0011-build-Add-PYD_PLATFORM_TAG.patch"
+	epatch "3.14/0012-build-Add-dynload_win-support-for-MinGW.patch"
+	epatch "3.14/0013-build-Use-.pyd-extension-suffix-fix-import-lib-insta.patch"
+	epatch "3.14/0014-build-Configure-SOABI-and-EXT_SUFFIX-for-MINGW.patch"
+	epatch "3.14/0015-build-Define-MS_DLL_ID-for-sys.winver-on-MINGW.patch"
+	epatch "3.14/0016-build-Ignore-main-program-for-frozen-scripts-on-MING.patch"
+	epatch "3.14/0017-socketmodule-add-MINGW-support.patch"
+	epatch "3.14/0018-build-enable-winreg-msvcrt-_winapi-winsound-and-_ove.patch"
+	epatch "3.14/0019-sysconfig-make-_sysconfigdata.py-relocatable.patch"
+	epatch "3.14/0020-sysconfig-treat-MINGW-builds-as-POSIX-builds.patch"
+	epatch "3.14/0021-sysconfig-Change-the-get_platform-method-in-sysconfi.patch"
+	epatch "3.14/0022-build-semi-native-build-sysconfig.patch"
+	epatch "3.14/0023-ctypes-Add-support-for-stdcall-without-underscore.patch"
+	epatch "3.14/0024-ctypes-add-suppor-for-ctypes.pythonapi-under-MINGW.patch"
+	epatch "3.14/0025-ctypes-find_library-c-should-return-None-with-ucrt.patch"
+	epatch "3.14/0026-site-Customize-for-MINGW.patch"
+	epatch "3.14/0027-site-Change-user-site-packages-path-to-include-the-e.patch"
+	epatch "3.14/0028-python-config-output-Windows-paths-for-the-shell-var.patch"
+	epatch "3.14/0029-python-config-use-the-Python-variant-of-python-confi.patch"
+	epatch "3.14/0030-mingw-prefer-unix-sep-if-MSYSTEM-environment-variabl.patch"
+	epatch "3.14/0031-build-Remove-MAXPATHLEN-default.patch"
+	epatch "3.14/0032-build-dont-link-with-gettext.patch"
+	epatch "3.14/0033-use-gnu_printf-in-format.patch"
+	epatch "3.14/0034-build-remove-usage-of-MS_COREDLL.patch"
+	epatch "3.14/0035-getcompiler-expose-MINGW-toolchain-related-informati.patch"
+	epatch "3.14/0036-build-fix-signal-module-build.patch"
+	epatch "3.14/0037-build-build-winconsoleio-and-_testconsole.patch"
+	epatch "3.14/0038-multiprocessing-expose-sem_unlink-to-fix-multiproces.patch"
+	epatch "3.14/0039-build-link-win-resource-files-and-build-pythonw.patch"
+	epatch "3.14/0040-pycore_fileutils-add-MINGW-support.patch"
+	epatch "3.14/0041-configure-fix-inet_pton-check.patch"
+	epatch "3.14/0042-importlib-bootstrap-path-sep.patch"
+	epatch "3.14/0043-configure-set-MINGW-stack-reserve.p"atch
+	epatch "3.14/0044-tests-fix-test_bytes.patch"
+	epatch "3.14/0045-timemodule-add-MINGW-support.patch"
+	epatch "3.14/0046-configure-Disable-checks-for-dlopen-dlfcn.patch"
+	epatch "3.14/0047-venvlauncher-Build-venvlauncher.exe-from-PC-launcher.patch"
+	epatch "3.14/0048-venvlauncher-try-looking-for-the-versioned-.exe-firs.patch"
+	epatch "3.14/0049-venvlauncher-Skip-find-python-in-Registry-for-mingw-.patch"
+	epatch "3.14/0050-configure-don-t-check-for-clock_-functions.patch"
+	epatch "3.14/0051-CI-test-the-build-and-add-some-mingw-specific-tests.patch"
+	epatch "3.14/0052-configure-Default-to-without-c-locale-coercion-on-Wi.patch"
+	epatch "3.14/0053-tests-Fix-some-failing-tests.patch"
+	epatch "3.14/0054-build-def-VPATH-when-compiling-Python-sysmodule.c.patch"
+	epatch "3.14/0055-configure-correctly-find-native-python.patch"
+	epatch "3.14/0056-build-Add-extra-flags-for-_bootstrap_python.patch"
+	epatch "3.14/0057-getpath-add-support-for-mingw.patch"
+	epatch "3.14/0058-build-Don-t-build-_posixsubprocess-on-Windows.patch"
+	epatch "3.14/0059-ssl-module-add-MINGW-support.patch"
+	epatch "3.14/0060-configure-Include-winsock.h-when-checking-for-netdb-.patch"
+	epatch "3.14/0061-configure-always-build-_multiprocessing-on-Windows.patch"
+	epatch "3.14/0062-configure-build-mmap-module-on-win32.patch"
+	epatch "3.14/0063-configure-set-BUILDEXEEXT-and-EXEEXT.patch"
+	epatch "3.14/0064-configure-fix-building-some-test-modules.patch"
+	epatch "3.14/0065-Always-convert-to-before-passing-though-pathcch-func.patch"
+	epatch "3.14/0066-pylifecycle.h-remove-conflicting-_Py_CheckPython3-de.patch"
+	epatch "3.14/0067-dynload_win-add-env-var-for-reverting-the-legacy-DLL.patch"
+	epatch "3.14/0068-dynload_win-Port-GetPythonImport-to-MINGW.patch"
+	epatch "3.14/0069-dynload_win-make-sure-to-only-use-backslashes-for-pa.patch"
+	epatch "3.14/0070-dynload_win-don-t-run-_Py_CheckPython3-for-MINGW-bui.patch"
+	epatch "3.14/0071-build-Build-and-install-libpython3.dll-stable-ABI.patch"
+	epatch "3.14/0072-configure-define-_DEBUG-for-a-debug-build.patch"
+	epatch "3.14/0073-configure-fix-multiprocessing-module.patch"
+	epatch "3.14/0074-build-add-MINGW-support-for-selectmodule.patch"
+	epatch "3.14/0075-configure-disable-various-modules-on-MINGW.patch"
+	epatch "3.14/0076-configure-Add-libraries-to-fix-ctypes-on-MINGW.patch"
+	epatch "3.14/0077-configure-Enable-_uuid-on-MINGW.patch"
+	epatch "3.14/0078-configure-make-incompatible-pointer-types-a-warning.patch"
+	epatch "3.14/0079-tests-test_makefile-normalize-path.patch"
+	epatch "3.14/0080-Fix-include-naming-for-cross-build.patch"
+	epatch "3.14/0081-Fix-format-warning.patch"
+	epatch "3.14/0082-Fix-pragma-warnings.patch"
+	epatch "3.14/0083-math-pyhash-MINGW-support.patch"
+	epatch "3.14/0084-tests-Fix-test-for-library-name.patch"
+	epatch "3.14/0085-dictobject-MINGW-support.patch"
+	epatch "3.14/0086-build-Fix-export-Py_GetBuildInfo-symbol.patch"
+	epatch "3.14/0087-build-Allow-profile-tests-failure.patch"
+	epatch "3.14/0088-build-add-support-for-building-C-modules.patch"
+	epatch "3.14/0089-build-build-fix-the-wmi-module.patch"
+	epatch "3.14/0090-Fix-exports-for-_suggestions-module.patch"
+	epatch "3.14/0091-compileall-Normalize-paths.patch"
+	epatch "3.14/0092-configure-enable-64-bit-time-support-for-32-bit-buil.patch"
+	epatch "3.14/0093-configure-Work-around-broken-pc-file.patch"
+	epatch "3.14/0094-makesetup-make-sure-a-library-path-is-passed-when-bu.patch"
+	epatch "3.14/0095-venv-also-install-the-versioned-launchers.patch"
+	epatch "3.14/0096-configure-set-_WIN32_WINNT-version.patch"
+	epatch "3.14/0097-tests-fix-sysconfig.test_get_platform.patch"
+	epatch "3.14/0098-pycore_time-fix-missing-timeval.patch"
+	epatch "3.14/0099-mmapmodule-define-DONT_USE_SEH.patch"
+	epatch "3.14/0100-build-Add-ABIFLAGS-to-targets-when-needed.patch"
+	epatch "3.14/0101-sysconfig-patch-nt-schemes-again.patch"
+	epatch "3.14/0102-configure-define-_PYTHREAD_NAME_MAXLEN-for-MINGW.patch"
+	epatch "3.14/0103-configure-allow-older-autoconf.patch"
+	epatch "3.14/0104-tests-allow-sys.abiflags-to-exist.patch"
+	epatch "3.14/0105-configure-fix-AC_PATH_TOOL-usage.patch"
+	epatch "3.14/0106-makesetup-make-sure-to-link-the-built-libpython.patch"
+
+	epatch "3.14/2001-winapi-dirty-typecasts.patch"
+	epatch "3.14/2003-libmpdec-fix-include-order.patch"
+
+	eautoreconf
+}
+
+src_configure()
+{
+	econf --enable-shared \
+		--with-system-expat \
+		--without-ensurepip \
+		--enable-loadable-sqlite-extensions \
+		--with-nt-threads \
+		--enable-optimizations
+}
+
+src_install()
+{
+	mkdir -p "${INSTDIR}"
+	local PREFIX_WIN=`posix_w32path ${PREFIX}`
+	local PREFIX_WIN_s="${PREFIX_WIN/\//\\\\}"
+
+	make -j1 install DESTDIR="${INSTDIR}" || die "install failed!"
+
+	# gdb pretty printers for debugging Python itself; to use:
+	# python
+	# sys.path.append('C:/msys64/mingw64/share/gdb/python3')
+	# import python_gdb
+	# reload(python_gdb)
+	# end
+	[[ -d "${INSTDIR}${PREFIX}"/share/gdb/python3/ ]] || mkdir -p "${INSTDIR}${PREFIX}"/share/gdb/python3/
+	cp -f python.exe-gdb.py "${INSTDIR}${PREFIX}"/share/gdb/python3/python_gdb.py
+
+	# some useful "stuff"
+	install -dm755 "${INSTDIR}${PREFIX}"/lib/python${_pybasever}/Tools/{i18n,scripts}
+	install -m755 "${WORKDIR}/${SOURCES_DIR}"/Tools/i18n/{msgfmt,pygettext}.py "${INSTDIR}${PREFIX}"/lib/python${_pybasever}/Tools/i18n/
+	install -m755 "${WORKDIR}/${SOURCES_DIR}"/Tools/scripts/{README,*py} "${INSTDIR}${PREFIX}"/lib/python${_pybasever}/Tools/scripts/
+
+	# fixup shebangs
+	for fscripts in 2to3 2to3-${_pybasever} idle3 idle${_pybasever} pydoc3 pydoc${_pybasever}; do
+		sed -i "s|${PREFIX_WIN_s}/bin/python${_pybasever}.exe|/usr/bin/env python${_pybasever}.exe|g" \
+			"${INSTDIR}${PREFIX}"/bin/${fscripts}
+	done
+
+	# default aliases for all scripts/binaries
+	# Default names are aliases for Python now
+	cp "${INSTDIR}${PREFIX}"/bin/python3.exe "${INSTDIR}${PREFIX}"/bin/python.exe
+	cp "${INSTDIR}${PREFIX}"/bin/python3w.exe "${INSTDIR}${PREFIX}"/bin/pythonw.exe
+	cp "${INSTDIR}${PREFIX}"/bin/python3-config "${INSTDIR}${PREFIX}"/bin/python-config
+	cp "${INSTDIR}${PREFIX}"/bin/idle3 "${INSTDIR}${PREFIX}"/bin/idle
+	cp "${INSTDIR}${PREFIX}"/bin/pydoc3 "${INSTDIR}${PREFIX}"/bin/pydoc
+}
+
+pkg_postinst()
+{
+	# For instalation from binary.
+	local PREFIX_WIN=`posix_w32path ${PREFIX}`
+
+	# Fix up two instances of MSYS2 paths in python-config.sh in-case the final consumer of the results are native executables.
+	sed -e "s|^prefix=.*$|prefix=\"${PREFIX_WIN}\"|" \
+		-i "${PREFIX}"/bin/python${_pybasever}-config \
+		-i "${PREFIX}"/bin/python3-config \
+		-i "${PREFIX}"/bin/python-config
+}

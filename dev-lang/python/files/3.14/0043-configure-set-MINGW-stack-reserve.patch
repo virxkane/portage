@@ -1,0 +1,26 @@
+From 1318287fd1687d46d1e88db0527a5f83b819ddeb Mon Sep 17 00:00:00 2001
+From: jeremyd2019 <4524874+jeremyd2019@users.noreply.github.com>
+Date: Thu, 17 Jun 2021 18:52:37 +0530
+Subject: [PATCH 043/N] configure: set MINGW stack reserve
+
+to match the MSVC build
+---
+ configure.ac | 5 +++++
+ 1 file changed, 5 insertions(+)
+
+diff --git a/configure.ac b/configure.ac
+index 1ce716b..cf834aa 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -3835,6 +3835,11 @@ then
+ 	VxWorks*)
+ 		LINKFORSHARED='-Wl,-export-dynamic';;
+ 	esac
++	case $host in
++	*-*-mingw*)
++		# for https://bugs.python.org/issue40458 on MINGW
++		LINKFORSHARED="-Wl,--stack,4194304";;
++	esac
+ fi
+ AC_MSG_RESULT([$LINKFORSHARED])
+ 
