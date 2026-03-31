@@ -1,4 +1,4 @@
-# Copyright 2010-2024 Chernov A.A.
+# Copyright 2010-2026 Chernov A.A.
 # Distributed under the terms of the GNU General Public License v2
 
 DESCRIPTION="GNU debugger"
@@ -11,7 +11,9 @@ RDEPEND="dev-libs/expat
 	dev-util/mpfr
 	sys-libs/zlib
 	>=dev-libs/isl-0.15
-	dev-lang/python"
+	dev-lang/python
+	app-arch/xz-utils
+	app-arch/zstd"
 
 SRC_URI="http://ftp.gnu.org/gnu/${PN}/${P}.tar.xz"
 
@@ -25,5 +27,7 @@ src_prepare()
 src_configure()
 {
 	econf --disable-werror --disable-nls \
-		--with-expat --with-system-zlib --with-python=yes
+		--with-expat \
+		--with-system-zlib --with-lzma --with-zstd \
+		--with-python=yes
 }

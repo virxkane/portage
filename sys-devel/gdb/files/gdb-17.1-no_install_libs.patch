@@ -1,7 +1,7 @@
-diff -urBb gdb-14.2-orig/bfd/Makefile.in gdb-14.2/bfd/Makefile.in
---- gdb-14.2-orig/bfd/Makefile.in	2024-03-03 09:54:59.000000000 +0400
-+++ gdb-14.2/bfd/Makefile.in	2024-06-23 23:31:24.859145900 +0400
-@@ -2039,11 +2039,10 @@
+diff -urBb gdb-17.1-orig/bfd/Makefile.in gdb-17.1/bfd/Makefile.in
+--- gdb-17.1-orig/bfd/Makefile.in	2025-12-20 06:53:21.000000000 +0400
++++ gdb-17.1/bfd/Makefile.in	2026-03-28 19:06:53.734794800 +0400
+@@ -2042,11 +2042,10 @@
  	for dir in "$(DESTDIR)$(bfdlibdir)" "$(DESTDIR)$(infodir)" "$(DESTDIR)$(bfdincludedir)"; do \
  	  test -z "$$dir" || $(MKDIR_P) "$$dir"; \
  	done
@@ -17,18 +17,17 @@ diff -urBb gdb-14.2-orig/bfd/Makefile.in gdb-14.2/bfd/Makefile.in
  
  install-am: all-am
  	@$(MAKE) $(AM_MAKEFLAGS) install-exec-am install-data-am
-Only in gdb-14.2/bfd: Makefile.in.orig
-diff -urBb gdb-14.2-orig/libctf/Makefile.in gdb-14.2/libctf/Makefile.in
---- gdb-14.2-orig/libctf/Makefile.in	2024-03-03 09:55:00.000000000 +0400
-+++ gdb-14.2/libctf/Makefile.in	2024-06-23 23:31:24.862108200 +0400
-@@ -1442,10 +1442,10 @@
+diff -urBb gdb-17.1-orig/libctf/Makefile.in gdb-17.1/libctf/Makefile.in
+--- gdb-17.1-orig/libctf/Makefile.in	2025-12-20 06:53:21.000000000 +0400
++++ gdb-17.1/libctf/Makefile.in	2026-03-28 19:07:49.837590300 +0400
+@@ -1578,10 +1578,10 @@
  	for dir in "$(DESTDIR)$(libdir)" "$(DESTDIR)$(infodir)" "$(DESTDIR)$(includedir)"; do \
  	  test -z "$$dir" || $(MKDIR_P) "$$dir"; \
  	done
--install: install-am
--install-exec: install-exec-am
--install-data: install-data-am
--uninstall: uninstall-am
+-install: install-recursive
+-install-exec: install-exec-recursive
+-install-data: install-data-recursive
+-uninstall: uninstall-recursive
 +install:
 +install-exec:
 +install-data:
@@ -36,11 +35,10 @@ diff -urBb gdb-14.2-orig/libctf/Makefile.in gdb-14.2/libctf/Makefile.in
  
  install-am: all-am
  	@$(MAKE) $(AM_MAKEFLAGS) install-exec-am install-data-am
-Only in gdb-14.2/libctf: Makefile.in.orig
-diff -urBb gdb-14.2-orig/libiberty/Makefile.in gdb-14.2/libiberty/Makefile.in
---- gdb-14.2-orig/libiberty/Makefile.in	2024-03-03 09:55:00.000000000 +0400
-+++ gdb-14.2/libiberty/Makefile.in	2024-06-23 23:31:24.865124900 +0400
-@@ -376,7 +376,7 @@
+diff -urBb gdb-17.1-orig/libiberty/Makefile.in gdb-17.1/libiberty/Makefile.in
+--- gdb-17.1-orig/libiberty/Makefile.in	2025-09-07 01:52:50.000000000 +0400
++++ gdb-17.1/libiberty/Makefile.in	2026-03-28 19:06:53.742201200 +0400
+@@ -378,7 +378,7 @@
  @MAINT@	echo stamp > stamp-functions
  
  INSTALL_DEST = @INSTALL_DEST@
@@ -49,11 +47,10 @@ diff -urBb gdb-14.2-orig/libiberty/Makefile.in gdb-14.2/libiberty/Makefile.in
  install-strip: install
  
  .PHONY: install install-strip
-Only in gdb-14.2/libiberty: Makefile.in.orig
-diff -urBb gdb-14.2-orig/libsframe/Makefile.in gdb-14.2/libsframe/Makefile.in
---- gdb-14.2-orig/libsframe/Makefile.in	2024-03-03 09:55:00.000000000 +0400
-+++ gdb-14.2/libsframe/Makefile.in	2024-06-23 23:32:52.379039700 +0400
-@@ -1342,10 +1342,10 @@
+diff -urBb gdb-17.1-orig/libsframe/Makefile.in gdb-17.1/libsframe/Makefile.in
+--- gdb-17.1-orig/libsframe/Makefile.in	2025-12-20 06:53:21.000000000 +0400
++++ gdb-17.1/libsframe/Makefile.in	2026-03-28 19:06:53.745341700 +0400
+@@ -1384,10 +1384,10 @@
  	for dir in "$(DESTDIR)$(libdir)" "$(DESTDIR)$(infodir)" "$(DESTDIR)$(includedir)"; do \
  	  test -z "$$dir" || $(MKDIR_P) "$$dir"; \
  	done
@@ -68,10 +65,10 @@ diff -urBb gdb-14.2-orig/libsframe/Makefile.in gdb-14.2/libsframe/Makefile.in
  
  install-am: all-am
  	@$(MAKE) $(AM_MAKEFLAGS) install-exec-am install-data-am
-diff -urBb gdb-14.2-orig/opcodes/Makefile.in gdb-14.2/opcodes/Makefile.in
---- gdb-14.2-orig/opcodes/Makefile.in	2024-03-03 09:55:00.000000000 +0400
-+++ gdb-14.2/opcodes/Makefile.in	2024-06-23 23:31:24.867104300 +0400
-@@ -1212,10 +1212,10 @@
+diff -urBb gdb-17.1-orig/opcodes/Makefile.in gdb-17.1/opcodes/Makefile.in
+--- gdb-17.1-orig/opcodes/Makefile.in	2025-12-20 06:53:21.000000000 +0400
++++ gdb-17.1/opcodes/Makefile.in	2026-03-28 19:06:53.747336300 +0400
+@@ -1219,10 +1219,10 @@
  	for dir in "$(DESTDIR)$(bfdlibdir)" "$(DESTDIR)$(bfdincludedir)"; do \
  	  test -z "$$dir" || $(MKDIR_P) "$$dir"; \
  	done
@@ -86,4 +83,3 @@ diff -urBb gdb-14.2-orig/opcodes/Makefile.in gdb-14.2/opcodes/Makefile.in
  
  install-am: all-am
  	@$(MAKE) $(AM_MAKEFLAGS) install-exec-am install-data-am
-Only in gdb-14.2/opcodes: Makefile.in.orig
