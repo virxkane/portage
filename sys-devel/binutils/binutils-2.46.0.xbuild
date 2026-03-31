@@ -1,4 +1,4 @@
-# Copyright 2010-2024 Chernov A.A.
+# Copyright 2010-2026 Chernov A.A.
 # Distributed under the terms of the GNU General Public License v2
 
 DESCRIPTION="Tools necessary to build programs"
@@ -13,7 +13,8 @@ LICENSE="GPL-3 LGPL-3"
 
 DEPEND="meta-virtual/system-headers
 		meta-virtual/system-libc"
-RDEPEND="sys-libs/zlib"
+RDEPEND="sys-libs/zlib
+		app-arch/zstd"
 
 SRC_URI="http://ftp.gnu.org/gnu/${PN}/${P}.tar.xz"
 
@@ -21,8 +22,20 @@ BUILD_IN_SEPARATE_DIR=yes
 
 src_configure()
 {
+	local econfp=
+	case ${CHOST} in
+	x86_64-*)
+		econfp="--enable-64-bit-bfd"
+		;;
+	esac
 	econf --with-sysroot="${PREFIX}" \
-		--disable-nls --disable-werror \
-		--disable-rpath --disable-shared \
-		--disable-multilib --with-system-zlib
+		--disable-werror \
+		--disable-multilib \
+		--disable-nls \
+		--disable-rpath \
+		--disable-shared \
+		--enable-lto \
+		--enable-plugins \
+		--with-system-zlib --with-zstd \
+		$econfp
 }
