@@ -1,0 +1,12 @@
+diff -urBb openssl-3.5.5-orig/Configurations/10-main.conf openssl-3.5.5/Configurations/10-main.conf
+--- openssl-3.5.5-orig/Configurations/10-main.conf	2026-01-27 17:42:37.000000000 +0400
++++ openssl-3.5.5/Configurations/10-main.conf	2026-03-29 10:35:51.376493600 +0400
+@@ -1743,7 +1743,7 @@
+         uplink_arch      => undef,
+         perlasm_scheme   => "mingw64",
+         shared_rcflag    => "--target=pe-x86-64",
+-        multilib         => "64",
++        multilib         => "",
+     },
+ 
+ #### UEFI
