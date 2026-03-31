@@ -1,0 +1,49 @@
+diff -urBb tcl8.6.17-orig/win/Makefile.in tcl8.6.17/win/Makefile.in
+--- tcl8.6.17-orig/win/Makefile.in	2025-08-13 21:15:38.000000000 +0400
++++ tcl8.6.17/win/Makefile.in	2026-03-29 12:48:35.453960700 +0400
+@@ -650,7 +650,7 @@
+ install: all install-binaries install-libraries install-doc install-packages
+ 
+ install-binaries: binaries
+-	@for i in "$(LIB_INSTALL_DIR)" "$(BIN_INSTALL_DIR)"; \
++	@for i in "$(LIB_INSTALL_DIR)" "$(BIN_INSTALL_DIR)" "$(LIB_INSTALL_DIR)/pkgconfig"; \
+ 	    do \
+ 	    if [ ! -d "$$i" ] ; then \
+ 		echo "Making directory $$i"; \
+@@ -701,6 +701,8 @@
+ 	    echo Installing $(REG_LIB_FILE); \
+ 	    $(COPY) $(REG_LIB_FILE) "$(LIB_INSTALL_DIR)/reg${REGDOTVER}"; \
+ 	    fi
++	@echo "Installing pkg-config file to $(LIB_INSTALL_DIR)/pkgconfig/"
++	@$(COPY) tcl.pc "$(LIB_INSTALL_DIR)/pkgconfig/tcl.pc"
+ 
+ install-libraries: libraries install-tzdata install-msgs
+ 	@for i in "$(prefix)/lib" "$(INCLUDE_INSTALL_DIR)" \
+diff -urBb tcl8.6.17-orig/win/configure.in tcl8.6.17/win/configure.in
+--- tcl8.6.17-orig/win/configure.in	2025-07-31 21:29:02.000000000 +0400
++++ tcl8.6.17/win/configure.in	2026-03-29 12:37:11.340932900 +0400
+@@ -331,6 +331,7 @@
+ 
+ eval "TCL_DLL_FILE=tcl${VER}${DLLSUFFIX}"
+ 
++eval "TCL_LIB_FLAG=\"-ltcl${VER}${LIBFLAGSUFFIX}\""
+ eval "TCL_STUB_LIB_FILE=\"${LIBPREFIX}tclstub${VER}${LIBSUFFIX}\""
+ eval "TCL_STUB_LIB_FLAG=\"-ltclstub${VER}${LIBFLAGSUFFIX}\""
+ eval "TCL_BUILD_STUB_LIB_SPEC=\"-L`$CYGPATH $(pwd)` ${TCL_STUB_LIB_FLAG}\""
+@@ -421,6 +422,7 @@
+ AC_SUBST(TCL_IMPORT_LIB_FILE)
+ AC_SUBST(TCL_IMPORT_LIB_FLAG)
+ # empty on win
++AC_SUBST(TCL_LIBS)
+ AC_SUBST(TCL_LIB_SPEC)
+ AC_SUBST(TCL_STUB_LIB_FILE)
+ AC_SUBST(TCL_STUB_LIB_FLAG)
+@@ -499,7 +501,7 @@
+ AC_SUBST(RC_DEFINES)
+ AC_SUBST(RES)
+ 
+-AC_CONFIG_FILES([Makefile tclConfig.sh tcl.hpj tclsh.exe.manifest])
++AC_CONFIG_FILES([Makefile tclConfig.sh tcl.hpj tclsh.exe.manifest tcl.pc])
+ AC_OUTPUT
+ 
+ dnl Local Variables:
