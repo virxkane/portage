@@ -1,0 +1,45 @@
+# Copyright 2024-2026 Chernov A.A.
+# This is a part of mingw-portage project: 
+# http://sourceforge.net/projects/mingwportage/
+# Distributed under the terms of the GNU General Public License v2
+
+DESCRIPTION="Tk Widget Set"
+
+HOMEPAGE="https://www.tcl-lang.org"
+
+SRC_URI="https://downloads.sourceforge.net/tcl/${PN}${PV}-src.tar.gz"
+
+LICENSE="tcltk"
+
+DEPEND="dev-lang/tcl"
+RDEPEND="dev-lang/tcl"
+
+SOURCES_DIR="${PN}${PV}/win"
+BUILD_IN_SEPARATE_DIR=yes
+
+src_prepare()
+{
+	pushd ..
+	epatch "${P}-add-pkgconfig-file.patch"
+	popd
+	mv configure.in configure.ac
+	autoconf
+}
+
+src_configure()
+{
+	local opt_64bit=""
+	case ${CHOST} in
+	x86_64-w64-*)
+		opt_64bit="--enable-64bit"
+		# without options assumed 32 bit
+		;;
+	esac
+	econf --enable-shared \
+		${opt_64bit}
+}
+
+src_install()
+{
+	emake_install INSTALL_ROOT="${INSTDIR}"
+}
