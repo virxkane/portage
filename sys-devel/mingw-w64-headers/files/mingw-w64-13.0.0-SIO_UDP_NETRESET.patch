@@ -1,0 +1,11 @@
+diff -urBb mingw-w64-v13.0.0-orig/mingw-w64-headers/include/mswsock.h mingw-w64-v13.0.0/mingw-w64-headers/include/mswsock.h
+--- mingw-w64-v13.0.0-orig/mingw-w64-headers/include/mswsock.h	2025-06-04 09:00:28.000000000 +0400
++++ mingw-w64-v13.0.0/mingw-w64-headers/include/mswsock.h	2026-03-28 12:40:16.341085900 +0400
+@@ -36,6 +36,7 @@
+ #define TCP_BSDURGENT 0x7000
+ 
+ #define SIO_UDP_CONNRESET _WSAIOW(IOC_VENDOR,12)
++#define SIO_UDP_NETRESET _WSAIOW(IOC_VENDOR,13)
+ #if (_WIN32_WINNT < 0x0600) && (_WIN32_WINNT >= 0x0501)
+ #define SIO_SOCKET_CLOSE_NOTIFY _WSAIOW(IOC_VENDOR,13)
+ #endif /* >= XP && < VISTA */
