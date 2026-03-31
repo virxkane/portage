@@ -1,4 +1,4 @@
-# Copyright 2010-2024 Chernov A.A.
+# Copyright 2010-2026 Chernov A.A.
 # This is a part of mingw-portage project: 
 # http://sourceforge.net/projects/mingwportage/
 # Distributed under the terms of the GNU General Public License v2
@@ -23,7 +23,8 @@ RDEPEND="!sys-devel/gcc-core-nobstrap
 		>=dev-libs/mpc-1.0.2
 		meta-virtual/pthreads
 		sys-devel/libiconv
-		>=dev-libs/isl-0.16"
+		>=dev-libs/isl-0.16
+		app-arch/zstd"
 
 MY_PN="gcc"
 MY_P="${MY_PN}-${PV}"
@@ -120,7 +121,7 @@ src_configure()
 		--disable-debug --enable-checking=release \
 		--enable-libgomp --enable-lto --enable-graphite --enable-fully-dynamic-string \
 		--with-gmp --with-mpc --with-libiconv \
-		--with-system-zlib --disable-werror --with-zstd=no \
+		--with-system-zlib --disable-werror --with-zstd \
 		--enable-languages=c,c++ \
 		--enable-libstdcxx-time=yes --disable-libstdcxx-pch \
 		--enable-bootstrap --disable-nls --disable-multilib \

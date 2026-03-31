@@ -1,6 +1,6 @@
-diff -urBb gcc-14.1.0-orig/libatomic/Makefile.am gcc-14.1.0/libatomic/Makefile.am
---- gcc-14.1.0-orig/libatomic/Makefile.am	2024-05-07 10:51:41.000000000 +0400
-+++ gcc-14.1.0/libatomic/Makefile.am	2024-06-23 13:08:12.327056700 +0400
+diff -urBb gcc-15.2.0-orig/libatomic/Makefile.am gcc-15.2.0/libatomic/Makefile.am
+--- gcc-15.2.0-orig/libatomic/Makefile.am	2025-08-08 10:51:44.756749700 +0400
++++ gcc-15.2.0/libatomic/Makefile.am	2026-01-11 12:29:40.396249100 +0400
 @@ -23,7 +23,7 @@
  ##  <http://www.gnu.org/licenses/>.
  
@@ -10,9 +10,9 @@ diff -urBb gcc-14.1.0-orig/libatomic/Makefile.am gcc-14.1.0/libatomic/Makefile.a
  
  ## May be used by toolexeclibdir.
  gcc_version := $(shell @get_gcc_base_ver@ $(top_srcdir)/../gcc/BASE-VER)
-diff -urBb gcc-14.1.0-orig/libatomic/Makefile.in gcc-14.1.0/libatomic/Makefile.in
---- gcc-14.1.0-orig/libatomic/Makefile.in	2024-05-07 10:52:51.000000000 +0400
-+++ gcc-14.1.0/libatomic/Makefile.in	2024-06-23 13:08:12.329123700 +0400
+diff -urBb gcc-15.2.0-orig/libatomic/Makefile.in gcc-15.2.0/libatomic/Makefile.in
+--- gcc-15.2.0-orig/libatomic/Makefile.in	2025-08-08 10:52:55.050592100 +0400
++++ gcc-15.2.0/libatomic/Makefile.in	2026-01-11 12:29:40.400248400 +0400
 @@ -399,7 +399,7 @@
  top_builddir = @top_builddir@
  top_srcdir = @top_srcdir@
@@ -22,10 +22,10 @@ diff -urBb gcc-14.1.0-orig/libatomic/Makefile.in gcc-14.1.0/libatomic/Makefile.i
  gcc_version := $(shell @get_gcc_base_ver@ $(top_srcdir)/../gcc/BASE-VER)
  search_path = $(addprefix $(top_srcdir)/config/, $(config_path)) \
  	$(top_srcdir) $(top_builddir)
-diff -urBb gcc-14.1.0-orig/libatomic/configure gcc-14.1.0/libatomic/configure
---- gcc-14.1.0-orig/libatomic/configure	2024-05-07 10:52:51.000000000 +0400
-+++ gcc-14.1.0/libatomic/configure	2024-06-23 13:08:12.333829000 +0400
-@@ -15879,9 +15879,7 @@
+diff -urBb gcc-15.2.0-orig/libatomic/configure gcc-15.2.0/libatomic/configure
+--- gcc-15.2.0-orig/libatomic/configure	2025-08-08 10:52:55.053592200 +0400
++++ gcc-15.2.0/libatomic/configure	2026-01-11 12:29:40.404248700 +0400
+@@ -15836,9 +15836,7 @@
    multilib_arg=
  fi
  
@@ -36,7 +36,7 @@ diff -urBb gcc-14.1.0-orig/libatomic/configure gcc-14.1.0/libatomic/configure
  
  cat >confcache <<\_ACEOF
  # This file is a shell script that caches the results of configure
-@@ -16957,8 +16955,6 @@
+@@ -16914,8 +16912,6 @@
      "libtool") CONFIG_COMMANDS="$CONFIG_COMMANDS libtool" ;;
      "gstdint.h") CONFIG_COMMANDS="$CONFIG_COMMANDS gstdint.h" ;;
      "Makefile") CONFIG_FILES="$CONFIG_FILES Makefile" ;;
@@ -45,10 +45,10 @@ diff -urBb gcc-14.1.0-orig/libatomic/configure gcc-14.1.0/libatomic/configure
  
    *) as_fn_error $? "invalid argument: \`$ac_config_target'" "$LINENO" 5;;
    esac
-diff -urBb gcc-14.1.0-orig/libatomic/configure.ac gcc-14.1.0/libatomic/configure.ac
---- gcc-14.1.0-orig/libatomic/configure.ac	2024-05-07 10:51:41.000000000 +0400
-+++ gcc-14.1.0/libatomic/configure.ac	2024-06-23 13:08:12.338081100 +0400
-@@ -309,6 +309,5 @@
+diff -urBb gcc-15.2.0-orig/libatomic/configure.ac gcc-15.2.0/libatomic/configure.ac
+--- gcc-15.2.0-orig/libatomic/configure.ac	2025-08-08 10:51:44.759419600 +0400
++++ gcc-15.2.0/libatomic/configure.ac	2026-01-11 12:29:40.406248400 +0400
+@@ -306,6 +306,5 @@
    multilib_arg=
  fi
  
@@ -56,9 +56,9 @@ diff -urBb gcc-14.1.0-orig/libatomic/configure.ac gcc-14.1.0/libatomic/configure
 -AC_CONFIG_FILES(testsuite/libatomic-site-extra.exp)
 +AC_CONFIG_FILES(Makefile)
  AC_OUTPUT
-diff -urBb gcc-14.1.0-orig/libgomp/Makefile.am gcc-14.1.0/libgomp/Makefile.am
---- gcc-14.1.0-orig/libgomp/Makefile.am	2024-05-07 10:52:51.000000000 +0400
-+++ gcc-14.1.0/libgomp/Makefile.am	2024-06-23 13:08:12.339627600 +0400
+diff -urBb gcc-15.2.0-orig/libgomp/Makefile.am gcc-15.2.0/libgomp/Makefile.am
+--- gcc-15.2.0-orig/libgomp/Makefile.am	2025-08-08 10:52:55.027591800 +0400
++++ gcc-15.2.0/libgomp/Makefile.am	2026-01-11 12:29:40.408248700 +0400
 @@ -2,7 +2,7 @@
  
  AUTOMAKE_OPTIONS = info-in-builddir
@@ -68,10 +68,10 @@ diff -urBb gcc-14.1.0-orig/libgomp/Makefile.am gcc-14.1.0/libgomp/Makefile.am
  
  ## May be used by toolexeclibdir.
  gcc_version := $(shell @get_gcc_base_ver@ $(top_srcdir)/../gcc/BASE-VER)
-diff -urBb gcc-14.1.0-orig/libgomp/Makefile.in gcc-14.1.0/libgomp/Makefile.in
---- gcc-14.1.0-orig/libgomp/Makefile.in	2024-05-07 10:52:51.000000000 +0400
-+++ gcc-14.1.0/libgomp/Makefile.in	2024-06-23 13:08:12.342406200 +0400
-@@ -512,7 +512,7 @@
+diff -urBb gcc-15.2.0-orig/libgomp/Makefile.in gcc-15.2.0/libgomp/Makefile.in
+--- gcc-15.2.0-orig/libgomp/Makefile.in	2025-08-08 10:52:55.030591800 +0400
++++ gcc-15.2.0/libgomp/Makefile.in	2026-01-11 12:29:40.410248500 +0400
+@@ -513,7 +513,7 @@
  top_srcdir = @top_srcdir@
  AUTOMAKE_OPTIONS = info-in-builddir
  ACLOCAL_AMFLAGS = -I .. -I ../config
@@ -80,9 +80,9 @@ diff -urBb gcc-14.1.0-orig/libgomp/Makefile.in gcc-14.1.0/libgomp/Makefile.in
  gcc_version := $(shell @get_gcc_base_ver@ $(top_srcdir)/../gcc/BASE-VER)
  search_path = $(addprefix $(top_srcdir)/config/, $(config_path)) $(top_srcdir) \
  	      $(top_srcdir)/../include
-diff -urBb gcc-14.1.0-orig/libgomp/configure gcc-14.1.0/libgomp/configure
---- gcc-14.1.0-orig/libgomp/configure	2024-05-07 10:52:51.000000000 +0400
-+++ gcc-14.1.0/libgomp/configure	2024-06-23 13:08:12.346394800 +0400
+diff -urBb gcc-15.2.0-orig/libgomp/configure gcc-15.2.0/libgomp/configure
+--- gcc-15.2.0-orig/libgomp/configure	2025-08-08 10:52:55.033591900 +0400
++++ gcc-15.2.0/libgomp/configure	2026-01-11 12:29:40.414248800 +0400
 @@ -17089,11 +17089,9 @@
  
  ac_config_files="$ac_config_files omp.h omp_lib.h omp_lib.f90 libgomp_f.h"
@@ -108,9 +108,9 @@ diff -urBb gcc-14.1.0-orig/libgomp/configure gcc-14.1.0/libgomp/configure
  
    *) as_fn_error $? "invalid argument: \`$ac_config_target'" "$LINENO" 5;;
    esac
-diff -urBb gcc-14.1.0-orig/libgomp/configure.ac gcc-14.1.0/libgomp/configure.ac
---- gcc-14.1.0-orig/libgomp/configure.ac	2024-05-07 10:52:51.000000000 +0400
-+++ gcc-14.1.0/libgomp/configure.ac	2024-06-23 13:08:12.351803000 +0400
+diff -urBb gcc-15.2.0-orig/libgomp/configure.ac gcc-15.2.0/libgomp/configure.ac
+--- gcc-15.2.0-orig/libgomp/configure.ac	2025-08-08 10:52:55.023591700 +0400
++++ gcc-15.2.0/libgomp/configure.ac	2026-01-11 12:29:40.418249200 +0400
 @@ -491,7 +491,5 @@
  GCC_BASE_VER
  
@@ -120,9 +120,9 @@ diff -urBb gcc-14.1.0-orig/libgomp/configure.ac gcc-14.1.0/libgomp/configure.ac
 -AC_CONFIG_FILES([testsuite/libgomp-site-extra.exp])
 +AC_CONFIG_FILES(Makefile libgomp.spec)
  AC_OUTPUT
-diff -urBb gcc-14.1.0-orig/libiberty/Makefile.in gcc-14.1.0/libiberty/Makefile.in
---- gcc-14.1.0-orig/libiberty/Makefile.in	2024-05-07 10:51:41.000000000 +0400
-+++ gcc-14.1.0/libiberty/Makefile.in	2024-06-23 13:08:12.353770900 +0400
+diff -urBb gcc-15.2.0-orig/libiberty/Makefile.in gcc-15.2.0/libiberty/Makefile.in
+--- gcc-15.2.0-orig/libiberty/Makefile.in	2026-01-11 12:28:08.118364000 +0400
++++ gcc-15.2.0/libiberty/Makefile.in	2026-01-11 12:29:40.420248500 +0400
 @@ -98,7 +98,7 @@
  	"tooldir=$(tooldir)"
  
@@ -132,10 +132,10 @@ diff -urBb gcc-14.1.0-orig/libiberty/Makefile.in gcc-14.1.0/libiberty/Makefile.i
  
  # FIXME: add @BUILD_INFO@ once we're sure it works for everyone.
  all: stamp-picdir stamp-noasandir $(TARGETLIB) required-list all-subdir
-diff -urBb gcc-14.1.0-orig/libiberty/configure gcc-14.1.0/libiberty/configure
---- gcc-14.1.0-orig/libiberty/configure	2024-05-07 10:51:41.000000000 +0400
-+++ gcc-14.1.0/libiberty/configure	2024-06-23 13:08:12.357324100 +0400
-@@ -8026,7 +8026,7 @@
+diff -urBb gcc-15.2.0-orig/libiberty/configure gcc-15.2.0/libiberty/configure
+--- gcc-15.2.0-orig/libiberty/configure	2025-08-08 10:51:45.461626600 +0400
++++ gcc-15.2.0/libiberty/configure	2026-01-11 12:29:40.424248500 +0400
+@@ -8032,7 +8032,7 @@
  
  
  # We need multilib support, but only if configuring for the target.
@@ -144,7 +144,7 @@ diff -urBb gcc-14.1.0-orig/libiberty/configure gcc-14.1.0/libiberty/configure
  
  ac_config_commands="$ac_config_commands default"
  
-@@ -8741,7 +8741,6 @@
+@@ -8747,7 +8747,6 @@
    case $ac_config_target in
      "config.h") CONFIG_HEADERS="$CONFIG_HEADERS config.h:config.in" ;;
      "Makefile") CONFIG_FILES="$CONFIG_FILES Makefile" ;;
@@ -152,10 +152,10 @@ diff -urBb gcc-14.1.0-orig/libiberty/configure gcc-14.1.0/libiberty/configure
      "default") CONFIG_COMMANDS="$CONFIG_COMMANDS default" ;;
  
    *) as_fn_error $? "invalid argument: \`$ac_config_target'" "$LINENO" 5;;
-diff -urBb gcc-14.1.0-orig/libiberty/configure.ac gcc-14.1.0/libiberty/configure.ac
---- gcc-14.1.0-orig/libiberty/configure.ac	2024-05-07 10:51:41.000000000 +0400
-+++ gcc-14.1.0/libiberty/configure.ac	2024-06-23 13:08:12.360315800 +0400
-@@ -813,7 +813,7 @@
+diff -urBb gcc-15.2.0-orig/libiberty/configure.ac gcc-15.2.0/libiberty/configure.ac
+--- gcc-15.2.0-orig/libiberty/configure.ac	2025-08-08 10:51:45.461626600 +0400
++++ gcc-15.2.0/libiberty/configure.ac	2026-01-11 12:29:40.426248700 +0400
+@@ -819,7 +819,7 @@
  AC_SUBST(htmldir)
  
  # We need multilib support, but only if configuring for the target.
@@ -164,9 +164,9 @@ diff -urBb gcc-14.1.0-orig/libiberty/configure.ac gcc-14.1.0/libiberty/configure
  AC_CONFIG_COMMANDS([default],
    [[test -z "$CONFIG_HEADERS" || echo timestamp > stamp-h
  if test -n "$CONFIG_FILES"; then
-diff -urBb gcc-14.1.0-orig/libstdc++-v3/Makefile.am gcc-14.1.0/libstdc++-v3/Makefile.am
---- gcc-14.1.0-orig/libstdc++-v3/Makefile.am	2024-05-07 10:51:41.000000000 +0400
-+++ gcc-14.1.0/libstdc++-v3/Makefile.am	2024-06-23 13:08:12.362286500 +0400
+diff -urBb gcc-15.2.0-orig/libstdc++-v3/Makefile.am gcc-15.2.0/libstdc++-v3/Makefile.am
+--- gcc-15.2.0-orig/libstdc++-v3/Makefile.am	2025-08-08 10:51:45.657434600 +0400
++++ gcc-15.2.0/libstdc++-v3/Makefile.am	2026-01-11 12:29:40.428248700 +0400
 @@ -24,7 +24,7 @@
  
  if GLIBCXX_HOSTED
@@ -182,14 +182,14 @@ diff -urBb gcc-14.1.0-orig/libstdc++-v3/Makefile.am gcc-14.1.0/libstdc++-v3/Make
  
 -# Testsuite/check forwarding targets.
 -check-%:
--	cd testsuite && $(MAKE) $@
+-	$(MAKE) -C testsuite $@
 -
  # Documentation forwarding targets.
  doc-%:
- 	cd doc && $(MAKE) $@
-diff -urBb gcc-14.1.0-orig/libstdc++-v3/Makefile.in gcc-14.1.0/libstdc++-v3/Makefile.in
---- gcc-14.1.0-orig/libstdc++-v3/Makefile.in	2024-05-07 10:52:51.000000000 +0400
-+++ gcc-14.1.0/libstdc++-v3/Makefile.in	2024-06-23 13:08:12.364461000 +0400
+ 	$(MAKE) -C doc $@
+diff -urBb gcc-15.2.0-orig/libstdc++-v3/Makefile.in gcc-15.2.0/libstdc++-v3/Makefile.in
+--- gcc-15.2.0-orig/libstdc++-v3/Makefile.in	2025-08-08 10:52:55.091592800 +0400
++++ gcc-15.2.0/libstdc++-v3/Makefile.in	2026-01-11 12:29:40.428248700 +0400
 @@ -179,7 +179,7 @@
  ETAGS = etags
  CTAGS = ctags
@@ -214,14 +214,14 @@ diff -urBb gcc-14.1.0-orig/libstdc++-v3/Makefile.in gcc-14.1.0/libstdc++-v3/Make
  
 -# Testsuite/check forwarding targets.
 -check-%:
--	cd testsuite && $(MAKE) $@
+-	$(MAKE) -C testsuite $@
 -
  # Documentation forwarding targets.
  doc-%:
- 	cd doc && $(MAKE) $@
-diff -urBb gcc-14.1.0-orig/libstdc++-v3/configure gcc-14.1.0/libstdc++-v3/configure
---- gcc-14.1.0-orig/libstdc++-v3/configure	2024-05-07 10:51:41.000000000 +0400
-+++ gcc-14.1.0/libstdc++-v3/configure	2024-06-23 13:10:03.232729200 +0400
+ 	$(MAKE) -C doc $@
+diff -urBb gcc-15.2.0-orig/libstdc++-v3/configure gcc-15.2.0/libstdc++-v3/configure
+--- gcc-15.2.0-orig/libstdc++-v3/configure	2025-08-08 10:51:45.690435100 +0400
++++ gcc-15.2.0/libstdc++-v3/configure	2026-01-11 12:29:40.436248600 +0400
 @@ -5531,7 +5531,7 @@
    # expandable list at autoconf time; the second provides an expandable list
    # (i.e., shell variable) at configure time.
@@ -231,7 +231,7 @@ diff -urBb gcc-14.1.0-orig/libstdc++-v3/configure gcc-14.1.0/libstdc++-v3/config
  
    # These need to be absolute paths, yet at the same time need to
    # canonicalize only relative paths, because then amd will not unmount
-@@ -55709,7 +55709,7 @@
+@@ -55820,7 +55820,7 @@
  # append it here.  Only modify Makefiles that have just been created.
  #
  # Also, get rid of this simulated-VPATH thing that automake does.
@@ -240,7 +240,7 @@ diff -urBb gcc-14.1.0-orig/libstdc++-v3/configure gcc-14.1.0/libstdc++-v3/config
  
  
  ac_config_commands="$ac_config_commands generate-headers"
-@@ -56975,7 +56975,6 @@
+@@ -57086,7 +57086,6 @@
      "src/experimental/Makefile") CONFIG_FILES="$CONFIG_FILES src/experimental/Makefile" ;;
      "doc/Makefile") CONFIG_FILES="$CONFIG_FILES doc/Makefile" ;;
      "po/Makefile") CONFIG_FILES="$CONFIG_FILES po/Makefile" ;;
@@ -248,10 +248,10 @@ diff -urBb gcc-14.1.0-orig/libstdc++-v3/configure gcc-14.1.0/libstdc++-v3/config
      "python/Makefile") CONFIG_FILES="$CONFIG_FILES python/Makefile" ;;
      "generate-headers") CONFIG_COMMANDS="$CONFIG_COMMANDS generate-headers" ;;
  
-diff -urBb gcc-14.1.0-orig/libstdc++-v3/configure.ac gcc-14.1.0/libstdc++-v3/configure.ac
---- gcc-14.1.0-orig/libstdc++-v3/configure.ac	2024-05-07 10:51:41.000000000 +0400
-+++ gcc-14.1.0/libstdc++-v3/configure.ac	2024-06-23 13:08:12.389346800 +0400
-@@ -521,9 +521,6 @@
+diff -urBb gcc-15.2.0-orig/libstdc++-v3/configure.ac gcc-15.2.0/libstdc++-v3/configure.ac
+--- gcc-15.2.0-orig/libstdc++-v3/configure.ac	2025-08-08 10:51:45.690435100 +0400
++++ gcc-15.2.0/libstdc++-v3/configure.ac	2026-01-11 12:29:40.442249100 +0400
+@@ -536,9 +536,6 @@
  GLIBCXX_CHECK_GETENTROPY
  GLIBCXX_CHECK_ARC4RANDOM
  
@@ -261,9 +261,9 @@ diff -urBb gcc-14.1.0-orig/libstdc++-v3/configure.ac gcc-14.1.0/libstdc++-v3/con
  # For gthread support.  Depends on GLIBCXX_ENABLE_SYMVERS.
  GLIBCXX_CHECK_GTHREADS
  
-diff -urBb gcc-14.1.0-orig/libvtv/Makefile.am gcc-14.1.0/libvtv/Makefile.am
---- gcc-14.1.0-orig/libvtv/Makefile.am	2024-05-07 10:51:42.000000000 +0400
-+++ gcc-14.1.0/libvtv/Makefile.am	2024-06-23 13:08:12.391342100 +0400
+diff -urBb gcc-15.2.0-orig/libvtv/Makefile.am gcc-15.2.0/libvtv/Makefile.am
+--- gcc-15.2.0-orig/libvtv/Makefile.am	2025-08-08 10:51:46.224053100 +0400
++++ gcc-15.2.0/libvtv/Makefile.am	2026-01-11 12:29:40.444248500 +0400
 @@ -19,12 +19,6 @@
  ## along with this library; see the file COPYING3.  If not see
  ## <http://www.gnu.org/licenses/>.
@@ -277,9 +277,9 @@ diff -urBb gcc-14.1.0-orig/libvtv/Makefile.am gcc-14.1.0/libvtv/Makefile.am
  ACLOCAL_AMFLAGS = -I .. -I ../config
  
  # May be used by toolexeclibdir.
-diff -urBb gcc-14.1.0-orig/libvtv/Makefile.in gcc-14.1.0/libvtv/Makefile.in
---- gcc-14.1.0-orig/libvtv/Makefile.in	2024-05-07 10:52:51.000000000 +0400
-+++ gcc-14.1.0/libvtv/Makefile.in	2024-06-23 13:08:12.393336100 +0400
+diff -urBb gcc-15.2.0-orig/libvtv/Makefile.in gcc-15.2.0/libvtv/Makefile.in
+--- gcc-15.2.0-orig/libvtv/Makefile.in	2025-08-08 10:52:55.069592500 +0400
++++ gcc-15.2.0/libvtv/Makefile.in	2026-01-11 12:29:40.446248400 +0400
 @@ -264,7 +264,6 @@
  ETAGS = etags
  CTAGS = ctags
@@ -297,9 +297,9 @@ diff -urBb gcc-14.1.0-orig/libvtv/Makefile.in gcc-14.1.0/libvtv/Makefile.in
  ACLOCAL_AMFLAGS = -I .. -I ../config
  
  # May be used by toolexeclibdir.
-diff -urBb gcc-14.1.0-orig/libvtv/configure gcc-14.1.0/libvtv/configure
---- gcc-14.1.0-orig/libvtv/configure	2024-05-07 10:52:51.000000000 +0400
-+++ gcc-14.1.0/libvtv/configure	2024-06-23 13:08:12.397365800 +0400
+diff -urBb gcc-15.2.0-orig/libvtv/configure gcc-15.2.0/libvtv/configure
+--- gcc-15.2.0-orig/libvtv/configure	2025-08-08 10:52:55.070592500 +0400
++++ gcc-15.2.0/libvtv/configure	2026-01-11 12:29:40.450248600 +0400
 @@ -15932,11 +15932,6 @@
  ac_config_files="$ac_config_files Makefile"
  
@@ -320,9 +320,9 @@ diff -urBb gcc-14.1.0-orig/libvtv/configure gcc-14.1.0/libvtv/configure
  
    *) as_fn_error $? "invalid argument: \`$ac_config_target'" "$LINENO" 5;;
    esac
-diff -urBb gcc-14.1.0-orig/libvtv/configure.ac gcc-14.1.0/libvtv/configure.ac
---- gcc-14.1.0-orig/libvtv/configure.ac	2024-05-07 10:51:42.000000000 +0400
-+++ gcc-14.1.0/libvtv/configure.ac	2024-06-23 13:08:12.402375600 +0400
+diff -urBb gcc-15.2.0-orig/libvtv/configure.ac gcc-15.2.0/libvtv/configure.ac
+--- gcc-15.2.0-orig/libvtv/configure.ac	2025-08-08 10:51:46.225444000 +0400
++++ gcc-15.2.0/libvtv/configure.ac	2026-01-11 12:29:40.452249600 +0400
 @@ -175,21 +175,6 @@
  
  AC_CONFIG_FILES([Makefile])
