@@ -1,6 +1,6 @@
-diff -urBbN zstd-1.5.6-orig/Makefile.am zstd-1.5.6/Makefile.am
---- zstd-1.5.6-orig/Makefile.am	1970-01-01 04:00:00.000000000 +0400
-+++ zstd-1.5.6/Makefile.am	2024-06-26 23:35:21.004489600 +0400
+diff -urBbN zstd-1.5.7-orig/Makefile.am zstd-1.5.7/Makefile.am
+--- zstd-1.5.7-orig/Makefile.am	1970-01-01 04:00:00.000000000 +0400
++++ zstd-1.5.7/Makefile.am	2026-03-29 14:11:27.874512900 +0400
 @@ -0,0 +1,6 @@
 +ACLOCAL_AMFLAGS = -I m4
 +#SUBDIRS = examples lib programs tests
@@ -8,12 +8,12 @@ diff -urBbN zstd-1.5.6-orig/Makefile.am zstd-1.5.6/Makefile.am
 +
 +pkgconfig_DATA  = lib/libzstd.pc
 +pkgconfigdir    = ${libdir}/pkgconfig
-diff -urBbN zstd-1.5.6-orig/configure.ac zstd-1.5.6/configure.ac
---- zstd-1.5.6-orig/configure.ac	1970-01-01 04:00:00.000000000 +0400
-+++ zstd-1.5.6/configure.ac	2024-06-26 23:36:05.755985600 +0400
-@@ -0,0 +1,126 @@
+diff -urBbN zstd-1.5.7-orig/configure.ac zstd-1.5.7/configure.ac
+--- zstd-1.5.7-orig/configure.ac	1970-01-01 04:00:00.000000000 +0400
++++ zstd-1.5.7/configure.ac	2026-03-29 15:12:32.413538900 +0400
+@@ -0,0 +1,129 @@
 +AC_PREREQ([2.57])
-+AC_INIT([zstd],[1.5.6])
++AC_INIT([zstd],[1.5.7])
 +AC_CONFIG_MACRO_DIR([m4])
 +AC_CONFIG_SRCDIR([lib/common/zstd_common.c])
 +AM_INIT_AUTOMAKE([no-define foreign])
@@ -119,6 +119,9 @@ diff -urBbN zstd-1.5.6-orig/configure.ac zstd-1.5.6/configure.ac
 +	CFLAGS="$CFLAGS -DZSTD_MULTITHREAD"
 +	CXXFLAGS="$CXXFLAGS -DZSTD_MULTITHREAD"
 +fi
++AC_SUBST(LIBS_MT, [$PTHREAD_LIBS])
++AC_SUBST(CFLAGS_MT, [$PTHREAD_CFLAGS])
++AC_SUBST(LIBS_PRIVATE, [$PTHREAD_LIBS])
 +
 +AM_CONDITIONAL([ZSTD_LIB_COMPRESSION], [test x$ac_enable_compession = xyes])
 +AM_CONDITIONAL([ZSTD_LIB_DECOMPRESSION], [test x$ac_enable_decompession = xyes])
@@ -138,10 +141,10 @@ diff -urBbN zstd-1.5.6-orig/configure.ac zstd-1.5.6/configure.ac
 +AC_CONFIG_FILES([Makefile lib/Makefile programs/Makefile])
 +AC_CONFIG_FILES([lib/libzstd.pc])
 +AC_OUTPUT
-diff -urBbN zstd-1.5.6-orig/lib/Makefile.am zstd-1.5.6/lib/Makefile.am
---- zstd-1.5.6-orig/lib/Makefile.am	1970-01-01 04:00:00.000000000 +0400
-+++ zstd-1.5.6/lib/Makefile.am	2024-06-26 23:35:21.007481600 +0400
-@@ -0,0 +1,86 @@
+diff -urBbN zstd-1.5.7-orig/lib/Makefile.am zstd-1.5.7/lib/Makefile.am
+--- zstd-1.5.7-orig/lib/Makefile.am	1970-01-01 04:00:00.000000000 +0400
++++ zstd-1.5.7/lib/Makefile.am	2026-03-29 14:24:14.646490500 +0400
+@@ -0,0 +1,87 @@
 +include_HEADERS = \
 +	zstd.h \
 +	zstd_errors.h \
@@ -181,6 +184,7 @@ diff -urBbN zstd-1.5.6-orig/lib/Makefile.am zstd-1.5.6/lib/Makefile.am
 +	compress/zstd_lazy.c \
 +	compress/zstd_ldm.c \
 +	compress/zstd_opt.c \
++	compress/zstd_preSplit.c \
 +	compress/zstdmt_compress.c
 +
 +ZSTD_DECOMPRESS_FILES = \
@@ -228,9 +232,9 @@ diff -urBbN zstd-1.5.6-orig/lib/Makefile.am zstd-1.5.6/lib/Makefile.am
 +EXTRA_DIST = \
 +	BUCK \
 +	README.md
-diff -urBbN zstd-1.5.6-orig/lib/libzstd.pc.in zstd-1.5.6/lib/libzstd.pc.in
---- zstd-1.5.6-orig/lib/libzstd.pc.in	2024-03-22 02:05:51.000000000 +0400
-+++ zstd-1.5.6/lib/libzstd.pc.in	2024-06-26 23:35:21.008478900 +0400
+diff -urBbN zstd-1.5.7-orig/lib/libzstd.pc.in zstd-1.5.7/lib/libzstd.pc.in
+--- zstd-1.5.7-orig/lib/libzstd.pc.in	2025-02-19 04:04:24.000000000 +0400
++++ zstd-1.5.7/lib/libzstd.pc.in	2026-03-29 15:08:41.428784400 +0400
 @@ -2,10 +2,10 @@
  #   Copyright (c) Meta Platforms, Inc. and affiliates.
  #   BSD 2-Clause License (https://opensource.org/licenses/bsd-license.php)
@@ -246,9 +250,15 @@ diff -urBbN zstd-1.5.6-orig/lib/libzstd.pc.in zstd-1.5.6/lib/libzstd.pc.in
  
  Name: zstd
  Description: fast lossless compression algorithm library
-diff -urBbN zstd-1.5.6-orig/programs/Makefile.am zstd-1.5.6/programs/Makefile.am
---- zstd-1.5.6-orig/programs/Makefile.am	1970-01-01 04:00:00.000000000 +0400
-+++ zstd-1.5.6/programs/Makefile.am	2024-06-26 23:52:50.970691500 +0400
+@@ -13,4 +13,4 @@
+ Version: @VERSION@
+ Libs: -L${libdir} -lzstd @LIBS_MT@
+ Libs.private: @LIBS_PRIVATE@
+-Cflags: -I${includedir} @LIBS_MT@
++Cflags: -I${includedir} @CFLAGS_MT@
+diff -urBbN zstd-1.5.7-orig/programs/Makefile.am zstd-1.5.7/programs/Makefile.am
+--- zstd-1.5.7-orig/programs/Makefile.am	1970-01-01 04:00:00.000000000 +0400
++++ zstd-1.5.7/programs/Makefile.am	2026-03-29 14:11:27.887479000 +0400
 @@ -0,0 +1,61 @@
 +
 +bin_PROGRAMS = zstd
