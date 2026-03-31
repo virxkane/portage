@@ -11,6 +11,11 @@ LICENSE="LGPL-3"
 
 SRC_URI="http://ftp.gnu.org/gnu/gmp/${P}.tar.xz"
 
+src_prepare()
+{
+	epatch "${P}-configure-error-gcc15-fix.patch"
+}
+
 src_configure()
 {
 	local _abi=32

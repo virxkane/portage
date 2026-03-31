@@ -1,0 +1,12 @@
+diff -urBb gmp-6.3.0-orig/configure gmp-6.3.0/configure
+--- gmp-6.3.0-orig/configure	2023-07-29 17:42:22.000000000 +0400
++++ gmp-6.3.0/configure	2026-03-28 15:51:02.329738300 +0400
+@@ -6568,7 +6568,7 @@
+ 
+ #if defined (__GNUC__) && ! defined (__cplusplus)
+ typedef unsigned long long t1;typedef t1*t2;
+-void g(){}
++void g(int, const t1*, t1, t1*, const t1*, int){}
+ void h(){}
+ static __inline__ t1 e(t2 rp,t2 up,int n,t1 v0)
+ {t1 c,x,r;int i;if(v0){c=1;for(i=1;i<n;i++){x=up[i];r=x+1;rp[i]=r;}}return c;}
