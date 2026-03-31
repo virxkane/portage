@@ -1,0 +1,834 @@
+diff --git a/.github/workflows/build.yml b/.github/workflows/build.yml
+index 98e89953b..103afbaf8 100644
+--- a/.github/workflows/build.yml
++++ b/.github/workflows/build.yml
+@@ -68,7 +68,7 @@ jobs:
+           mkdir cross
+           cd cross
+ 
+-          for arch in i686 x86_64 armv7 aarch64; do
++          for arch in i686 x86_64 aarch64; do
+             src_crt=${{matrix.crt}}
+             if [[ "$arch" = a* && "$src_crt" == "msvcrt" ]]; then
+                 continue
+@@ -100,13 +100,6 @@ jobs:
+           path: |
+             llvm-mingw-*-x86_64.zip
+           retention-days: 7
+-      - uses: actions/upload-artifact@v4
+-        if: matrix.crt != 'msvcrt'
+-        with:
+-          name: windows-${{matrix.crt}}-armv7-toolchain
+-          path: |
+-            llvm-mingw-*-armv7.zip
+-          retention-days: 7
+       - uses: actions/upload-artifact@v4
+         if: matrix.crt != 'msvcrt'
+         with:
+@@ -127,7 +120,6 @@ jobs:
+           - x86_64
+           - i686
+           - aarch64
+-          - armv7
+         crt:
+           - ucrt
+           - ucrtbase
+@@ -135,8 +127,6 @@ jobs:
+         exclude:
+           - arch: aarch64
+             crt: msvcrt
+-          - arch: armv7
+-            crt: msvcrt
+     runs-on: ${{startsWith(matrix.arch, 'a') && 'windows-11-arm' || 'windows-latest'}}
+     steps:
+       - uses: msys2/setup-msys2@v2
+@@ -180,7 +170,7 @@ jobs:
+               $arch-w64-mingw32-clang $defs -fno-builtin test/crt-test.c -o $name-crt-first.exe -l$lib -O2
+               echo $name
+               case $arch in
+-              ${{ runner.arch == 'ARM64' && 'a*' || '*86*' }}) ./$name-regular.exe ; ./$name-crt-first.exe ;;
++              ${{ runner.arch == 'ARM64' && 'aarch64' || '*86*' }}) ./$name-regular.exe ; ./$name-crt-first.exe ;;
+               esac
+             done
+           done
+diff --git a/mingw-w64-crt/Makefile.am b/mingw-w64-crt/Makefile.am
+index e0924b470..3ae153417 100644
+--- a/mingw-w64-crt/Makefile.am
++++ b/mingw-w64-crt/Makefile.am
+@@ -624,6 +624,12 @@ src_msvcrt64=\
+   misc/wcsnlen.c \
+   misc/wctob.c \
+   stdio/_fseeki64.c \
++  stdio/_fstat32.c \
++  stdio/_fstat32i64.c \
++  stdio/_stat32.c \
++  stdio/_stat32i64.c \
++  stdio/_wstat32.c \
++  stdio/_wstat32i64.c \
+   string/wcstok.c
+ 
+ # Files included in libmsvcrt-os.a (for msvcrt.dll) on arm32
+@@ -777,7 +783,13 @@ src_msvcrtarm64=\
+   misc/_getpid.c \
+   misc/__initenv.c \
+   misc/__winitenv.c \
++  stdio/_fstat32.c \
++  stdio/_fstat32i64.c \
+   stdio/_setmaxstdio.c \
++  stdio/_stat32.c \
++  stdio/_stat32i64.c \
++  stdio/_wstat32.c \
++  stdio/_wstat32i64.c \
+   stdio/gets.c
+ 
+ if ARM64EC
+diff --git a/mingw-w64-crt/Makefile.in b/mingw-w64-crt/Makefile.in
+index dfb1acc61..0876b201b 100644
+--- a/mingw-w64-crt/Makefile.in
++++ b/mingw-w64-crt/Makefile.in
+@@ -4224,7 +4224,9 @@ am__lib64_libmsvcrt_extra_a_SOURCES_DIST =  \
+ 	misc/_get_current_locale.c misc/_initterm_e.c misc/btowc.c \
+ 	misc/mbrtowc.c misc/output_format.c misc/_get_errno.c \
+ 	misc/_set_errno.c misc/strnlen.c misc/wassert.c misc/wcrtomb.c \
+-	misc/wcsnlen.c misc/wctob.c stdio/_fseeki64.c string/wcstok.c
++	misc/wcsnlen.c misc/wctob.c stdio/_fseeki64.c stdio/_fstat32.c \
++	stdio/_fstat32i64.c stdio/_stat32.c stdio/_stat32i64.c \
++	stdio/_wstat32.c stdio/_wstat32i64.c string/wcstok.c
+ am__objects_209 =  \
+ 	stdio/lib64_libmsvcrt_extra_a-scanf2-argcount-char.$(OBJEXT) \
+ 	stdio/lib64_libmsvcrt_extra_a-scanf2-argcount-wchar.$(OBJEXT) \
+@@ -4346,6 +4348,12 @@ am__objects_212 = $(am__objects_210) $(am__objects_211) \
+ 	misc/lib64_libmsvcrt_extra_a-wcsnlen.$(OBJEXT) \
+ 	misc/lib64_libmsvcrt_extra_a-wctob.$(OBJEXT) \
+ 	stdio/lib64_libmsvcrt_extra_a-_fseeki64.$(OBJEXT) \
++	stdio/lib64_libmsvcrt_extra_a-_fstat32.$(OBJEXT) \
++	stdio/lib64_libmsvcrt_extra_a-_fstat32i64.$(OBJEXT) \
++	stdio/lib64_libmsvcrt_extra_a-_stat32.$(OBJEXT) \
++	stdio/lib64_libmsvcrt_extra_a-_stat32i64.$(OBJEXT) \
++	stdio/lib64_libmsvcrt_extra_a-_wstat32.$(OBJEXT) \
++	stdio/lib64_libmsvcrt_extra_a-_wstat32i64.$(OBJEXT) \
+ 	string/lib64_libmsvcrt_extra_a-wcstok.$(OBJEXT)
+ @LIB64_TRUE@@W32API_FALSE@am_lib64_libmsvcrt_extra_a_OBJECTS =  \
+ @LIB64_TRUE@@W32API_FALSE@	$(am__objects_212)
+@@ -7000,7 +7008,9 @@ am__libarm64_libmsvcrt_extra_a_SOURCES_DIST =  \
+ 	misc/__p__pwctype.c misc/__p__wcmdln.c misc/__p__winmajor.c \
+ 	misc/__p__winminor.c misc/__p__winver.c misc/__p__wpgmptr.c \
+ 	misc/__timezone.c misc/__tzname.c misc/_getpid.c \
+-	misc/__initenv.c misc/__winitenv.c stdio/_setmaxstdio.c \
++	misc/__initenv.c misc/__winitenv.c stdio/_fstat32.c \
++	stdio/_fstat32i64.c stdio/_setmaxstdio.c stdio/_stat32.c \
++	stdio/_stat32i64.c stdio/_wstat32.c stdio/_wstat32i64.c \
+ 	stdio/gets.c math/fabsf.c stdio/scanf.S
+ am__objects_325 = stdio/libarm64_libmsvcrt_extra_a-scanf2-argcount-char.$(OBJEXT) \
+ 	stdio/libarm64_libmsvcrt_extra_a-scanf2-argcount-wchar.$(OBJEXT) \
+@@ -7111,7 +7121,13 @@ am__objects_329 = $(am__objects_326) \
+ 	misc/libarm64_libmsvcrt_extra_a-_getpid.$(OBJEXT) \
+ 	misc/libarm64_libmsvcrt_extra_a-__initenv.$(OBJEXT) \
+ 	misc/libarm64_libmsvcrt_extra_a-__winitenv.$(OBJEXT) \
++	stdio/libarm64_libmsvcrt_extra_a-_fstat32.$(OBJEXT) \
++	stdio/libarm64_libmsvcrt_extra_a-_fstat32i64.$(OBJEXT) \
+ 	stdio/libarm64_libmsvcrt_extra_a-_setmaxstdio.$(OBJEXT) \
++	stdio/libarm64_libmsvcrt_extra_a-_stat32.$(OBJEXT) \
++	stdio/libarm64_libmsvcrt_extra_a-_stat32i64.$(OBJEXT) \
++	stdio/libarm64_libmsvcrt_extra_a-_wstat32.$(OBJEXT) \
++	stdio/libarm64_libmsvcrt_extra_a-_wstat32i64.$(OBJEXT) \
+ 	stdio/libarm64_libmsvcrt_extra_a-gets.$(OBJEXT) \
+ 	$(am__objects_327) $(am__objects_328)
+ @LIBARM64_TRUE@@W32API_FALSE@am_libarm64_libmsvcrt_extra_a_OBJECTS =  \
+@@ -11878,7 +11894,13 @@ am__depfiles_remade = ./$(DEPDIR)/lib32_libm_a-_libm_dummy.Po \
+ 	stdio/$(DEPDIR)/lib64_libmsvcrt_common_a-wstat32i64.Po \
+ 	stdio/$(DEPDIR)/lib64_libmsvcrt_common_a-wstat64.Po \
+ 	stdio/$(DEPDIR)/lib64_libmsvcrt_extra_a-_fseeki64.Po \
++	stdio/$(DEPDIR)/lib64_libmsvcrt_extra_a-_fstat32.Po \
++	stdio/$(DEPDIR)/lib64_libmsvcrt_extra_a-_fstat32i64.Po \
+ 	stdio/$(DEPDIR)/lib64_libmsvcrt_extra_a-_ftelli64.Po \
++	stdio/$(DEPDIR)/lib64_libmsvcrt_extra_a-_stat32.Po \
++	stdio/$(DEPDIR)/lib64_libmsvcrt_extra_a-_stat32i64.Po \
++	stdio/$(DEPDIR)/lib64_libmsvcrt_extra_a-_wstat32.Po \
++	stdio/$(DEPDIR)/lib64_libmsvcrt_extra_a-_wstat32i64.Po \
+ 	stdio/$(DEPDIR)/lib64_libmsvcrt_extra_a-mingw_lock.Po \
+ 	stdio/$(DEPDIR)/lib64_libmsvcrt_extra_a-msvcr110pre_stat32.Po \
+ 	stdio/$(DEPDIR)/lib64_libmsvcrt_extra_a-msvcr110pre_stat64i32.Po \
+@@ -12176,8 +12198,14 @@ am__depfiles_remade = ./$(DEPDIR)/lib32_libm_a-_libm_dummy.Po \
+ 	stdio/$(DEPDIR)/libarm64_libmsvcrt_common_a-vswprintf_alias.Po \
+ 	stdio/$(DEPDIR)/libarm64_libmsvcrt_common_a-wstat32i64.Po \
+ 	stdio/$(DEPDIR)/libarm64_libmsvcrt_common_a-wstat64.Po \
++	stdio/$(DEPDIR)/libarm64_libmsvcrt_extra_a-_fstat32.Po \
++	stdio/$(DEPDIR)/libarm64_libmsvcrt_extra_a-_fstat32i64.Po \
+ 	stdio/$(DEPDIR)/libarm64_libmsvcrt_extra_a-_ftelli64.Po \
+ 	stdio/$(DEPDIR)/libarm64_libmsvcrt_extra_a-_setmaxstdio.Po \
++	stdio/$(DEPDIR)/libarm64_libmsvcrt_extra_a-_stat32.Po \
++	stdio/$(DEPDIR)/libarm64_libmsvcrt_extra_a-_stat32i64.Po \
++	stdio/$(DEPDIR)/libarm64_libmsvcrt_extra_a-_wstat32.Po \
++	stdio/$(DEPDIR)/libarm64_libmsvcrt_extra_a-_wstat32i64.Po \
+ 	stdio/$(DEPDIR)/libarm64_libmsvcrt_extra_a-gets.Po \
+ 	stdio/$(DEPDIR)/libarm64_libmsvcrt_extra_a-mingw_lock.Po \
+ 	stdio/$(DEPDIR)/libarm64_libmsvcrt_extra_a-msvcr110pre_stat32.Po \
+@@ -13977,6 +14005,12 @@ src_msvcrt64 = \
+   misc/wcsnlen.c \
+   misc/wctob.c \
+   stdio/_fseeki64.c \
++  stdio/_fstat32.c \
++  stdio/_fstat32i64.c \
++  stdio/_stat32.c \
++  stdio/_stat32i64.c \
++  stdio/_wstat32.c \
++  stdio/_wstat32i64.c \
+   string/wcstok.c
+ 
+ 
+@@ -14024,7 +14058,9 @@ src_msvcrtarm64 = $(src_msvcrt) math/arm-common/acosh.c \
+ 	misc/__p__pwctype.c misc/__p__wcmdln.c misc/__p__winmajor.c \
+ 	misc/__p__winminor.c misc/__p__winver.c misc/__p__wpgmptr.c \
+ 	misc/__timezone.c misc/__tzname.c misc/_getpid.c \
+-	misc/__initenv.c misc/__winitenv.c stdio/_setmaxstdio.c \
++	misc/__initenv.c misc/__winitenv.c stdio/_fstat32.c \
++	stdio/_fstat32i64.c stdio/_setmaxstdio.c stdio/_stat32.c \
++	stdio/_stat32i64.c stdio/_wstat32.c stdio/_wstat32i64.c \
+ 	stdio/gets.c $(am__append_5) $(am__append_6)
+ @ARM64EC_TRUE@src_msvcrtarm64_x64 = libarm64/stdio/scanf.x86_64.o
+ src_pre_msvcrt20 = \
+@@ -22337,6 +22373,18 @@ misc/lib64_libmsvcrt_extra_a-wctob.$(OBJEXT): misc/$(am__dirstamp) \
+ 	misc/$(DEPDIR)/$(am__dirstamp)
+ stdio/lib64_libmsvcrt_extra_a-_fseeki64.$(OBJEXT):  \
+ 	stdio/$(am__dirstamp) stdio/$(DEPDIR)/$(am__dirstamp)
++stdio/lib64_libmsvcrt_extra_a-_fstat32.$(OBJEXT):  \
++	stdio/$(am__dirstamp) stdio/$(DEPDIR)/$(am__dirstamp)
++stdio/lib64_libmsvcrt_extra_a-_fstat32i64.$(OBJEXT):  \
++	stdio/$(am__dirstamp) stdio/$(DEPDIR)/$(am__dirstamp)
++stdio/lib64_libmsvcrt_extra_a-_stat32.$(OBJEXT):  \
++	stdio/$(am__dirstamp) stdio/$(DEPDIR)/$(am__dirstamp)
++stdio/lib64_libmsvcrt_extra_a-_stat32i64.$(OBJEXT):  \
++	stdio/$(am__dirstamp) stdio/$(DEPDIR)/$(am__dirstamp)
++stdio/lib64_libmsvcrt_extra_a-_wstat32.$(OBJEXT):  \
++	stdio/$(am__dirstamp) stdio/$(DEPDIR)/$(am__dirstamp)
++stdio/lib64_libmsvcrt_extra_a-_wstat32i64.$(OBJEXT):  \
++	stdio/$(am__dirstamp) stdio/$(DEPDIR)/$(am__dirstamp)
+ string/lib64_libmsvcrt_extra_a-wcstok.$(OBJEXT):  \
+ 	string/$(am__dirstamp) string/$(DEPDIR)/$(am__dirstamp)
+ 
+@@ -26215,8 +26263,20 @@ misc/libarm64_libmsvcrt_extra_a-__initenv.$(OBJEXT):  \
+ 	misc/$(am__dirstamp) misc/$(DEPDIR)/$(am__dirstamp)
+ misc/libarm64_libmsvcrt_extra_a-__winitenv.$(OBJEXT):  \
+ 	misc/$(am__dirstamp) misc/$(DEPDIR)/$(am__dirstamp)
++stdio/libarm64_libmsvcrt_extra_a-_fstat32.$(OBJEXT):  \
++	stdio/$(am__dirstamp) stdio/$(DEPDIR)/$(am__dirstamp)
++stdio/libarm64_libmsvcrt_extra_a-_fstat32i64.$(OBJEXT):  \
++	stdio/$(am__dirstamp) stdio/$(DEPDIR)/$(am__dirstamp)
+ stdio/libarm64_libmsvcrt_extra_a-_setmaxstdio.$(OBJEXT):  \
+ 	stdio/$(am__dirstamp) stdio/$(DEPDIR)/$(am__dirstamp)
++stdio/libarm64_libmsvcrt_extra_a-_stat32.$(OBJEXT):  \
++	stdio/$(am__dirstamp) stdio/$(DEPDIR)/$(am__dirstamp)
++stdio/libarm64_libmsvcrt_extra_a-_stat32i64.$(OBJEXT):  \
++	stdio/$(am__dirstamp) stdio/$(DEPDIR)/$(am__dirstamp)
++stdio/libarm64_libmsvcrt_extra_a-_wstat32.$(OBJEXT):  \
++	stdio/$(am__dirstamp) stdio/$(DEPDIR)/$(am__dirstamp)
++stdio/libarm64_libmsvcrt_extra_a-_wstat32i64.$(OBJEXT):  \
++	stdio/$(am__dirstamp) stdio/$(DEPDIR)/$(am__dirstamp)
+ stdio/libarm64_libmsvcrt_extra_a-gets.$(OBJEXT):  \
+ 	stdio/$(am__dirstamp) stdio/$(DEPDIR)/$(am__dirstamp)
+ math/libarm64_libmsvcrt_extra_a-fabsf.$(OBJEXT): math/$(am__dirstamp) \
+@@ -31425,7 +31485,13 @@ distclean-compile:
+ @AMDEP_TRUE@@am__include@ @am__quote@stdio/$(DEPDIR)/lib64_libmsvcrt_common_a-wstat32i64.Po@am__quote@ # am--include-marker
+ @AMDEP_TRUE@@am__include@ @am__quote@stdio/$(DEPDIR)/lib64_libmsvcrt_common_a-wstat64.Po@am__quote@ # am--include-marker
+ @AMDEP_TRUE@@am__include@ @am__quote@stdio/$(DEPDIR)/lib64_libmsvcrt_extra_a-_fseeki64.Po@am__quote@ # am--include-marker
++@AMDEP_TRUE@@am__include@ @am__quote@stdio/$(DEPDIR)/lib64_libmsvcrt_extra_a-_fstat32.Po@am__quote@ # am--include-marker
++@AMDEP_TRUE@@am__include@ @am__quote@stdio/$(DEPDIR)/lib64_libmsvcrt_extra_a-_fstat32i64.Po@am__quote@ # am--include-marker
+ @AMDEP_TRUE@@am__include@ @am__quote@stdio/$(DEPDIR)/lib64_libmsvcrt_extra_a-_ftelli64.Po@am__quote@ # am--include-marker
++@AMDEP_TRUE@@am__include@ @am__quote@stdio/$(DEPDIR)/lib64_libmsvcrt_extra_a-_stat32.Po@am__quote@ # am--include-marker
++@AMDEP_TRUE@@am__include@ @am__quote@stdio/$(DEPDIR)/lib64_libmsvcrt_extra_a-_stat32i64.Po@am__quote@ # am--include-marker
++@AMDEP_TRUE@@am__include@ @am__quote@stdio/$(DEPDIR)/lib64_libmsvcrt_extra_a-_wstat32.Po@am__quote@ # am--include-marker
++@AMDEP_TRUE@@am__include@ @am__quote@stdio/$(DEPDIR)/lib64_libmsvcrt_extra_a-_wstat32i64.Po@am__quote@ # am--include-marker
+ @AMDEP_TRUE@@am__include@ @am__quote@stdio/$(DEPDIR)/lib64_libmsvcrt_extra_a-mingw_lock.Po@am__quote@ # am--include-marker
+ @AMDEP_TRUE@@am__include@ @am__quote@stdio/$(DEPDIR)/lib64_libmsvcrt_extra_a-msvcr110pre_stat32.Po@am__quote@ # am--include-marker
+ @AMDEP_TRUE@@am__include@ @am__quote@stdio/$(DEPDIR)/lib64_libmsvcrt_extra_a-msvcr110pre_stat64i32.Po@am__quote@ # am--include-marker
+@@ -31723,8 +31789,14 @@ distclean-compile:
+ @AMDEP_TRUE@@am__include@ @am__quote@stdio/$(DEPDIR)/libarm64_libmsvcrt_common_a-vswprintf_alias.Po@am__quote@ # am--include-marker
+ @AMDEP_TRUE@@am__include@ @am__quote@stdio/$(DEPDIR)/libarm64_libmsvcrt_common_a-wstat32i64.Po@am__quote@ # am--include-marker
+ @AMDEP_TRUE@@am__include@ @am__quote@stdio/$(DEPDIR)/libarm64_libmsvcrt_common_a-wstat64.Po@am__quote@ # am--include-marker
++@AMDEP_TRUE@@am__include@ @am__quote@stdio/$(DEPDIR)/libarm64_libmsvcrt_extra_a-_fstat32.Po@am__quote@ # am--include-marker
++@AMDEP_TRUE@@am__include@ @am__quote@stdio/$(DEPDIR)/libarm64_libmsvcrt_extra_a-_fstat32i64.Po@am__quote@ # am--include-marker
+ @AMDEP_TRUE@@am__include@ @am__quote@stdio/$(DEPDIR)/libarm64_libmsvcrt_extra_a-_ftelli64.Po@am__quote@ # am--include-marker
+ @AMDEP_TRUE@@am__include@ @am__quote@stdio/$(DEPDIR)/libarm64_libmsvcrt_extra_a-_setmaxstdio.Po@am__quote@ # am--include-marker
++@AMDEP_TRUE@@am__include@ @am__quote@stdio/$(DEPDIR)/libarm64_libmsvcrt_extra_a-_stat32.Po@am__quote@ # am--include-marker
++@AMDEP_TRUE@@am__include@ @am__quote@stdio/$(DEPDIR)/libarm64_libmsvcrt_extra_a-_stat32i64.Po@am__quote@ # am--include-marker
++@AMDEP_TRUE@@am__include@ @am__quote@stdio/$(DEPDIR)/libarm64_libmsvcrt_extra_a-_wstat32.Po@am__quote@ # am--include-marker
++@AMDEP_TRUE@@am__include@ @am__quote@stdio/$(DEPDIR)/libarm64_libmsvcrt_extra_a-_wstat32i64.Po@am__quote@ # am--include-marker
+ @AMDEP_TRUE@@am__include@ @am__quote@stdio/$(DEPDIR)/libarm64_libmsvcrt_extra_a-gets.Po@am__quote@ # am--include-marker
+ @AMDEP_TRUE@@am__include@ @am__quote@stdio/$(DEPDIR)/libarm64_libmsvcrt_extra_a-mingw_lock.Po@am__quote@ # am--include-marker
+ @AMDEP_TRUE@@am__include@ @am__quote@stdio/$(DEPDIR)/libarm64_libmsvcrt_extra_a-msvcr110pre_stat32.Po@am__quote@ # am--include-marker
+@@ -65056,6 +65128,90 @@ stdio/lib64_libmsvcrt_extra_a-_fseeki64.obj: stdio/_fseeki64.c
+ @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+ @am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lib64_libmsvcrt_extra_a_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o stdio/lib64_libmsvcrt_extra_a-_fseeki64.obj `if test -f 'stdio/_fseeki64.c'; then $(CYGPATH_W) 'stdio/_fseeki64.c'; else $(CYGPATH_W) '$(srcdir)/stdio/_fseeki64.c'; fi`
+ 
++stdio/lib64_libmsvcrt_extra_a-_fstat32.o: stdio/_fstat32.c
++@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lib64_libmsvcrt_extra_a_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT stdio/lib64_libmsvcrt_extra_a-_fstat32.o -MD -MP -MF stdio/$(DEPDIR)/lib64_libmsvcrt_extra_a-_fstat32.Tpo -c -o stdio/lib64_libmsvcrt_extra_a-_fstat32.o `test -f 'stdio/_fstat32.c' || echo '$(srcdir)/'`stdio/_fstat32.c
++@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) stdio/$(DEPDIR)/lib64_libmsvcrt_extra_a-_fstat32.Tpo stdio/$(DEPDIR)/lib64_libmsvcrt_extra_a-_fstat32.Po
++@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='stdio/_fstat32.c' object='stdio/lib64_libmsvcrt_extra_a-_fstat32.o' libtool=no @AMDEPBACKSLASH@
++@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
++@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lib64_libmsvcrt_extra_a_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o stdio/lib64_libmsvcrt_extra_a-_fstat32.o `test -f 'stdio/_fstat32.c' || echo '$(srcdir)/'`stdio/_fstat32.c
++
++stdio/lib64_libmsvcrt_extra_a-_fstat32.obj: stdio/_fstat32.c
++@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lib64_libmsvcrt_extra_a_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT stdio/lib64_libmsvcrt_extra_a-_fstat32.obj -MD -MP -MF stdio/$(DEPDIR)/lib64_libmsvcrt_extra_a-_fstat32.Tpo -c -o stdio/lib64_libmsvcrt_extra_a-_fstat32.obj `if test -f 'stdio/_fstat32.c'; then $(CYGPATH_W) 'stdio/_fstat32.c'; else $(CYGPATH_W) '$(srcdir)/stdio/_fstat32.c'; fi`
++@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) stdio/$(DEPDIR)/lib64_libmsvcrt_extra_a-_fstat32.Tpo stdio/$(DEPDIR)/lib64_libmsvcrt_extra_a-_fstat32.Po
++@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='stdio/_fstat32.c' object='stdio/lib64_libmsvcrt_extra_a-_fstat32.obj' libtool=no @AMDEPBACKSLASH@
++@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
++@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lib64_libmsvcrt_extra_a_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o stdio/lib64_libmsvcrt_extra_a-_fstat32.obj `if test -f 'stdio/_fstat32.c'; then $(CYGPATH_W) 'stdio/_fstat32.c'; else $(CYGPATH_W) '$(srcdir)/stdio/_fstat32.c'; fi`
++
++stdio/lib64_libmsvcrt_extra_a-_fstat32i64.o: stdio/_fstat32i64.c
++@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lib64_libmsvcrt_extra_a_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT stdio/lib64_libmsvcrt_extra_a-_fstat32i64.o -MD -MP -MF stdio/$(DEPDIR)/lib64_libmsvcrt_extra_a-_fstat32i64.Tpo -c -o stdio/lib64_libmsvcrt_extra_a-_fstat32i64.o `test -f 'stdio/_fstat32i64.c' || echo '$(srcdir)/'`stdio/_fstat32i64.c
++@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) stdio/$(DEPDIR)/lib64_libmsvcrt_extra_a-_fstat32i64.Tpo stdio/$(DEPDIR)/lib64_libmsvcrt_extra_a-_fstat32i64.Po
++@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='stdio/_fstat32i64.c' object='stdio/lib64_libmsvcrt_extra_a-_fstat32i64.o' libtool=no @AMDEPBACKSLASH@
++@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
++@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lib64_libmsvcrt_extra_a_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o stdio/lib64_libmsvcrt_extra_a-_fstat32i64.o `test -f 'stdio/_fstat32i64.c' || echo '$(srcdir)/'`stdio/_fstat32i64.c
++
++stdio/lib64_libmsvcrt_extra_a-_fstat32i64.obj: stdio/_fstat32i64.c
++@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lib64_libmsvcrt_extra_a_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT stdio/lib64_libmsvcrt_extra_a-_fstat32i64.obj -MD -MP -MF stdio/$(DEPDIR)/lib64_libmsvcrt_extra_a-_fstat32i64.Tpo -c -o stdio/lib64_libmsvcrt_extra_a-_fstat32i64.obj `if test -f 'stdio/_fstat32i64.c'; then $(CYGPATH_W) 'stdio/_fstat32i64.c'; else $(CYGPATH_W) '$(srcdir)/stdio/_fstat32i64.c'; fi`
++@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) stdio/$(DEPDIR)/lib64_libmsvcrt_extra_a-_fstat32i64.Tpo stdio/$(DEPDIR)/lib64_libmsvcrt_extra_a-_fstat32i64.Po
++@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='stdio/_fstat32i64.c' object='stdio/lib64_libmsvcrt_extra_a-_fstat32i64.obj' libtool=no @AMDEPBACKSLASH@
++@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
++@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lib64_libmsvcrt_extra_a_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o stdio/lib64_libmsvcrt_extra_a-_fstat32i64.obj `if test -f 'stdio/_fstat32i64.c'; then $(CYGPATH_W) 'stdio/_fstat32i64.c'; else $(CYGPATH_W) '$(srcdir)/stdio/_fstat32i64.c'; fi`
++
++stdio/lib64_libmsvcrt_extra_a-_stat32.o: stdio/_stat32.c
++@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lib64_libmsvcrt_extra_a_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT stdio/lib64_libmsvcrt_extra_a-_stat32.o -MD -MP -MF stdio/$(DEPDIR)/lib64_libmsvcrt_extra_a-_stat32.Tpo -c -o stdio/lib64_libmsvcrt_extra_a-_stat32.o `test -f 'stdio/_stat32.c' || echo '$(srcdir)/'`stdio/_stat32.c
++@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) stdio/$(DEPDIR)/lib64_libmsvcrt_extra_a-_stat32.Tpo stdio/$(DEPDIR)/lib64_libmsvcrt_extra_a-_stat32.Po
++@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='stdio/_stat32.c' object='stdio/lib64_libmsvcrt_extra_a-_stat32.o' libtool=no @AMDEPBACKSLASH@
++@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
++@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lib64_libmsvcrt_extra_a_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o stdio/lib64_libmsvcrt_extra_a-_stat32.o `test -f 'stdio/_stat32.c' || echo '$(srcdir)/'`stdio/_stat32.c
++
++stdio/lib64_libmsvcrt_extra_a-_stat32.obj: stdio/_stat32.c
++@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lib64_libmsvcrt_extra_a_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT stdio/lib64_libmsvcrt_extra_a-_stat32.obj -MD -MP -MF stdio/$(DEPDIR)/lib64_libmsvcrt_extra_a-_stat32.Tpo -c -o stdio/lib64_libmsvcrt_extra_a-_stat32.obj `if test -f 'stdio/_stat32.c'; then $(CYGPATH_W) 'stdio/_stat32.c'; else $(CYGPATH_W) '$(srcdir)/stdio/_stat32.c'; fi`
++@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) stdio/$(DEPDIR)/lib64_libmsvcrt_extra_a-_stat32.Tpo stdio/$(DEPDIR)/lib64_libmsvcrt_extra_a-_stat32.Po
++@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='stdio/_stat32.c' object='stdio/lib64_libmsvcrt_extra_a-_stat32.obj' libtool=no @AMDEPBACKSLASH@
++@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
++@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lib64_libmsvcrt_extra_a_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o stdio/lib64_libmsvcrt_extra_a-_stat32.obj `if test -f 'stdio/_stat32.c'; then $(CYGPATH_W) 'stdio/_stat32.c'; else $(CYGPATH_W) '$(srcdir)/stdio/_stat32.c'; fi`
++
++stdio/lib64_libmsvcrt_extra_a-_stat32i64.o: stdio/_stat32i64.c
++@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lib64_libmsvcrt_extra_a_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT stdio/lib64_libmsvcrt_extra_a-_stat32i64.o -MD -MP -MF stdio/$(DEPDIR)/lib64_libmsvcrt_extra_a-_stat32i64.Tpo -c -o stdio/lib64_libmsvcrt_extra_a-_stat32i64.o `test -f 'stdio/_stat32i64.c' || echo '$(srcdir)/'`stdio/_stat32i64.c
++@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) stdio/$(DEPDIR)/lib64_libmsvcrt_extra_a-_stat32i64.Tpo stdio/$(DEPDIR)/lib64_libmsvcrt_extra_a-_stat32i64.Po
++@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='stdio/_stat32i64.c' object='stdio/lib64_libmsvcrt_extra_a-_stat32i64.o' libtool=no @AMDEPBACKSLASH@
++@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
++@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lib64_libmsvcrt_extra_a_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o stdio/lib64_libmsvcrt_extra_a-_stat32i64.o `test -f 'stdio/_stat32i64.c' || echo '$(srcdir)/'`stdio/_stat32i64.c
++
++stdio/lib64_libmsvcrt_extra_a-_stat32i64.obj: stdio/_stat32i64.c
++@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lib64_libmsvcrt_extra_a_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT stdio/lib64_libmsvcrt_extra_a-_stat32i64.obj -MD -MP -MF stdio/$(DEPDIR)/lib64_libmsvcrt_extra_a-_stat32i64.Tpo -c -o stdio/lib64_libmsvcrt_extra_a-_stat32i64.obj `if test -f 'stdio/_stat32i64.c'; then $(CYGPATH_W) 'stdio/_stat32i64.c'; else $(CYGPATH_W) '$(srcdir)/stdio/_stat32i64.c'; fi`
++@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) stdio/$(DEPDIR)/lib64_libmsvcrt_extra_a-_stat32i64.Tpo stdio/$(DEPDIR)/lib64_libmsvcrt_extra_a-_stat32i64.Po
++@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='stdio/_stat32i64.c' object='stdio/lib64_libmsvcrt_extra_a-_stat32i64.obj' libtool=no @AMDEPBACKSLASH@
++@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
++@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lib64_libmsvcrt_extra_a_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o stdio/lib64_libmsvcrt_extra_a-_stat32i64.obj `if test -f 'stdio/_stat32i64.c'; then $(CYGPATH_W) 'stdio/_stat32i64.c'; else $(CYGPATH_W) '$(srcdir)/stdio/_stat32i64.c'; fi`
++
++stdio/lib64_libmsvcrt_extra_a-_wstat32.o: stdio/_wstat32.c
++@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lib64_libmsvcrt_extra_a_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT stdio/lib64_libmsvcrt_extra_a-_wstat32.o -MD -MP -MF stdio/$(DEPDIR)/lib64_libmsvcrt_extra_a-_wstat32.Tpo -c -o stdio/lib64_libmsvcrt_extra_a-_wstat32.o `test -f 'stdio/_wstat32.c' || echo '$(srcdir)/'`stdio/_wstat32.c
++@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) stdio/$(DEPDIR)/lib64_libmsvcrt_extra_a-_wstat32.Tpo stdio/$(DEPDIR)/lib64_libmsvcrt_extra_a-_wstat32.Po
++@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='stdio/_wstat32.c' object='stdio/lib64_libmsvcrt_extra_a-_wstat32.o' libtool=no @AMDEPBACKSLASH@
++@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
++@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lib64_libmsvcrt_extra_a_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o stdio/lib64_libmsvcrt_extra_a-_wstat32.o `test -f 'stdio/_wstat32.c' || echo '$(srcdir)/'`stdio/_wstat32.c
++
++stdio/lib64_libmsvcrt_extra_a-_wstat32.obj: stdio/_wstat32.c
++@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lib64_libmsvcrt_extra_a_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT stdio/lib64_libmsvcrt_extra_a-_wstat32.obj -MD -MP -MF stdio/$(DEPDIR)/lib64_libmsvcrt_extra_a-_wstat32.Tpo -c -o stdio/lib64_libmsvcrt_extra_a-_wstat32.obj `if test -f 'stdio/_wstat32.c'; then $(CYGPATH_W) 'stdio/_wstat32.c'; else $(CYGPATH_W) '$(srcdir)/stdio/_wstat32.c'; fi`
++@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) stdio/$(DEPDIR)/lib64_libmsvcrt_extra_a-_wstat32.Tpo stdio/$(DEPDIR)/lib64_libmsvcrt_extra_a-_wstat32.Po
++@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='stdio/_wstat32.c' object='stdio/lib64_libmsvcrt_extra_a-_wstat32.obj' libtool=no @AMDEPBACKSLASH@
++@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
++@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lib64_libmsvcrt_extra_a_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o stdio/lib64_libmsvcrt_extra_a-_wstat32.obj `if test -f 'stdio/_wstat32.c'; then $(CYGPATH_W) 'stdio/_wstat32.c'; else $(CYGPATH_W) '$(srcdir)/stdio/_wstat32.c'; fi`
++
++stdio/lib64_libmsvcrt_extra_a-_wstat32i64.o: stdio/_wstat32i64.c
++@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lib64_libmsvcrt_extra_a_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT stdio/lib64_libmsvcrt_extra_a-_wstat32i64.o -MD -MP -MF stdio/$(DEPDIR)/lib64_libmsvcrt_extra_a-_wstat32i64.Tpo -c -o stdio/lib64_libmsvcrt_extra_a-_wstat32i64.o `test -f 'stdio/_wstat32i64.c' || echo '$(srcdir)/'`stdio/_wstat32i64.c
++@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) stdio/$(DEPDIR)/lib64_libmsvcrt_extra_a-_wstat32i64.Tpo stdio/$(DEPDIR)/lib64_libmsvcrt_extra_a-_wstat32i64.Po
++@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='stdio/_wstat32i64.c' object='stdio/lib64_libmsvcrt_extra_a-_wstat32i64.o' libtool=no @AMDEPBACKSLASH@
++@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
++@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lib64_libmsvcrt_extra_a_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o stdio/lib64_libmsvcrt_extra_a-_wstat32i64.o `test -f 'stdio/_wstat32i64.c' || echo '$(srcdir)/'`stdio/_wstat32i64.c
++
++stdio/lib64_libmsvcrt_extra_a-_wstat32i64.obj: stdio/_wstat32i64.c
++@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lib64_libmsvcrt_extra_a_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT stdio/lib64_libmsvcrt_extra_a-_wstat32i64.obj -MD -MP -MF stdio/$(DEPDIR)/lib64_libmsvcrt_extra_a-_wstat32i64.Tpo -c -o stdio/lib64_libmsvcrt_extra_a-_wstat32i64.obj `if test -f 'stdio/_wstat32i64.c'; then $(CYGPATH_W) 'stdio/_wstat32i64.c'; else $(CYGPATH_W) '$(srcdir)/stdio/_wstat32i64.c'; fi`
++@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) stdio/$(DEPDIR)/lib64_libmsvcrt_extra_a-_wstat32i64.Tpo stdio/$(DEPDIR)/lib64_libmsvcrt_extra_a-_wstat32i64.Po
++@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='stdio/_wstat32i64.c' object='stdio/lib64_libmsvcrt_extra_a-_wstat32i64.obj' libtool=no @AMDEPBACKSLASH@
++@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
++@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lib64_libmsvcrt_extra_a_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o stdio/lib64_libmsvcrt_extra_a-_wstat32i64.obj `if test -f 'stdio/_wstat32i64.c'; then $(CYGPATH_W) 'stdio/_wstat32i64.c'; else $(CYGPATH_W) '$(srcdir)/stdio/_wstat32i64.c'; fi`
++
+ string/lib64_libmsvcrt_extra_a-wcstok.o: string/wcstok.c
+ @am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lib64_libmsvcrt_extra_a_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT string/lib64_libmsvcrt_extra_a-wcstok.o -MD -MP -MF string/$(DEPDIR)/lib64_libmsvcrt_extra_a-wcstok.Tpo -c -o string/lib64_libmsvcrt_extra_a-wcstok.o `test -f 'string/wcstok.c' || echo '$(srcdir)/'`string/wcstok.c
+ @am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) string/$(DEPDIR)/lib64_libmsvcrt_extra_a-wcstok.Tpo string/$(DEPDIR)/lib64_libmsvcrt_extra_a-wcstok.Po
+@@ -87204,6 +87360,34 @@ misc/libarm64_libmsvcrt_extra_a-__winitenv.obj: misc/__winitenv.c
+ @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+ @am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libarm64_libmsvcrt_extra_a_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o misc/libarm64_libmsvcrt_extra_a-__winitenv.obj `if test -f 'misc/__winitenv.c'; then $(CYGPATH_W) 'misc/__winitenv.c'; else $(CYGPATH_W) '$(srcdir)/misc/__winitenv.c'; fi`
+ 
++stdio/libarm64_libmsvcrt_extra_a-_fstat32.o: stdio/_fstat32.c
++@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libarm64_libmsvcrt_extra_a_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT stdio/libarm64_libmsvcrt_extra_a-_fstat32.o -MD -MP -MF stdio/$(DEPDIR)/libarm64_libmsvcrt_extra_a-_fstat32.Tpo -c -o stdio/libarm64_libmsvcrt_extra_a-_fstat32.o `test -f 'stdio/_fstat32.c' || echo '$(srcdir)/'`stdio/_fstat32.c
++@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) stdio/$(DEPDIR)/libarm64_libmsvcrt_extra_a-_fstat32.Tpo stdio/$(DEPDIR)/libarm64_libmsvcrt_extra_a-_fstat32.Po
++@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='stdio/_fstat32.c' object='stdio/libarm64_libmsvcrt_extra_a-_fstat32.o' libtool=no @AMDEPBACKSLASH@
++@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
++@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libarm64_libmsvcrt_extra_a_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o stdio/libarm64_libmsvcrt_extra_a-_fstat32.o `test -f 'stdio/_fstat32.c' || echo '$(srcdir)/'`stdio/_fstat32.c
++
++stdio/libarm64_libmsvcrt_extra_a-_fstat32.obj: stdio/_fstat32.c
++@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libarm64_libmsvcrt_extra_a_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT stdio/libarm64_libmsvcrt_extra_a-_fstat32.obj -MD -MP -MF stdio/$(DEPDIR)/libarm64_libmsvcrt_extra_a-_fstat32.Tpo -c -o stdio/libarm64_libmsvcrt_extra_a-_fstat32.obj `if test -f 'stdio/_fstat32.c'; then $(CYGPATH_W) 'stdio/_fstat32.c'; else $(CYGPATH_W) '$(srcdir)/stdio/_fstat32.c'; fi`
++@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) stdio/$(DEPDIR)/libarm64_libmsvcrt_extra_a-_fstat32.Tpo stdio/$(DEPDIR)/libarm64_libmsvcrt_extra_a-_fstat32.Po
++@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='stdio/_fstat32.c' object='stdio/libarm64_libmsvcrt_extra_a-_fstat32.obj' libtool=no @AMDEPBACKSLASH@
++@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
++@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libarm64_libmsvcrt_extra_a_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o stdio/libarm64_libmsvcrt_extra_a-_fstat32.obj `if test -f 'stdio/_fstat32.c'; then $(CYGPATH_W) 'stdio/_fstat32.c'; else $(CYGPATH_W) '$(srcdir)/stdio/_fstat32.c'; fi`
++
++stdio/libarm64_libmsvcrt_extra_a-_fstat32i64.o: stdio/_fstat32i64.c
++@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libarm64_libmsvcrt_extra_a_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT stdio/libarm64_libmsvcrt_extra_a-_fstat32i64.o -MD -MP -MF stdio/$(DEPDIR)/libarm64_libmsvcrt_extra_a-_fstat32i64.Tpo -c -o stdio/libarm64_libmsvcrt_extra_a-_fstat32i64.o `test -f 'stdio/_fstat32i64.c' || echo '$(srcdir)/'`stdio/_fstat32i64.c
++@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) stdio/$(DEPDIR)/libarm64_libmsvcrt_extra_a-_fstat32i64.Tpo stdio/$(DEPDIR)/libarm64_libmsvcrt_extra_a-_fstat32i64.Po
++@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='stdio/_fstat32i64.c' object='stdio/libarm64_libmsvcrt_extra_a-_fstat32i64.o' libtool=no @AMDEPBACKSLASH@
++@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
++@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libarm64_libmsvcrt_extra_a_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o stdio/libarm64_libmsvcrt_extra_a-_fstat32i64.o `test -f 'stdio/_fstat32i64.c' || echo '$(srcdir)/'`stdio/_fstat32i64.c
++
++stdio/libarm64_libmsvcrt_extra_a-_fstat32i64.obj: stdio/_fstat32i64.c
++@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libarm64_libmsvcrt_extra_a_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT stdio/libarm64_libmsvcrt_extra_a-_fstat32i64.obj -MD -MP -MF stdio/$(DEPDIR)/libarm64_libmsvcrt_extra_a-_fstat32i64.Tpo -c -o stdio/libarm64_libmsvcrt_extra_a-_fstat32i64.obj `if test -f 'stdio/_fstat32i64.c'; then $(CYGPATH_W) 'stdio/_fstat32i64.c'; else $(CYGPATH_W) '$(srcdir)/stdio/_fstat32i64.c'; fi`
++@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) stdio/$(DEPDIR)/libarm64_libmsvcrt_extra_a-_fstat32i64.Tpo stdio/$(DEPDIR)/libarm64_libmsvcrt_extra_a-_fstat32i64.Po
++@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='stdio/_fstat32i64.c' object='stdio/libarm64_libmsvcrt_extra_a-_fstat32i64.obj' libtool=no @AMDEPBACKSLASH@
++@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
++@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libarm64_libmsvcrt_extra_a_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o stdio/libarm64_libmsvcrt_extra_a-_fstat32i64.obj `if test -f 'stdio/_fstat32i64.c'; then $(CYGPATH_W) 'stdio/_fstat32i64.c'; else $(CYGPATH_W) '$(srcdir)/stdio/_fstat32i64.c'; fi`
++
+ stdio/libarm64_libmsvcrt_extra_a-_setmaxstdio.o: stdio/_setmaxstdio.c
+ @am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libarm64_libmsvcrt_extra_a_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT stdio/libarm64_libmsvcrt_extra_a-_setmaxstdio.o -MD -MP -MF stdio/$(DEPDIR)/libarm64_libmsvcrt_extra_a-_setmaxstdio.Tpo -c -o stdio/libarm64_libmsvcrt_extra_a-_setmaxstdio.o `test -f 'stdio/_setmaxstdio.c' || echo '$(srcdir)/'`stdio/_setmaxstdio.c
+ @am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) stdio/$(DEPDIR)/libarm64_libmsvcrt_extra_a-_setmaxstdio.Tpo stdio/$(DEPDIR)/libarm64_libmsvcrt_extra_a-_setmaxstdio.Po
+@@ -87218,6 +87402,62 @@ stdio/libarm64_libmsvcrt_extra_a-_setmaxstdio.obj: stdio/_setmaxstdio.c
+ @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+ @am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libarm64_libmsvcrt_extra_a_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o stdio/libarm64_libmsvcrt_extra_a-_setmaxstdio.obj `if test -f 'stdio/_setmaxstdio.c'; then $(CYGPATH_W) 'stdio/_setmaxstdio.c'; else $(CYGPATH_W) '$(srcdir)/stdio/_setmaxstdio.c'; fi`
+ 
++stdio/libarm64_libmsvcrt_extra_a-_stat32.o: stdio/_stat32.c
++@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libarm64_libmsvcrt_extra_a_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT stdio/libarm64_libmsvcrt_extra_a-_stat32.o -MD -MP -MF stdio/$(DEPDIR)/libarm64_libmsvcrt_extra_a-_stat32.Tpo -c -o stdio/libarm64_libmsvcrt_extra_a-_stat32.o `test -f 'stdio/_stat32.c' || echo '$(srcdir)/'`stdio/_stat32.c
++@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) stdio/$(DEPDIR)/libarm64_libmsvcrt_extra_a-_stat32.Tpo stdio/$(DEPDIR)/libarm64_libmsvcrt_extra_a-_stat32.Po
++@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='stdio/_stat32.c' object='stdio/libarm64_libmsvcrt_extra_a-_stat32.o' libtool=no @AMDEPBACKSLASH@
++@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
++@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libarm64_libmsvcrt_extra_a_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o stdio/libarm64_libmsvcrt_extra_a-_stat32.o `test -f 'stdio/_stat32.c' || echo '$(srcdir)/'`stdio/_stat32.c
++
++stdio/libarm64_libmsvcrt_extra_a-_stat32.obj: stdio/_stat32.c
++@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libarm64_libmsvcrt_extra_a_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT stdio/libarm64_libmsvcrt_extra_a-_stat32.obj -MD -MP -MF stdio/$(DEPDIR)/libarm64_libmsvcrt_extra_a-_stat32.Tpo -c -o stdio/libarm64_libmsvcrt_extra_a-_stat32.obj `if test -f 'stdio/_stat32.c'; then $(CYGPATH_W) 'stdio/_stat32.c'; else $(CYGPATH_W) '$(srcdir)/stdio/_stat32.c'; fi`
++@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) stdio/$(DEPDIR)/libarm64_libmsvcrt_extra_a-_stat32.Tpo stdio/$(DEPDIR)/libarm64_libmsvcrt_extra_a-_stat32.Po
++@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='stdio/_stat32.c' object='stdio/libarm64_libmsvcrt_extra_a-_stat32.obj' libtool=no @AMDEPBACKSLASH@
++@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
++@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libarm64_libmsvcrt_extra_a_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o stdio/libarm64_libmsvcrt_extra_a-_stat32.obj `if test -f 'stdio/_stat32.c'; then $(CYGPATH_W) 'stdio/_stat32.c'; else $(CYGPATH_W) '$(srcdir)/stdio/_stat32.c'; fi`
++
++stdio/libarm64_libmsvcrt_extra_a-_stat32i64.o: stdio/_stat32i64.c
++@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libarm64_libmsvcrt_extra_a_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT stdio/libarm64_libmsvcrt_extra_a-_stat32i64.o -MD -MP -MF stdio/$(DEPDIR)/libarm64_libmsvcrt_extra_a-_stat32i64.Tpo -c -o stdio/libarm64_libmsvcrt_extra_a-_stat32i64.o `test -f 'stdio/_stat32i64.c' || echo '$(srcdir)/'`stdio/_stat32i64.c
++@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) stdio/$(DEPDIR)/libarm64_libmsvcrt_extra_a-_stat32i64.Tpo stdio/$(DEPDIR)/libarm64_libmsvcrt_extra_a-_stat32i64.Po
++@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='stdio/_stat32i64.c' object='stdio/libarm64_libmsvcrt_extra_a-_stat32i64.o' libtool=no @AMDEPBACKSLASH@
++@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
++@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libarm64_libmsvcrt_extra_a_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o stdio/libarm64_libmsvcrt_extra_a-_stat32i64.o `test -f 'stdio/_stat32i64.c' || echo '$(srcdir)/'`stdio/_stat32i64.c
++
++stdio/libarm64_libmsvcrt_extra_a-_stat32i64.obj: stdio/_stat32i64.c
++@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libarm64_libmsvcrt_extra_a_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT stdio/libarm64_libmsvcrt_extra_a-_stat32i64.obj -MD -MP -MF stdio/$(DEPDIR)/libarm64_libmsvcrt_extra_a-_stat32i64.Tpo -c -o stdio/libarm64_libmsvcrt_extra_a-_stat32i64.obj `if test -f 'stdio/_stat32i64.c'; then $(CYGPATH_W) 'stdio/_stat32i64.c'; else $(CYGPATH_W) '$(srcdir)/stdio/_stat32i64.c'; fi`
++@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) stdio/$(DEPDIR)/libarm64_libmsvcrt_extra_a-_stat32i64.Tpo stdio/$(DEPDIR)/libarm64_libmsvcrt_extra_a-_stat32i64.Po
++@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='stdio/_stat32i64.c' object='stdio/libarm64_libmsvcrt_extra_a-_stat32i64.obj' libtool=no @AMDEPBACKSLASH@
++@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
++@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libarm64_libmsvcrt_extra_a_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o stdio/libarm64_libmsvcrt_extra_a-_stat32i64.obj `if test -f 'stdio/_stat32i64.c'; then $(CYGPATH_W) 'stdio/_stat32i64.c'; else $(CYGPATH_W) '$(srcdir)/stdio/_stat32i64.c'; fi`
++
++stdio/libarm64_libmsvcrt_extra_a-_wstat32.o: stdio/_wstat32.c
++@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libarm64_libmsvcrt_extra_a_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT stdio/libarm64_libmsvcrt_extra_a-_wstat32.o -MD -MP -MF stdio/$(DEPDIR)/libarm64_libmsvcrt_extra_a-_wstat32.Tpo -c -o stdio/libarm64_libmsvcrt_extra_a-_wstat32.o `test -f 'stdio/_wstat32.c' || echo '$(srcdir)/'`stdio/_wstat32.c
++@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) stdio/$(DEPDIR)/libarm64_libmsvcrt_extra_a-_wstat32.Tpo stdio/$(DEPDIR)/libarm64_libmsvcrt_extra_a-_wstat32.Po
++@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='stdio/_wstat32.c' object='stdio/libarm64_libmsvcrt_extra_a-_wstat32.o' libtool=no @AMDEPBACKSLASH@
++@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
++@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libarm64_libmsvcrt_extra_a_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o stdio/libarm64_libmsvcrt_extra_a-_wstat32.o `test -f 'stdio/_wstat32.c' || echo '$(srcdir)/'`stdio/_wstat32.c
++
++stdio/libarm64_libmsvcrt_extra_a-_wstat32.obj: stdio/_wstat32.c
++@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libarm64_libmsvcrt_extra_a_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT stdio/libarm64_libmsvcrt_extra_a-_wstat32.obj -MD -MP -MF stdio/$(DEPDIR)/libarm64_libmsvcrt_extra_a-_wstat32.Tpo -c -o stdio/libarm64_libmsvcrt_extra_a-_wstat32.obj `if test -f 'stdio/_wstat32.c'; then $(CYGPATH_W) 'stdio/_wstat32.c'; else $(CYGPATH_W) '$(srcdir)/stdio/_wstat32.c'; fi`
++@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) stdio/$(DEPDIR)/libarm64_libmsvcrt_extra_a-_wstat32.Tpo stdio/$(DEPDIR)/libarm64_libmsvcrt_extra_a-_wstat32.Po
++@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='stdio/_wstat32.c' object='stdio/libarm64_libmsvcrt_extra_a-_wstat32.obj' libtool=no @AMDEPBACKSLASH@
++@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
++@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libarm64_libmsvcrt_extra_a_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o stdio/libarm64_libmsvcrt_extra_a-_wstat32.obj `if test -f 'stdio/_wstat32.c'; then $(CYGPATH_W) 'stdio/_wstat32.c'; else $(CYGPATH_W) '$(srcdir)/stdio/_wstat32.c'; fi`
++
++stdio/libarm64_libmsvcrt_extra_a-_wstat32i64.o: stdio/_wstat32i64.c
++@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libarm64_libmsvcrt_extra_a_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT stdio/libarm64_libmsvcrt_extra_a-_wstat32i64.o -MD -MP -MF stdio/$(DEPDIR)/libarm64_libmsvcrt_extra_a-_wstat32i64.Tpo -c -o stdio/libarm64_libmsvcrt_extra_a-_wstat32i64.o `test -f 'stdio/_wstat32i64.c' || echo '$(srcdir)/'`stdio/_wstat32i64.c
++@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) stdio/$(DEPDIR)/libarm64_libmsvcrt_extra_a-_wstat32i64.Tpo stdio/$(DEPDIR)/libarm64_libmsvcrt_extra_a-_wstat32i64.Po
++@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='stdio/_wstat32i64.c' object='stdio/libarm64_libmsvcrt_extra_a-_wstat32i64.o' libtool=no @AMDEPBACKSLASH@
++@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
++@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libarm64_libmsvcrt_extra_a_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o stdio/libarm64_libmsvcrt_extra_a-_wstat32i64.o `test -f 'stdio/_wstat32i64.c' || echo '$(srcdir)/'`stdio/_wstat32i64.c
++
++stdio/libarm64_libmsvcrt_extra_a-_wstat32i64.obj: stdio/_wstat32i64.c
++@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libarm64_libmsvcrt_extra_a_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT stdio/libarm64_libmsvcrt_extra_a-_wstat32i64.obj -MD -MP -MF stdio/$(DEPDIR)/libarm64_libmsvcrt_extra_a-_wstat32i64.Tpo -c -o stdio/libarm64_libmsvcrt_extra_a-_wstat32i64.obj `if test -f 'stdio/_wstat32i64.c'; then $(CYGPATH_W) 'stdio/_wstat32i64.c'; else $(CYGPATH_W) '$(srcdir)/stdio/_wstat32i64.c'; fi`
++@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) stdio/$(DEPDIR)/libarm64_libmsvcrt_extra_a-_wstat32i64.Tpo stdio/$(DEPDIR)/libarm64_libmsvcrt_extra_a-_wstat32i64.Po
++@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='stdio/_wstat32i64.c' object='stdio/libarm64_libmsvcrt_extra_a-_wstat32i64.obj' libtool=no @AMDEPBACKSLASH@
++@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
++@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libarm64_libmsvcrt_extra_a_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o stdio/libarm64_libmsvcrt_extra_a-_wstat32i64.obj `if test -f 'stdio/_wstat32i64.c'; then $(CYGPATH_W) 'stdio/_wstat32i64.c'; else $(CYGPATH_W) '$(srcdir)/stdio/_wstat32i64.c'; fi`
++
+ stdio/libarm64_libmsvcrt_extra_a-gets.o: stdio/gets.c
+ @am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libarm64_libmsvcrt_extra_a_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT stdio/libarm64_libmsvcrt_extra_a-gets.o -MD -MP -MF stdio/$(DEPDIR)/libarm64_libmsvcrt_extra_a-gets.Tpo -c -o stdio/libarm64_libmsvcrt_extra_a-gets.o `test -f 'stdio/gets.c' || echo '$(srcdir)/'`stdio/gets.c
+ @am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) stdio/$(DEPDIR)/libarm64_libmsvcrt_extra_a-gets.Tpo stdio/$(DEPDIR)/libarm64_libmsvcrt_extra_a-gets.Po
+@@ -97129,7 +97369,13 @@ distclean: distclean-am
+ 	-rm -f stdio/$(DEPDIR)/lib64_libmsvcrt_common_a-wstat32i64.Po
+ 	-rm -f stdio/$(DEPDIR)/lib64_libmsvcrt_common_a-wstat64.Po
+ 	-rm -f stdio/$(DEPDIR)/lib64_libmsvcrt_extra_a-_fseeki64.Po
++	-rm -f stdio/$(DEPDIR)/lib64_libmsvcrt_extra_a-_fstat32.Po
++	-rm -f stdio/$(DEPDIR)/lib64_libmsvcrt_extra_a-_fstat32i64.Po
+ 	-rm -f stdio/$(DEPDIR)/lib64_libmsvcrt_extra_a-_ftelli64.Po
++	-rm -f stdio/$(DEPDIR)/lib64_libmsvcrt_extra_a-_stat32.Po
++	-rm -f stdio/$(DEPDIR)/lib64_libmsvcrt_extra_a-_stat32i64.Po
++	-rm -f stdio/$(DEPDIR)/lib64_libmsvcrt_extra_a-_wstat32.Po
++	-rm -f stdio/$(DEPDIR)/lib64_libmsvcrt_extra_a-_wstat32i64.Po
+ 	-rm -f stdio/$(DEPDIR)/lib64_libmsvcrt_extra_a-mingw_lock.Po
+ 	-rm -f stdio/$(DEPDIR)/lib64_libmsvcrt_extra_a-msvcr110pre_stat32.Po
+ 	-rm -f stdio/$(DEPDIR)/lib64_libmsvcrt_extra_a-msvcr110pre_stat64i32.Po
+@@ -97427,8 +97673,14 @@ distclean: distclean-am
+ 	-rm -f stdio/$(DEPDIR)/libarm64_libmsvcrt_common_a-vswprintf_alias.Po
+ 	-rm -f stdio/$(DEPDIR)/libarm64_libmsvcrt_common_a-wstat32i64.Po
+ 	-rm -f stdio/$(DEPDIR)/libarm64_libmsvcrt_common_a-wstat64.Po
++	-rm -f stdio/$(DEPDIR)/libarm64_libmsvcrt_extra_a-_fstat32.Po
++	-rm -f stdio/$(DEPDIR)/libarm64_libmsvcrt_extra_a-_fstat32i64.Po
+ 	-rm -f stdio/$(DEPDIR)/libarm64_libmsvcrt_extra_a-_ftelli64.Po
+ 	-rm -f stdio/$(DEPDIR)/libarm64_libmsvcrt_extra_a-_setmaxstdio.Po
++	-rm -f stdio/$(DEPDIR)/libarm64_libmsvcrt_extra_a-_stat32.Po
++	-rm -f stdio/$(DEPDIR)/libarm64_libmsvcrt_extra_a-_stat32i64.Po
++	-rm -f stdio/$(DEPDIR)/libarm64_libmsvcrt_extra_a-_wstat32.Po
++	-rm -f stdio/$(DEPDIR)/libarm64_libmsvcrt_extra_a-_wstat32i64.Po
+ 	-rm -f stdio/$(DEPDIR)/libarm64_libmsvcrt_extra_a-gets.Po
+ 	-rm -f stdio/$(DEPDIR)/libarm64_libmsvcrt_extra_a-mingw_lock.Po
+ 	-rm -f stdio/$(DEPDIR)/libarm64_libmsvcrt_extra_a-msvcr110pre_stat32.Po
+@@ -101508,7 +101760,13 @@ maintainer-clean: maintainer-clean-am
+ 	-rm -f stdio/$(DEPDIR)/lib64_libmsvcrt_common_a-wstat32i64.Po
+ 	-rm -f stdio/$(DEPDIR)/lib64_libmsvcrt_common_a-wstat64.Po
+ 	-rm -f stdio/$(DEPDIR)/lib64_libmsvcrt_extra_a-_fseeki64.Po
++	-rm -f stdio/$(DEPDIR)/lib64_libmsvcrt_extra_a-_fstat32.Po
++	-rm -f stdio/$(DEPDIR)/lib64_libmsvcrt_extra_a-_fstat32i64.Po
+ 	-rm -f stdio/$(DEPDIR)/lib64_libmsvcrt_extra_a-_ftelli64.Po
++	-rm -f stdio/$(DEPDIR)/lib64_libmsvcrt_extra_a-_stat32.Po
++	-rm -f stdio/$(DEPDIR)/lib64_libmsvcrt_extra_a-_stat32i64.Po
++	-rm -f stdio/$(DEPDIR)/lib64_libmsvcrt_extra_a-_wstat32.Po
++	-rm -f stdio/$(DEPDIR)/lib64_libmsvcrt_extra_a-_wstat32i64.Po
+ 	-rm -f stdio/$(DEPDIR)/lib64_libmsvcrt_extra_a-mingw_lock.Po
+ 	-rm -f stdio/$(DEPDIR)/lib64_libmsvcrt_extra_a-msvcr110pre_stat32.Po
+ 	-rm -f stdio/$(DEPDIR)/lib64_libmsvcrt_extra_a-msvcr110pre_stat64i32.Po
+@@ -101806,8 +102064,14 @@ maintainer-clean: maintainer-clean-am
+ 	-rm -f stdio/$(DEPDIR)/libarm64_libmsvcrt_common_a-vswprintf_alias.Po
+ 	-rm -f stdio/$(DEPDIR)/libarm64_libmsvcrt_common_a-wstat32i64.Po
+ 	-rm -f stdio/$(DEPDIR)/libarm64_libmsvcrt_common_a-wstat64.Po
++	-rm -f stdio/$(DEPDIR)/libarm64_libmsvcrt_extra_a-_fstat32.Po
++	-rm -f stdio/$(DEPDIR)/libarm64_libmsvcrt_extra_a-_fstat32i64.Po
+ 	-rm -f stdio/$(DEPDIR)/libarm64_libmsvcrt_extra_a-_ftelli64.Po
+ 	-rm -f stdio/$(DEPDIR)/libarm64_libmsvcrt_extra_a-_setmaxstdio.Po
++	-rm -f stdio/$(DEPDIR)/libarm64_libmsvcrt_extra_a-_stat32.Po
++	-rm -f stdio/$(DEPDIR)/libarm64_libmsvcrt_extra_a-_stat32i64.Po
++	-rm -f stdio/$(DEPDIR)/libarm64_libmsvcrt_extra_a-_wstat32.Po
++	-rm -f stdio/$(DEPDIR)/libarm64_libmsvcrt_extra_a-_wstat32i64.Po
+ 	-rm -f stdio/$(DEPDIR)/libarm64_libmsvcrt_extra_a-gets.Po
+ 	-rm -f stdio/$(DEPDIR)/libarm64_libmsvcrt_extra_a-mingw_lock.Po
+ 	-rm -f stdio/$(DEPDIR)/libarm64_libmsvcrt_extra_a-msvcr110pre_stat32.Po
+diff --git a/mingw-w64-crt/ssp/stack_chk_guard.c b/mingw-w64-crt/ssp/stack_chk_guard.c
+index 3ff22e020..b9a8584c1 100644
+--- a/mingw-w64-crt/ssp/stack_chk_guard.c
++++ b/mingw-w64-crt/ssp/stack_chk_guard.c
+@@ -10,7 +10,19 @@
+ 
+ void *__stack_chk_guard;
+ 
+-static void __cdecl __attribute__((__constructor__)) init(void)
++#if defined __SSP__ || defined __SSP_STRONG__ || defined __SSP_ALL__
++// This function requires `no_stack_protector` because it changes the
++// value of `__stack_chk_guard`, causing stack checks to fail before
++// returning from this function.
++# if (defined __GNUC__ && __GNUC__ >= 11) || (defined __clang__ && __clang_major__ >= 7)
++__attribute__((__no_stack_protector__))
++# else
++#  error This file can not be built with stack protector enabled. Remove \
++         -fstack-protector* options from CFLAGS.
++# endif
++#endif
++__attribute__((__constructor__))
++static void __cdecl init(void)
+ {
+   unsigned int ui;
+   if (__stack_chk_guard != 0)
+diff --git a/mingw-w64-crt/stdio/_fstat32.c b/mingw-w64-crt/stdio/_fstat32.c
+new file mode 100644
+index 000000000..2b4bbf4f2
+--- /dev/null
++++ b/mingw-w64-crt/stdio/_fstat32.c
+@@ -0,0 +1,48 @@
++/**
++ * This file has no copyright assigned and is placed in the Public Domain.
++ * This file is part of the mingw-w64 runtime package.
++ * No warranty is given; refer to the file DISCLAIMER.PD within this package.
++ */
++
++#include <sys/stat.h>
++#include <stdint.h>
++#include <errno.h>
++
++/* When the file time does not fit into the st_Xtime field:
++ *           crtdll-msvcr71   msvcr80+
++ * st_Xtime       -1             -1
++ * errno       no change       EINVAL
++ * returns         0              0
++ *
++ * When the file size does not fit into the st_size field:
++ *           crtdll-msvcr90   msvcr100   msvcr110+
++ * st_size      truncate         0           0
++ * errno       no change     no change   EOVERFLOW
++ * returns         0            -1          -1
++ *
++ * This file is used only for 64-bit msvcrt.dll builds.
++ * The stat function on 32-bit system os msvcrt.dll behaves
++ * like the msvcr80/msvcr90, so use this behavior.
++ */
++int __cdecl _fstat32(int _FileDes,struct _stat32 *_Stat)
++{
++  struct _stat64 st;
++  int ret=_fstat64(_FileDes,&st);
++  if (ret != 0)
++    return ret;
++  _Stat->st_dev=st.st_dev;
++  _Stat->st_ino=st.st_ino;
++  _Stat->st_mode=st.st_mode;
++  _Stat->st_nlink=st.st_nlink;
++  _Stat->st_uid=st.st_uid;
++  _Stat->st_gid=st.st_gid;
++  _Stat->st_rdev=st.st_rdev;
++  _Stat->st_size=(_off_t) st.st_size; /* truncate 64-bit st_size to 32-bit */
++  _Stat->st_atime=((st.st_atime < 0 || st.st_atime > INT32_MAX) ? -1 : st.st_atime);
++  _Stat->st_mtime=((st.st_mtime < 0 || st.st_mtime > INT32_MAX) ? -1 : st.st_mtime);
++  _Stat->st_ctime=((st.st_ctime < 0 || st.st_ctime > INT32_MAX) ? -1 : st.st_ctime);
++  if (_Stat->st_atime == -1 || _Stat->st_mtime == -1 || _Stat->st_ctime == -1)
++    errno = EINVAL;
++  return 0;
++}
++int (__cdecl *__MINGW_IMP_SYMBOL(_fstat32))(int, struct _stat32 *) = _fstat32;
+diff --git a/mingw-w64-crt/stdio/_fstat32i64.c b/mingw-w64-crt/stdio/_fstat32i64.c
+index 1bd63cd60..5d737d5e0 100644
+--- a/mingw-w64-crt/stdio/_fstat32i64.c
++++ b/mingw-w64-crt/stdio/_fstat32i64.c
+@@ -6,6 +6,7 @@
+ 
+ #include <sys/stat.h>
+ #include <stdint.h>
++#include <errno.h>
+ 
+ /* When the file time does not fit into the st_Xtime field:
+  *           crtdll-msvcr71   msvcr80+
+@@ -13,8 +14,9 @@
+  * errno       no change       EINVAL
+  * returns         0              0
+  *
+- * This file is used only for pre-msvcrt40 builds,
+- * So use the pre-msvcrt40 behavior - fills -1 without errno change.
++ * This file is used for 32-bit pre-msvcrt40 builds and 64-bit msvcrt.dll builds.
++ * So for 32-bit use the pre-msvcrt40 behavior - fills -1 without errno change.
++ * And for 64-bit use the msvcr80+ behavior - fills -1 with setting errno to EINVAL.
+  */
+ int __cdecl _fstat32i64(int _FileDes,struct _stat32i64 *_Stat)
+ {
+@@ -30,13 +32,19 @@ int __cdecl _fstat32i64(int _FileDes,struct _stat32i64 *_Stat)
+   _Stat->st_gid=st.st_gid;
+   _Stat->st_rdev=st.st_rdev;
+   _Stat->st_size=st.st_size;
+-  _Stat->st_atime=((st.st_atime > INT32_MAX) ? -1 : st.st_atime);
+-  _Stat->st_mtime=((st.st_mtime > INT32_MAX) ? -1 : st.st_mtime);
+-  _Stat->st_ctime=((st.st_ctime > INT32_MAX) ? -1 : st.st_ctime);
++  _Stat->st_atime=((st.st_atime < 0 || st.st_atime > INT32_MAX) ? -1 : st.st_atime);
++  _Stat->st_mtime=((st.st_mtime < 0 || st.st_mtime > INT32_MAX) ? -1 : st.st_mtime);
++  _Stat->st_ctime=((st.st_ctime < 0 || st.st_ctime > INT32_MAX) ? -1 : st.st_ctime);
++#ifdef _WIN64
++  if (_Stat->st_atime == -1 || _Stat->st_mtime == -1 || _Stat->st_ctime == -1)
++    errno = EINVAL;
++#endif
+   return 0;
+ }
+ int (__cdecl *__MINGW_IMP_SYMBOL(_fstat32i64))(int, struct _stat32i64 *) = _fstat32i64;
+ 
++#ifndef _WIN64
+ #undef _fstati64
+ int __attribute__ ((alias ("_fstat32i64"))) __cdecl _fstati64(int, struct _stat32i64 *);
+ extern int __attribute__ ((alias (__MINGW64_STRINGIFY(__MINGW_IMP_SYMBOL(_fstat32i64))))) (__cdecl *__MINGW_IMP_SYMBOL(_fstati64))(int, struct _stat32i64 *);
++#endif
+diff --git a/mingw-w64-crt/stdio/_stat32.c b/mingw-w64-crt/stdio/_stat32.c
+new file mode 100644
+index 000000000..34cb4e3bc
+--- /dev/null
++++ b/mingw-w64-crt/stdio/_stat32.c
+@@ -0,0 +1,48 @@
++/**
++ * This file has no copyright assigned and is placed in the Public Domain.
++ * This file is part of the mingw-w64 runtime package.
++ * No warranty is given; refer to the file DISCLAIMER.PD within this package.
++ */
++
++#include <sys/stat.h>
++#include <stdint.h>
++#include <errno.h>
++
++/* When the file time does not fit into the st_Xtime field:
++ *           crtdll-msvcr71   msvcr80+
++ * st_Xtime       -1             -1
++ * errno       no change       EINVAL
++ * returns         0              0
++ *
++ * When the file size does not fit into the st_size field:
++ *           crtdll-msvcr90   msvcr100   msvcr110+
++ * st_size      truncate         0           0
++ * errno       no change     no change   EOVERFLOW
++ * returns         0            -1          -1
++ *
++ * This file is used only for 64-bit msvcrt.dll builds.
++ * The stat function on 32-bit system os msvcrt.dll behaves
++ * like the msvcr80/msvcr90, so use this behavior.
++ */
++int __cdecl _stat32(const char *_Name,struct _stat32 *_Stat)
++{
++  struct _stat64 st;
++  int ret=_stat64(_Name,&st);
++  if (ret != 0)
++    return ret;
++  _Stat->st_dev=st.st_dev;
++  _Stat->st_ino=st.st_ino;
++  _Stat->st_mode=st.st_mode;
++  _Stat->st_nlink=st.st_nlink;
++  _Stat->st_uid=st.st_uid;
++  _Stat->st_gid=st.st_gid;
++  _Stat->st_rdev=st.st_rdev;
++  _Stat->st_size=(_off_t) st.st_size; /* truncate 64-bit st_size to 32-bit */
++  _Stat->st_atime=((st.st_atime < 0 || st.st_atime > INT32_MAX) ? -1 : st.st_atime);
++  _Stat->st_mtime=((st.st_mtime < 0 || st.st_mtime > INT32_MAX) ? -1 : st.st_mtime);
++  _Stat->st_ctime=((st.st_ctime < 0 || st.st_ctime > INT32_MAX) ? -1 : st.st_ctime);
++  if (_Stat->st_atime == -1 || _Stat->st_mtime == -1 || _Stat->st_ctime == -1)
++    errno = EINVAL;
++  return 0;
++}
++int (__cdecl *__MINGW_IMP_SYMBOL(_stat32))(const char *, struct _stat32 *) = _stat32;
+diff --git a/mingw-w64-crt/stdio/_stat32i64.c b/mingw-w64-crt/stdio/_stat32i64.c
+index 641f2f556..e4a6f964c 100644
+--- a/mingw-w64-crt/stdio/_stat32i64.c
++++ b/mingw-w64-crt/stdio/_stat32i64.c
+@@ -6,6 +6,7 @@
+ 
+ #include <sys/stat.h>
+ #include <stdint.h>
++#include <errno.h>
+ 
+ /* When the file time does not fit into the st_Xtime field:
+  *           crtdll-msvcr71   msvcr80+
+@@ -13,8 +14,9 @@
+  * errno       no change       EINVAL
+  * returns         0              0
+  *
+- * This file is used only for pre-msvcrt40 builds,
+- * So use the pre-msvcrt40 behavior - fills -1 without errno change.
++ * This file is used for 32-bit pre-msvcrt40 builds and 64-bit msvcrt.dll builds.
++ * So for 32-bit use the pre-msvcrt40 behavior - fills -1 without errno change.
++ * And for 64-bit use the msvcr80+ behavior - fills -1 with setting errno to EINVAL.
+  */
+ int __cdecl _stat32i64(const char *_Name,struct _stat32i64 *_Stat)
+ {
+@@ -30,13 +32,19 @@ int __cdecl _stat32i64(const char *_Name,struct _stat32i64 *_Stat)
+   _Stat->st_gid=st.st_gid;
+   _Stat->st_rdev=st.st_rdev;
+   _Stat->st_size=st.st_size;
+-  _Stat->st_atime=((st.st_atime > INT32_MAX) ? -1 : st.st_atime);
+-  _Stat->st_mtime=((st.st_mtime > INT32_MAX) ? -1 : st.st_mtime);
+-  _Stat->st_ctime=((st.st_ctime > INT32_MAX) ? -1 : st.st_ctime);
++  _Stat->st_atime=((st.st_atime < 0 || st.st_atime > INT32_MAX) ? -1 : st.st_atime);
++  _Stat->st_mtime=((st.st_mtime < 0 || st.st_mtime > INT32_MAX) ? -1 : st.st_mtime);
++  _Stat->st_ctime=((st.st_ctime < 0 || st.st_ctime > INT32_MAX) ? -1 : st.st_ctime);
++#ifdef _WIN64
++  if (_Stat->st_atime == -1 || _Stat->st_mtime == -1 || _Stat->st_ctime == -1)
++    errno = EINVAL;
++#endif
+   return 0;
+ }
+ int (__cdecl *__MINGW_IMP_SYMBOL(_stat32i64))(const char *, struct _stat32i64 *) = _stat32i64;
+ 
++#ifndef _WIN64
+ #undef _stati64
+ int __attribute__ ((alias ("_stat32i64"))) __cdecl _stati64(const char *, struct _stat32i64 *);
+ extern int __attribute__ ((alias (__MINGW64_STRINGIFY(__MINGW_IMP_SYMBOL(_stat32i64))))) (__cdecl *__MINGW_IMP_SYMBOL(_stati64))(const char *, struct _stat32i64 *);
++#endif
+diff --git a/mingw-w64-crt/stdio/_wstat32.c b/mingw-w64-crt/stdio/_wstat32.c
+new file mode 100644
+index 000000000..8ef681a42
+--- /dev/null
++++ b/mingw-w64-crt/stdio/_wstat32.c
+@@ -0,0 +1,48 @@
++/**
++ * This file has no copyright assigned and is placed in the Public Domain.
++ * This file is part of the mingw-w64 runtime package.
++ * No warranty is given; refer to the file DISCLAIMER.PD within this package.
++ */
++
++#include <sys/stat.h>
++#include <stdint.h>
++#include <errno.h>
++
++/* When the file time does not fit into the st_Xtime field:
++ *           crtdll-msvcr71   msvcr80+
++ * st_Xtime       -1             -1
++ * errno       no change       EINVAL
++ * returns         0              0
++ *
++ * When the file size does not fit into the st_size field:
++ *           crtdll-msvcr90   msvcr100   msvcr110+
++ * st_size      truncate         0           0
++ * errno       no change     no change   EOVERFLOW
++ * returns         0            -1          -1
++ *
++ * This file is used only for 64-bit msvcrt.dll builds.
++ * The stat function on 32-bit system os msvcrt.dll behaves
++ * like the msvcr80/msvcr90, so use this behavior.
++ */
++int __cdecl _wstat32(const wchar_t *_Name,struct _stat32 *_Stat)
++{
++  struct _stat64 st;
++  int ret=_wstat64(_Name,&st);
++  if (ret != 0)
++    return ret;
++  _Stat->st_dev=st.st_dev;
++  _Stat->st_ino=st.st_ino;
++  _Stat->st_mode=st.st_mode;
++  _Stat->st_nlink=st.st_nlink;
++  _Stat->st_uid=st.st_uid;
++  _Stat->st_gid=st.st_gid;
++  _Stat->st_rdev=st.st_rdev;
++  _Stat->st_size=(_off_t) st.st_size; /* truncate 64-bit st_size to 32-bit */
++  _Stat->st_atime=((st.st_atime < 0 || st.st_atime > INT32_MAX) ? -1 : st.st_atime);
++  _Stat->st_mtime=((st.st_mtime < 0 || st.st_mtime > INT32_MAX) ? -1 : st.st_mtime);
++  _Stat->st_ctime=((st.st_ctime < 0 || st.st_ctime > INT32_MAX) ? -1 : st.st_ctime);
++  if (_Stat->st_atime == -1 || _Stat->st_mtime == -1 || _Stat->st_ctime == -1)
++    errno = EINVAL;
++  return 0;
++}
++int (__cdecl *__MINGW_IMP_SYMBOL(_wstat32))(const wchar_t *, struct _stat32 *) = _wstat32;
+diff --git a/mingw-w64-crt/stdio/_wstat32i64.c b/mingw-w64-crt/stdio/_wstat32i64.c
+index dab760069..e7eaf0f02 100644
+--- a/mingw-w64-crt/stdio/_wstat32i64.c
++++ b/mingw-w64-crt/stdio/_wstat32i64.c
+@@ -6,6 +6,7 @@
+ 
+ #include <sys/stat.h>
+ #include <stdint.h>
++#include <errno.h>
+ 
+ /* When the file time does not fit into the st_Xtime field:
+  *           crtdll-msvcr71   msvcr80+
+@@ -13,8 +14,9 @@
+  * errno       no change       EINVAL
+  * returns         0              0
+  *
+- * This file is used only for pre-msvcrt40 builds,
+- * So use the pre-msvcrt40 behavior - fills -1 without errno change.
++ * This file is used for 32-bit pre-msvcrt40 builds and 64-bit msvcrt.dll builds.
++ * So for 32-bit use the pre-msvcrt40 behavior - fills -1 without errno change.
++ * And for 64-bit use the msvcr80+ behavior - fills -1 with setting errno to EINVAL.
+  */
+ int __cdecl _wstat32i64(const wchar_t *_Name,struct _stat32i64 *_Stat)
+ {
+@@ -30,13 +32,19 @@ int __cdecl _wstat32i64(const wchar_t *_Name,struct _stat32i64 *_Stat)
+   _Stat->st_gid=st.st_gid;
+   _Stat->st_rdev=st.st_rdev;
+   _Stat->st_size=st.st_size;
+-  _Stat->st_atime=((st.st_atime > INT32_MAX) ? -1 : st.st_atime);
+-  _Stat->st_mtime=((st.st_mtime > INT32_MAX) ? -1 : st.st_mtime);
+-  _Stat->st_ctime=((st.st_ctime > INT32_MAX) ? -1 : st.st_ctime);
++  _Stat->st_atime=((st.st_atime < 0 || st.st_atime > INT32_MAX) ? -1 : st.st_atime);
++  _Stat->st_mtime=((st.st_mtime < 0 || st.st_mtime > INT32_MAX) ? -1 : st.st_mtime);
++  _Stat->st_ctime=((st.st_ctime < 0 || st.st_ctime > INT32_MAX) ? -1 : st.st_ctime);
++#ifdef _WIN64
++  if (_Stat->st_atime == -1 || _Stat->st_mtime == -1 || _Stat->st_ctime == -1)
++    errno = EINVAL;
++#endif
+   return 0;
+ }
+ int (__cdecl *__MINGW_IMP_SYMBOL(_wstat32i64))(const wchar_t *, struct _stat32i64 *) = _wstat32i64;
+ 
++#ifndef _WIN64
+ #undef _wstati64
+ int __attribute__ ((alias ("_wstat32i64"))) __cdecl _wstati64(const wchar_t *, struct _stat32i64 *);
+ extern int __attribute__ ((alias (__MINGW64_STRINGIFY(__MINGW_IMP_SYMBOL(_wstat32i64))))) (__cdecl *__MINGW_IMP_SYMBOL(_wstati64))(const wchar_t *, struct _stat32i64 *);
++#endif
