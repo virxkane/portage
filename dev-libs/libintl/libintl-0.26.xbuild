@@ -1,0 +1,44 @@
+# Copyright 2026 Chernov A.A.
+# This is a part of mingw-portage project:
+# http://sourceforge.net/projects/mingwportage/
+# Distributed under the terms of the GNU General Public License v2
+
+DESCRIPTION="the GNU international library (split out of gettext)"
+
+HOMEPAGE="http://www.gnu.org/software/gettext/gettext.html"
+
+LICENSE="LGPL-2.1+"
+
+MY_P="gettext-${PV}"
+
+#   external dependencies
+# perl (msys)
+
+RDEPEND="sys-devel/libiconv"
+
+SRC_URI="http://ftp.gnu.org/pub/gnu/gettext/${MY_P}.tar.gz"
+
+SOURCES_DIR="${MY_P}/gettext-runtime"
+
+src_configure()
+{
+	econf --enable-shared --enable-static \
+		--enable-threads=posix \
+		--without-emacs \
+		--without-lispdir \
+		--enable-nls \
+		--with-included-gettext \
+		--disable-c++ \
+		--disable-libasprintf \
+		--disable-java
+}
+
+src_compile()
+{
+	emake -C intl
+}
+
+src_install()
+{
+	emake_install DESTDIR="${INSTDIR}" -C intl
+}
