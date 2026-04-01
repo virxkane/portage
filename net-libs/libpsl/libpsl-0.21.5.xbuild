@@ -1,0 +1,19 @@
+# Copyright 2026 Chernov A.A.
+# This is a part of mingw-portage project: 
+# http://sourceforge.net/projects/mingwportage/
+# Distributed under the terms of the GNU General Public License v2
+
+DESCRIPTION="C library for the Public Suffix List"
+
+HOMEPAGE="https://github.com/rockdaboot/libpsl"
+
+SRC_URI="https://github.com/rockdaboot/${PN}/releases/download/${PV}/${P}.tar.gz"
+
+LICENSE="MIT"
+
+RDEPEND="net-dns/libidn2"
+
+src_configure()
+{
+	econf --enable-shared --enable-static
+}
