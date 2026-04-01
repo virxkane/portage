@@ -1,4 +1,4 @@
-# Copyright 2010-2024 Chernov A.A.
+# Copyright 2010-2026 Chernov A.A.
 # This is a part of mingw-portage project: 
 # http://sourceforge.net/projects/mingwportage/
 # Distributed under the terms of the GNU General Public License v2
@@ -15,11 +15,11 @@ RDEPEND="dev-libs/openssl
 		app-arch/xz-utils
 		app-arch/zstd
 		dev-libs/expat
-		dev-libs/libpcre
+		dev-libs/libpcre2
 		dev-libs/nettle
 		sys-devel/libiconv"
 
-SRC_URI="http://www.libarchive.org/downloads/${P}.tar.gz"
+SRC_URI="http://www.libarchive.org/downloads/${P}.tar.xz"
 
 # We not use cmake to resolve circular dependencies.
 #USE_CMAKE=yes
@@ -29,6 +29,7 @@ src_configure()
 	econf --enable-shared --enable-static \
 			--without-xml2 \
 			--with-expat \
+			--enable-posix-regex-lib=libpcre2posix \
 			--with-openssl \
 			--with-nettle \
 			--enable-bsdtar \
