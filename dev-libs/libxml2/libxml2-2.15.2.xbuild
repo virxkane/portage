@@ -1,4 +1,4 @@
-# Copyright 2010-2024 Chernov A.A.
+# Copyright 2010-2026 Chernov A.A.
 # This is a part of mingw-portage project: 
 # http://sourceforge.net/projects/mingwportage/
 # Distributed under the terms of the GNU General Public License v2
@@ -16,7 +16,7 @@ RDEPEND="sys-devel/libiconv
 		app-arch/xz-utils
 		dev-libs/icu"
 
-MAJ_PV="2.13"
+MAJ_PV="2.15"
 
 SRC_URI="https://download.gnome.org/sources/${PN}/${MAJ_PV}/${P}.tar.xz"
 
