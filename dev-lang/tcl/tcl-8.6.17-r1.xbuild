@@ -44,5 +44,8 @@ src_configure()
 
 src_install()
 {
+	cp tclsh86.exe tclsh.exe
+	export PATH=".:${PATH}"
 	emake_install INSTALL_ROOT="${INSTDIR}"
+	cp ${INSTDIR}/${PREFIX}/bin/tclsh86.exe ${INSTDIR}/${PREFIX}/bin/tclsh.exe
 }
