@@ -1,4 +1,4 @@
-# Copyright 2014-2024 Chernov A.A.
+# Copyright 2014-2026 Chernov A.A.
 # This is a part of mingw-portage project: 
 # http://sourceforge.net/projects/mingwportage/
 # Distributed under the terms of the GNU General Public License v2
@@ -13,20 +13,14 @@ DEPEND="dev-lang/python"
 
 RDEPEND=">=meta-virtual/pthreads-2"
 
-MJ_PV="75"
+MJ_PV="78"
 
-SRC_URI="https://github.com/unicode-org/icu/releases/download/release-${PV//./-}/icu4c-${PV//./_}-src.tgz"
+SRC_URI="https://github.com/unicode-org/icu/releases/download/release-${PV}/icu4c-${PV}-sources.tgz"
 
 SOURCES_DIR="${PN}/source"
 
-src_prepare()
-{
-	epatch "${P}-mingw.patch"
-}
-
 src_configure()
 {
-	export CXXFLAGS="${CXXFLAGS} -DWINVER=0x0601 -DMINGW_HAS_SECURE_API=1"
 	econf --enable-shared --enable-static \
 		--enable-release --disable-debug \
 		--disable-tests --disable-samples
