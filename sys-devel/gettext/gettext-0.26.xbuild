@@ -20,7 +20,7 @@ RDEPEND=">=meta-virtual/pthreads-2
 		sys-devel/libiconv
 		dev-libs/libxml2"
 
-SRC_URI="http://ftp.gnu.org/pub/gnu/${PN}/${P}.tar.gz"
+SRC_URI="http://ftp.gnu.org/pub/gnu/${PN}/${P}.tar.xz"
 
 # --without-included-gettext don't build libintl since we have separate dev-libs/libintl
 

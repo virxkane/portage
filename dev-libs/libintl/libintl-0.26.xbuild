@@ -16,7 +16,7 @@ MY_P="gettext-${PV}"
 
 RDEPEND="sys-devel/libiconv"
 
-SRC_URI="http://ftp.gnu.org/pub/gnu/gettext/${MY_P}.tar.gz"
+SRC_URI="http://ftp.gnu.org/pub/gnu/gettext/${MY_P}.tar.xz"
 
 SOURCES_DIR="${MY_P}/gettext-runtime"
 
