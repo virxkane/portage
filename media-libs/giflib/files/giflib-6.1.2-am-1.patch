@@ -1,6 +1,6 @@
-diff -urBbN giflib-5.2.2-orig/AUTHORS giflib-5.2.2/AUTHORS
---- giflib-5.2.2-orig/AUTHORS	1970-01-01 04:00:00.000000000 +0400
-+++ giflib-5.2.2/AUTHORS	2024-07-25 15:02:21.591875000 +0400
+diff -urBbN giflib-6.1.2-orig/AUTHORS giflib-6.1.2/AUTHORS
+--- giflib-6.1.2-orig/AUTHORS	1970-01-01 04:00:00.000000000 +0400
++++ giflib-6.1.2/AUTHORS	2026-04-03 20:01:25.261439400 +0400
 @@ -0,0 +1,36 @@
 +Michael Brown <michael_brown_uk[AT]hotmail.com>
 +        callbacks to write data via user defined function
@@ -38,10 +38,10 @@ diff -urBbN giflib-5.2.2-orig/AUTHORS giflib-5.2.2/AUTHORS
 +	
 +Georg Schwarz <geos[AT]epost.de>
 +	IRIX fixes
-diff -urBbN giflib-5.2.2-orig/Makefile.am giflib-5.2.2/Makefile.am
---- giflib-5.2.2-orig/Makefile.am	1970-01-01 04:00:00.000000000 +0400
-+++ giflib-5.2.2/Makefile.am	2024-07-25 15:02:21.591875000 +0400
-@@ -0,0 +1,110 @@
+diff -urBbN giflib-6.1.2-orig/Makefile.am giflib-6.1.2/Makefile.am
+--- giflib-6.1.2-orig/Makefile.am	1970-01-01 04:00:00.000000000 +0400
++++ giflib-6.1.2/Makefile.am	2026-04-03 20:22:51.224002600 +0400
+@@ -0,0 +1,115 @@
 +SUBDIRS = pic
 +
 +# Avoid trouble if your system doesn't have xmlto.
@@ -78,22 +78,26 @@ diff -urBbN giflib-5.2.2-orig/Makefile.am giflib-5.2.2/Makefile.am
 +
 +# Utilities
 +
-+# The no-install programs are test pattern generators and example code.
-+noinst_PROGRAMS = gifbg gifcolor giffilter gifhisto gifsponge gifwedge
-+
 +noinst_LIBRARIES = libgetarg.a
 +
 +bin_PROGRAMS = \
-+	gif2rgb \
 +	gifbuild \
-+	gifecho \
 +	giffix \
-+	gifinto \
 +	giftext \
 +	giftool \
 +	gifclrmp
 +
-+gif2rgb_LDADD = libgetarg.a libgif.la
++noinst_PROGRAMS = \
++	gifbg \
++	gifcolor \
++	gifecho \
++	giffilter \
++	gifhisto \
++	gifinto \
++	gifsponge \
++	gifwedge \
++	gif2rgb
++
 +gifbuild_LDADD = libgetarg.a libgif.la
 +gifecho_LDADD = libgetarg.a libgif.la
 +giffix_LDADD = libgetarg.a libgif.la
@@ -109,6 +113,7 @@ diff -urBbN giflib-5.2.2-orig/Makefile.am giflib-5.2.2/Makefile.am
 +gifhisto_LDADD = libgetarg.a libgif.la
 +gifsponge_LDADD = libgetarg.a libgif.la
 +gifwedge_LDADD = libgetarg.a libgif.la
++gif2rgb_LDADD = libgetarg.a libgif.la
 +
 +libgetarg_a_SOURCES = getarg.c getarg.h \
 +                    qprintf.c
@@ -116,7 +121,6 @@ diff -urBbN giflib-5.2.2-orig/Makefile.am giflib-5.2.2/Makefile.am
 +gifclrmp_SOURCES = gifclrmp.c
 +gifclrmp_LDADD += -lm
 +
-+gif2rgb_SOURCES = gif2rgb.c
 +gifbg_SOURCES = gifbg.c
 +gifbuild_SOURCES = gifbuild.c
 +gifcolor_SOURCES = gifcolor.c
@@ -129,6 +133,7 @@ diff -urBbN giflib-5.2.2-orig/Makefile.am giflib-5.2.2/Makefile.am
 +giftext_SOURCES = giftext.c
 +giftool_SOURCES = giftool.c
 +gifwedge_SOURCES = gifwedge.c
++gif2rgb_SOURCES = gif2rgb.c
 +
 +# Auditing tools.
 +
@@ -152,9 +157,9 @@ diff -urBbN giflib-5.2.2-orig/Makefile.am giflib-5.2.2/Makefile.am
 +	cd doc; make website
 +	shipper -w version=@VERSION@ | sh -e -x
 +	rm -fr doc/staging
-diff -urBbN giflib-5.2.2-orig/config.h.in giflib-5.2.2/config.h.in
---- giflib-5.2.2-orig/config.h.in	1970-01-01 04:00:00.000000000 +0400
-+++ giflib-5.2.2/config.h.in	2024-07-25 15:02:46.201250000 +0400
+diff -urBbN giflib-6.1.2-orig/config.h.in giflib-6.1.2/config.h.in
+--- giflib-6.1.2-orig/config.h.in	1970-01-01 04:00:00.000000000 +0400
++++ giflib-6.1.2/config.h.in	2026-04-03 20:01:25.268801000 +0400
 @@ -0,0 +1,72 @@
 +/* config.h.in.  Generated from configure.ac by autoheader.  */
 +
@@ -228,12 +233,12 @@ diff -urBbN giflib-5.2.2-orig/config.h.in giflib-5.2.2/config.h.in
 +
 +/* Version number of package */
 +#undef VERSION
-diff -urBbN giflib-5.2.2-orig/configure.ac giflib-5.2.2/configure.ac
---- giflib-5.2.2-orig/configure.ac	1970-01-01 04:00:00.000000000 +0400
-+++ giflib-5.2.2/configure.ac	2024-07-25 15:02:21.591875000 +0400
+diff -urBbN giflib-6.1.2-orig/configure.ac giflib-6.1.2/configure.ac
+--- giflib-6.1.2-orig/configure.ac	1970-01-01 04:00:00.000000000 +0400
++++ giflib-6.1.2/configure.ac	2026-04-03 20:05:37.065342800 +0400
 @@ -0,0 +1,51 @@
 +dnl Process this file with autoconf to produce a configure script.
-+AC_INIT(giflib, [5.2.2], [esr@thyrsus.com], giflib)
++AC_INIT(giflib, [6.1.2], [esr@thyrsus.com], giflib)
 +AC_CONFIG_MACRO_DIR([m4])
 +AC_CONFIG_SRCDIR([dgif_lib.c])
 +AM_INIT_AUTOMAKE([gnu dist-bzip2 -Wall])
@@ -283,10 +288,10 @@ diff -urBbN giflib-5.2.2-orig/configure.ac giflib-5.2.2/configure.ac
 +pic/Makefile
 +])
 +AC_OUTPUT
-diff -urBbN giflib-5.2.2-orig/doc/Makefile.am giflib-5.2.2/doc/Makefile.am
---- giflib-5.2.2-orig/doc/Makefile.am	1970-01-01 04:00:00.000000000 +0400
-+++ giflib-5.2.2/doc/Makefile.am	2024-07-25 15:35:56.285234300 +0400
-@@ -0,0 +1,66 @@
+diff -urBbN giflib-6.1.2-orig/doc/Makefile.am giflib-6.1.2/doc/Makefile.am
+--- giflib-6.1.2-orig/doc/Makefile.am	1970-01-01 04:00:00.000000000 +0400
++++ giflib-6.1.2/doc/Makefile.am	2026-04-03 20:26:01.344220700 +0400
+@@ -0,0 +1,68 @@
 +SUFFIXES = .xml .html .txt .asc .1 .7
 +
 +.xml.html:
@@ -310,19 +315,21 @@ diff -urBbN giflib-5.2.2-orig/doc/Makefile.am giflib-5.2.2/doc/Makefile.am
 +# some pages shouldn't be installed as part of a binary package;
 +# they're just for test-pattern generators.
 +XMLMAN1 = \
-+	gif2rgb.xml \
 +	gifbuild.xml \
 +	gifclrmp.xml \
-+	gifecho.xml \
++	giffilter.xml \
 +	giffix.xml \
-+	gifinto.xml \
++	gifsponge.xml \
 +	giftext.xml \
 +	giftool.xml
 +XMLMAN7 = \
 +	giflib.xml
 +XMLINTERNAL = \
++	gif2rgb.xml \
 +	gifbg.xml \
 +	gifcolor.xml \
++	gifecho.xml \
++	gifinto.xml \
 +	gifhisto.xml \
 +	gifwedge.xml
 +XMLDOC = intro.xml gif_lib.xml
@@ -353,9 +360,9 @@ diff -urBbN giflib-5.2.2-orig/doc/Makefile.am giflib-5.2.2/doc/Makefile.am
 +
 +clean-local:
 +	rm -fr staging $(XMLALL:.xml=.html) $(XMLMAN1:.xml=.1) $(XMLMAN7:.xml=.7)
-diff -urBbN giflib-5.2.2-orig/pic/Makefile.am giflib-5.2.2/pic/Makefile.am
---- giflib-5.2.2-orig/pic/Makefile.am	1970-01-01 04:00:00.000000000 +0400
-+++ giflib-5.2.2/pic/Makefile.am	2024-07-25 15:02:21.591875000 +0400
+diff -urBbN giflib-6.1.2-orig/pic/Makefile.am giflib-6.1.2/pic/Makefile.am
+--- giflib-6.1.2-orig/pic/Makefile.am	1970-01-01 04:00:00.000000000 +0400
++++ giflib-6.1.2/pic/Makefile.am	2026-04-03 20:01:25.273058100 +0400
 @@ -0,0 +1,11 @@
 +EXTRA_DIST = NOTES \
 +	     fire.gif \
