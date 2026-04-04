@@ -1,4 +1,4 @@
-# Copyright 2010-2024 Chernov A.A.
+# Copyright 2010-2026 Chernov A.A.
 # Distributed under the terms of the GNU General Public License v2
 
 DESCRIPTION="tools for using the Ogg Vorbis sound file format"
@@ -23,5 +23,6 @@ src_prepare()
 
 src_configure()
 {
+	export CFLAGS="$CFLAGS -std=gnu17"
 	econf --enable-threads=win32 --disable-nls
 }
