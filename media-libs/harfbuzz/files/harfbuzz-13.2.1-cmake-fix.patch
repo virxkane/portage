@@ -1,7 +1,7 @@
-diff -urBb harfbuzz-9.0.0-orig/CMakeLists.txt harfbuzz-9.0.0/CMakeLists.txt
---- harfbuzz-9.0.0-orig/CMakeLists.txt	2024-06-27 19:38:31.000000000 +0400
-+++ harfbuzz-9.0.0/CMakeLists.txt	2024-06-30 10:28:15.735848700 +0400
-@@ -533,14 +532,9 @@
+diff -urBb harfbuzz-13.2.1-orig/CMakeLists.txt harfbuzz-13.2.1/CMakeLists.txt
+--- harfbuzz-13.2.1-orig/CMakeLists.txt	2026-03-19 18:09:56.000000000 +0400
++++ harfbuzz-13.2.1/CMakeLists.txt	2026-04-03 15:20:28.437450700 +0400
+@@ -721,20 +721,9 @@
    # As of CMake 3.0.0, the compiler id for Apple-provided Clang is now "AppleClang";
    # thus we use MATCHES instead of STREQUAL to include either regular Clang or AppleClang
    if (CMAKE_CXX_COMPILER_ID MATCHES "Clang" OR CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
@@ -12,6 +12,12 @@ diff -urBb harfbuzz-9.0.0-orig/CMakeLists.txt harfbuzz-9.0.0/CMakeLists.txt
 -    set_target_properties(harfbuzz PROPERTIES LINKER_LANGUAGE C)
 -    if (HB_BUILD_SUBSET)
 -      set_target_properties(harfbuzz-subset PROPERTIES LINKER_LANGUAGE C)
+-    endif ()
+-    if (HB_BUILD_RASTER)
+-      set_target_properties(harfbuzz-raster PROPERTIES LINKER_LANGUAGE C)
+-    endif ()
+-    if (HB_BUILD_VECTOR)
+-      set_target_properties(harfbuzz-vector PROPERTIES LINKER_LANGUAGE C)
 -    endif ()
  
      # No threadsafe statics as we do it ourselves

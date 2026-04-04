@@ -1,4 +1,4 @@
-# Copyright 2010-2024 Chernov A.A.
+# Copyright 2010-2026 Chernov A.A.
 # This is a part of mingw-portage project: 
 # http://sourceforge.net/projects/mingwportage/
 # Distributed under the terms of the GNU General Public License v2
@@ -12,20 +12,15 @@ LICENSE="Old-MIT ISC icu"
 # TODO: add graphite2
 
 DEPEND="meta-virtual/pkg-config
-		dev-lang/python
-		dev-util/cmake"
+		dev-lang/python"
 RDEPEND=">=media-libs/freetype-2.4.2
-		>=dev-libs/icu-51.2"
+		>=dev-libs/icu-75.1
+		sys-libs/zlib
+		media-libs/libpng"
 
 SRC_URI="https://github.com/harfbuzz/${PN}/releases/download/${PV}/${P}.tar.xz"
 
 USE_CMAKE=yes
-
-src_unpack()
-{
-	unpack_one ${A} ign
-	cd "${SOURCES_DIR}" || eerror "Can't cd to sources directory!"
-}
 
 src_prepare()
 {
@@ -44,5 +39,8 @@ src_configure()
 		-DHB_HAVE_UNISCRIBE=ON \
 		-DHB_HAVE_GDI=ON \
 		-DHB_HAVE_DIRECTWRITE=ON \
-		-DHB_BUILD_UTILS=OFF
+		-DHB_BUILD_UTILS=OFF \
+		-DHB_BUILD_SUBSET=ON \
+		-DHB_BUILD_RASTER=ON \
+		-DHB_BUILD_VECTOR=ON
 }
