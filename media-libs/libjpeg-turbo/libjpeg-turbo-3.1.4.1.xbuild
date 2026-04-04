@@ -1,19 +1,18 @@
-# Copyright 2013-2024 Chernov A.A.
+# Copyright 2013-2026 Chernov A.A.
 # This is a part of mingw-portage project: 
 # http://sourceforge.net/projects/mingwportage/
 # Distributed under the terms of the GNU General Public License v2
 
 DESCRIPTION="MMX, SSE, and SSE2 SIMD accelerated JPEG library"
 
-HOMEPAGE="http://libjpeg-turbo.virtualgl.org/ https://github.com/libjpeg-turbo/libjpeg-turbo"
+HOMEPAGE="https://libjpeg-turbo.org/"
 
 LICENSE="BSD"
 
-DEPEND="dev-util/cmake
-		>=dev-lang/nasm-2.10
+DEPEND=">=dev-lang/nasm-2.10
 		!media-libs/jpeg"
 
-SRC_URI="https://github.com/libjpeg-turbo/${PN}/releases/download/${PV}/${P}.tar.gz"
+SRC_URI="https://github.com/libjpeg-turbo/libjpeg-turbo/releases/download/${PV}/${P}.tar.gz"
 
 USE_CMAKE=yes
 
