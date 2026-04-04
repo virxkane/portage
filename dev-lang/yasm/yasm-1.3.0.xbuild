@@ -13,5 +13,6 @@ SRC_URI="http://www.tortall.net/projects/${PN}/releases/${P}.tar.gz"
 
 src_configure()
 {
+	export CFLAGS="$CFLAGS -std=gnu17"
 	econf --disable-debug --disable-nls --disable-python
 }
