@@ -9,6 +9,8 @@ HOMEPAGE="https://curl.haxx.se/"
 
 LICENSE="MIT"
 
+# Can't add app-arch/brotli: circular dependency with dev-util/cmake
+
 DEPEND="meta-virtual/pkg-config"
 RDEPEND="sys-libs/zlib
 		app-arch/zstd
