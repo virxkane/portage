@@ -1,0 +1,48 @@
+# Copyright 2026 Chernov A.A.
+# Distributed under the terms of the GNU General Public License v2
+
+DESCRIPTION="Simple Direct Media Layer"
+
+HOMEPAGE="https://www.libsdl.org/"
+
+LICENSE="zlib"
+
+SRC_URI="http://www.libsdl.org/release/SDL3-${PV}.tar.gz"
+
+DEPEND="meta-virtual/pthreads"
+RDEPEND="sys-devel/libiconv
+		dev-libs/libusb"
+
+SOURCES_DIR="SDL3-${PV}"
+
+USE_CMAKE=yes
+
+src_configure()
+{
+	econf \
+		-DBUILD_SHARED_LIBS=ON \
+		-DSDL_DEPS_SHARED=OFF \
+		-DSDL_SHARED=ON \
+		-DSDL_STATIC=ON \
+		-DSDL_SYSTEM_ICONV=ON \
+		-DSDL_DUMMYAUDIO=ON \
+		-DSDL_DUMMYVIDEO=ON \
+		-DSDL_OPENGL=ON \
+		-DSDL_OPENGLES=OFF \
+		-DSDL_PTHREADS=ON \
+		-DSDL_DIRECTX=ON \
+		-DSDL_XINPUT=ON \
+		-DSDL_WASAPI=ON \
+		-DSDL_RENDER_D3D=ON \
+		-DSDL_RENDER_D3D11=ON \
+		-DSDL_RENDER_D3D12=ON \
+		-DSDL_RENDER_GPU=ON \
+		-DSDL_VULKAN=ON \
+		-DSDL_OFFSCREEN=ON \
+		-DSDL_HIDAPI=ON \
+		-DSDL_HIDAPI_LIBUSB=ON \
+		-DSDL_TESTS=OFF \
+		-DSDL_TESTS_LINK_SHARED=OFF \
+		-DSDL_EXAMPLES=OFF \
+		-DSDL_EXAMPLES_LINK_SHARED=OFF
+}
