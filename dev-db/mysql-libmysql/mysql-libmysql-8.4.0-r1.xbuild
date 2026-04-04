@@ -14,10 +14,11 @@ SRC_URI="https://cdn.mysql.com/Downloads/MySQL-8.4/${MY_P}.tar.gz"
 
 LICENSE="GPL-2"
 
-DEPEND="dev-util/cmake"
 RDEPEND="dev-libs/openssl
 		sys-libs/zlib
-		app-arch/zstd"
+		app-arch/zstd
+		net-misc/curl
+		dev-libs/icu"
 
 SOURCES_DIR="${MY_PN}-${PV}"
 USE_CMAKE=yes
@@ -37,8 +38,9 @@ src_configure()
 	-DWITH_ZLIB=system \
 	-DWITH_ZSTD=system \
 	-DWITH_LZ4=bundled \
-	-DWITH_SSL=${PREFIX} \
-	-DWITH_CURL=bundled
+	-DWITH_SSL=system \
+	-DWITH_CURL=system \
+	-DWITH_ICU=system
 }
 
 src_compile()
