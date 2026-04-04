@@ -1,4 +1,4 @@
-# Copyright 2010-2024 Chernov A.A.
+# Copyright 2010-2026 Chernov A.A.
 # Distributed under the terms of the GNU General Public License v2
 
 DESCRIPTION="A library for configuring and customizing font access"
@@ -13,12 +13,11 @@ RDEPEND=">=media-libs/freetype-2.8.1
 		dev-libs/expat
 		sys-devel/libiconv"
 
-SRC_URI="http://www.fontconfig.org/release/${P}.tar.xz"
+SRC_URI="https://gitlab.freedesktop.org/api/v4/projects/890/packages/generic/${PN}/${PV}/${P}.tar.xz"
 
 src_prepare()
 {
-	epatch "${PN}-2.14.1-mingw32.patch"
-	epatch "${PN}-2.14.1-disable-tests.patch"
+	epatch "${P}-disable-tests.patch"
 	AT_M4DIR="m4" eautoreconf
 }
 
@@ -28,6 +27,12 @@ src_configure()
 	# Remove files generated for other system, make & gperf regenerate theirs.
 	rm -f src/fcobjshash.gperf
 	rm -f src/fcobjshash.h
+}
+
+src_install()
+{
+	export MSYS2_ENV_CONV_EXCL="DESTDIR"
+	emake_install
 }
 
 pkg_postinst()
