@@ -1,0 +1,57 @@
+# Copyright 2020-2026 Chernov A.A.
+# Distributed under the terms of the GNU General Public License v2
+
+DESCRIPTION="Library for encoding video streams into the H.265/HEVC format"
+
+HOMEPAGE="https://bitbucket.org/multicoreware/x265_git"
+
+LICENSE="GPL-2"
+
+DEPEND=">=dev-lang/nasm-2.13.0"
+
+MJ_PV=4.1
+#GIT_SNAP=20251114
+
+MY_P="${PN}_${MJ_PV}"
+SRC_URI="http://ftp.videolan.org/pub/videolan/x265/${PN}_${MJ_PV}.tar.gz"
+
+SOURCES_DIR="${MY_P}/source"
+
+USE_CMAKE=yes
+
+src_prepare()
+{
+	pushd ..
+	epatch "${P}-cmake-version-fix.patch"
+	popd
+}
+
+src_configure()
+{
+	mkdir 10bit || eerror "mkdir failed!"
+	mkdir 12bit || eerror "mkdir failed!"
+	pushd 10bit
+	econf -DHIGH_BIT_DEPTH=ON -DEXPORT_C_API=OFF \
+		-DENABLE_SHARED=OFF -DENABLE_CLI=OFF || eerror
+	popd
+	pushd 12bit
+	econf -DHIGH_BIT_DEPTH=ON -DEXPORT_C_API=OFF \
+		-DENABLE_SHARED=OFF -DENABLE_CLI=OFF -DMAIN12=ON || eerror
+	popd
+	econf -DEXTRA_LINK_FLAGS=-L. -DLINKED_10BIT=ON -DLINKED_12BIT=ON \
+		-DEXTRA_LIB="x265_main10.a\;x265_main12.a" \
+		-DENABLE_SHARED=ON
+}
+
+src_compile()
+{
+	pushd 10bit
+	emake || eerror
+	cp -pv libx265.a ../libx265_main10.a
+	popd
+	pushd 12bit
+	emake || eerror
+	cp -pv libx265.a ../libx265_main12.a
+	popd
+	emake
+}
