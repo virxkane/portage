@@ -1,4 +1,4 @@
-# Copyright 2020-2022 Chernov A.A.
+# Copyright 2020-2026 Chernov A.A.
 # Distributed under the terms of the GNU General Public License v2
 
 DESCRIPTION="WebM VP8 and VP9 Codec SDK"
@@ -22,7 +22,9 @@ src_prepare()
 
 src_configure()
 {
-	${WORKDIR}/${SOURCES_DIR}/configure --prefix=${PREFIX} \
+	${WORKDIR}/${SOURCES_DIR}/configure --prefix="${PREFIX}" \
+		--enable-shared \
+		--enable-static \
 		--as=yasm \
 		--enable-vp8 \
 		--enable-vp9 \
@@ -31,8 +33,6 @@ src_configure()
 		--enable-runtime-cpu-detect \
 		--enable-postproc \
 		--enable-pic \
-		--enable-shared \
-		--enable-static \
 		--enable-experimental \
 		--enable-multithread \
 		--disable-examples \
