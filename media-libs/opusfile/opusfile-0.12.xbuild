@@ -7,7 +7,7 @@ HOMEPAGE="https://opus-codec.org/"
 
 LICENSE="BSD"
 
-SRC_URI="https://downloads.xiph.org/releases/${PN}/${P}.tar.gz"
+SRC_URI="https://downloads.xiph.org/releases/opus/${P}.tar.gz"
 
 RDEPEND=">=media-libs/opus-1.0.1
 		>=media-libs/libogg-1.3
