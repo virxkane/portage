@@ -11,7 +11,7 @@ SRC_URI="https://github.com/KhronosGroup/Vulkan-Loader/archive/vulkan-sdk-${PV}.
 
 LICENSE="Apache-2.0"
 
-DEPENDS="dev-util/vulkan-headers
+DEPEND="dev-util/vulkan-headers
 		meta-virtual/pkg-config"
 
 USE_CMAKE=yes
