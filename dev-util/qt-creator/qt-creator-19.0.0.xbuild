@@ -1,4 +1,4 @@
-# Copyright 2010-2024 Chernov A.A.
+# Copyright 2010-2026 Chernov A.A.
 # This is a part of mingw-portage project: 
 # http://sourceforge.net/projects/mingwportage/
 # Distributed under the terms of the GNU General Public License v2
@@ -9,7 +9,7 @@ HOMEPAGE="https://wiki.qt.io/Category:Tools::QtCreator"
 
 LICENSE="LGPL-2.1 LGPL-3"
 
-MIN_QT_PV="6.7.0"
+MIN_QT_PV="6.9.0"
 
 RDEPEND="sys-libs/zlib
 		app-arch/zstd
@@ -30,10 +30,8 @@ RDEPEND="sys-libs/zlib
 
 MY_P=${PN}-opensource-src-${PV}
 
-SRC_URI="http://download.qt.io/official_releases/qtcreator/8.0/${PV}/${MY_P}.tar.xz"
-
-#SRC_URI="https://download.qt.io/official_releases/qtcreator/13.0/${PV}/${MY_P}.tar.xz"
-SRC_URI="https://qtproject.mirror.liquidtelecom.com/official_releases/qtcreator/13.0/${PV}/${MY_P}.tar.xz"
+#SRC_URI="https://download.qt.io/official_releases/qtcreator/19.0/${PV}/${MY_P}.tar.xz"
+SRC_URI="https://qtproject.mirror.liquidtelecom.com/official_releases/qtcreator/19.0/${PV}/${MY_P}.tar.xz"
 
 SOURCES_DIR="${MY_P}"
 
@@ -45,5 +43,6 @@ src_configure()
 	# with gcc-11 & pch build failed...
 	econf \
 		-DBUILD_WITH_PCH=OFF \
-		-DWITH_TESTS=OFF
+		-DWITH_TESTS=OFF \
+		-DBUILD_EXECUTABLE_CMDBRIDGE=OFF
 }
