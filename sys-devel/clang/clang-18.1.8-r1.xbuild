@@ -1,4 +1,4 @@
-# Copyright 2022-2024 Chernov A.A.
+# Copyright 2022-2026 Chernov A.A.
 # This is a part of mingw-portage project: 
 # http://sourceforge.net/projects/mingwportage/
 # Distributed under the terms of the GNU General Public License v2
@@ -44,6 +44,10 @@ src_unpack()
 	mv "libunwind-${PV}.src" "libunwind"
 	mv "third-party-${PV}.src" "third-party"
 	cd "${SOURCES_DIR}"
+	epatch "llvm-${PV}-gcc-fix.patch"
+	pushd ../lldb
+	epatch "lldb-${PV}-gcc-fix.patch"
+	popd
 }
 
 src_configure()
@@ -51,14 +55,24 @@ src_configure()
 	# with -DLLVM_BUILD_LLVM_DYLIB=ON option build failed:
 	#   x86_64-w64-mingw32/bin/ld.exe: error: export ordinal too large: 74167
 	#   collect2.exe: error: ld returned 1 exit status 
+	# LLVM_BUILD_LLVM_DYLIB, LLVM_LINK_LLVM_DYLIB not officially supported...
+	# LLVM_TARGETS_TO_BUILD=Native significantly reduces the size of 
+	# the DLL file to fit within the 64K symbol limit.
 	econf \
 		-DLLVM_ENABLE_PROJECTS="clang;clang-tools-extra;lld;lldb" \
-		-DLLVM_BUILD_LLVM_DYLIB=OFF \
+		-DLLVM_TARGETS_TO_BUILD=Native \
+		-DLLVM_BUILD_LLVM_DYLIB=ON \
+		-DLLVM_LINK_LLVM_DYLIB=ON \
+		-DCLANG_LINK_CLANG_DYLIB=ON \
 		-DLLVM_BUILD_RUNTIME=ON \
 		-DLLVM_BUILD_TOOLS=ON \
 		-DLLVM_BUILD_UTILS=ON \
+		-DLLVM_BUILD_EXAMPLES=OFF \
+		-DLLVM_BUILD_TESTS=OFF \
 		-DLLVM_BUILD_BENCHMARKS=OFF \
 		-DLLVM_INCLUDE_BENCHMARKS=OFF \
+		-DLLVM_INCLUDE_EXAMPLES=OFF \
+		-DLLVM_INCLUDE_TESTS=OFF \
 		-DLLVM_ENABLE_LIBCXX=ON \
 		-DLLVM_ENABLE_LLD=OFF \
 		-DLLVM_ENABLE_LTO=OFF \

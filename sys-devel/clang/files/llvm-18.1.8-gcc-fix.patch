@@ -1,0 +1,33 @@
+diff -urBb llvm-18.1.8.src-orig/include/llvm/ADT/SmallVector.h llvm-18.1.8.src/include/llvm/ADT/SmallVector.h
+--- llvm-18.1.8.src-orig/include/llvm/ADT/SmallVector.h	2024-06-15 21:21:32.000000000 +0400
++++ llvm-18.1.8.src/include/llvm/ADT/SmallVector.h	2026-04-12 08:23:33.143565300 +0400
+@@ -20,6 +20,7 @@
+ #include <cassert>
+ #include <cstddef>
+ #include <cstdlib>
++#include <cstdint>
+ #include <cstring>
+ #include <functional>
+ #include <initializer_list>
+diff -urBb llvm-18.1.8.src-orig/lib/Target/AMDGPU/MCTargetDesc/AMDGPUMCTargetDesc.h llvm-18.1.8.src/lib/Target/AMDGPU/MCTargetDesc/AMDGPUMCTargetDesc.h
+--- llvm-18.1.8.src-orig/lib/Target/AMDGPU/MCTargetDesc/AMDGPUMCTargetDesc.h	2024-06-15 21:21:32.000000000 +0400
++++ llvm-18.1.8.src/lib/Target/AMDGPU/MCTargetDesc/AMDGPUMCTargetDesc.h	2026-04-12 10:08:58.316719000 +0400
+@@ -16,6 +16,7 @@
+ #define LLVM_LIB_TARGET_AMDGPU_MCTARGETDESC_AMDGPUMCTARGETDESC_H
+ 
+ #include <memory>
++#include <cstdint>
+ 
+ namespace llvm {
+ class Target;
+diff -urBb llvm-18.1.8.src-orig/lib/Target/X86/MCTargetDesc/X86MCTargetDesc.h llvm-18.1.8.src/lib/Target/X86/MCTargetDesc/X86MCTargetDesc.h
+--- llvm-18.1.8.src-orig/lib/Target/X86/MCTargetDesc/X86MCTargetDesc.h	2024-06-15 21:21:32.000000000 +0400
++++ llvm-18.1.8.src/lib/Target/X86/MCTargetDesc/X86MCTargetDesc.h	2026-04-12 09:14:56.733167500 +0400
+@@ -15,6 +15,7 @@
+ 
+ #include <memory>
+ #include <string>
++#include <cstdint>
+ 
+ namespace llvm {
+ class formatted_raw_ostream;

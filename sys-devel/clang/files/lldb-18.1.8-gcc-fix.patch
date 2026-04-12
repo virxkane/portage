@@ -1,0 +1,12 @@
+diff -urBb lldb-orig/include/lldb/Utility/AddressableBits.h lldb/include/lldb/Utility/AddressableBits.h
+--- lldb-orig/include/lldb/Utility/AddressableBits.h	2024-06-15 21:21:32.000000000 +0400
++++ lldb/include/lldb/Utility/AddressableBits.h	2026-04-12 08:56:30.197179400 +0400
+@@ -11,6 +11,8 @@
+ 
+ #include "lldb/lldb-forward.h"
+ 
++#include <cstdint>
++
+ namespace lldb_private {
+ 
+ /// \class AddressableBits AddressableBits.h "lldb/Core/AddressableBits.h"
