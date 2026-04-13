@@ -9,11 +9,13 @@ HOMEPAGE="https://wiki.qt.io/Category:Tools::QtCreator"
 
 LICENSE="LGPL-2.1 LGPL-3"
 
-MIN_QT_PV="6.9.0"
+MIN_QT_PV="6.11.0"
 
 RDEPEND="sys-libs/zlib
 		app-arch/zstd
+		app-arch/libarchive
 		dev-libs/libxml2
+		media-libs/vulkan-loader
 		>=dev-qt/qtbase-${MIN_QT_PV}
 		>=dev-qt/qtsvg-${MIN_QT_PV}
 		>=dev-qt/qttools-${MIN_QT_PV}
