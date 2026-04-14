@@ -1,0 +1,12 @@
+diff -urBb gcc-15.2.0-orig/libiberty/Makefile.in gcc-15.2.0/libiberty/Makefile.in
+--- gcc-15.2.0-orig/libiberty/Makefile.in	2025-08-08 10:51:45.459431200 +0400
++++ gcc-15.2.0/libiberty/Makefile.in	2026-01-11 12:14:21.429073200 +0400
+@@ -377,7 +377,7 @@
+ @MAINT@	echo stamp > stamp-functions
+ 
+ INSTALL_DEST = @INSTALL_DEST@
+-install: install_to_$(INSTALL_DEST) install-subdir
++install: install-subdir
+ install-strip: install
+ 
+ .PHONY: install install-strip
