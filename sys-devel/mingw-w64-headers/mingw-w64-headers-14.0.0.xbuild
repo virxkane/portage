@@ -33,8 +33,7 @@ src_prepare()
 		;;
 	esac
 	pushd ..
-	epatch "mingw-w64-${PV}-remove-ireference-boolean.patch"
-	epatch "mingw-w64-${PV}-SIO_UDP_NETRESET.patch"
+	epatch "mingw-w64-13.0.0-remove-ireference-boolean.patch"
 	popd
 }
 
