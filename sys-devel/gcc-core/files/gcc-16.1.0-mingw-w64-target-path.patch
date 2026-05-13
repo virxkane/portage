@@ -1,7 +1,7 @@
-diff -urBb gcc-15.2.0-orig/configure gcc-15.2.0/configure
---- gcc-15.2.0-orig/configure	2025-08-08 10:51:39.874338100 +0400
-+++ gcc-15.2.0/configure	2026-01-11 12:32:25.370829000 +0400
-@@ -11578,7 +11578,7 @@
+diff -urBb gcc-16.1.0-orig/configure gcc-16.1.0/configure
+--- gcc-16.1.0-orig/configure	2026-04-30 12:33:19.000000000 +0400
++++ gcc-16.1.0/configure	2026-05-13 08:56:30.318476900 +0400
+@@ -11881,7 +11881,7 @@
    x86_64-*mingw* | *-w64-mingw*)
    # MinGW-w64 does not use newlib, nor does it use winsup. It may,
    # however, use a symlink named 'mingw' in ${prefix} .
@@ -10,10 +10,10 @@ diff -urBb gcc-15.2.0-orig/configure gcc-15.2.0/configure
      ;;
    *-mingw*)
    # MinGW can't be handled as Cygwin above since it does not use newlib.
-diff -urBb gcc-15.2.0-orig/configure.ac gcc-15.2.0/configure.ac
---- gcc-15.2.0-orig/configure.ac	2025-08-08 10:51:39.874338100 +0400
-+++ gcc-15.2.0/configure.ac	2026-01-11 12:32:25.374853300 +0400
-@@ -3805,7 +3805,7 @@
+diff -urBb gcc-16.1.0-orig/configure.ac gcc-16.1.0/configure.ac
+--- gcc-16.1.0-orig/configure.ac	2026-04-30 12:33:19.000000000 +0400
++++ gcc-16.1.0/configure.ac	2026-05-13 08:56:30.324157500 +0400
+@@ -3950,7 +3950,7 @@
    x86_64-*mingw* | *-w64-mingw*)
    # MinGW-w64 does not use newlib, nor does it use winsup. It may,
    # however, use a symlink named 'mingw' in ${prefix} .

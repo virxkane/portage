@@ -1,0 +1,12 @@
+diff -urBb gcc-16.1.0-orig/libstdc++-v3/config/abi/pre/gnu.ver gcc-16.1.0/libstdc++-v3/config/abi/pre/gnu.ver
+--- gcc-16.1.0-orig/libstdc++-v3/config/abi/pre/gnu.ver	2026-04-30 12:33:29.000000000 +0400
++++ gcc-16.1.0/libstdc++-v3/config/abi/pre/gnu.ver	2026-05-13 09:01:37.811919900 +0400
+@@ -2815,7 +2815,7 @@
+     __cxa_allocate_dependent_exception;
+     __cxa_free_dependent_exception;
+     __cxa_deleted_virtual;
+-
++    _ZTC*;
+ } CXXABI_1.3.5;
+ 
+ CXXABI_1.3.7 {
