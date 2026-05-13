@@ -30,9 +30,6 @@ src_prepare()
 		eerror "This xbuild only for mingw-w64 platforms!"
 		;;
 	esac
-	pushd ..
-	epatch "mingw-w64-upstream-20250731.patch"
-	popd
 }
 
 src_configure()
