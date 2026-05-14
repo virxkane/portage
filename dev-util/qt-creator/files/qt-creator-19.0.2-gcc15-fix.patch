@@ -1,0 +1,11 @@
+diff -urbB qt-creator-opensource-src-19.0.2-orig/src/libs/3rdparty/yaml-cpp/src/emitterutils.cpp qt-creator-opensource-src-19.0.2/src/libs/3rdparty/yaml-cpp/src/emitterutils.cpp
+--- qt-creator-opensource-src-19.0.2-orig/src/libs/3rdparty/yaml-cpp/src/emitterutils.cpp	2026-05-11 13:32:21.000000000 +0400
++++ qt-creator-opensource-src-19.0.2/src/libs/3rdparty/yaml-cpp/src/emitterutils.cpp	2026-05-14 08:32:58.807852500 +0400
+@@ -1,6 +1,7 @@
+ #include <algorithm>
+ #include <iomanip>
+ #include <sstream>
++#include <cstdint>
+ 
+ #include "emitterutils.h"
+ #include "exp.h"

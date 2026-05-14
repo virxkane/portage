@@ -40,6 +40,11 @@ SOURCES_DIR="${MY_P}"
 USE_CMAKE=yes
 CMAKE_GENERATOR=Ninja
 
+src_prepare()
+{
+	epatch "${P}-gcc15-fix.patch"
+}
+
 src_configure()
 {
 	# with gcc-11 & pch build failed...
