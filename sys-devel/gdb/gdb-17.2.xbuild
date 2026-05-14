@@ -21,7 +21,7 @@ BUILD_IN_SEPARATE_DIR=yes
 
 src_prepare()
 {
-	epatch "${P}-no_install_libs.patch"
+	epatch "${PN}-17.1-no_install_libs.patch"
 }
 
 src_configure()
