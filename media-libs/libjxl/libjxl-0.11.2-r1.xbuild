@@ -19,12 +19,22 @@ RDEPEND="app-arch/brotli
 		media-libs/libpng"
 
 USE_CMAKE=yes
-USE_CMAKE_GENERATOR=Ninja
+CMAKE_GENERATOR=Ninja
 
 src_unpack()
 {
 	unpack_one ${A} ign
 	cd "${SOURCES_DIR}" || eerror "Can't cd to sources directory!"
+}
+
+# Some bug in GCC or mingw-w64
+#  https://github.com/libjxl/libjxl/issues/4546
+# required to disable AVX2
+# -DJPEGXL_ENABLE_HWY_AVX2=false
+
+src_prepare()
+{
+	epatch "${P}-enable-disable-hwy-targets.patch"
 }
 
 src_configure()
@@ -43,5 +53,6 @@ src_configure()
 		-DJPEGXL_ENABLE_DOXYGEN=OFF \
 		-DJPEGXL_ENABLE_MANPAGES=OFF \
 		-DJPEGXL_ENABLE_JNI=OFF \
-		-DJPEGXL_ENABLE_EXAMPLES=OFF
+		-DJPEGXL_ENABLE_EXAMPLES=OFF \
+		-DJPEGXL_ENABLE_HWY_AVX2=false
 }
