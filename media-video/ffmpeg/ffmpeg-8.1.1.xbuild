@@ -29,21 +29,28 @@ RDEPEND="sys-devel/libiconv
 		media-libs/libvpx
 		media-libs/libwebp
 		media-libs/libaom
-		media-libs/libass"
+		media-libs/libass
+		media-libs/vidstab
+		media-libs/nv-codec-headers"
 
 SRC_URI="https://ffmpeg.org/releases/${P}.tar.bz2"
 
 src_configure()
 {
 	./configure --prefix=${PREFIX} \
-		--enable-gpl --enable-shared --enable-static \
+		--enable-gpl --enable-nonfree \
+		--enable-shared --enable-static \
 		--enable-pthreads --disable-w32threads --enable-runtime-cpudetect \
 		--enable-libx264 --enable-libx265 --enable-libwebp --enable-libvpx \
 		--enable-libmp3lame --enable-libspeex --enable-libopus --enable-libvorbis \
 		--enable-libaom \
 		--enable-libfreetype --enable-libfontconfig \
 		--enable-libass \
-		--enable-opengl --enable-sdl
+		--enable-libvidstab \
+		--enable-opengl --enable-vulkan \
+		--enable-d3d11va --enable-d3d12va --enable-dxva2 \
+		--enable-ffnvcodec --enable-nvenc --enable-nvdec \
+		--enable-sdl
 	checkexitcode $? "configure failed"
 }
 
