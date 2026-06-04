@@ -1,0 +1,23 @@
+# Copyright 2026 Chernov A.A.
+# This is a part of mingw-portage project: 
+# http://sourceforge.net/projects/mingwportage/
+# Distributed under the terms of the GNU General Public License v2
+
+DESCRIPTION="Video stabilization library"
+
+HOMEPAGE="https://github.com/georgmartius/vid.stab"
+
+SRC_URI="https://github.com/georgmartius/vid.stab/archive/v${PV}.tar.gz -> ${P}.tar.gz"
+
+LICENSE="GPL-2+"
+
+USE_CMAKE=yes
+
+SOURCES_DIR="vid.stab-${PV}"
+
+src_configure()
+{
+	econf -DCMAKE_POLICY_VERSION_MINIMUM=3.5 \
+		-DUSE_OMP=ON \
+		-DBUILD_SHARED_LIBS=OFF
+}
